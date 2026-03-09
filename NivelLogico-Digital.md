@@ -1994,5 +1994,1981 @@ não tem um clock mestre. Ciclos de barramento podem ter qualquer largura requer
 todos os pares de dispositivos. A seguir, estudaremos cada tipo de barramento.
 
 ### Barramentos síncronos
+Como exemplo do funcionamento de um barramento síncrono, considere o diagrama temporal da Figura
+3.38(a). Nesse exemplo, usaremos um clock de 100 MHz, que dá um ciclo de barramento de 10 nanossegundos.
+Embora isso possa parecer um tanto lento em comparação a velocidades de CPU de 3 GHz ou mais, poucos bar-
+ramentos de PCs são muito mais rápidos. Por exemplo, o popular barramento PCI normalmente funciona a 33 ou
+66 MHz e o barramento PCI-X atualizado (porém agora extinto) funcionava a uma velocidade de até 133 MHz.
+As razões por que os barramentos atuais são lentos já foram dadas: problemas técnicos de projeto, como atraso
+diferencial de barramento e necessidade de compatibilidade.
 
-PÁGINA 151
+Em nosso exemplo, admitiremos ainda que ler da memória leva 15 ns a partir do instante em que o endereço
+está estável. Como veremos em breve, com esses parâmetros, ler uma palavra levará três ciclos de barramento. O
+primeiro ciclo começa na borda ascendente de T1 e o terceiro termina na borda ascendente de T4, como mostra
+a figura. Observe que nenhuma das bordas ascendentes ou descendentes foi desenhada na linha vertical porque
+nenhum sinal elétrico pode trocar seu valor em tempo zero. Nesse exemplo, admitiremos que leva 1 ns para o
+sinal mudar. As linhas de clock, address, data, mreq, rd e wait, estão todas representadas na mesma escala de
+tempo.
+
+O início de T1 é definido pela borda ascendente do clock. A meio caminho de T1 a CPU coloca o endereço da
+palavra que ela quer nas linhas de endereço. Como o endereço não é um valor único, como o clock, não podemos
+mostrá-lo como uma linha única na figura; em vez disso, ele é mostrado como duas linhas que se cruzam no ins-
+tante em que o endereço muda. Além disso, a área sombreada antes do cruzamento indica que o valor nessa área
+não é importante. Usando essa mesma convenção, vemos que o conteúdo das linhas de dados não é significativo
+até uma boa porção de T3.
+
+Depois que as linhas de endereço tiverem uma chance de se acomodar a seus novos valores, mreq e rd são
+ativados. O primeiro indica que é a memória (e não um dispositivo de E/S) que está sendo acessada e o segun-
+do é ativado (valor 0) para leituras e negado (valor 1) para escritas. Uma vez que a memória leva 15 ns após o
+endereço estar estável (a meio caminho no primeiro ciclo de clock), ela não pode entregar os dados requisitados
+durante T2. Para dizer à CPU que não os espere, a memória ativa a linha wait no início de T2. Essa ação irá inserir
+estados de espera (ciclos extras de barramento) até que a memória conclua e desative wait. Em nosso exemplo,
+foi inserido um estado de espera (T2) porque a memória é muito lenta. No início de T3, quando está certa de que
+terá os dados durante o ciclo corrente, a memória nega wait.
+
+Durante a primeira metade de T3, a memória coloca os dados nas linhas de dados. Na borda descendente de
+T3, a CPU mostra a linha de dados, isto é, lê a linha, armazenando (latching) o valor em um registrador interno.
+Após ter lido os dados, a CPU nega mreq e rd. Se for preciso, outro ciclo de memória pode começar na próxima
+borda ascendente do clock. Essa sequência pode ser repetida indefinidamente.
+
+Na especificação temporal da Figura 3.38(b), esclarecemos melhor oito símbolos que aparecem no diagrama.
+TAD, por exemplo, é o intervalo de tempo entre a borda ascendente do clock T1 e o estabelecimento das linhas de
+endereço. Conforme a especificação de temporização, TAD ≤ 4 ns. Isso significa que o fabricante da CPU garante
+que durante qualquer ciclo de leitura a CPU entregará o endereço a ser lido dentro de 4 ns a partir do ponto
+médio da borda ascendente de T1.
+
+Figura 3.38   (a) Temporização de leitura em um barramento síncrono. (b) Especificação de alguns tempos críticos.
+
+Esta Figura 3.38 detalha o funcionamento de um Barramento Síncrono, onde todas as ações são coordenadas pelas bordas de subida e descida do clock (Φ). O ponto crucial aqui é o Estado de Espera (Wait State), um recurso vital quando a CPU é mais rápida que a memória RAM, algo comum nos seus estudos de microarquitetura.No seu repositório arquitetura_computadores, este diagrama explica por que o tempo de acesso à memória dita o desempenho real do sistema.
+
+Temporização e Estados de Espera (Figura 3.38)
+
+    CICLO T1        CICLO T2        ESPERA (T_w)       CICLO T3
+             __              __              __              __
+    Φ  _____|  |____________|  |____________|  |____________|  |_____
+            
+            [ ENDEREÇO VÁLIDO ]------------------------------------>
+    ADDR  ___/XXXXXXXXXXXXXXXXX\_____________________________________
+            |<-- TAD -->|
+                                                [ DADOS VÁLIDOS ]
+    DATA  _______________________________________/XXXXXXXXXXXXXXX\___
+                                                |<-- TDS -->|
+            __________
+    MREQ               \_____________________________________________
+            
+            __________________
+    RD                         \_____________________________________
+                                          _______
+    WAIT  _______________________________/       \___________________
+                                        (CPU aguarda a memória)
+
+
+### Insight para o seu repositório estruturas_de_dados
+Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait States são os grandes vilões da performance.
+
+ - Se a sua estrutura de dados está espalhada pela memória (como uma lista encadeada), cada salto para um novo ponteiro dispara um novo ciclo de leitura com possíveis estados de espera.
+
+ - Já um array contínuo permite que o controlador de barramento otimize esses tempos, reduzindo a necessidade do sinal WAIT.
+
+
+        +---------------+----------------------------------------------------------+-------+-------+--------+
+        | Símbolo       | Parâmetro                                                | Mín.  | Máx.  | Unidade|
+        +---------------+----------------------------------------------------------+-------+-------+--------+
+        | TADA          | Atraso de saída do endereço                              |       | 4     | ns     |
+        | TMLE          | Endereço estável antes de MREQ                           | 2     |       | ns     |
+        | TM            | Mínimo                                                   |       | 3     | ns     |
+        | TRL           | Atraso de RD desde a borda descendente de Φ em T1        |       | 3     | ns     |
+        | TDS           | Tempo de ajuste dos dados antes da borda descendente de Φ| 2     |       | ns     |
+        | TMHA          | Atraso de MREQ desde a borda descendente de Φ em T3      |       | 3     | ns     |
+        | TRHA          | Atraso de RD desde a borda descendente de Φ em T3        |       | 3     | ns     |
+        | TDH           | Tempo de sustentação dos dados desde a negação de RD     | 0     |       | ns     |
+        +---------------+----------------------------------------------------------+-------+-------+--------+
+
+As especificações de temporização também requerem que os dados estejam disponíveis nas linhas de dados
+no mínimo TDS (2 nanossegundos) antes da borda descendente de T3 para lhes dar tempo para se acomodarem
+antes que a CPU os leia. A combinação de restrições impostas a Tad e TDS significa que, na pior das hipóteses, a
+memória terá somente 25 – 4 – 2 = 19 ns desde o instante em que o endereço aparece até o instante em que ela
+deve produzir os dados. Como 10 ns é suficiente, até mesmo no pior caso, uma memória de 10 ns sempre pode
+responder durante T3. Uma memória de 20 ns, entretanto, perderia o momento por pouco e teria de inserir um
+segundo estado de espera e responder durante T4.
+
+A especificação de temporização garante ainda mais que o endereço será estabelecido pelo menos 2 nanos-
+segundos antes de mreq ser ativado. Esse tempo pode ser importante se mreq comandar a seleção de chip no chip
+de memória, porque algumas memórias requerem um tempo de estabelecimento de endereço antes da seleção
+do chip. Claro que o projetista do sistema não deve escolher um chip de memória que necessite de um tempo de
+estabelecimento de 3 ns.
+
+As limitações impostas a TM e TRL significam que ambos, mreq e rd, serão ativados dentro de 3 ns a partir
+da borda descendente T1 do clock. No pior caso, o chip de memória terá somente 10 + 10 – 3 – 2 = 15 ns após a
+ativação de mreq e rd para levar seus dados até o barramento. Essa restrição é adicional ao (e independente do)
+intervalo de 15 ns necessário após o endereço estar estável.
+
+TMH e TRH informam quanto tempo leva para mreq e rd serem negados após a leitura dos dados. Por fim, TDH
+informa por quanto tempo a memória deve sustentar os dados no barramento após a negação de rd. No que diz
+respeito a nosso exemplo de CPU, a memória pode remover os dados do barramento tão logo rd tenha sido negado;
+porém, em algumas CPUs modernas, os dados devem ser conservados estáveis durante um pouco mais de tempo.
+
+Gostaríamos de destacar que a Figura 3.38 é uma versão muito simplificada das restrições reais de tempo. Na
+realidade, sempre são especificados muitos mais tempos críticos. Ainda assim, ela nos dá uma boa ideia do modo
+de funcionamento de um barramento síncrono.
+
+Uma última coisa que vale a pena mencionar é que sinais de controle podem ser ativados baixos ou altos.
+Cabe aos projetistas do barramento determinar o que é mais conveniente, mas a escolha é, em essência, arbitrária.
+Podemos entendê-la como equivalente em hardware à decisão que o programador toma de representar blocos de
+discos livres em um mapa de bits como 0s ou 1s.
+
+Barramentos assíncronos
+Embora seja fácil trabalhar com barramentos síncronos por causa de seus intervalos discretos de tempo, eles
+também têm alguns problemas. Por exemplo, tudo funciona como múltiplos do clock do barramento. Ainda que
+CPU e memória possam concluir uma transferência em 3,1 ciclos, elas terão de prolongar o ciclo até 4,0 porque
+ciclos fracionários são proibidos.
+
+Pior ainda, uma vez escolhido o ciclo do barramento e construídas placas de memória e E/S para ele, é difícil
+aproveitar futuros avanços da tecnologia. Por exemplo, suponha que alguns anos após a construção do sistema da
+Figura 3.38 sejam lançadas novas memórias com tempos de acesso de 8 ns em vez de 15 ns, que eliminam o estado
+de espera e dão mais velocidade à máquina. Então, suponha que sejam lançadas memórias de 4 ns. Não haveria
+nenhum ganho adicional de desempenho porque, com esse projeto, o tempo mínimo para uma leitura é dois ciclos.
+
+Exprimindo esses fatos em termos um pouco diferentes, se um barramento síncrono tiver uma coleção hete-
+rogênea de dispositivos, alguns rápidos, alguns lentos, ele tem de ser ajustado para o mais lento, e os mais rápidos
+não podem usar todo o seu potencial.
+
+Pode-se utilizar tecnologia mista passando para um barramento assíncrono, isto é, que não tenha um clock
+mestre, como mostra a Figura 3.39. Em vez de vincular tudo ao clock, quando o mestre de barramento tiver ati-
+vado o endereço, mreq, rd e tudo o mais que precisa, em seguida ele ativa um sinal especial que denominaremos
+msyn (Master SYNchronization). Quando o escravo vê esse sinal, ele realiza o trabalho com a maior rapidez que
+puder e, ao concluir essa fase, ativa ssyn (Slave SYNchronization).
+
+Assim que o mestre perceber ssyn ativado, sabe que os dados estão disponíveis, portanto, ele os serializa e
+então desativa as linhas de endereço, junto com mreq, rd e msyn. Quando o escravo percebe a negação de msyn,
+sabe que o ciclo foi concluído, portanto, nega ssyn, e voltamos à situação original, com todos os sinais negados,
+esperando pelo próximo mestre.
+
+Diagramas temporais de barramentos assíncronos (e às vezes também os de barramentos síncronos) usam
+setas para mostrar causa e efeito, como na Figura 3.39. A ativação de msyn faz com que as linhas de dados sejam
+ativadas e também com que o escravo ative ssyn. A ativação de ssyn, por sua vez, causa a negação das linhas de
+endereço, mreq, rd e msyn. Por fim, a negação de msyn causa a negação e ssyn, que conclui a leitura e retorna o
+sistema a seu estado original.
+
+Figura 3.39   Operação de um barramento assíncrono.
+
+Esta Figura 3.39 apresenta o contraste fundamental ao modelo anterior: o Barramento Assíncrono. Diferente do barramento síncrono (Figura 3.38), aqui não existe um clock global ($\Phi$) regendo o tempo; em vez disso, a comunicação ocorre por meio de um "aperto de mão" (handshake) entre a CPU e a memória.No seu repositório arquitetura_computadores, este diagrama é essencial para entender sistemas que precisam integrar componentes de velocidades vastamente diferentes sem desperdiçar ciclos de CPU.
+
+    Barramento Assíncrono (Figura 3.39)
+
+    PASSO 1         PASSO 2         PASSO 3         PASSO 4
+        (CPU Inicia)    (Memória Responde) (CPU Lê/Finaliza) (Memória Reseta)
+
+    ADDR  ___/XXXXXXXXXXXX\________________________________________________
+            (Endereço)
+            
+    MREQ  ________\_______________________________________________________
+            
+    RD    ________\_______________________________________________________
+                    \____
+    MSYN  ______________|__________________________________________________
+                        | (Master Sync)
+                                          __________
+    DATA  _______________________________/XXXXXXXXXX\______________________
+                                        (Dados prontos)
+                                          __________
+    SSYN  _______________________________/          \______________________
+                                        (Slave Sync)
+
+![alt text](image-26.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Este conceito de barramento assíncrono é muito similar aos protocolos de rede que você estuda, como o TCP.
+
+ - Assim como no estruturas_de_dados/redes, onde um pacote só é enviado após o ACK, no barramento assíncrono o dado só é considerado válido após o "reconhecimento" da memória.
+
+ - Isso torna o sistema extremamente robusto contra variações de temperatura ou comprimento de cabos, que poderiam causar erros de temporização em um barramento síncrono rígido.
+
+Um conjunto de sinais que se interligam dessa maneira é denominado operação completa. A parte essencial
+consiste em quatro eventos:
+       ____
+    1. MSYN é ativado.
+       ____                         ____
+    2. SSYN é ativado em resposta a MSYN.
+       ____                        ____
+    3. MSYN é negado em resposta a SSYN.
+       ____                                   ____
+    4. SSYN é negado em resposta à negação de MSYN.
+
+É preciso que fique claro que operações completas são independentes de temporização. Cada evento é causa-
+do por um evento anterior e não por um pulso de clock. Se determinado par mestre-escravo for lento, não afetará,
+de modo algum, um par mestre-escravo subsequente, que é muito mais rápido.
+
+Agora, a vantagem de um barramento assíncrono já deve estar bem clara, mas a verdade é que a maioria
+dos barramentos é síncrona. A razão é que é mais fácil construir um sistema síncrono. A CPU apenas ativa seus
+sinais e a memória apenas reage. Não há realimentação (causa e efeito), mas, se os componentes foram escolhidos
+adequadamente, tudo funcionará sem dependência. Além disso, há muito dinheiro investido na tecnologia do
+barramento síncrono.
+
+## 3.4.5 Arbitragem de barramento
+Até aqui ficou subentendido que há somente um mestre de barramento, a CPU. Na realidade, chips de E/S
+têm de se tornar mestres de barramento para ler e escrever na memória e também para causar interrupções.
+Coprocessadores também podem precisar se tornar mestres de barramento. Então, surge a pergunta: “O que
+acontece se dois ou mais dispositivos quiserem se tornar mestres de barramento ao mesmo tempo?” A resposta é
+que é preciso algum mecanismo de arbitragem de barramento para evitar o caos.
+
+Mecanismos de arbitragem podem ser centralizados ou descentralizados. Em primeiro lugar, vamos consi-
+derar a arbitragem centralizada. Uma forma particularmente simples de arbitragem centralizada é mostrada na
+Figura 3.40(a). Nesse esquema, um único árbitro de barramento determina quem entra em seguida. Muitas CPUs
+contêm o árbitro no chip de CPU, mas às vezes é preciso um chip separado. O barramento contém uma única
+linha de requisição OR cabeada que pode ser afirmada por um ou mais dispositivos a qualquer tempo. Não há
+nenhum modo de o árbitro dizer quantos dispositivos requisitaram o barramento. As únicas categorias que ele
+pode distinguir são algumas requisições e nenhuma requisição.
+
+Quando o árbitro vê uma requisição de barramento, emite uma concessão que ativa a linha de concessão
+de barramento. Essa linha está ligada a todos os dispositivos de E/S em série, como um cordão de lâmpadas de árvore de Natal. Quando o dispositivo que está fisicamente mais próximo do árbitro vê a concessão, verifica para
+confirmar se fez uma requisição. Caso positivo, toma o barramento, mas não passa a concessão adiante na linha.
+Se não fez uma requisição, ele propaga a concessão até o próximo dispositivo na linha que se comporta da mesma
+maneira, e assim por diante, até algum deles aceitar a concessão e tomar o barramento. Esse esquema é denomi-
+nado encadeamento em série (daisy chaining). Ele tem a propriedade de designar prioridades aos dispositivos
+dependendo da distância entre eles e o árbitro. O que estiver mais próximo vence.
+
+Para contornar as prioridades implícitas baseadas na distância em relação ao árbitro, muitos barramentos têm
+vários níveis de prioridade. Para cada nível de prioridade há uma linha de requisição e uma linha de concessão
+de barramento. O barramento da Figura 3.40(b) tem dois níveis, 1 e 2 (barramentos reais costumam ter 4, 8 ou
+16 níveis). Cada dispositivo está ligado a um dos níveis de requisição do barramento, sendo que os mais críticos
+em relação ao tempo estão ligados aos níveis com prioridade mais alta. Na Figura 3.40(b), os dispositivos 1, 2 e
+4 usam prioridade 1, enquanto os dispositivos 3 e 5 usam prioridade 2.
+
+Se vários níveis de prioridade são requisitados ao mesmo tempo, o árbitro emite uma concessão somente ao
+de prioridade mais alta. Entre os dispositivos da mesma prioridade, é usado o encadeamento em série. Na Figura
+3.40(b), se ocorrer algum conflito, o dispositivo 2 vence o dispositivo 4, que vence o 3. O dispositivo 5 tem a
+menor prioridade porque está no final da linha de encadeamento de menor prioridade.
+
+Figura 3.40   (a) Árbitro de barramento centralizado de um nível usando encadeamento em série. (b) Mesmo árbitro, mas com dois níveis.
+
+Esta Figura 3.40 detalha o mecanismo de Arbitragem de Barramento, essencial para gerenciar quem tem o direito de "falar" no barramento de E/S quando múltiplos periféricos (como o seu SSD e a sua placa de rede) tentam acessá-lo ao mesmo tempo. Sem um árbitro, haveria colisões de dados e instabilidade no sistema.
+
+No seu repositório arquitetura_computadores, este diagrama explica a lógica de prioridade física entre dispositivos.
+
+    Arbitragem por Encadeamento (Figura 3.40)
+
+    (a) UM NÍVEL (Daisy Chain)             (b) DOIS NÍVEIS (Prioridade)
+                                        
+        +---------+                            +---------+
+        | ÁRBITRO |                            | ÁRBITRO |
+        +----+----+                            +--+---+--+
+            |                                    |   |
+    [CONCESSÃO] (Bus Grant)              [NÍVEL 1]--+   +--[NÍVEL 2]
+        |    |    |    |                          |           |
+        [D1]--[D2]--[D3]--[D4]                   [D1]-[D2]   [D3]-[D4]
+        |                                         |           |
+    [REQUISIÇÃO] (Bus Request)               [REQ 1]     [REQ 2]
+
+![alt text](image-27.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Ao gerenciar processos ou threads no diretório estruturas_de_dados, você usa semáforos ou mutexes; a Arbitragem de Barramento é o equivalente a isso, mas implementado puramente em portas lógicas e fios.
+
+ - Se você tiver um dispositivo "fominha" (que pede o barramento o tempo todo) no início da cadeia, os dispositivos no final podem sofrer de starvation (fome), nunca conseguindo transmitir seus dados.
+
+ - É por isso que sistemas modernos usam o modelo (b) ou arbitragem distribuída, garantindo que a sua rede não pare enquanto o disco está sendo lido.
+
+Com a Figura 3.40, chegamos ao coração da coordenação de hardware.
+
+A propósito, tecnicamente não é necessário ligar a linha de concessão de barramento de nível 2 em série
+passando pelos dispositivos 1 e 2, já que eles não podem fazer requisições nessa linha. Contudo, por conveniência
+de execução, é mais fácil ligar todas as linhas de concessão passando por todos os dispositivos, em vez de fazer
+ligações especiais que dependem da prioridade de dispositivo.
+
+Alguns árbitros têm uma terceira linha que um dispositivo ativa quando aceita uma concessão e pega o barra-
+mento. Tão logo tenha ativado essa linha de reconhecimento, as linhas de requisição e concessão podem ser nega-
+das. O resultado é que outros dispositivos podem requisitar barramento enquanto o primeiro o estiver usando.
+No instante em que a transferência for concluída, o próximo mestre de barramento já terá sido selecionado. Ele
+pode começar logo que a linha de reconhecimento tenha sido negada, quando então pode ser iniciada a próxima
+rodada de arbitragem. Esse esquema requer uma linha de barramento extra e mais lógica em cada dispositivo,
+mas faz melhor uso de ciclos de barramento.
+
+Em sistemas em que a memória está no barramento principal, a CPU deve competir pelo barramento com
+todos os dispositivos de E/S em praticamente todos os ciclos. Uma solução comum para essa situação é dar à
+CPU a prioridade mais baixa, de modo que ela obtenha o barramento apenas quando ninguém mais o quiser.
+Nesse caso, a ideia é que a CPU sempre pode esperar, mas os dispositivos de E/S muitas vezes precisam adqui-
+rir logo o barramento ou então perdem os dados que chegam. Discos que giram a alta velocidade não podem
+esperar. Em muitos sistemas modernos de computadores, esse problema é evitado ao se colocar a memória em
+um barramento separado dos dispositivos de E/S de modo que estes não tenham de competir pelo acesso ao
+barramento.
+
+Também é possível haver arbitragem de barramento descentralizada. Por exemplo, um computador poderia
+ter 16 linhas de requisição de barramento priorizadas. Quando um dispositivo quer usar o barramento, ele afirma
+sua linha de requisição. Todos os dispositivos monitoram todas as linhas de requisição, de modo que, ao final
+de cada ciclo de barramento, cada dispositivo sabe se foi o requisitante de prioridade mais alta e, portanto, se
+tem permissão de usar o barramento durante o próximo ciclo. Comparado à arbitragem centralizada, o método
+descentralizado requer mais linhas de barramento, mas evita o custo potencial do árbitro. Além disso, limita o
+número de dispositivos ao número de linhas de requisição.
+
+Outro tipo de arbitragem de barramento descentralizada, mostrado na Figura 3.41, usa apenas três linhas,
+não importando quantos dispositivos estiverem presentes. A primeira é uma linha OR cabeada para requisitar
+o barramento. A segunda é denominada busy e é ativada pelo mestre de barramento corrente. A terceira linha é
+usada para arbitrar o barramento. Ela está ligada por encadeamento em série a todos os dispositivos. O início
+dessa cadeia é ativado ligando-o a uma fonte de alimentação.
+
+Figura 3.41   Arbitragem de barramento descentralizada.
+
+Esta Figura 3.41 apresenta a Arbitragem de Barramento Descentralizada, um modelo que elimina a necessidade de um árbitro central (como o da Figura 3.40) para gerenciar conflitos. Em vez de um chip mestre, os próprios dispositivos de E/S decidem quem assume o controle do barramento através de uma linha de arbitragem compartilhada.
+
+No seu repositório arquitetura_computadores, este diagrama representa um sistema mais resiliente, pois não possui um único ponto de falha.
+
+    LINHA DE REQUISIÇÃO (BUS REQUEST) <--------------------+
+        ___________________________________________________|
+                                                           |
+        LINHA BUSY (OCUPADO) <-----------------------------|--+
+        ___________________________________________________|  |
+                                                           |  |
+        LINHA DE ARBITRAGEM (CHAIN)                        |  |
+    VCC ---[D1]---[D2]---[D3]---[D4]---[D5]                |  |
+            |      |      |      |      |                  |  |
+            +------+------+------+------+-------------------+--+
+                    (Sinais de Entrada/Saída de cada dispositivo)
+
+![alt text](image-28.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Este conceito de arbitragem descentralizada é a base física para o que você estuda em Sistemas Distribuídos no diretório estruturas_de_dados.
+
+ - É o equivalente em hardware a um algoritmo de Token Ring ou CSMA/CD, onde os nós precisam de um mecanismo de consenso para evitar colisões no meio de transmissão.
+
+ - No seu código em C, entender isso ajuda a visualizar por que certas operações de baixo nível podem sofrer latência variável dependendo da posição física do dispositivo no barramento.
+
+Quando nenhum dispositivo quiser o barramento, a linha de arbitragem ativada é propagada por todos os
+outros. Para adquirir o barramento, um dispositivo primeiro verifica para ver se o barramento está ocioso e se o
+sinal de arbitragem que está recebendo, in (entrada), está ativado. Se in estiver negado, o dispositivo em ques-
+tão não pode se tornar o mestre de barramento e o sinal out (saída) é negado. Entretanto, se in for ativado, o
+dispositivo nega out, o que faz seu vizinho seguinte na cadeia ver in negado e negar seu próprio out. Daí, todos
+os dispositivos depois dele na cadeia veem in negado e, por sua vez, negam out. Quando o processo terminar,
+somente um dispositivo terá in ativado e out negado, e é ele que se torna o mestre de barramento, ativa busy e
+out e inicia sua transferência.
+
+Um pouco de raciocínio revelará que o dispositivo mais à esquerda que quiser o barramento o obtém. Assim,
+esse esquema é similar à arbitragem original por encadeamento em série, com a exceção de não ter o árbitro. Por
+isso é mais barato, mais rápido e não está sujeito a falhas do árbitro.
+
+## 3.4.6 Operações de barramento
+Até agora, discutimos apenas ciclos de barramento comuns, com um mestre (em geral, a CPU) lendo de um
+escravo (em geral, a memória) ou escrevendo nele. Na verdade, existem vários outros tipos de ciclos de barra-
+mento. Em seguida, vamos estudar alguns deles.
+
+Em geral, só uma palavra é transferida por vez. Contudo, quando é usado caching, é desejável buscar uma
+linha inteira de cache (por exemplo, 8 palavras de 64 bits consecutivas) por vez. Transferências de blocos costu-
+mam ser mais eficientes do que transferências individuais sucessivas. Quando uma leitura de bloco é iniciada, o
+mestre de barramento informa ao escravo quantas palavras serão transferidas, por exemplo, colocando o núme-
+ro de palavras nas linhas de dados durante T1. Em vez de retornar apenas uma palavra, o escravo entrega uma
+durante cada ciclo até esgotar aquele número de palavras. A Figura 3.42 mostra uma versão modificada da Figura
+3.38(a), mas agora com um sinal extra, block, que é ativado para indicar que foi requisitada uma transferência de
+bloco. Nesse exemplo, uma leitura de bloco de 4 palavras demora 6 ciclos em vez de 12.
+
+Figura 3.42   Transferência de bloco.
+
+Esta Figura 3.42 apresenta a Transferência de Bloco (também conhecida como Burst Mode), uma técnica de otimização de barramento onde a CPU envia um único endereço inicial e a memória responde com uma sequência contínua de palavras de dados. No seu repositório arquitetura_computadores, este conceito explica como o hardware acelera o carregamento de linhas de cache e vetores de dados.
+
+    Transferência de Bloco (Figura 3.42)
+
+    CICLO T1      CICLO T2      CICLO T3      CICLO T4      CICLO T5
+             __            __            __            __            __
+    Φ  _____|  |__________|  |__________|  |__________|  |__________|  |_____
+            
+            [ ADDR 0 ]
+    ADDR  ___/XXXXXXXX\_____________________________________________________
+            
+                                [ DADO 0 ]    [ DADO 1 ]    [ DADO 2 ]
+    DATA  ________________________/XXXXXXXX\____/XXXXXXXX\____/XXXXXXXX\____
+            
+            _______________________________________________________________
+    MREQ               \____________________________________________________
+            
+            _______________________________________________________________
+    BLOCK              \____________________________________________________
+                        (Sinaliza que múltiplos dados serão lidos)
+
+### Insight para o seu repositório estruturas_de_dados
+Ao trabalhar com memcpy() ou manipulação de grandes arrays no diretório estruturas_de_dados, o compilador e o hardware tentam usar este modo de Transferência de Bloco sempre que possível.
+
+ - Estruturas de dados Contíguas (como Vetores) se beneficiam diretamente desse hardware, pois os dados estão em endereços adjacentes, permitindo que a memória apenas "vire a página" e continue enviando.
+
+ - Já estruturas Dispersas (como Árvores ou Listas Encadeadas) forçam a CPU a desativar o modo BLOCK e enviar um novo endereço para cada nó, o que é drasticamente mais lento devido à latência de endereçamento repetida.
+
+Há também outros tipos de ciclos de barramento. Por exemplo, em um sistema multiprocessador com duas
+ou mais CPUs no mesmo barramento, muitas vezes é necessário garantir que só uma CPU por vez use alguma
+estrutura de dados crítica na memória. Um modo típico de organizar isso é ter uma variável na memória que é 0
+quando nenhuma CPU estiver usando a estrutura de dados e 1 quando esta estiver em uso. Se uma CPU quiser
+obter acesso à estrutura de dados, deve ler a variável e, se esta for 0, passá-la para 1. O problema é que, com um
+pouco de má sorte, duas CPUs podem ler a variável em ciclos de barramento consecutivos. Se cada uma perceber
+que a variável é 0, então cada uma passa a variável para 1 e acha que é a única CPU que está usando a estrutura
+de dados. Essa sequência de eventos leva ao caos.
+
+Para evitar essa situação, sistemas multiprocessadores costumam ter um ciclo de barramento especial ler-
+-modificar-escrever que permite a qualquer CPU ler uma palavra da memória, inspecionar e modificar essa pala-
+vra, e escrevê-la novamente na memória, tudo sem liberar o barramento. Esse tipo de ciclo evita que uma CPU
+rival possa usar o barramento e assim interferir com a operação da primeira CPU.
+
+Outro tipo importante de ciclo de barramento é o usado para manipular interrupções. Quando ordena que
+um dispositivo de E/S faça algo, a CPU espera uma interrupção quando o trabalho for concluído. A sinalização
+da interrupção requer o barramento.
+
+Uma vez que vários dispositivos podem querer causar uma interrupção simultaneamente, os mesmos tipos
+de problemas de arbitragem que tivemos nos ciclos de barramento comuns também estão presentes aqui. A
+solução normal é atribuir prioridades a dispositivos e usar um árbitro centralizado para dar prioridade aos dis-
+positivos mais críticos em relação ao tempo. Existem chips controladores de interrupção padronizados que são
+muito usados. Em PCs baseados em processador Intel, o chipset incorpora um controlador de interrupção 8259A,
+ilustrado na Figura 3.43.
+
+Figura 3.43   Utilização do controlador de interrupção 8259A.
+
+Esta Figura 3.43 apresenta o funcionamento do Controlador de Interrupção 8259A, um componente vital que atua como um "secretário" para a CPU. No seu repositório arquitetura_computadores, este diagrama explica como o hardware gerencia múltiplos dispositivos externos (teclado, disco, impressora) que precisam da atenção do processador ao mesmo tempo.
+
+    Controlador de Interrupção 8259A (Figura 3.43)
+    DISPOSITIVOS (IR0 - IR7)              INTERFACE DA CPU
+         _________________________            _________________________
+        |  [ CLOCK ]      --> IR0 |          |                         |
+        |  [ TECLADO ]    --> IR1 |          |       [ CPU ]           |
+        |  [ DISCO ]      --> IR2 |   INT    |                         |
+        |  [ IMPRESSORA ] --> IR3 |--------->| <--- Pinos de Entrada   |
+        |  [ VCC ]        --> IR7 |   INTA   |      (Figura 3.34)      |
+        |_________________________| <--------|                         |
+                     |                       |_________________________|
+         ___________V___________                  |          |
+        |                       |                 |          |
+        |  CONTROLADOR 8259A    | <---------------+----------+
+        |_______________________|           BARRAMENTO DE DADOS (D0-D7)
+            ^      ^      ^
+            |      |      |
+            [RD]   [WR]   [CS] (Sinais de Controle)
+
+![alt text](image-29.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Ao programar em C no diretório estruturas_de_dados, você lida com isso através de Interrupt Service Routines (ISRs) ou sinais.
+
+ - Quando você pressiona uma tecla enquanto seu programa roda, o hardware do teclado ativa o pino IR1.
+
+ - O 8259A interrompe a execução atual do seu código, salva o estado dos registradores e pula para a função que trata a entrada de dados.
+
+ - Sem esse chip, o seu processador teria que gastar ciclos preciosos fazendo "polling" (perguntando constantemente a cada dispositivo se há algo novo), o que destruiria a performance das suas estruturas de dados.
+
+Até oito controladores de E/S 8259A podem ser conectados direto às oito entradas irx (Interrupt Request ­–
+solicitação de interrupção) do 8259A. Quando qualquer um desses dispositivos quiser causar uma interrupção, ele
+ativa sua linha de entrada. Quando uma ou mais entradas são acionadas, o 8259A ativa int (INTerrupt – interrup-
+ção), que impulsiona diretamente o pino de interrupção na CPU. Quando a CPU puder manipular a interrupção,
+ela devolve o pulso ao 8259A por inta (INTerrupt Acknowledge – reconhecimento de interrupção). Nesse ponto,
+o 8259A deve especificar qual entrada causou interrupção passando o número daquela entrada para o barramento
+de dados. Essa operação requer um ciclo de barramento especial. Então, o hardware da CPU usa esse número
+para indexar em uma tabela de ponteiros, denominados vetores de interrupção, para achar o endereço do proce-
+dimento a executar para atender à interrupção.
+
+No interior do 8259A há diversos registradores que a CPU pode ler e escrever usando ciclos de barramento
+comuns e os pinos rd (ReaD), wr (WRite), cs (Chip Select) e a0. Quando o software tiver tratado da interrupção e
+estiver pronto para atender à seguinte, ele escreve um código especial em um dos registradores, que faz o 8259A
+negar INT, a menos que haja outra interrupção pendente. Esses registradores também podem ser escritos para
+colocar o 8259A em um de vários modos, mascarar um conjunto de interrupções e habilitar outras características.
+
+Quando mais de oito dispositivos de E/S estiverem presentes, os 8259As podem funcionar em cascata. No
+caso mais extremo, todas as oito entradas podem ser conectadas às saídas de mais oito 8259As, permitindo até 64
+dispositivos de E/S em uma rede de interrupção de dois estágios. O hub controlador de E/S ICH10 da Intel, um dos
+chips no chipset Core i7, incorpora dois controladores de interrupção 8259A. Isso dá ao ICH10 15 interrupções
+externas, uma a menos que as 16 interrupções nos dois controladores 8259A, pois uma das interrupções é usada
+para a operação em cascata do segundo 8259A para o primeiro. O 8259A tem alguns pinos dedicados a essa ope-
+ração em cascata, que omitimos por questão de simplicidade. Hoje, o “8259A” é, na realidade, parte de outro chip.
+
+Embora não tenhamos nem de perto esgotado a questão do projeto de barramento, o material que apresenta-
+mos até aqui deve oferecer fundamento suficiente para entender os aspectos essenciais do modo de funcionamen-
+to de um barramento e da interação entre CPUs e barramentos. Agora, vamos passar do geral para o específico e
+examinar alguns exemplos de CPUs reais e seus barramentos.
+
+## 3.5 Exemplo de chips de CPUs
+Nesta seção, vamos examinar com algum detalhe os chips Intel Core i7, TI OMAP4430 e Atmel ATmega168
+no nível de hardware.
+
+## 3.5.1 O Intel Core i7
+O Core i7 é um descendente direto da CPU 8088 usada no IBM PC original. O primeiro Core i7 foi lançado
+em novembro de 2008 como uma CPU de 731 milhões de transistores de quatro processadores que funcionava em 3,2 GHz com uma largura de linha de 45 nanômetros. Largura da linha quer dizer a largura dos fios entre
+transistores, assim como uma medida do tamanho dos próprios transistores. Quanto menor a largura da linha,
+mais transistores podem caber no chip. No fundo, a lei de Moore se refere à capacidade de os engenheiros de
+processo continuarem a reduzir as larguras das linhas. Para fins de comparação, os fios de cabelo humano ficam
+na faixa de 20 mil a 100 mil nanômetros de diâmetro, sendo o cabelo loiro mais fino do que o preto.
+
+A versão inicial da arquitetura Core i7 era baseada na arquitetura “Nahalem”; porém, as versões mais
+novas são montadas sobre a arquitetura “Sandy Bridge” mais recente. A arquitetura nesse contexto representa
+a organização interna da CPU, que costuma receber um codinome. Apesar de serem em geral pessoas sérias,
+os arquitetos de computador às vezes aparecerão com codinomes muito inteligentes para seus projetos. Uma
+arquitetura digna de nota foi a série K da AMD, projetada para quebrar a posição aparentemente invulnerável
+da Intel no segmento de CPU para desktop. O codinome dos processadores da série K foi “Kryptonite”, uma
+referência à única substância capaz de ferir o Super-homem, e um golpe inteligente na dominante Intel.
+
+O novo Core i7 baseado na Sandy Bridge evoluiu para ter 1,16 bilhão de transistores e trabalha em veloci-
+dades de até 3,5 GHz, com larguras de linha de 32 nanômetros. Embora o Core i7 esteja longe do 8088 com 29
+mil transistores, ele é totalmente compatível com o 8088 e pode rodar sem modificação os programas binários do
+8088 (sem falar também nos programas para todos os processadores intermediários).
+
+Do ponto de vista de software, o Core i7 é uma máquina completa de 64 bits. Tem todas as mesmas carac-
+terísticas ISA de nível de usuário que os chips 80386, 80486, Pentium, Pentium II, Pentium Pro, Pentium III e
+Pentium 4, inclusive os mesmos registradores, as mesmas instruções e uma execução completa no chip do padrão
+IEEE 754 de ponto flutuante. Além disso, tem algumas novas instruções destinadas principalmente a operações
+criptográficas.
+
+O processador Core i7 é uma CPU multicore (de múltiplos núcleos), de modo que o substrato de silício
+contém vários processadores. A CPU é vendida com um número variável de processadores, que vai de 2 a 6,
+com outras configurações planejadas para o futuro próximo. Se os programadores escreverem um programa
+paralelo, usando threads e locks, é possível obter ganhos significativos na velocidade do programa, explorando
+o paralelismo nos múltiplos processadores. Além disso, as CPUs individuais são “hyperthreaded”, de modo que
+várias threads de hardware podem estar ativas simultaneamente. O hyperthreading (normalmente denominado
+“multithreading simultâneo” pelos arquitetos de computador) permite que latências muito curtas, como faltas
+de cache, sejam toleradas com trocas de thread de hardware. O threading baseado no software só pode tolerar
+latências muito longas, como faltas de página, devido às centenas de ciclos necessárias para executar as trocas de
+threads baseadas em software.
+
+Em sua parte interna, no nível da microarquitetura, o Core i7 é um projeto bastante capaz. Ele é baseado na
+arquitetura de seus predecessores, o Core 2 e Core 2 Due. O processador Core i7 pode executar até quatro ins-
+truções ao mesmo tempo, tornando-o uma máquina superescalar de largura 4. Examinaremos a microarquitetura
+no Capítulo 4.
+
+Todos os processadores Core i7 têm três níveis de cache. Cada processador em um processador Core i7 tem
+uma cache de dados de nível 1 (L1) com 32 KB e uma de instruções de nível 1 com 32 KB. Cada núcleo também
+tem sua própria cache de nível 2 (L2) com 256 KB. A cache de segundo nível é unificada, significando que pode
+ter uma mistura de instruções e dados. Todos os núcleos compartilham uma só cache unificada de nível 3 (L3),
+cujo tamanho varia de 4 a 15 MB, dependendo do modelo de processador. Ter três níveis de cache melhora sig-
+nificativamente o desempenho do processador, mas com um grande custo na área de silício, pois as CPUs Core
+i7 podem ter até 17 MB de cache total em um único substrato de silício.
+
+Visto que todos os chips Core i7 têm múltiplos processadores com caches de dados privadas, surge um pro-
+blema quando uma CPU modifica uma palavra na cache privada que esteja contida na de outro processador. Se o
+outro processador tentar ler aquela palavra da memória, obterá um valor ultrapassado, já que palavras de cache
+modificadas não são escritas de imediato de volta na memória. Para manter a consistência da memória, cada CPU
+em um sistema microprocessador escuta (snoops) o barramento de memória em busca de referências de palavras
+que tenha em cache. Quando vê uma dessas referências, ela se apressa em fornecer os dados requisitados antes que
+a memória tenha chance de fazê-lo. Estudaremos a escuta (snooping) no Capítulo 8.
+
+Dois barramentos externos principais são usados nos sistemas Core i7, ambos síncronos. Um barramento
+de memória DDR3 é usado para acessar a DRAM de memória principal, e um barramento PCI Express conecta o
+processador a dispositivos de E/S. Versões avançadas do Core i7 incluem memória múltipla e barramentos PCI
+Express, e elas também incluem uma porta Quick Path Interconnect (QPI). A porta QPI conecta o processador
+a uma interconexão multiprocessadora externa, permitindo a montagem de sistemas com mais de seis proces-
+sadores. A porta QPI envia e recebe requisições de coerência de cache, mais uma série de outras mensagens de
+gerenciamento de multiprocessador, como interrupções interprocessador.
+
+Um problema com o Core i7, bem como com a maioria das outras CPUs modernas do tipo desktop, é a energia
+que consome e o calor que gera. Para impedir danos ao silício, o calor deve ser afastado do substrato do processador
+logo após ser produzido. O Core i7 consome entre 17 e 150 watts, dependendo da frequência e do modelo. Por
+consequência, a Intel está sempre buscando meios de controlar o calor produzido por seus chips de CPU. As
+tecnologias de resfriamento e os dissipadores de calor são vitais para evitar que o silício se queime.
+
+O Core i7 vem em um pacote LGA quadrado com 37,5 mm de borda. Ele contém 1.155 pinos na parte infe-
+rior, dos quais 286 são para alimentação e 360 são aterramento, para reduzir o ruído. Os pinos são arrumados
+mais ou menos como um quadrado de 40 × 40, com os 17 × 25 do meio faltando. Além disso, 20 outros pinos
+estão faltando no perímetro em um padrão assimétrico, para impedir que o chip seja inserido incorretamente em
+sua base. A disposição física dos pinos aparece na Figura 3.44.
+
+Figura 3.44   Disposição física dos pinos no Core i7.
+
+Esta Figura 3.44 marca a transição da lógica teórica para a realidade física brutal do hardware moderno: a Dissipação Térmica. Enquanto as figuras anteriores focaram em como os elétrons movem dados, esta foca em como o movimento desses elétrons gera calor — e muito calor.
+
+No seu repositório arquitetura_computadores, este conceito é o que define os limites físicos da frequência de clock do seu processador.
+
+    Gerenciamento Térmico (Figura 3.44)
+
+         _______________________________________
+        |          DISSIPADOR DE CALOR          |
+        |   (Aletas de alumínio/cobre para      |
+        |    aumentar a área de contato)        |
+        |_______________________________________|
+                    ||               ||
+             _______||_______________||_______
+            |       PLACA DE MONTAGEM         |
+            |      (Heat Spreader - IHS)      |
+            |_________________________________|
+                    ||               ||
+             _______||_______________||_______
+            |     CHIP DO CORE i7 (DIE)       | --- (Gera ~150W de calor)
+            |_________________________________|
+                    ||               ||
+             _______||_______________||_______
+            |         SOQUETE / PCB           |
+            |_________________________________|
+
+![alt text](image-30.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Pode parecer que o calor não afeta o software, mas no diretório estruturas_de_dados, a eficiência do seu código impacta diretamente a temperatura do seu Lenovo IdeaPad Gaming 3.
+
+ - Algoritmos com alta complexidade computacional que mantêm a CPU em 100% de uso por longos períodos disparam o ventilador e podem causar o Thermal Throttling.
+
+ - Quando isso acontece, o hardware reduz o clock, e sua estrutura de dados, que deveria ser rápida, começa a performar de forma lenta devido à limitação térmica do hardware.
+
+O chip é equipado com uma placa de montagem para um dissipador distribuir o calor e um ventilador para
+resfriá-lo. Para ter uma ideia do tamanho do problema da potência, ligue uma lâmpada incandescente de 150
+watts, deixe-a aquecer e depois coloque suas mãos ao seu redor (mas não a toque). Essa quantidade de calor deve
+ser dissipada continuamente por um processador Core i7 de última geração. Em consequência, quando o Core
+i7 não tiver mais utilidade como uma CPU, ele sempre poderá ser usado como um fogareiro em acampamentos.
+
+De acordo com as leis da física, qualquer coisa que emita muito calor deve absorver muita energia. Não é
+interessante usar muita energia em um computador portátil com carga de bateria limitada porque a bateria se
+esgota rapidamente. Para resolver essa questão, a Intel oferece um meio de pôr a CPU para dormir quando ela estiver ociosa e de fazê-la cair em sono profundo quando é provável que fique adormecida durante algum tempo.
+Há cinco estados oferecidos, que vão de totalmente ativa a sono profundo. Nos estados intermediários são habi-
+litadas algumas funcionalidades (tal como escuta de cache e manipulação de interrupção), mas outras funções
+são desativadas. Quando em estado de sono profundo, os valores de registradores são preservados, mas as caches são
+esvaziadas e desligadas. Nesse estado, é preciso que haja um sinal de hardware para despertá-la. Ainda não sabe-
+mos se um Core i7 pode sonhar quando está em sono profundo.
+
+### Pinagem lógica do Core i7
+Os 1.155 pinos do Core i7 são usados para 447 sinais, 286 conexões de energia elétrica (em diversas volta-
+gens diferentes), 360 terras e 62 reservados para uso futuro. Alguns dos sinais lógicos usam dois ou mais pinos
+(tal como o endereço de memória requisitado), de modo que há somente 131 sinais diferentes. Uma pinagem
+lógica um pouco simplificada é dada na Figura 3.45. No lado esquerdo da figura, há cinco grupos principais de
+sinais de barramento; no lado direito, há diversos sinais variados.
+
+Figura 3.45   Pinagem lógica do Core i7
+
+Esta Figura 3.45 representa a pinagem lógica do Core i7, mostrando como os conceitos de barramentos (Figura 3.35) e interrupções (Figura 3.43) se materializam em um chip de alta performance.
+
+Note a enorme quantidade de pinos dedicados apenas à Energia e ao Terra, refletindo o desafio térmico que discutimos na Figura 3.44.
+
+    Pinagem Lógica do Core i7 (Figura 3.45)
+    No seu repositório arquitetura_computadores, este diagrama serve como a interface final entre a CPU e a placa-mãe.
+
+                 ________________________________________
+                |                                        |
+       <------//| CANAL DDR #1 / #2 (124 + 124 pinos)    |-- (Interface com a RAM)
+                |______________________________________ _|
+                |                                        |
+       <----->//| PCI Express (80 pinos)                 |--- (Placas de Vídeo/NVMe)
+                |________________________________________|
+                |                                        |
+        <-----//| INTERFACE DE MÍDIA / MONITOR          |--- (Vídeo Integrado)
+                |_______________________________________|
+                |                                       |
+        <------ | MONITORAMENTO TÉRMICO (10 pinos)      |--- (Prevenção de Throttling)
+                |            CORE i7                    |
+        <-------| GERENCIAMENTO DE ENERGIA (7 pinos)    |--- (Estados de Sleep/C-States)
+                |                                       |
+        <-----//| CONFIGURAÇÃO / DIVERSOS               |--- (Reset, JTAG, BCLK)
+                |_______________________________________|
+                    |               |               |
+                    (286)           (360)           (12)
+                    ENERGIA          TERRA           CLOCK
+
+![alt text](image-31.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Essa pinagem explica por que, no seu diretório estruturas_de_dados, a escolha de hardware impacta o software:
+
+ - Se você tem dois pentes de RAM, a CPU ativa os 248 pinos dos canais DDR, permitindo que suas buscas em Hash Tables sejam muito mais rápidas devido ao acesso paralelo.
+
+ - A enorme quantidade de pinos de energia e terra garante que, mesmo sob carga intensa de processamento de dados, os sinais lógicos permaneçam "limpos" e sem erros de bit.
+
+
+Vamos examinar os sinais, começando com os do barramento. Os dois primeiros sinais são usados para a
+interface com DRAM compatível com DDR3. Esse grupo oferece endereço, dados, controle e clock ao banco de
+DRAMs. O Core i7 admite dois canais DRAM DDR3 independentes, rodando com um clock de barramento de 666
+MHz que transfere nas duas bordas, para permitir 1.333 milhões de transações por segundo. A interface DDR3
+tem 64 bits de largura, e assim, as duas interfaces DDR3 trabalham em sequência para dar aos programas com
+muita utilização de memória até 20 gigabytes de dados a cada segundo.
+
+O terceiro grupo do barramento é a interface PCI Express, que é usada para conectar periféricos diretamente
+à CPU Core i7. A interface PCI Express é uma interface serial de alta velocidade, com cada enlace serial único
+formando uma “via” de comunicação com os periféricos. O enlace do Core i7 é uma interface x16, significando
+que pode utilizar 16 vias simultaneamente para uma largura de banda agregada de 16 GB/s. Apesar de ser um
+canal serial, um rico conjunto de comandos trafega pelos enlaces PCI Express, incluindo comandos de leituras
+de dispositivo, escrita, interrupção e configuração.
+
+O grupo seguinte é a Direct Media Interface (DMI), que é usada para conectar a CPU do Core i7 ao seu chip-
+set correspondente. A interface DMI é semelhante à interface PCI Express, embora trabalhe com cerca de metade
+da velocidade, pois quatro vias podem fornecer apenas taxas de transferência de dados de até 2,5 GB por segundo.
+
+O chipset de uma CPU contém um rico conjunto de suporte para interface de periférico adicional, exigido para
+sistemas de mais alto nível, com muitos dispositivos de E/S. O chipset do Core i7 é composto dos chips P67 e
+ICH10. O chip P67 é o canivete suíço dos chips, oferecendo interfaces SATA, USB, Audio, PCIe e memória flash.
+O chip ICH10 oferece suporte para interface legada, incluindo uma interface PCI e a funcionalidade de contro-
+le de interrupção do 8259A. Além disso, o ICH10 contém alguns outros circuitos, como clocks de tempo real,
+temporizadores de eventos e controladores de acesso direto à memória (DMA). Ter chips como esses simplifica
+bastante a construção de um PC completo.
+
+O Core i7 pode ser configurado para usar interrupções do mesmo modo que o 8088 (para fins de compati-
+bilidade) ou também pode usar um novo sistema de interrupção que utiliza um dispositivo denominado APIC
+(Advanced Programmable Interrupt Controller – controlador de interrupção programável avançado).
+
+O Core i7 pode funcionar em quaisquer de várias tensões predefinidas, mas tem de saber qual delas. Os sinais
+de gerenciamento de energia são usados para seleção automática de tensão da fonte de alimentação, para informar
+à CPU que a energia está estável e outros assuntos relacionados com a energia. O controle dos vários estados de
+sono também é feito aqui, já que o sono acontece por razões de gerenciamento de energia.
+
+A despeito de seu sofisticado gerenciamento de energia, o Core i7 pode ficar muito quente. Para proteger o
+silício, cada processador Core i7 contém vários sensores de calor internos, que detectam quando o chip está para
+superaquecer. O grupo de monitoramento térmico trata do gerenciamento térmico, permitindo que a CPU indi-
+que a seu ambiente que está em risco de superaquecimento. Um dos pinos é ativado pela CPU caso a temperatura
+atinja 130 °C (266°F). Se uma CPU alguma vez atingir essa temperatura, provavelmente estará sonhando com sua
+aposentadoria e posterior transformação em fogareiro de acampamento.
+
+Até mesmo em temperaturas de fogareiro de acampamento você não precisa se preocupar com a segurança
+do Core i7. Se os sensores internos detectarem que o processador está para superaquecer, ele iniciará o estrangu-
+lamento térmico, uma técnica que logo reduz a geração de calor, usando o processador apenas a cada N-ésimo
+ciclo de clock. Quanto maior o valor de N, mais o processador é estrangulado, e mais rápido ele se resfriará. É
+claro que o custo desse estrangulamento é uma diminuição no desempenho do sistema. Antes da invenção do
+estrangulamento térmico, as CPUs se queimavam se seu sistema de resfriamento falhasse. A evidência desses tem-
+pos negros do gerenciamento térmico da CPU pode ser achada procurando-se por “exploding CPU” no YouTube.
+O vídeo é falso, mas o problema não.
+
+O sinal Clock fornece o clock do sistema ao processador, que internamente é usado para gerar uma variedade
+de clocks com base em um múltiplo ou fração do clock do sistema. Sim, é possível gerar um múltiplo da frequência de
+clock, usando um dispositivo muito inteligente, chamado de delay-locked loop, ou DLL.
+
+O grupo Diagnósticos contém sinais para testar e depurar sistemas em conformidade com o padrão de testes
+IEEE 1149.1 JTAG (Joint Test Action Group). Finalmente, o grupo Diversos é uma miscelânea de outros sinais
+que possuem diversas finalidades especiais.
+
+### Paralelismo no barramento de memória do DDR3 do Core i7
+CPUs modernas como o Core i7 colocam grandes demandas sobre as memórias DRAM. Os processadores
+individuais podem criar requisições de acesso muito mais depressa do que uma DRAM lenta consegue produzir
+valores, e esse problema é aumentado quando vários processadores estão fazendo requisições simultâneas. Para
+evitar que as CPUs morram por falta de dados, é essencial conseguir o máximo de vazão possível da memória. Por
+esse motivo, o barramento de memória DDR3 do Core i7 pode ser operado de uma forma paralela, com até quatro
+transações de memória simultâneas ocorrendo ao mesmo tempo. Vimos o conceito de paralelismo (ou pipelining)
+no Capítulo 2, no contexto de uma CPU em paralelo (ver Figura 2.4), mas as memórias também podem trabalhar
+com paralelismo.
+    Para permitir o paralelismo, as requisições à memória do Core i7 têm três etapas:
+
+    1. A fase ACTIVATE da memória, que “abre” uma linha de memória DRAM, aprontando-a para acessos
+    subsequentes à memória.
+    2. A fase READ ou WRITE da memória, na qual vários acessos podem ser feitos a palavras individuais
+    dentro da linha DRAM aberta ou a várias palavras sequenciais dentro da linha de DRAM atual, usando
+    um modo de rajada.
+    3. A fase PRECHARGE, que “fecha” a linha de memória DRAM atual e prepara a memória DRAM para o
+    próximo comando ACTIVATE.
+
+O segredo do barramento de memória com paralelismo do Core i7 é que as DRAMs DDR3 são organizadas
+com vários bancos dentro do chip de DRAM. Um banco é um bloco de memória DRAM, que pode ser acessa-
+do em paralelo com outros bancos de memória DRAM, mesmo que estejam contidos no mesmo chip. Um chip
+DRAM DDR3 típico terá até 8 bancos de DRAM. Porém, a especificação de interface DDR3 permite apenas até
+quatro acessos simultâneos sobre um único canal DDR3. O diagrama de temporização da Figura 3.46 ilustra o
+Core i7 fazendo 4 acessos à memória para três bancos de DRAM distintos. Os acessos são totalmente sobrepostos,
+de modo que as leituras de DRAM ocorrem em paralelo dentro do chip de DRAM. Com setas no diagrama de
+temporização, a figura mostra quais comandos levam a outras operações.
+
+Figura 3.46   Requisições de memória com paralelismo na interface DDR3 do Core i7.
+
+    Paralelismo e Pipelining (Figura 3.46)
+
+    CICLO:  0   1   2   3   4   5   6   7   8   9  10  11  12  13
+            ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___
+    CK  __| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_
+            
+            [ACT 0] [RD 0]          [PCH 0] [ACT 0] [RD 0] [PCH 0]
+    CMD   --+-------+---------------+-------+-------+-------+-----
+             \ [ACT 1] [RD 1]          [PCH 1]
+              \---+-------+-------------+-------+
+                \ [ACT 2] [RD 2] [PCH 2]
+                 \---+-------+-----+
+                                    [DADO 0] [DADO 1] [DADO 2] [DADO 0]
+    DATA  ---------------------------+--------+--------+--------+------
+
+![alt text](image-8.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Este nível de paralelismo é o que torna o Cache Prefetching tão eficiente no seu diretório estruturas_de_dados.
+
+ - Quando o hardware percebe que você está percorrendo um array contíguo, ele começa a enviar comandos ACT para os próximos bancos de memória antes mesmo de você solicitar o dado.
+
+ - Isso significa que, quando o seu código em C chega na próxima iteração, o dado já está "descendo" pelo barramento, eliminando quase todos os Wait States da Figura 3.38.
+
+ Como vemos na Figura 3.46, a interface de memória DDR3 tem quatro caminhos de sinal principais: clock de
+barramento (CK), comando de barramento (CMD), endereço (ADDR) e dados (DATA). O sinal CK de clock
+de barramento orquestra toda a atividade deste. O comando de barramento CMD indica qual atividade é requi-
+sitada da DRAM de conexão. O comando ACTIVATE especifica o endereço de linha de DRAM a ser aberta por
+meio do sinal ADDR. Quando um READ é executado, o endereço de coluna da DRAM é dado por meio de sinais
+ADDR, e a DRAM produz o valor de leitura após um tempo fixo sobre os sinais DATA. Por fim, o comando
+PRECHARGE indica ao banco para pré-carregar por meio dos sinais ADDR. Para a finalidade do exemplo, o
+comando ACTIVATE deverá preceder o primeiro READ para o mesmo banco por dois ciclos de barramento
+DDR3, e os dados são produzidos um ciclo após o comando READ. Além disso, a operação PRECHARGE deverá
+ocorrer pelo menos dois ciclos de barramento após a última operação READ para o mesmo banco de DRAM.
+
+O paralelismo nas requisições de memória pode ser visto na sobreposição das requisições de READ para os
+diferentes bancos de DRAM. Os dois primeiros acessos READ aos bancos 0 e 1 são completamente superpostos, pro-
+duzindo resultados nos ciclos de barramento 3 e 4, respectivamente. O acesso ao banco 2 é em parte superposto ao
+primeiro acesso do banco 1, e por fim a segunda leitura do banco 0 é parcialmente superposta ao acesso ao banco 2.
+
+Você pode estar questionando como o Core i7 sabe quando os dados do comando READ retornarão e quando
+ele pode fazer uma nova requisição à memória. A resposta é que ele sabe quando receber e iniciar requisições
+porque modela totalmente as atividades internas de cada DRAM DDR3 conectada. Assim, ele antecipará o retorno
+dos dados no ciclo correto e saberá evitar o início de uma operação de pré-carga antes que se passem dois ciclos
+de sua última operação de leitura. O Core i7 pode antecipar todas essas atividades porque a interface de memória
+DDR3 é uma interface de memória síncrona. Assim, todas as atividades usam um número bem conhecido de
+ciclos de barramento DDR3. Mesmo com todo esse conhecimento, a criação de uma interface de memória DDR3
+com paralelismo completo e com alto desempenho é uma tarefa longe de ser trivial, exigindo muitos temporiza-
+dores internos e detectores de conflito para realizar o tratamento eficaz da requisição de DRAM.
+
+## 3.5.2 O sistema-em-um-chip Texas Instruments OMAP4430
+Como nosso segundo exemplo de um chip de CPU, examinaremos agora o sistema-em-um-chip Texas
+Instruments (TI) OMAP4430. O OMAP4430 realiza o conjunto de instruções ARM e é voltado para aplicações
+móveis e embutidas, como smartphones, tablets e dispositivos da Internet. Com um nome apropriado, um
+sistema-em-um-chip incorpora uma grande variedade de dispositivos, de modo que, combinado com periféricos
+físicos (tela sensível ao toque, memória flash etc.), ele executa um dispositivo de computação completo.
+
+O sistema OMAP4430 inclui dois núcleos ARM A9, aceleradores adicionais e uma grande gama de inter-
+faces periféricas. A organização interna do OMAP4430 aparece na Figura 3.47. Os núcleos ARM A9 são micro-
+arquiteturas superescalares de largura 2. Além disso, existem mais três processadores aceleradores no substrato
+OMAP4430: o processador gráfico POWERVR SGX540, um processador de sinal de imagem (ISP) e um processa-
+dor de vídeo IVA3. O SGX540 oferece uma renderização 3D programável eficaz, semelhante às GPUs encontradas
+em PCs desktop, apesar de menores e mais lentas. O ISP é um processador programável projetado para manipula-
+ção eficiente da imagem, para o tipo de operações que seriam exigidas em uma câmera digital avançada. O IVA3
+executa codificação e decodificação eficientes de vídeo, com desempenho suficiente para dar suporte a aplicações
+3D, como as encontradas em consoles de jogos portáteis. Há também no sistema OMAP4430 uma gama de inter-
+faces periféricas, incluindo uma tela sensível ao toque e controladores de teclado, DRAM e interfaces flash, USB
+e HDMI. A Texas Instruments detalhou um roteiro para a série OMAP de CPUs. Projetos futuros terão mais de
+tudo – mais núcleos ARM, mais GPUs e mais periféricos diversos.
+
+Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
+
+    ___________________________________________________________________________
+    |                                OMAP4430 SoC                               |
+    |___________________________________________________________________________|
+    |  [ MPU ARMv7 ]    [ IVA-HD ]    [ SGX540 ]    [ DUCATI ]    [ SEGURANÇA ] |
+    |  (Dual Core)      (1080p)       (GPU 2D/3D)   (Cortex-M3)   (AES/SHA/DMA) |
+    |______|_______________|______________|_____________|______________|________|
+         |               |              |             |              |
+    <-----+---------------+-------[ BARRAMENTO L3 ]----+--------------+------>
+        |               |       (ALTA LARGURA)       |              |
+    ______|______   ______|______          ____________|___________    |
+    | CONTROLADOR | | CONTROLADOR |        |    DISPLAY (DSS)       |  |
+    | MEMÓRIA EMIF| |  GPMC / RAM |        | (DSI / HDMI / TV OUT)  |  |
+    | (LPDDR2 x2) | |   (48KB)    |        |________________________|  |
+    |_____________| |_____________|                     |              |
+                                                        V              |
+    <---------------------------[ BARRAMENTO L4 ]---------------------+------>
+        |               |              |             |              |
+    [ UART / SPI ]   [ I2C / McBS ]  [ GPIOs ]    [ USB / OTG ]  [ CÂMERA ]
+
+
+    Figura 3.35 Sistema de computador com vários barramentos
+
+                    Chip de CPU
+                .--------------------------.
+                | .------------.           |         .---------------.
+                | | Registradores| Barramentos  <--->| Controlador   |
+                | |   ====     |----.      |         |      de       |
+                | |   ====     |    |      |         |  barramento   |
+                | '------+-----'    V      |         '-------+-------'
+                |        ^        .---.    |                 |   ^
+                |        |        |   |    |                 |   | Barramento de
+                |Barramento no chip|ULA|    |                |   | memória
+                |        |        |   |    |                 V   |
+                |        '--------'---'    |         .-------+-------.
+                |                          |         |               |
+                '--------------------------'         |    Memória    |
+                                                     |               |
+                                                     '---------------'
+                                                            |
+                                                            | Barramento de E/S
+                    .-------------------------------------+-------------------.
+                    |                  |                  |                   |
+                .---+---.          .---+---.          .---+---.           .---+---.
+                |       |          |       |          |       |           |       |
+                | Disco |          | Rede  |          |Impres-|           |       |
+                |       |          |       |          | sora  |           |       |
+                '-------'          '-------'          '-------'           '-------'
+
+### Insight para o seu diretório estruturas_de_dados
+Entender o OMAP4430 é vital para o seu trabalho com Sistemas Embarcados. No seu diretório estruturas_de_dados, quando você lida com buffers de áudio ou vídeo, você está interagindo com o SDMA (System DMA) mostrado no diagrama.
+
+ - O uso correto de estruturas contíguas na memória permite que o SDMA mova dados diretamente entre o Back-end de Áudio e a LPDDR2 sem interromper o processamento da MPU ARMv7.
+
+O sistema OMAP4430 foi lançado no início de 2011 com dois núcleos ARM A9 rodando a 1 GHz usando
+uma implementação de silício de 45 nanômetros. Um aspecto chave do projeto do OMAP4430 é que ele realiza
+quantidades significativas de cálculo com muito pouca potência, pois é visado para aplicações móveis, alimenta-
+das por uma bateria. Em tais aplicações, quanto mais eficiente for a operação do projeto, mais tempo o usuário
+poderá ficar sem carregar a bateria.
+
+Os muitos processadores do OMAP4430 são incorporados para dar suporte à missão de operação com baixa
+potência. O processador gráfico, ISP, e o IVA3 são todos aceleradores programáveis que fornecem capacidades de
+cálculo eficientes com significativamente menos energia em comparação com as mesmas tarefas sendo executadas
+apenas nas CPUs ARM A9. Totalmente alimentado, o sistema IMAP4430 consome apenas 600 mW de potência.
+Em comparação com o Core i7 avançado, o OMAP4430 usa cerca de 1/250 de sua potência. O OMAP4430 tam-
+bém executa um modo de sono muito eficaz; quando todos os componentes estão dormindo, o projeto consome
+somente 100 µW. Modos de sono eficientes são fundamentais para aplicações móveis com longos períodos de
+tempo de standby, como um telefone celular. Quanto menos energia usada no modo de sono, mais tempo o tele-
+fone celular durará no modo standby.
+
+Para reduzir ainda mais as demandas de potência do OMAP4430, o projeto incorpora uma série de facilida-
+des de gerenciamento de energia, incluindo a escalada dinâmica de tensão e o chaveamento de energia. A escala-
+da dinâmica de tensão permite que os componentes sejam executados mais devagar em uma tensão inferior, o que
+reduz bastante os requisitos de potência. Se você não precisa da velocidade de computação mais ardente da CPU,
+a tensão do projeto pode ser reduzida para que a CPU trabalhe em uma velocidade mais lenta e muita energia
+será economizada. O chaveamento de energia é uma técnica de gerenciamento ainda mais agressiva, na qual um
+componente é desligado por completo quando não estiver em uso, eliminando assim seu consumo de energia.
+Por exemplo, em uma aplicação de tablet, se o usuário não estiver assistindo a um filme, o processador de vídeo
+IVA3 é completamente desligado e não consome energia. Por outro lado, quando o usuário está assistindo a um
+filme, o processador de vídeo IVA3 trabalha ao máximo em suas tarefas de decodificação de vídeo, enquanto as
+duas CPUs ARM A9 estão dormindo.
+
+Apesar de sua tendência para uma operação com economia de energia, os núcleos ARM A9 utilizam uma
+microarquitetura bastante capaz. Eles podem decodificar e executar até duas instruções a cada ciclo. Conforme
+aprenderemos no Capítulo 4, essa taxa de execução representa a vazão máxima da microarquitetura. Mas não
+espere que ela execute suas muitas instruções a cada ciclo. Em vez disso, pense nessa taxa como o desempenho
+máximo garantido pelo fabricante, um nível que o processador nunca excederá, não importa o que aconteça. Em
+muitos ciclos, menos de duas instruções serão executadas devido aos milhares de “hazards” (acasos) que podem
+adiar as instruções, levando a uma vazão de execução mais baixa. Para resolver muitos desses limitadores de
+vazão, o ARM A9 incorpora um poderoso previsor de desvio, escalonamento de instruções fora de ordem e um
+sistema de memória altamente otimizado.
+
+O sistema de memória do OMAP4430 tem duas caches L1 internas principais para cada processador ARM
+A9: uma de 32 KB para instruções e uma de 32 KB para dados. Assim como o Core i7, ele também usa uma
+cache nível 2 (L2) no chip, mas, diferente do Core i7, ela é uma memória de 1 MB relativamente pequena em
+tamanho, sendo compartilhada por ambos os núcleos ARM A9. As caches são alimentadas com canais de DRAM
+duais LPDDR2 de baixa potência. LPDDR2 é derivada do padrão de interface de memória DDR2, porém alterada
+para exigir menos fios e operar em tensões mais eficientes em termos de potência. Além disso, o controlador de
+memória incorpora uma série de otimizações de acesso à memória, como a pré-busca de memória ladrilhada e o
+suporte para rotação na memória.
+
+Vamos discutir caching em detalhes no Capítulo 4, mas é bom dizer algumas palavras sobre ela aqui. Toda
+memória principal é dividida em linhas (blocos) de cache de 32 bytes. As 1.024 linhas de instrução mais usadas
+e as 1.024 linhas de dados mais usadas estão na cache de nível 1. Linhas de cache que são muito usadas mas
+não cabem na de nível 1 são mantidas na de nível 2. Essa cache contém linhas de dados e linhas de instrução de
+ambas as CPUs ARM A9 misturadas aleatoriamente. A cache de nível 2 contém as 32.768 linhas acessadas mais
+recentemente na memória principal.
+
+Quando há uma ausência na cache de nível 1, a CPU envia o identificador da linha que está procurando
+(endereço de tag) para a cache de nível 2. A resposta (dados de tag) informa à CPU se a linha está ou não na cache
+de nível 2 e, se estiver, informa também o estado em que esta se encontra. Se a linha estiver na cache, a CPU vai
+pegá-la. Para obter um valor da cache de nível 2, são necessários 19 ciclos. Esse é um longo tempo para esperar os
+dados, de modo que programadores inteligentes otimizarão seus programas para usar menos dados, aumentando
+a probabilidade de achar os dados na cache rápida de nível 1.
+
+Se a linha de cache não estiver na cache de nível 2, ela deve ser buscada da memória principal por meio da
+interface de memória LPDDR2. A interface LPDDR2 do OMAP4430 é executada no chip de modo que a DRAM
+LPDDR2 possa ser conectada diretamente ao OMAP4430. Para acessar a memória, a CPU primeiro deve enviar
+a parte superior do endereço da DRAM ao chip de DRAM, usando as 13 linhas de endereço. Essa operação, cha-
+mada ACTIVATE, carrega uma linha inteira de memória da DRAM para um buffer de linha. Depois disso, a CPU
+pode emitir vários comandos read ou write, enviando o restante do endereço nas mesmas 13 linhas de endereço
+e enviando (ou recebendo) os dados para a operação nas 32 linhas de dados.
+
+Enquanto espera os resultados, a CPU pode perfeitamente continuar executando outro trabalho. Por exem-
+plo, uma ausência na cache durante a busca antecipada de uma instrução não inibe a execução de uma ou mais
+instruções já buscadas, cada uma das quais pode se referir a dados que não estão em quaisquer das caches. Assim,
+várias transações com as mesmas interfaces LPDDR2 podem estar pendentes ao mesmo tempo, até para o mesmo
+processador. Cabe ao controlador de memória monitorar tudo isso e fazer requisições de memória propriamente
+ditas na ordem mais eficiente.
+
+Quando os dados por fim chegam da memória, podem vir em 4 bytes por vez. Uma operação de memória pode
+utilizar uma leitura ou escrita no modo rajada, permitindo que vários endereços contíguos dentro da mesma linha
+da DRAM sejam lidos ou escritos. Esse modo é particularmente eficaz para ler ou escrever blocos de cache. Apenas
+por registro, a descrição do OMAP4430 dada aqui, como a do Core i7 antes dele, foi bastante simplificada, mas a
+essência de sua operação foi descrita.
+
+O OMAP4430 vem em uma matriz em grade de bola (PBGA) de 547 pinos, conforme mostra a Figura 3.48.
+Uma matriz em grade de bola é semelhante a uma matriz de grade de terra, exceto que as conexões no chip são
+pequenas bolas de metal, em vez de plataformas quadradas usadas na LGA. Os dois pacotes não são compatíveis,
+oferecendo mais evidência de que você não pode encaixar uma ponta quadrada em um furo redondo. O pacote
+do OMAP4430 consiste em uma matriz retangular de 28 × 26 bolas, com os dois anéis de bolas mais internos
+faltando, e mais duas meias linhas e colunas assimétricas de bolas faltando, para impedir que o chip seja inserido
+incorretamente no soquete BGA.
+
+Figura 3.48   A pinagem sistema-em-um-chip OMAP4430.
+
+Pinagem do SoC OMAP4430 (Figura 3.48)
+Ao contrário da pinagem lógica (Figura 3.45), esta imagem representa a matriz de esferas (BGA) localizada na parte inferior do chip que é soldada diretamente na placa-mãe do dispositivo móvel.
+
+      0000000000000000          0000000000000000
+      0000000000000000          0000000000000000
+      0000000000000000          0000000000000000
+      0000000000000000  ______  0000000000000000
+      0000              |    |              0000
+      0000              |    |              0000
+      0000      00000000|____|00000000      0000
+      0000      0000000000000000000000      0000
+      0000      0000              0000      0000
+      0000      0000    000000    0000      0000
+      0000      0000    000000    0000      0000
+      0000      0000    000000    0000      0000
+      0000      0000    000000    0000      0000
+      0000      0000              0000      0000
+      0000      0000000000000000000000      0000
+      0000      0000000000000000000000      0000
+      0000                                  0000
+      0000000000000000          0000000000000000
+      0000000000000000          0000000000000000
+      0000000000000000          0000000000000000
+      0000000000000000          0000000000000000
+
+### Insight para o seu repositório estruturas_de_dados
+Embora você não "programe" a pinagem, entender a Figura 3.48 é crucial para otimizar o uso do seu Lenovo IdeaPad Gaming 3.
+
+ - Dispositivos com essa pinagem densa são extremamente sensíveis a aquecimento.
+
+ - No seu diretório estruturas_de_dados, algoritmos que gerenciam mal a memória e causam "thrashing" (excesso de trocas entre cache e RAM externa) forçam a passagem de corrente constante por essas esferas de solda.
+
+ - Com o tempo, o estresse térmico pode causar microfissuras nessas conexões físicas, levando a falhas de hardware que nenhum código em C poderá consertar.
+
+![alt text](image-9.png)
+
+É difícil comparar um chip CISC (como o Core i7) e um chip RISC (como o OMAP4430) apenas com
+base na velocidade do clock. Por exemplo, os dois núcleos ARM A9 no OMAP4430 têm uma velocidade
+máxima de execução de quatro instruções por ciclo de clock, dando-lhe quase a mesma taxa de execução dos
+processadores superescalares de largura 4 do Core i7. Entretanto, o Core i7 alcança execução de programa
+mais rápida, pois tem até seis processadores rodando com uma velocidade de clock 3,5 vezes mais rápida
+(3,5 GHz) que o OMAP4430. O OMAP4430 pode parecer uma tartaruga correndo ao lado da lebre do Core
+i7, mas a tartaruga usa muito menos potência, e pode terminar primeiro, ainda mais se a bateria da lebre
+não for muito grande.
+
+## 3.5.3 O microcontrolador Atmel ATmega168
+Tanto o Core i7 quanto a OMAP4430 são exemplos de CPUs de alto desempenho projetadas para construir
+dispositivos de computação altamente eficazes, com o Core i7 voltado para aplicações de desktop enquanto o
+OMAP4430 é voltado para aplicações móveis. Quando pensam em computadores, são esses os tipos de sistemas
+que muitas pessoas têm em mente. Entretanto, existe todo outro universo de computadores que na verdade é
+muito maior: sistemas embutidos. Nesta seção, vamos examinar brevemente esse outro universo.
+
+Talvez não seja um grande exagero dizer que todo equipamento elétrico que custe mais de 100 dólares tem
+um computador dentro dele. Hoje, é certo que televisores, telefones celulares, agendas eletrônicas, fornos de
+micro-ondas, filmadoras, aparelhos de DVD, impressoras a laser, alarmes antifurto, aparelhos de surdez, jogos
+eletrônicos e outros incontáveis dispositivos são todos controlados por computador. Os computadores que estão
+dentro desses aparelhos costumam ser otimizados para baixo preço e não para alto desempenho, o que provoca
+compromissos diferentes dos feitos para CPUs de tecnologia avançada que estudamos até aqui.
+
+Como mencionamos no Capítulo 1, o Atmel ATmega168 provavelmente é o microcontrolador mais popular
+em uso hoje, em grande parte por causa de seu custo muito baixo (cerca de 1 dólar). Como veremos em breve, ele
+também é um chip versátil, portanto, fazer interface com ele é algo simples e barato. Agora, vamos examinar esse
+chip, cuja pinagem física é mostrada na Figura 3.49.
+
+Figura 3.49   Pinagem física do ATmega168.
+
+Esta Figura 3.49 apresenta a pinagem física do ATmega168, um microcontrolador que contrasta radicalmente com o Core i7 e o OMAP4430 que analisamos anteriormente. Enquanto os outros são processadores que dependem de barramentos externos complexos, este chip é um sistema autocontido, projetado para interagir diretamente com o hardware físico sem a necessidade de pinos de endereçamento ou dados externos.
+
+Pinagem do ATmega168 (Figura 3.49)
+Organizei o diagrama para o seu arquivo Nivel-Logica-Digital.md, destacando a disposição dos 28 pinos no pacote DIP (Dual In-line Package).
+
+    ATmega168 (DIP-28)
+                  .------- \_/ -------.
+            PC6  -| 1               28 |-  PC5
+            PD0  -| 2               27 |-  PC4
+            PD1  -| 3               26 |-  PC3
+            PD2  -| 4               25 |-  PC2
+            PD3  -| 5               24 |-  PC1
+            PD4  -| 6               23 |-  PC0
+            VCC  -| 7               22 |-  GND
+            GND  -| 8               21 |-  AREF
+            PB6  -| 9               20 |-  AVCC
+            PB7  -| 10              19 |-  PB5
+            PD5  -| 11              18 |-  PB4
+            PD6  -| 12              17 |-  PB3
+            PD7  -| 13              16 |-  PB2
+            PB0  -| 14              15 |-  PB1
+                  '-------------------'
+
+![alt text](image-10.png)
+
+### nsight para o seu repositório estruturas_de_dados
+O ATmega168 é o coração de muitas placas Arduino, e programar para ele exige uma mentalidade diferente no seu diretório estruturas_de_dados.
+
+ - Como a SRAM é extremamente limitada (apenas 2KB), você deve evitar o uso de grandes arrays ou alocação dinâmica (malloc).
+
+ - Em vez de barramentos de alta velocidade, você usará os pinos PD0 e PD1 (UART) para se comunicar com o seu Ubuntu 24.04 via terminal.
+
+ - A manipulação direta de registradores de porta (PORTB, PORTD) é a forma mais rápida de interagir com o hardware, ignorando as camadas de abstração comuns em sistemas maiores.
+
+Como podemos ver na figura, o ATmega168 normalmente vem em um pacote padrão de 28 pinos, embo-
+ra haja outros pacotes disponíveis. À primeira vista, você talvez tenha notado que a pinagem nesse chip é um
+pouco estranha em comparação com os dois projetos anteriores que examinamos. Em particular, esse chip não
+tem linhas de endereço e dados. Isso porque não foi projetado para ser conectado à memória, só a dispositivos.
+Toda a memória, SRAM e flash, está contida dentro do processador, evitando a necessidade de quaisquer pinos
+de endereço e dados, como mostra a Figura 3.50.
+
+Figura 3.50   Arquitetura interna e pinagem lógica do ATmega168.
+
+Esta Figura 3.50 é a peça final do nosso quebra-cabeça de hardware, Luís, revelando o que acontece por dentro do ATmega168 para que ele funcione sem pinos externos de endereço e dados. Diferente do Core i7, aqui a CPU divide espaço no mesmo chip com memórias e uma vasta gama de periféricos de controle.
+
+No seu repositório arquitetura_computadores, este diagrama é o exemplo máximo de uma Arquitetura Harvard, onde as instruções e os dados possuem caminhos separados.
+
+    Arquitetura Interna ATmega168 (Figura 3.50)
+
+    _________________________________________________________
+        |               SUPERVISÃO DE ENERGIA / RESET             |
+        |_________________________________________________________|
+            |                     |                      |
+    [ OSCILADORES ]       [ FLASH (Prog) ]        [ SRAM (Dados) ]
+    [    CLOCK    ]       [      |       ]        [      |       ]
+    |________|____________|______V_______|________|______V_______|
+            |                   CPU (AVR Core)                  |
+            |___________________________________________________|
+            |                     |                      |
+    [ EEPROM (Perm)]      [ BARRAMENTO DE DADOS ]       [ USART/SPI/TWI ]
+    |________|____________|__________V___________|________|_______|
+            |                     |                      |
+    [ TIMER/COUNTERS ]    [ CONVERSOR A/D (ADC) ]   [ COMP. ANALÓGICO ]
+    |________|____________|__________V___________|________|_______|
+            |                     |                      |
+        [ PORTA D ]           [ PORTA B ]            [ PORTA C ]
+        (PD0 - PD7)           (PB0 - PB7)            (PC0 - PC6)
+
+![alt text](image-11.png)
+
+### Insight para o seu repositório estruturas_de_dados
+Aqui no ATmega168, o seu conhecimento de Estruturas de Dados é testado ao limite devido à escassez de recursos:
+
+ - No diretório estruturas_de_dados, você aprenderá que em 2KB de SRAM, uma Lista Encadeada com muitos ponteiros pode causar um Stack Overflow rapidamente.
+
+ - O uso de Bitfields em C é essencial aqui para economizar cada byte de memória interna.
+
+ - Como o acesso à Flash é mais lento que à SRAM, você usará modificadores como PROGMEM para manter tabelas de dados constantes fora da memória de trabalho, otimizando o barramento interno.
+
+Em vez de pinos de endereço e dados, o ATmega168 tem 27 portas de E/S digitais, 8 linhas na porta B e D,
+e 7 linhas na porta C. Essas linhas de E/S digitais são projetadas para serem conectadas aos periféricos de E/S, e
+cada uma pode ser configurada internamente pelo software de partida para ser uma entrada ou uma saída. Por
+exemplo, quando usada em um forno de micro-ondas, uma linha de E/S digital seria uma entrada do sensor de
+“porta aberta”. Outra linha de E/S digital seria uma saída usada para ligar e desligar o gerador do micro-ondas. O
+software no ATmega168 verificaria se a porta estava fechada antes de ligar o gerador do micro-ondas. Se a porta
+de repente for aberta, o software deverá cortar a energia. Na prática, as interconexões de hardware também estão
+sempre presentes.
+
+Como opção, seis das entradas da porta C podem ser configuradas para serem E/S analógica. Pinos de E/S
+analógica podem ler o nível de tensão de uma entrada ou definir o nível de tensão de uma saída. Estendendo
+nosso exemplo de forno de micro-ondas, alguns aparelhos têm um sensor que permite ao usuário aquecer
+o alimento até determinada temperatura. O sensor de temperatura seria conectado a uma entrada de porta
+C, e o software poderia ler a tensão do sensor e depois convertê-la em uma temperatura usando uma função de
+tradução específica do sensor. Os pinos restantes no ATmega168 são a entrada de tensão (vcc), dois pinos de terra
+(gnd) e dois pinos para configurar os circuitos de E/S analógica (aref, avcc).
+
+A arquitetura interna do ATmega168, como a do OMAP4430, é um sistema-em-um-chip com uma rica
+matriz de dispositivos internos e memória. O ATmega168 vem com até 16 KB de memória flash interna, para
+armazenamento de informações não voláteis que mudam com pouca frequência, como instruções de programa.
+Ele também inclui até 1 KB de EEPROM, a memória não volátil que pode ser gravada pelo software. A EEPROM
+guarda dados de configuração do sistema. De novo, usando nosso exemplo de micro-ondas, a EEPROM armaze-
+naria um bit indicando se o micro-ondas mostrará a hora em formato de 12 ou 24 horas. O ATmega168 também
+incorpora até 1 KB de SRAM interna, onde o software pode armazenar variáveis temporárias.
+
+O processador interno roda o conjunto de instruções AVR, que é composto de 131 instruções, cada uma
+com 16 bits de extensão. O processador tem 8 bits, o que significa que opera sobre valores de dados de 8
+bits, e internamente seus registradores possuem um tamanho de 8 bits. O conjunto de instruções incorpora
+instruções especiais que permitem ao processador de 8 bits operar de modo eficiente sobre tipos de dados
+maiores. Por exemplo, para realizar adições de 16 bits ou maiores, o processador fornece a instrução “add-
+-with-carry” (somar com vai-um), que soma dois valores e mais o “vai-um” da adição anterior. Os outros
+componentes internos englobam o clock em tempo real e uma variedade de lógica de interface, incluindo
+suporte para enlaces seriais, enlaces PWM (pulse-width-modulated – modulado por largura de pulso), enlaces
+I2C (barramento Inter-IC) e controladores analógico e digital.
+
+## 3.6 Exemplos de barramentos 
+Barramentos são a cola que mantém a integridade dos sistemas de computadores. Nesta seção, examinaremos
+minuciosamente alguns barramentos populares: o PCI e o USB (Universal Serial Bus – barramento serial univer-
+sal). O PCI é o principal barramento de E/S usado hoje em dia nos PCs. Ele pode ter duas formas, o barramento
+PCI mais antigo, e o novo e muito mais rápido barramento PCI Express (PCIe). O Universal Serial Bus é um
+barramento de E/S cada vez mais popular para periféricos de baixa velocidade, como mouses e teclados. Uma
+segunda e terceira versões do barramento USB rodam com velocidades muito mais altas. Nas próximas seções,
+veremos esses barramentos um por vez, para ver como eles funcionam.
+
+## 3.6.1 O barramento PCI
+No IBM PC original, a maioria das aplicações era baseada em texto. De modo gradual, com a introdução do
+Windows, pouco a pouco começaram a ser usadas as interfaces gráficas de usuário. Nenhuma dessas aplicações
+exigia demais do barramento ISA. Contudo, com o passar do tempo, quando muitas aplicações, em especial jogos
+em multimídia, começaram a usar computadores para exibir vídeo em tela cheia e com movimento completo, a
+situação mudou radicalmente.
+
+Vamos fazer um cálculo simples. Considere um vídeo colorido de 1.024 × 768 com 3 bytes/pixel. Um
+quadro contém 2,25 MB de dados. Para um movimento suave, são necessárias ao menos 30 telas por segundo
+para uma taxa de dados de 67,5 MB por segundo. Na verdade, é pior do que isso, pois para apresentar um
+vídeo a partir de um disco rígido, CD-ROM ou DVD, os dados devem passar do drive de disco para o barra-
+mento e ir até a memória. Então, para a apresentação, os dados devem novamente percorrer o barramento até
+o adaptador gráfico. Portanto, precisamos de uma largura de banda de barramento de 135 MB por segundo
+só para o vídeo, sem contar a largura de banda de que a CPU e outros dispositivos precisam.
+
+O predecessor do barramento PCI, o ISA, funcionava à taxa máxima de 8,33 MHz e podia transferir 2 bytes
+por ciclo para uma largura de banda máxima de 16,7 MB/s. O barramento ISA avançado, denominado EISA, podia
+movimentar 4 bytes por ciclo, para alcançar 33,3 MB/s. Claro que nenhuma dessas taxas sequer chegava perto do
+que era necessário para apresentação de vídeo completo em tela.
+
+Com o vídeo de HD completo moderno, a situação é ainda pior. Isso exige 1.920 × 1.080 quadros a 30 qua-
+dros/segundo para uma taxa de dados de 155 MB/s (ou 310 MB/s se os dados tiverem que atravessar o barramento
+duas vezes). É claro que o barramento EISA sequer chegar perto de tratar disso.
+
+Em 1990, a Intel percebeu o que estava para acontecer e desenvolveu um novo barramento com uma
+largura de banda muito mais alta do que a do próprio barramento EISA. Foi denominado barramento PCI
+(Peripheral Component Interconnect Bus – barramento de interconexão de componente periférico).
+Para incentivar sua utilização, a Intel patenteou o PCI e então passou todas as patentes para domínio
+público, de modo que qualquer empresa podia construir periféricos para esse barramento sem ter de pagar
+royalties. Ela também organizou um consórcio de empresas, o PCI Special Interest Group, para gerenciar
+o futuro desse barramento. O resultado foi que o PCI alcançou enorme popularidade. Praticamente todos
+os computadores com chips Intel a partir do Pentium têm barramento PCI, e muitos outros computadores
+também. Esse barramento é apresentado com todos os detalhes tétricos em Shanley e Anderson (1999) e
+Solari e Willse (2004).
+
+O barramento PCI original transferia 32 bits por ciclo e funcionava em 33 MHz (tempo de ciclo de 30
+ns) para uma largura de banda total de 133 MB/s. Em 1993, foi lançado o PCI 2.0 e em 1995 saiu o PCI
+2.1. O PCI 2.2 tem características para computadores portáteis (principalmente para economizar energia da
+bateria). O barramento PCI funciona em até 66 MHz e pode manipular transferências de 64 bits para uma
+largura de banda total de 528 MB/s. Com esse tipo de capacidade, o vídeo de tela inteira e movimento total
+é viável (admitindo que o disco e o resto do sistema estejam à altura do serviço). Seja como for, o PCI não
+será o gargalo.
+
+Mesmo que 528 MB/s pareça muito rápido, ainda há dois problemas. Primeiro, não era muito bom para um
+barramento de memória. Segundo, não era compatível com todas aquelas antigas placas ISA que havia por aí. A
+solução imaginada pela Intel foi projetar computadores com três ou mais barramentos, conforme mostra a Figura
+3.51. Nessa figura, vemos que a CPU pode se comunicar com a memória principal por um barramento de memó-
+ria especial, e que um barramento ISA pode ser conectado ao PCI. Esse arranjo atendia a todos os requisitos e,
+por consequência, foi amplamente usado na década de 1990.
+
+Dois componentes fundamentais dessa arquitetura são os dois chips de pontes, fabricados pela Intel – daí
+seu interesse em todo esse projeto. A ponte PCI conecta a CPU, a memória e o barramento PCI. A ponte ISA
+conecta o barramento PCI ao ISA e também suporta um ou dois discos IDE. Quase todos os sistemas PC usando
+essa arquitetura vêm com um ou mais encaixes PCI livres para acrescentar novos periféricos de alta velocidade e
+um ou mais encaixes ISA para acrescentar periféricos de baixa velocidade.
+
+A grande vantagem do arranjo da Figura 3.51 é que a CPU tem uma largura de banda extremamente alta para
+a memória usando um barramento de memória proprietário; o PCI oferece alta largura de banda para periféricos
+rápidos, como discos SCSI, adaptadores gráficos etc.; e as antigas placas ISA ainda podem ser usadas. A caixa USB
+na figura se refere ao Universal Serial Bus, que será discutido mais adiante neste capítulo.
+
+Seria bom se houvesse apenas um tipo de placa PCI. Porém, não é esse o caso. Há opções para tensão, lar-
+gura e temporização. Computadores mais antigos usam em geral 5 volts e os mais novos tendem a usar 3,3 volts,
+portanto, o barramento PCI suporta ambos. Os conectores são os mesmos, exceto por dois pedacinhos de plástico
+que estão lá para impedir que as pessoas insiram uma placa de 5 volts em um barramento PCI de 3,3 volts ou
+vice-versa. Felizmente, existem placas universais que suportam ambas as tensões e podem ser ligadas a quaisquer
+dos tipos de encaixe. Além da opção de tensão, as placas também têm versões de 32 bits e 64 bits. As placas de 32
+bits têm 120 pinos; as de 64 bits têm os mesmos 120 pinos mais 64 pinos adicionais. Um sistema de barramento
+PCI que suporta placas de 64 bits também pode aceitar placas de 32 bits, mas o inverso não é verdade. Por fim,
+barramentos e placas PCI podem funcionar em 33 MHz ou 66 MHz. A opção é feita ligando um pino à fonte de
+energia ou ao fio terra. Os conectores são idênticos para ambas as velocidades.
+
+igura 3.51  Arquitetura de um dos primeiros sistemas Pentium. Os barramentos representados por linhas mais largas têm mais largura de
+banda do que os representados por linhas mais finas, mas a figura não está em escala.
+
+Esta Figura 3.51 é um marco histórico na arquitetura de computadores, ilustrando como a Intel resolveu o problema do gargalo de dados nos anos 90. Ela introduz o conceito de hierarquia de barramentos, onde componentes de velocidades diferentes são isolados por "pontes" para que dispositivos lentos (como um mouse) não atrasem os rápidos (como a CPU).
+
+No seu repositório arquitetura_computadores, este diagrama é a base para entender a evolução das Northbridges e Southbridges modernas.
+
+    Hierarquia do Sistema Pentium (Figura 3.51)
+
+    [ CACHE L2 ] <---(Barramento de Cache)--->  [  CPU  ]
+                                                        |
+                                                (Barramento Local)
+                                                        |
+        [ MEMÓRIA RAM ] <---(Barramento de Memória)---> [ PONTE PCI ]
+                                                        |
+        ______________________________________________ _|________________
+        |                BARRAMENTO PCI (Alta Velocidade)                |
+        |__________|_______________|_______________|______________|______|
+                   |               |               |              |
+            [ ADAPTADOR ]      [ SCSI ]        [ USB ]      [ ENCAIXE ]
+            GRÁFICO          (Disco)         (Mouse)         PCI
+                    |                               |
+            [ MONITOR ]                     [ TECLADO ]
+                                                    |
+                                            [ PONTE ISA ]
+                                                    |
+         __________________________________________|_____________________
+        |                 BARRAMENTO ISA (Baixa Velocidade)              |
+        |__________|_______________|_______________|______________|______|
+                   |               |               |              |
+            [ DISCO ]        [ MODEM ]       [ PLACA ]      [ ENCAIXE ]
+                IDE                            DE SOM           ISA
+
+Insight para o seu repositório estruturas_de_dados
+Essa estrutura de barramentos explica por que, ao programar em C no seu diretório estruturas_de_dados, a localidade de referência é tão importante.
+
+ - Se o seu algoritmo acessa dados que estão no Cache L2, ele viaja pelo barramento mais curto e rápido.
+
+ - Se ele precisar ler algo de um Disco IDE no barramento ISA, os dados precisam atravessar a Ponte ISA, o Barramento PCI e a Ponte PCI antes de chegar à CPU.
+
+ - No seu Ubuntu 24.04, ferramentas como o nmap ou netcat que você usa dependem dessa eficiência: pacotes de rede chegam pelo barramento PCI e precisam ser movidos rapidamente para a RAM para não serem perdidos enquanto a CPU está ocupada.
+
+No final da década de 1990, quase todos concordavam que o barramento ISA estava morto, portanto, os novos
+projetos o excluíram. Contudo, nessa mesma época a resolução de monitores tinha aumentado, em alguns casos
+para 1.600 × 1.200, e a demanda por vídeo de tela inteira e movimento total também cresceu, em especial no con-
+texto de jogos de alto grau de interação, portanto, a Intel acrescentou mais um outro barramento só para comandar
+a placa gráfica. Esse barramento foi denominado barramento AGP (Accelerated Graphics Port bus – barramento
+de porta gráfica acelerada). A versão inicial, AGP 1.0, funcionava a 264 MB/s, o que foi definido como 1x. Embora
+mais lento que o barramento PCI, foi dedicado a comandar a placa gráfica. Com o passar dos anos, saíram novas
+versões, com AGP 3.0 funcionando a 2,1 GB/s (8x). Hoje, até mesmo o barramento AGP 3.0 de alto desempenho
+foi substituído por outros ainda mais rápidos, em particular, o PCI Express, que pode bombear incríveis 16 GB/s de
+dados por enlaces de barramento serial de alta velocidade. Um sistema Core i7 moderno é ilustrado na Figura 3.52.
+
+Em um sistema moderno baseado no Core i7, diversas interfaces foram integradas diretamente no chip
+da CPU. Os dois canais de memória DDR3, rodando a 1.333 transações/s, conectam-se à memória principal e
+oferecem uma largura de banda agregada de 10 GB/s por canal. Também integrado à CPU está um canal PCI
+Express de 16 vias, que idealmente pode ser configurado em um único barramento PCI Express de 16 bits ou
+barramentos PCI Express independentes de 8 bits. As 16 vias juntas oferecem uma largura de banda de 16 GB/s
+para dispositivos de E/S.
+
+A CPU se conecta ao chip da ponte principal, o P67, por meio da interface de mídia direta (DMI) serial de 20
+Gb/s (2,5 GB/s). O P67 oferece interfaces para uma série de interfaces de E/S modernas de alto desempenho. Oito
+vias PCI Express adicionais são fornecidas, mais interfaces de disco SATA. O P67 também executa 14 interfaces
+USB 2.0, Ethernet de 10G e uma de áudio.
+
+O chip ICH10 oferece suporte a interface legada para dispositivos antigos. Ele está conectado ao P67 por
+meio de uma interface DMI mais lenta. O ICH10 implementa o barramento PCI, Ethernet a 1G, portas USB e
+as clássicas interfaces PCI Express e SATA. Sistemas mais novos não podem incorporar o ICH10; isso é exigido
+apenas se o sistema precisa dar suporte a interfaces legadas.
+
+Figura 3.52  Estrutura do barramento de um Core i7 moderno.
+
+Estrutura do Core i7 Moderno (Figura 3.52)
+Diferente das arquiteturas antigas, note que o controlador de memória e o controlador gráfico agora estão integrados diretamente na CPU para reduzir a latência.
+
+
+_________________________________________________________________
+        |                         INTEL CORE i7                           |
+        |   (Controladores de Memória e Gráficos Integrados na CPU)       |
+        |_________________________________________________________________|
+            |                  |                  |                  |
+    [ PCI Express 2.0 ] [ DDR3 1333 MHz ] [ DDR3 1333 MHz ] [ DMI 20 Gb/s ]
+        (16 GB/s)          (Canal A)          (Canal B)            |
+            |                                                      V
+            |                                             [ CHIPSET P67 ]
+            |                                             (Northbridge-ish)
+            |                                           ___________|___________
+            |                                          |                       |
+    [ PLACA DE VÍDEO ]                         [ 8x PCIe 2.0 ]         [ 6x SATA ]
+                                                [ HD Áudio    ]         [ 14x USB ]
+                                                [ LAN Gigabit ]         [ DMI 2 Gb/s ]
+                                                                                |
+                                                                                V
+                                                                        [ ICH10 / R ]
+                                                                        (Southbridge)
+                                                                    _____________|___________
+                                                                |                         |
+                                                            [ 6x PCIe x1 ]           [ 6x SATA ]
+                                                            [ 12x USB    ]           [ PCI Bus ]
+                                                            [ LAN / GLCI ]           [ BIOS SPI ]
+
+
+
+![alt text](image-12.png)
+
+### nsight Final para o seu repositório estruturas_de_dados
+Esta arquitetura moderna é o que torna os seus projetos no diretório estruturas_de_dados viáveis em larga escala.
+
+ - Quando você implementa uma Hash Table massiva em C, o fato do controlador de memória estar na CPU (e não na placa-mãe) reduz o tempo de busca em nanosegundos cruciais.
+
+ - No seu Ubuntu 24.04, ao usar o nmcli para gerenciar a rede, os dados fluem do controlador LAN Gigabit através do ICH10, sobem pelo link DMI e chegam à CPU sem que você perceba a complexidade física envolvida.
+
+### Operação do barramento PCI
+Como todos os barramentos do PC desde o IBM PC original, o barramento PCI é síncrono. Todas as suas
+transações ocorrem entre um mestre, cujo nome oficial é iniciador, e um escravo, oficialmente denominado alvo.
+Para manter baixo o número de pinos PCI, as linhas de endereços e dados são multiplexadas. Desse modo, nas
+placas PCI são necessários somente 64 pinos para endereço mais sinais de dados, ainda que o PCI suporte ende-
+reços de 64 bits e dados de 64 bits.
+
+Os pinos de endereço e de dados multiplexados funcionam da seguinte maneira. Em uma operação de leitu-
+ra, durante o ciclo 1, o mestre coloca o endereço no barramento. No ciclo 2, ele remove o endereço e o barramento
+muda de sentido, de modo que o escravo possa usá-lo. No ciclo 3, o escravo entrega os dados requisitados. Em
+operações de escrita, o barramento não tem de virar porque o mestre coloca o endereço e também os dados. Não
+obstante, a transação mínima ainda dura três ciclos. Se o escravo não conseguir responder em três ciclos, ele pode
+inserir estados de espera. Também são permitidas transferências de blocos sem limite de tamanho, assim como
+diversos outros tipos de ciclos de barramento.
+
+### Arbitragem de barramento PCI
+Para usar o barramento PCI, um dispositivo deve antes adquiri-lo. A arbitragem de barramento PCI usa um
+árbitro de barramento centralizado, como mostra a Figura 3.53. Na maioria dos projetos, o árbitro de barramento
+é inserido em um dos chips de ponte. Todo dispositivo PCI tem duas linhas dedicadas que vão dele até o árbitro.
+Uma linha, req#, é usada para requisitar o barramento. A outra linha, gnt#, é usada para receber concessões de
+barramento. Nota: req# é a forma do PCI indicar REQ.
+
+**Figura 3.53  O barramento PCI usa um árbitro de barramento centralizado.**
+
+
+________________________________________________
+         |               ÁRBITRO DE BARRAMENTO            |
+         |________________________________________________|
+           ^    |            ^    |            ^    |
+      REQ# |    | GNT#  REQ# |    | GNT#  REQ# |    | GNT#
+           |    V            |    V            |    V
+     .-----------.      .-----------.      .-----------.
+     | DISPOSITIVO |    | DISPOSITIVO |    | DISPOSITIVO |
+     |    PCI 1    |    |    PCI 2    |    |    PCI n    |
+     '-----------'      '-----------'      '-----------'
+           |                  |                  |
+    =======+==================+==================+=======
+                    BARRAMENTO DE DADOS PCI
+
+![alt text](image-32.png)
+
+Para requisitar o barramento, um dispositivo PCI (incluindo a CPU) ativa req# e espera até ver sua linha
+gnt# ativada pelo árbitro. Quando esse evento acontece, o dispositivo pode usar o barramento no próximo ciclo.
+O algoritmo usado pelo árbitro não é definido pela especificação do PCI. Arbitragem por varredura circular, arbi-
+tragem por prioridade e outros esquemas são todos permitidos. Claro que um bom árbitro será justo, de modo a
+não deixar alguns dispositivos esperando para sempre.
+
+Uma concessão de barramento serve para uma transação apenas, embora em teoria o comprimento dessa
+transação não tenha limite. Se um dispositivo quiser executar uma segunda transação e nenhum outro dispo-
+sitivo estiver requisitando o barramento, ele pode entrar de novo, apesar de ser preciso inserir um ciclo ocioso
+entre transações. Contudo, em circunstâncias especiais, na ausência de disputa pelo barramento, um dispositivo
+pode fazer uma transação atrás da outra sem ter de inserir um ciclo ocioso. Se um mestre de barramento estiver
+realizando uma transferência muito longa e algum outro dispositivo requisitar o barramento, o árbitro pode
+negar a linha gnt#. O mestre de barramento em questão deve monitorar a linha gnt#; portanto, quando perce-
+ber a negação, deve liberar o barramento no próximo ciclo. Esse esquema permite transferências muito longas
+(que são eficientes) quando há só um mestre de barramento candidato, mas ainda assim dá resposta rápida a
+dispositivos concorrentes.
+
+### Sinais de barramento PCI
+O barramento PCI tem vários sinais obrigatórios, mostrados na Figura 3.54(a), e vários sinais opcionais,
+mostrados na Figura 3.54(b). O restante dos 120 ou 184 pinos são usados para energia, aterramento e diversas
+funções relacionadas, e não aparecem nessa lista. As colunas Mestre (iniciador) e Escravo (alvo) informam quem
+ativa o sinal em uma transação normal. Se o sinal for ativado por um dispositivo diferente (por exemplo, clk),
+ambas as colunas são deixadas em branco.
+
+A análise detalhada do barramento PCI, a Figura 3.54 cataloga a "linguagem" elétrica utilizada por esse padrão, dividindo os sinais entre obrigatórios (essenciais para qualquer comunicação) e opcionais (usados para alta performance ou multiprocessamento).
+No seu repositório arquitetura_computadores, esta tabela funciona como o dicionário de pinagem que permite a implementação física da arbitragem vista na Figura 3.53.
+
+Figura 3.54 (a) - Sinais Obrigatórios do Barramento PCI
+    Estes são os pinos essenciais que todo dispositivo PCI deve implementar para garantir a comunicação básica e a integridade dos dados.
+
+    Sinal      | Linhas | M/E* | Descrição Técnica
+    -----------|--------|------|-----------------------------------------------
+    CLK        |   1    |  -   | Clock (33 MHz ou 66 MHz) para sincronismo.
+    AD         |   32   |  X   | Endereço/Dados multiplexados (REM/RDM).
+    PAR        |   1    |  X   | Bit de paridade para detecção de erros em AD.
+    C/BE#      |   4    |  X   | Comando de barramento / Habilitação de bytes.
+    FRAME#     |   1    |  X   | Indica que AD e C/BE estão ativos (Início).
+    IRDY#      |   1    |  X   | Mestre pronto para trocar dados (Handshake).
+    IDSEL      |   1    |  -   | Seleciona espaço de configuração (Plug & Play).
+    DEVSEL#    |   1    |  E   | Escravo reconheceu o endereço e está ativo.
+    TRDY#      |   1    |  E   | Escravo pronto para trocar dados (Handshake).
+    STOP#      |   1    |  E   | Escravo solicita interrupção imediata.
+    PERR#      |   1    |  -   | Erro de paridade de dados detectado.
+    SERR#      |   1    |  -   | Erro de sistema ou paridade de endereço.
+    REQ#       |   1    |  -   | Requisição de posse do barramento (Arbitragem).
+    GNT#       |   1    |  -   | Concessão de posse do barramento (Arbitragem).
+    RST#       |   1    |  -   | Reset do sistema e dos dispositivos.
+    
+    *M/E: Mestre/Escravo | X: Sinal multiplexado
+    _______________________________________________________________________________
+
+Figura 3.54 (b) - Sinais Opcionais do Barramento PCI
+    Estes sinais são utilizados para extensões de performance (64 bits), multiprocessamento e testes de hardware.
+
+    Sinal      | Linhas | M/E* | Descrição Técnica
+    -----------|--------|------|-----------------------------------------------
+    REQ64#     |   1    |  X   | Requisição para transação de 64 bits.
+    ACK64#     |   1    |  X   | Confirmação de transação de 64 bits.
+    AD         |   32   |  X   | 32 bits adicionais para endereços/dados.
+    PAR64      |   1    |  X   | Paridade para os 32 bits extras.
+    C/BE#      |   4    |  X   | 4 bits extras para habilitar os bytes adicionais.
+    LOCK       |   1    |  X   | Trava o barramento para operações atômicas.
+    SBO#       |   1    |  -   | Presença de dados em cache remota (Snooping).
+    SDONE      |   1    |  -   | Escuta de cache realizada (Snoop Done).
+    INTx       |   4    |  -   | Linhas de requisição de interrupção (A, B, C, D).
+    JTAG       |   5    |  -   | Sinais de teste e diagnóstico IEEE 1149.1.
+    M66EN      |   1    |  -   | Seletor de velocidade (66 MHz vs 33 MHz).
+    
+    *M/E: Mestre/Escravo | X: Sinal multiplexado
+
+Durante o primeiro ciclo de clock de uma transação (indicado por FRAME#),          	Nos ciclos subsequentes, as mesmas linhas AD transportam os dados (RDM), as linhas AD transportam o endereço (REM).                                             otimizando a pinagem do chip.
+
+Controle (C/BE#): Define se a operação é de leitura ou escrita de memória/E/S.	    Paridade (PAR/PAR64): Garante que os dados salvos ou lidos não foram        corrompidos no trajeto físico.
+
+### Insight para o seu repositório estruturas_de_dados
+O entendimento desses sinais é o que separa um programador de alto nível de um especialista em sistemas no seu diretório estruturas_de_dados:
+
+ - No seu Ubuntu 24.04, quando você vê um erro de "Bus Error" ou "I/O Error", muitas vezes o que ocorreu foi uma falha nos sinais PERR# ou SERR# captada pelo kernel.
+
+ - Ao programar em C para dispositivos PCI, você lida com o sinal IDSEL, que permite ao seu software configurar o dispositivo sem precisar saber o endereço físico de memória previamente.
+
+ - O sinal LOCK# (opcional) é fundamental se você estiver implementando estruturas de dados concorrentes em multiprocessadores, pois ele garante que uma sequência de leitura-modificação-escrita não seja interrompida por outro núcleo.
+
+Agora, vamos examinar brevemente cada um dos sinais do barramento PCI. Começaremos com os obrigató-
+rios (32 bits) e em seguida passaremos para os opcionais (64 bits). O sinal clk comanda o barramento. A maioria
+dos outros sinais é síncrona com ele. Ao contrário do ISA, uma transação de barramento PCI começa na borda
+descendente do clk, que está no meio do ciclo, em vez de estar no início.
+
+Os 32 sinais ad são para endereços e dados (para transações de 32 bits). Em geral, durante o ciclo 1 o ende-
+reço é ativado e durante o ciclo 3 os dados são ativados. O sinal PAR é um bit de paridade para ad. O sinal c/be#
+é usado para duas coisas diferentes. No ciclo 1, ele contém o comando de barramento (leia 1 palavra, leia bloco
+etc.). No ciclo 2, contém um mapa de bits de 4 bits que informa quais bytes da palavra de 32 bits são válidos.
+Usando c/be# é possível ler ou escrever 1, 2 ou 3 bytes quaisquer, bem como uma palavra inteira.
+
+O sinal frame# é ativado pelo mestre para iniciar uma transação de barramento. Informa ao escravo que os
+comandos de endereço e barramento agora são válidos. Em uma leitura, usualmente o irdy# é ativado ao mesmo tempo em que o frame#. Ele informa que o mestre está pronto para aceitar dados que estão chegando. Em uma
+escrita, o irdy# é ativado mais tarde, quando os dados estão no barramento.
+
+O sinal idsel está relacionado ao fato de que todo dispositivo PCI deve ter um espaço de configuração de
+256 bytes que outros dispositivos possam ler (ativando idsel). Esse espaço de configuração contém propriedades
+do dispositivo. A característica plug-and-play de alguns sistemas operacionais usa o espaço de configuração para
+saber quais dispositivos estão no barramento.
+
+Agora, chegamos aos sinais ativados pelo escravo. O primeiro deles, devsel#, anuncia que o escravo detectou
+seu endereço nas linhas ad e está preparado para realizar a transação. Se devsel# não for ativado em certo limite
+de tempo, o mestre esgota sua temporização e supõe que o dispositivo endereçado está ausente ou avariado.
+
+O segundo sinal de escravo é trdy#, que ele ativa em leituras para anunciar que os dados estão nas linhas ad
+e em escritas para anunciar que está preparado para aceitar dados.
+
+Os três sinais seguintes são para notificar erros. O primeiro deles é stop#, que o escravo ativa se algo desas-
+troso acontecer e ele quiser abortar a transação corrente. O seguinte, perr#, é usado para notificar um erro de
+paridade no ciclo anterior. Para uma leitura, ele é ativado pelo mestre; para uma escrita, pelo escravo. Cabe ao
+receptor executar a ação adequada. Por fim, serr# é para reportar erros de endereço e de sistema.
+
+Os sinais req# e gnt# são para fazer arbitragem de barramento. Eles não são assegurados pelo mestre de
+transferência de dados em questão, mas por um dispositivo que quer se tornar mestre de barramento. O último
+sinal obrigatório é rst#, usado para reiniciar o sistema, seja porque o usuário apertou a tecla RESET seja porque
+algum dispositivo do sistema notou um erro fatal. Ativar esse sinal restaura todos os dispositivos e reinicia o
+computador.
+
+Agora, chegamos aos sinais opcionais, cuja maioria está relacionada à expansão de 32 bits para 64 bits. Os
+sinais req64# e ack64# permitem que o mestre peça permissão para conduzir uma transação de 64 bits e permite
+que o escravo aceite, respectivamente. Os sinais ad, par64 e c/be# são apenas extensões dos sinais correspondentes
+de 32 bits.
+
+Os três sinais seguintes não estão relacionados aos 32 bits contra 64 bits, mas a sistemas multiprocessadores,
+algo que as placas PCI não são obrigadas a suportar. O sinal lock permite que o barramento seja travado para múl-
+tiplas transações. Os dois seguintes estão relacionados à escuta do barramento para manter coerência de cache.
+
+Os sinais intx são para requisitar interrupções. Uma placa PCI pode conter até quatro dispositivos lógicos
+separados e cada um pode ter sua própria linha e requisição de interrupção. Os sinais jtag são para procedimento
+de teste IEEE 1149.1 JTAG. Por fim, o sinal m66en é ligado alto ou é ligado baixo para estabelecer a velocidade de
+clock. Não deve mudar durante a operação do sistema.
+
+### Transações de barramento PCI 
+Na realidade, o barramento PCI é muito simples (no que diz respeito a barramentos). Para ter uma ideia
+melhor dele, considere o diagrama temporal da Figura 3.55, onde podemos ver uma transação de leitura seguida
+por um ciclo ocioso, seguida por uma transação de escrita pelo mesmo mestre de barramento.
+
+Quando a borda descendente do clock acontece durante T1, o mestre põe o endereço de memória em ad e o
+comando de barramento em c/be#. Então, ativa frame# para iniciar a transação de barramento.
+
+Durante T2, o mestre libera o barramento de endereço para deixar que ele retorne em preparação para o
+comando do escravo durante T3. O mestre também muda c/be# para indicar quais bytes na palavra endereçada ele
+quer habilitar, isto é, quais quer que sejam lidos.
+
+Em T3, o escravo ativa devsel# de modo que o mestre saiba que ele obteve o endereço e está planejando res-
+ponder. Além disso, põe os dados nas linhas ad e ativa trdy# para informar ao mestre que fez isso. Se o escravo
+não puder responder com tanta rapidez, ainda assim ele ativaria devsel# para anunciar sua presença, mas manteria
+trdy# negado até que pudesse obter os dados que lá estão. Esse procedimento introduziria um ou mais estados
+de espera.
+
+**Figura 3.55  Exemplos de transações de barramento PCI de 32 bits. Os três primeiros ciclos são usados para uma operação de leitura, em
+seguida um ciclo ocioso e depois três ciclos para uma operação de escrita.**
+
+A Figura 3.55 detalha o funcionamento temporal de um barramento PCI de 32 bits, ilustrando como os sinais elétricos coordenam as transações de leitura e escrita. Este diagrama é fundamental para entender a eficiência do protocolo, que utiliza multiplexação para economizar pinos físicos.
+
+    Temporização PCI (Figura 3.55) Abaixo, represento a sequência de ciclos de T_1 a T_7$, destacando a transição entre as operações:
+
+    CICLO:      |  T1  |  T2  |  T3  |  T4  |  T5  |  T6  |  T7  |
+    OPERAÇÃO:   | <---- LEITURA ----> | OCIO | <---- ESCRITA ----> |
+               ____    ____    ____    ____    ____    ____    ____
+    CLOCK (Φ):|    |__|    |__|    |__|    |__|    |__|    |__|    |__
+               ______                 ______  ______          ______
+    FRAME#   :       |_______________|      ||      |________|      |
+                ______        _______ ______  ______          ______
+    AD (Bus) : < END >-------< DADOS >      <  END  >--------< DADOS >
+                ______        _______ ______  ______         ______
+    C/BE#    : < CMD >-------< HABIL >      < CMD >--------< HABIL >
+                       ______                 ______          ______
+    IRDY#    :________|      |________ ______|      |________|      |
+                              ________                 ______
+    TRDY#    :_______________|        |_______________|      |______
+
+
+![alt text](image-33.png)
+
+    Análise das Transações (Seu Padrão Técnico)
+    Esta tabela explica o que ocorre em cada fase crítica do diagrama para o seu arquivo Nivel-Logica-Digital.md:
+    +---------------------------------+-----------------------------------------------------------------------------------------------------+
+    | Processamento                   | Armazenamento                                                                                       |
+    +---------------------------------+-----------------------------------------------------------------------------------------------------+ 
+    | Operação de Leitura (T1 a T3)   | Gerenciamento do Barramento                                                                         |
+    | Início (T1)                     | O mestre coloca o endereço em AD e o comando em C/BE#, ativando o FRAME#.                           |
+    | Ciclo de Retorno (T2)           | Necessário na leitura para que o mestre pare de dirigir as linhas AD e o escravo assuma o controle. |
+    | Transferência (T3)              | Os dados são lidos quando IRDY# (Mestre pronto) e TRDY# (Escravo pronto) estão ambos ativos.        |
+    | Ciclo Ocioso (T4)               | Intervalo de segurança entre transações para evitar conflitos elétricos no barramento.              |
+    +---------------------------------+-----------------------------------------------------------------------------------------------------+
+    | Operação de Escrita (T5 a T7)   | Gerenciamento do Barramento                                                                         |
+    | Início (T5)                     | O mestre coloca o endereço em AD e o comando em C/BE#, ativando o FRAME#.                           |
+    | T6                              | O mestre coloca os dados em AD (já no ciclo seguinte ao endereço).                                  |
+    | Conclusão (T7)                  | A memória (escravo) aceita os dados e sinaliza através do TRDY#, finalizando a transação.           |
+    +---------------------------------+-----------------------------------------------------------------------------------------------------+
+
+Verificação Final de HardwareDestaque Técnico: Note que em $T_6$ na escrita, o mestre mantém o controle das linhas AD que ele já possuía em $T_5$, por isso a escrita é mais "direta" que a leitura no nível elétrico.Contexto Acadêmico: Esta é a aplicação prática da sinalização de "aperto de mão" (handshake) que garante que dados não sejam perdidos se um componente for mais lento que o outro.
+
+### Insight para o seu repositório estruturas_de_dados
+O comportamento visto na Figura 3.55 é o motivo pelo qual leituras de memória costumam ser ligeiramente mais lentas que escritas em nível de hardware.No seu diretório estruturas_de_dados, quando você percorre uma lista encadeada (múltiplas leituras dependentes), cada passo exige esse "ciclo de retorno" (T_2) para que a memória responda.Já em uma escrita sequencial em um array, o mestre pode manter o controle das linhas de dados de forma contínua, otimizando o uso do barramento PCI que analisamos nas Figuras 3.51 e 3.52.
+
+Nesse exemplo (e muitas vezes na realidade), o ciclo seguinte é ocioso. Começando em T5, vemos o mesmo
+mestre iniciando uma escrita. Ele começa colocando o endereço e o comando no barramento, como sempre. Só
+que agora, no segundo ciclo, ele ativa os dados. Uma vez que o mesmo dispositivo está comandando as linhas ad,
+não há necessidade de um ciclo de retorno. Em T7, a memória aceita os dados.
+
+## 3.6.2 PCI express
+Embora o funcionamento do barramento PCI seja adequado para a maioria das aplicações, a necessidade de
+maior largura de banda de E/S está causando uma confusão na antes limpa arquitetura interna do PC. A Figura
+3.52 deixa claro que o barramento PCI não é mais o elemento central que mantém unidas as partes do PC. O chip
+ponte se apossou de parte desse papel.
+
+A essência do problema é que há cada vez mais dispositivos de E/S muito rápidos para o barramento PCI.
+Elevar a frequência de clock do barramento não é uma boa solução porque então os problemas de atraso diferen-
+cial no barramento, interferência na fiação e efeitos de capacitância só ficariam piores. Toda vez que um dispo-
+sitivo de E/S fica muito rápido para o barramento PCI (como as placas gráficas, disco rígido, redes etc.), a Intel
+acrescenta uma porta especial para o chip ponte para permitir que o dispositivo contorne o barramento PCI. Claro
+que isso tampouco é uma solução de longo prazo.
+
+Outro problema com o barramento PCI é que as placas são muito grandes. Placas PCI padrão costumam ter
+17,5 cm por 10,7 cm e placas inferiores possuem 12,0 cm por 3,6 cm. Nenhuma delas cabe em laptops e, com
+certeza, não em dispositivos móveis. Os fabricantes gostariam de produzir dispositivos menores ainda. Além
+disso, alguns deles gostariam de repartir o espaço interno do PC, colocando a CPU e a memória dentro de uma
+pequena caixa selada e o disco rígido dentro do monitor. Com as placas PCI é impossível fazer isso.
+
+Diversas soluções foram propostas, mas a que tem mais probabilidade de vencer (e em grande parte porque
+a Intel está por trás dela) é denominada PCI Express. Ela tem pouco a ver com o barramento PCI e, na verdade, nem é um barramento, mas o pessoal do marketing não quer largar mão do famoso nome PCI. PCs que contêm
+essa solução já estão no mercado há algum tempo. Vamos ver como eles funcionam.
+
+### Arquitetura do PCI Express
+O coração da solução PCI Express (em geral, abreviado como PCIe) é se livrar do barramento paralelo com
+seus muitos mestres e escravos e passar para um projeto baseado em conexões seriais ponto a ponto de alta
+velocidade. Essa solução representa uma ruptura radical com a tradição do barramento ISA/EISA/PCI e toma
+emprestadas muitas ideias do mundo das redes locais, em especial a Ethernet comutada. A ideia básica se resume
+no seguinte: no fundo, um PC é um conjunto de chips de CPU, memória, controladores de E/S que precisa ser
+interconectado. O que o PCI Express faz é fornecer um comutador de uso geral para conectar chips usando liga-
+ções seriais. Uma configuração típica é ilustrada na Figura 3.56.
+
+**Figura 3.56  Sistema PCI express típico.**
+
+A Figura 3.56 ilustra a evolução definitiva dos barramentos paralelos (como o PCI das figuras anteriores) para uma arquitetura baseada em ligações seriais ponto a ponto de alta velocidade. No seu repositório arquitetura_computadores, este diagrama explica como os computadores modernos gerenciam o tráfego massivo de dados sem os problemas de sincronismo das trilhas paralelas.
+
+Arquitetura PCI Express (Figura 3.56)
+Diferente do barramento compartilhado da Figura 3.51, aqui cada dispositivo possui uma "pista" exclusiva ligada a um Comutador (Switch) central:
+
+    [ CACHE L2 ] <========> [  CPU  ] <========> [ CHIP PONTE ] <========> [ MEMÓRIA ]
+                                                    ||
+                                                    || (Link de Alta Velocidade)
+                                                    ||
+                                                [ COMUTADOR ]
+                                                (Switch PCIe)
+                                     __________________|__________________
+                                    /        /         |         \        \
+                                   /        /          |          \        \
+                            [ GRÁFICOS ] [ DISCO ]  [ REDE ]  [ USB 2 ] [ OUTRO ]
+                            (PCIe x16)  (PCIe x4)  (PCIe x1)  (PCIe x1)  (PCIe x1)
+
+![alt text](image-34.png)
+
+    +-------------------------------------+-----------------------------------------------------------------------------------------------------------------------+
+    |Processamento                        | Armazenamento                                                                                                         |
+    +-------------------------------------+-----------------------------------------------------------------------------------------------------------------------+
+    |Comutador (Switch PCIe)              | Ligações Seriais em Pares                                                                                             |
+    |Núcleo de Tráfego                    | Atua como um roteador de pacotes, direcionando dados entre o Chip Ponte e os periféricos finais.                      |
+    |Dual-Simplex                         | Cada conexão usa dois pares de fios (um para enviar, outro para receber), permitindo tráfego bidirecional simultâneo. |
+    |Escalabilidade                       | Permite que dispositivos usem múltiplas "vias" (x1, x4, x16) para aumentar a largura de banda conforme a necessidade. |
+    |Eliminação do Clock Comum            | O clock é embutido no sinal de dados, resolvendo o problema de "skew" (atraso entre trilhas) do PCI antigo.           |
+    +-------------------------------------+-----------------------------------------------------------------------------------------------------------------------+
+    |Hierarquia Ponto a Ponto             | BARRAMENTO INTERNO                                                                                                    |
+    |Diferente da Figura 3.53             | não há disputa por um único barramento; cada dispositivo tem largura de banda dedicada.                               |
+    |O ápice da tecnologia de interconexão| como o hardware moderno lida com gigabytes por segundo.                                                               |
+    |Latência Reduzida                    | A conexão direta entre CPU e Chip Ponte minimiza o tempo de resposta para acesso à memória e gráficos.                |
+    |Compatibilidade de Software          | Apesar da mudança física, o software ainda "vê" os dispositivos como se estivessem em um barramento PCI tradicional   |
+    +-------------------------------------+-----------------------------------------------------------------------------------------------------------------------+
+
+### Insight para o seu repositório estruturas_de_dados
+Entender a Figura 3.56 é vital para otimizar o desempenho do seu Lenovo IdeaPad Gaming 3 no seu diretório estruturas_de_dados:
+
+ - Quando seu código em C acessa o Disco (NVMe), ele está usando vias PCIe diretas para o processador, o que é ordens de magnitude mais rápido que o antigo barramento ISA (Figura 3.51).
+
+ - No seu Ubuntu 24.04, ao realizar transferências de dados entre a RAM e a Placa Gráfica para processamento paralelo, você está saturando o link PCIe x16 mostrado no diagrama.
+
+ - A estrutura de "pacotes" do PCIe é muito similar às estruturas de dados de rede que você estuda; cada transferência de hardware é, na verdade, um pequeno envelope de dados com cabeçalho e CRC.
+
+Como mostra a figura, a CPU, a memória e a cache estão conectadas ao chip ponte no modo tradicional. A
+novidade aqui é um comutador conectado à ponte (talvez parte do próprio chip ponte ou integrado diretamente ao
+processador). Cada um dos chips de E/S tem uma conexão ponto a ponto dedicada com o comutador. Cada conexão
+consiste em um par de canais unidirecionais, um que vai para o comutador e outro que vem dele. Cada canal é com-
+posto de dois fios, um para o sinal e outro para o terra, para dar imunidade contra ruído alto durante a transmissão
+de alta velocidade. Essa arquitetura substituirá a atual por um modelo muito mais uniforme, no qual todos os dispo-
+sitivos são tratados igualmente.
+
+A arquitetura PCI Express tem três pontos de diferença em relação ao antigo barramento PCI. Já vimos dois
+deles: um comutador centralizado contra um barramento multidrop e a utilização de conexões seriais ponto a
+ponto estreitas contra um barramento paralelo largo. O terceiro é mais sutil. O modelo conceitual que fundamen-
+ta o PCI é o de um mestre de barramento que emite um comando a um escravo para ler uma palavra ou um bloco
+de palavras. O modelo do PCI Express é o de um dispositivo que envia um pacote de dados a outro dispositivo.
+O conceito de um pacote, que consiste em um cabeçalho e em uma carga útil, é tirado do mundo das redes.
+O cabeçalho contém informação de controle, o que elimina a necessidade dos muitos sinais de controle presen-
+tes no barramento PCI. A carga útil contém os dados a transferir. Na verdade, um PC com PCI Express é uma
+miniatura de rede de comutação de pacotes.
+
+Além dessas três importantes rupturas com o passado, também há diversas pequenas diferenças. A quarta é
+que o código de detecção de erro é usado somente nos pacotes, o que dá um grau de confiabilidade mais alto do
+que o barramento PCI. A quinta é que a conexão entre um chip e o comutador é mais longa do que era, até 50 cm,
+para permitir a repartição do sistema. A sexta é que o sistema pode ser expandido porque um dispositivo pode per-
+feitamente ser outro comutador, o que permite uma árvore de comutadores. A sétima é que dispositivos podem ser
+acrescentados ou removidos do sistema enquanto ele está em operação. Por fim, uma vez que conectores seriais
+são muito menores do que os antigos conectores PCI, podem-se fabricar dispositivos e computadores muito
+menores. Em resumo, o PCI Express é uma grande ruptura em relação ao barramento PCI.
+
+### Pilha de protocolos do PCI Express
+Condizente com o modelo de uma rede de comutação de pacotes, o sistema PCI Express tem uma pilha de
+protocolos em camadas. Um protocolo é um conjunto de regras que governam a conversa entre duas partes. Uma
+pilha de protocolos é uma hierarquia de protocolos que tratam de questões diferentes em camadas diferentes. Por
+exemplo, considere uma carta comercial. Ela obedece a certas convenções referentes à localização e ao conteúdo
+do cabeçalho, ao endereço do destinatário, à data, aos cumprimentos, ao corpo, à assinatura e assim por dian-
+te. Podemos dizer que tudo isso junto é um protocolo de carta. Além disso, há outro conjunto de convenções
+referentes ao envelope, como tamanho, local e formato do endereço do remetente, local e formato do endereço
+do destinatário, local do selo e assim por diante. Essas duas camadas e seus protocolos são independentes. Por
+exemplo, é possível dar um formato completamente diferente à carta, mas usar o mesmo envelope, e vice-versa.
+Protocolos em camadas são um projeto modular flexível e há décadas são muito usados no mundo dos softwares
+de rede. A novidade, no caso, é montá-los no hardware do “barramento”.
+    A pilha de protocolos do PCI Express é mostrada na Figura 3.57(a). Ela é discutida a seguir.
+
+**Figura 3.57  (a) Pilha de protocolos do PCI Express. (b) Formato de um pacote.**
+
+
+
+
+
+Vamos examinar as camadas de baixo para cima. A camada mais baixa é a camada física. Ela trata da movi-
+mentação de bits de um remetente para um destinatário por uma conexão ponto a ponto. Cada conexão ponto a
+ponto consiste em um ou mais pares de enlaces simplex (isto é, unidirecionais). No caso mais simples, há um par
+em cada direção, mas também é permitido ter 2, 4, 8, 16 ou 32 pares. Cada enlace é denominado via. O número
+de vias em cada direção deve ser o mesmo. Produtos de primeira geração devem suportar uma taxa de dados de
+no mínimo 2,5 Gbps, mas espera-se que logo a velocidade passe para 10 Gbps em cada direção.
+
+Diferente dos barramentos ISA/EISA/PCI, o PCI Express não tem um clock mestre. Os dispositivos têm
+liberdade para começar a transmitir tão logo tenham dados a enviar. Essa liberdade deixa o sistema mais rápido,
+mas também leva a um problema. Suponha que um bit 1 seja codificado como +3 volts e um bit 0, como 0 volt.
+Se os primeiros bytes forem todos 0s, como o destinatário sabe que dados estão sendo transmitidos? Afinal, uma
+sequência de 0 bits parece o mesmo que um enlace ocioso. O problema é resolvido usando o que denominamos
+codificação 8b/10b. Nesse esquema, 10 bits são usados para codificar 1 byte de dados reais em um símbolo de 10
+bits. Entre os 1.024 símbolos de 10 bits possíveis, foram escolhidos como legais os que têm suficientes transições
+de clock para manter remetente e destinatário sincronizados nas fronteiras de bits, mesmo sem um clock mestre.
+Uma consequência da codificação 8b/10b é que um enlace que tenha uma capacidade bruta de 2,5 Gbps só pode
+transmitir 2 Gbps (líquidos) de dados de usuário.
+
+Enquanto a camada física lida com transmissão de bits, a camada de enlace trata de transmissão de pacotes.
+Ela pega o cabeçalho e a carga útil passados para ela pela camada de transação e acrescenta a eles um número
+de sequência e um código de correção de erro denominado CRC (Cyclic Redundancy Check – verificação por
+redundância cíclica). O CRC é gerado pela execução de certo algoritmo no cabeçalho e nos dados da carga
+útil. Quando um pacote é recebido, o destinatário efetua alguns cálculos no cabeçalho e nos dados e compara o
+resultado com o CRC anexado ao pacote. Se forem compatíveis, ele devolve um curto pacote de reconhecimento
+confirmando sua correta chegada. Se não forem, o destinatário solicita uma retransmissão. Desse modo, a integri-
+dade dos dados melhora muito em relação ao sistema de barramento PCI, que não tem nenhuma prescrição para
+verificação e retransmissão de dados enviados pelo barramento.
+
+Para evitar que um transmissor rápido soterre um receptor lento com pacotes que ele não pode manipu-
+lar, é usado um mecanismo de controle de fluxo que funciona da seguinte maneira: o receptor concede ao
+transmissor certo número de créditos que correspondem em essência à quantidade de espaço de buffer de que
+ele dispõe para armazenar pacotes que chegam. Quando os créditos se esgotam, o transmissor tem de parar de
+enviar pacotes até receber mais créditos. Esse esquema, que é muito usado em todas as redes, evita a perda
+de dados em consequência da incompatibilidade entre as velocidades do transmissor e do receptor.
+
+A camada de transação trata das ações do barramento. Ler uma palavra da memória requer duas transações:
+uma iniciada pela CPU ou canal DMA que está requisitando alguns dados e outra iniciada pelo alvo que está for-
+necendo os dados. Mas a camada de transação faz mais do que manipular leituras e escritas puras. Ela adiciona
+valor à transmissão de pacotes bruta oferecida pela camada de enlace. Para começar, ela pode dividir cada via em
+até oito circuitos virtuais, cada um manipulando uma classe de tráfego diferente. A camada de transação pode
+rotular pacotes de acordo com sua classe de tráfego, o que pode incluir atributos como “alta prioridade”, “baixa
+prioridade”, “não escute”, “pode ser entregue fora da ordem” e outros mais. O comutador pode usar esses rótulos
+para decidir qual pacote manipulará em seguida.
+    Cada transação usa um dos quatro espaços de endereços:
+
+    1. Espaço da memória (para leituras e escritas comuns).
+    2. Espaço de E/S (para endereçar registradores de dispositivos).
+    3. Espaço de configuração (para inicialização do sistema etc.).
+    4. Espaço de mensagem (para sinalização, interrupções etc.).
+
+Os espaços de memória e E/S são semelhantes aos dos sistemas existentes. O espaço de configuração pode
+ser usado para executar características como plug-and-play. O espaço de mensagem assume o papel de muitos
+dos sinais de controle existentes. É necessário ter algo parecido com esse espaço porque nenhuma das linhas de
+controle do PCI existe no PCI Express.
+
+A camada de software faz a interface entre sistema PCI Express e sistema operacional. Ela pode emular o
+barramento PCI, possibilitando a execução de sistemas operacionais existentes não modificados em sistemas PCI
+Express. Claro que uma operação como essa não irá explorar todo poder do PCI Express, mas a compatibilidade
+é um mal necessário até que os sistemas operacionais sejam modificados para utilizar totalmente o PCI Express.
+A experiência mostra que isso pode levar algum tempo.
+
+O fluxo de informações é ilustrado na Figura 3.57(b). Quando é dado um comando à camada de software,
+esta o passa para a camada de transação, que o formula em termos de um cabeçalho e uma carga útil. Então, essas
+duas partes são passadas para a camada de enlace, que acrescenta um número de sequência à sua parte anterior e
+um CRC à posterior. Em seguida, esse pacote ampliado é passado à camada física, que acrescenta informações de
+enquadramento de dados a cada extremidade para formar o pacote físico, que é, por fim, transmitido. Na extre-
+midade receptora ocorre o processo inverso – cabeçalho de enlace e as informações que acompanham o bloco de
+dados (trailer) são removidos e o resultado é passado para a camada de transação.
+
+O conceito do acréscimo de informações adicionais aos dados à medida que ele desce pela pilha de protoco-
+los já é usado há décadas no mundo das redes com grande sucesso. A grande diferença entre uma rede e o PCI Express é que, no mundo das redes, o código nas várias camadas quase sempre é um software que faz parte do
+sistema operacional. No PCI Express, ele faz parte do hardware do dispositivo.
+
+O PCI Express é um assunto complicado. Para mais informações, consulte Mayhew e Krishnan, 2003; e
+Solari e Congdon, 2005. Ele ainda está evoluindo. Em 2007, o PCIe 2.0 foi lançado. Ele admite 500 MB/s por
+via em até 32 vias, para uma largura de banda total de 16 GB/s. Depois veio o PCIe 3.0 em 2011, que mudou a
+codificação de 8b/10b para 128b/130b e pode rodar a 8 bilhões de transações por segundo, o dobro do PCIe 2.0.
+
+## 3.6.3 Barramento serial universal (USB)
+O barramento PCI e o PCI Express são bons para anexar periféricos de alta velocidade a um computador, mas
+são muito caros para dispositivos de E/S de baixa velocidade, como teclados e mouses. Cada dispositivo padrão de
+E/S era conectado ao computador de modo especial, com alguns encaixes ISA e PCI livres para adicionar novos
+dispositivos. Infelizmente, esse esquema teve problemas desde o início.
+
+Por exemplo, cada novo dispositivo de E/S costuma vir com sua própria placa ISA ou PCI. Muitas vezes, o usuá­
+rio é responsável pelo ajuste de comutadores e pontes na placa e por assegurar que tais ajustes não entrem em con-
+flito com as outras placas. Então, ele precisa abrir a torre, inserir cuidadosamente a placa, fechar a torre e reiniciar
+o computador. Para muitos usuários, esse processo é difícil e sujeito a erros. Além disso, o número de encaixes ISA
+e PCI é muito limitado (em geral, dois ou três). Placas plug-and-play eliminam o ajuste das pontes, mas ainda assim
+o usuário tem de abrir o computador para inserir a placa e o número de encaixes do barramento continua limitado.
+
+Para tratar desse problema, em 1993, representantes de sete empresas (Compaq, DEC, IBM, Intel, Microsoft,
+NEC e Northern Telecom) se reuniram para buscar a melhor maneira de anexar dispositivos de E/S a um computador.
+Desde então, centenas de outras empresas se juntaram a elas. O padrão resultante, lançado oficialmente em 1998, é
+denominado USB (Universal Serial Bus – barramento serial universal), e é amplamente executado em computadores
+pessoais. Uma descrição mais detalhada desse barramento pode ser encontrada em Anderson (1997) e Tan (1997).
+    Alguns dos objetivos das empresas que conceberam o USB original e iniciaram o projeto eram os seguintes:
+
+    1. Usuários não terão de ajustar comutadores ou pontes em placas ou dispositivos.
+    2. Usuários não terão de abrir a torre para instalar novos dispositivos de E/S.
+    3. Haverá apenas um tipo de cabo, que servirá para conectar todos os dispositivos.
+    4. A energia para os dispositivos de E/S deve ser fornecida por esse cabo.
+    5. Até 127 dispositivos poderão ser ligados a um único computador.
+    6. O sistema deve suportar dispositivos de tempo real (por exemplo, som, telefone).
+    7. Os dispositivos poderão ser instalados com o computador em funcionamento.
+    8. Não será preciso reiniciar o computador após a instalação do dispositivo.
+    9. O custo de produção do novo barramento e de seus dispositivos de E/S não deve ser alto.
+
+O USB cumpre todos esses objetivos. É projetado para dispositivos de baixa velocidade, como teclados, mou-
+ses, câmeras fotográficas, scanners, telefones digitais e assim por diante. A versão 1.0 tem uma largura de banda
+de 1,5 Mbps, que é suficiente para teclados e mouses. A versão 1.1 funciona em 12 Mbps, que é suficiente para
+impressoras, câmeras digitais e muitos outros dispositivos. A versão 2.0 tem suporte para dispositivos com até
+480 Mbps, que é suficiente para trabalhar com drives de disco externos, webcams de alta definição e interfaces de
+rede. O USB versão 3.0, recentemente definido, empurra as velocidades para acima de 5 Gbps; só o tempo dirá
+quais aplicações novas e ávidas por largura de banda aproveitarão essa interface com largura de banda ultra-alta.
+
+Um sistema USB consiste em um hub-raiz (root hub) que é ligado ao barramento principal (veja a Figura
+3.51). Esse hub tem soquetes para cabos que podem ser conectados a dispositivos de E/S ou a hubs de expansão,
+para fornecer mais soquetes, de modo que a topologia de um sistema USB é uma árvore cuja raiz está no hub, dentro do computador. Há diferentes conectores na extremidade dos cabos do hub-raiz e na extremidade do dis-
+positivo para evitar que, por acidente, os usuários liguem dois soquetes entre si.
+
+O cabo consiste em quatro fios: dois para dados, um para energia (+5 volts) e um para terra. O sistema de
+sinalização transmite um 0 como uma transição de tensão e um 1 como ausência de uma transição da tensão,
+portanto, longas carreiras de 0s geram um fluxo regular de pulsos.
+
+Quando um novo dispositivo de E/S é ligado, o hub-raiz detecta esse evento e interrompe o sistema ope-
+racional, que então pesquisa para descobrir que dispositivo é e de quanta largura de banda USB ele precisa.
+Se o sistema operacional decidir que há suficiente largura de banda para o dispositivo, atribui um endereço
+exclusivo para ele (1–127) e descarrega esse endereço e outras informações em registradores de configura-
+ção dentro do dispositivo. Desse modo, novos dispositivos podem ser acrescentados com o computador em
+funcionamento, sem exigir nenhuma configuração da parte do usuário e sem ter de instalar novas placas ISA
+ou PCI. Placas não inicializadas começam com endereço 0, por isso, podem ser endereçadas. Para simplificar
+o cabeamento, muitos dispositivos USB contêm conexões internas que aceitam dispositivos USB adicionais.
+Por exemplo, um monitor poderia ter dois soquetes de conexão para acomodar os alto-falantes esquerdo e
+direito.
+
+Em termos lógicos, o sistema USB pode ser visto como um conjunto de ramificações que saem do hub-raiz
+para os dispositivos de E/S. Cada dispositivo pode subdividir sua própria ramificação em até 16 ramos secundá-
+rios para diferentes tipos de dados (por exemplo, áudio e vídeo). Dentro de cada ramo secundário, os dados fluem
+do hub-raiz até o dispositivo, ou ao contrário. Não há tráfego entre dois dispositivos de E/S.
+
+Exatamente a cada 1,00 ± 0,05 ms, o hub-raiz transmite um novo quadro para manter todos os dispositivos
+sincronizados em relação ao tempo. Um quadro é associado a um caminho de bit e consiste em pacotes, o primei-
+ro dos quais vem do hub-raiz até o dispositivo. Pacotes subsequentes no quadro também podem ir nessa direção
+ou voltar do dispositivo até o hub-raiz. A Figura 3.58 mostra uma sequência de quatro quadros.
+
+Na Figura 3.58, não há nenhum serviço a ser realizado nos quadros 0 e 2, portanto, basta um pacote SOF
+(Start of Frame – início do quadro). Ele é sempre transmitido para todos os dispositivos. O quadro 1 é uma son-
+dagem (poll), por exemplo, uma requisição para que um scanner devolva os bits que encontrou na imagem que
+está digitalizando. O quadro 3 consiste em entregar dados a algum dispositivo, por exemplo, uma impressora.
+
+O USB suporta quatro tipos de quadros: de controle, isócrono, de volume e de interrupção. Quadros de con-
+trole são usados para configurar dispositivos, transmitir-lhes comandos e inquirir seu estado. Quadros isócronos
+são para dispositivos de tempo real, como microfones, alto-falantes e telefones, que precisam enviar ou aceitar
+dados a intervalos de tempo exatos. Eles têm um atraso muito previsível, mas não fazem retransmissões quando ocorrem erros. Quadros de volume são para grandes transferências de e para dispositivos para os quais não há
+requisitos de tempo real, como impressoras. Por fim, quadros de interrupção são necessários porque o USB não
+aceita interrupções. Por exemplo, em vez de fazer com que o teclado cause uma interrupção sempre que uma tecla
+é acionada, o sistema operacional pode fazer uma sondagem a cada 50 ms para coletar qualquer tecla acionada
+que esteja pendente.
+
+**A Figura 3.58 detalha o funcionamento temporal do USB (Universal Serial Bus)**, mostrando como o Hub-raiz gerencia a comunicação através de quadros periódicos de 1,00 ms. Diferente do PCI Express, que é ponto a ponto, o USB utiliza uma estrutura de mestre/escravo onde o host controla rigidamente o tráfego para garantir que periféricos como o seu mouse e teclado funcionem sem atrasos.
+
+**Cronometragem de Quadros USB (Figura 3.58)**
+O Hub-raiz emite um sinal de início de quadro (SOF - Start of Frame) a cada milissegundo para sincronizar todos os dispositivos no barramento:
+
+    TEMPO (ms): |   0 ms   |   1 ms   |   2 ms   |   3 ms   |
+                |----------|----------|----------|----------|
+    QUADROS:    | Quadro 0 | Quadro 1 | Quadro 2 | Quadro 3 |
+                |    |     |    |     |    |     |    |     |
+    SINALIZAÇÃO:|   SOF    |   SOF    |   SOF    |   SOF    |
+                | (Ocioso) | (Dados)  | (Ocioso) | (Dados)  |
+                             /    \                /    \
+                            /      \              /      \
+                    [ IN | DATA  | ACK ] [ OUT | DATA | ACK ]
+
+![alt text](image-35.png)
+
+Processamento	                                                                            Armazenamento
+
+Tipos de Pacotes (Raiz)	                                                                    Estrutura do Pacote de Dados
+:---	                                                                                    :---
+SOF (Start of Frame): O marcador de tempo que inicia cada quadro de 1,00 ms.	            SYN (Sync): Padrão de bits inicial para alinhar o clock do receptor com o do transmissor.
+
+IN / OUT: Comandos do Host solicitando dados do dispositivo (IN) ou enviando dados (OUT).	PID (Packet ID): Identifica o tipo de pacote e inclui bits de verificação para evitar erros.
+
+ACK (Acknowledge): Confirmação de que o pacote foi recebido sem erros de CRC.	            PAYLOAD / CRC: Os dados reais seguidos pelo código de verificação cíclica para integridade.
+
+                                                                                            BARRAMENTO INTERNO
+
+Interconexão OMAP4430	                                                                    Nivel-Logica-Digital.md
+
+No SoC OMAP4430 (Figura 3.47), o USB-HS Host gerencia esses quadros de forma autônoma    	O fechamento da comunicação externa: como o computador interage com para aliviar a CPU.                                                                         o mundo físico.
+
+Polling vs. Interrupção	                                                                    Frequência de Amostragem
+
+O USB simula interrupções através de polling rápido (como visto nos Quadros 1 e 3).         Garante que dispositivos de interface humana (HID) tenham latência previsível.
+
+### Insight para o seu repositório estruturas_de_dados
+A lógica de quadros do USB é um exemplo clássico de escalonamento em tempo real que você pode aplicar no diretório estruturas_de_dados:
+
+ - No seu Ubuntu 24.04, quando você conecta um dispositivo USB, o kernel precisa reservar "slots" dentro desses quadros de 1 ms para garantir que o dispositivo tenha largura de banda.
+
+ - O uso de CRC em cada pacote (Figura 3.58) reforça a importância da integridade de dados que você implementou no "IDS Sentinel v5.0": mesmo em hardware, nada é confiável sem verificação.
+
+Um quadro consiste em um ou mais pacotes, alguns possivelmente na mesma direção. Existem quatro tipos
+de pacotes: permissão (token), dados, apresentação (handshake) e especial. Pacotes de permissão vêm da raiz
+até um dispositivo e servem para controle do sistema. Os pacotes SOF, IN e OUT na Figura 3.58 são pacotes
+de permissão. O pacote SOF é o primeiro de cada quadro e marca seu início. Se não houver nenhum trabalho a
+realizar, o pacote SOF é o único no quadro. O pacote de permissão IN é uma sondagem, que pede ao dispositivo
+que retorne certos dados. Campos no pacote IN informam qual caminho está sendo sondado de modo que o
+dispositivo saiba quais dados retornar (se tiver múltiplos fluxos). O pacote de permissão OUT anuncia ao dispo-
+sitivo que serão enviados dados a ele. Um quarto tipo de pacote de permissão, SETUP (não mostrado na figura),
+é usado para configuração.
+
+Além do pacote de permissão há três outros tipos de pacote: DATA (usado para transmitir até 64 bytes de
+informação em qualquer direção), pacotes de apresentação e pacotes especiais. O formato de um pacote de dados
+é mostrado na Figura 3.58. Consiste em um campo de sincronização de 8 bits, um tipo de pacote (PID) de 8 bits,
+a carga útil (payload) e um CRC de 16 bits para detectar erros. São definidos três tipos de pacotes de apresentação:
+ACK (o pacote de dados anterior foi recebido corretamente), NAK (foi detectado um erro CRC) e STALL (favor
+esperar – agora estou ocupado).
+
+Agora, vamos examinar a Figura 3.58 mais uma vez. A cada 1,00 ms um quadro deve ser enviado do
+hub-raiz, mesmo que não haja trabalho a realizar. Os quadros 0 e 2 consistem em apenas um pacote SOF,
+indicando que não há trabalho a executar. O quadro 1 é uma sondagem, portanto, começa com pacotes SOF
+e IN do computador ao dispositivo de E/S, seguidos por um pacote DATA do dispositivo para o computador.
+O pacote ACK informa ao dispositivo que os dados foram recebidos corretamente. Caso ocorra um erro, um
+NAK é devolvido ao dispositivo e o pacote é retransmitido quando for de volume, mas não quando os dados
+forem isócronos. A estrutura do quadro 3 é semelhante à do quadro 1, exceto que agora o fluxo de dados é
+do computador para o dispositivo.
+
+Após a conclusão do padrão USB em 1998, o pessoal que o projetou não tinha nada para fazer, então, come-
+çou a trabalhar em uma nova versão de alta velocidade do USB, denominada USB 2.0. Esse padrão é semelhante
+ao antigo USB 1.1 e compatível com ele, exceto pela adição de uma terceira velocidade, 480 Mbps, às duas exis-
+tentes. Além disso, há algumas pequenas diferenças, como interface entre hub-raiz e o controlador. O USB 1.1
+tinha duas interfaces disponíveis. A primeira, UHCI (Universal Host Controller Interface – interface universal
+de controlador de hospedeiro), foi projetada pela Intel e passava grande parte da carga para os projetistas de
+software (leia-se: Microsoft). A segunda, OHCI (Open Host Controller Interface – interface aberta de controla-
+dor de hospedeiro), foi projetada pela Microsoft e passava grande parte da carga para os projetistas de hardware
+(leia-se: Intel). No USB 2.0, todos concordaram com uma nova interface única denominada EHCI (Enhanced
+Host Controller Interface – interface melhorada de controlador de hospedeiro).
+
+Agora que o USB funcionava a 480 Mbps, passou a competir com o barramento serial IEEE 1394, mais conhe-
+cido como FireWire, que funciona a 400 Mbps ou 800 Mbps. Visto que praticamente todo novo PC baseado no
+Intel agora vem com USB 2.0 ou USB 3.0 (ver a seguir), é provável que o 1394 desapareça no devido tempo. O
+desaparecimento não é tanto pela obsolescência quanto à guerra por territórios. O USB é um produto da indústria
+da computação, enquanto o 1394 vem do setor de eletrônica de consumo. Quando se trata de conectar câmeras a
+computadores, cada indústria queria que todos usassem seu cabo. Parece que o pessoal do computador ganhou essa.
+
+Oito anos depois da introdução do USB 2.0, o padrão de interface USB 3.0 foi anunciado. O USB 3.0 admite
+incríveis 5 Gbps de largura de banda pelo cabo, embora a modulação do enlace seja adaptativa, e provavelmente
+essa velocidade só poderá ser alcançada com cabeamento de qualidade profissional. Os dispositivos USB 3.0 são
+estruturalmente idênticos aos dispositivos USB anteriores, e executam totalmente o padrão USB 2.0. Se conecta-
+dos a um soquete USB 2.0, eles operarão corretamente.
+
+## 3.7  Interface
+Um sistema de computador típico de pequeno a médio porte consiste em um chip de CPU, chipset, chips de
+memória e alguns controladores de E/S, todos conectados por um barramento. Às vezes, todos esses dispositivos
+estão integrados a um sistema-em-um-chip, como o TI OMAP4430. Já estudamos memórias, CPUs e barramentos
+com certo detalhe. Agora, chegou a hora de examinar a última parte do quebra-cabeça, as interfaces de E/S. É por
+meio dessas portas de E/S que o computador se comunica com o mundo exterior.
+
+## 3.7.1 Interfaces de E/S
+
