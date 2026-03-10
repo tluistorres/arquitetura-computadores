@@ -3971,4 +3971,273 @@ com certo detalhe. Agora, chegou a hora de examinar a última parte do quebra-ca
 meio dessas portas de E/S que o computador se comunica com o mundo exterior.
 
 ## 3.7.1 Interfaces de E/S
+Há inúmeras interfaces de E/S disponíveis no mercado e novas são lançadas o tempo todo. Entre as interfaces
+comuns estão UARTs, USARTs, controladores de CRT, controladores de disco e PIOs. Uma UART (Universal
+Asynchronous Receiver Transmitter – transmissor receptor assíncrono universal) é uma interface de E/S que
+pode ler um byte do barramento de dados e entregá-lo um bit por vez a um terminal por meio de uma linha serial,
+ou receber dados de um terminal. Em geral, as UARTs permitem várias velocidades de 50 a 19.200 bps; largura de
+caracteres de 5 a 8 bits; 1, 1,5 ou 2 bits de fim; e fornecem paridade par, ímpar ou nenhuma paridade, tudo sob con-
+trole de programa. USARTs (Universal Synchronous Asynchronous Receiver Transmitters – transmissor receptor
+assíncrono síncrono universal) podem manipular transmissão síncrona usando uma variedade de protocolos, bem
+como executando todas as funções da UART. Como as UARTs se tornaram menos importantes com o desapareci-
+mento dos modems de telefone, agora vamos estudar a interface paralela como exemplo de uma interface de E/S.
+
+### Interfaces PIO
+Uma interface PIO (Parallel Input/Output – entrada e saída paralela) típica é o Intel 8255A, mostrado na
+Figura 3.59. Ele tem uma série de linhas de E/S (por exemplo, 24 linhas de E/S no exemplo da figura) que podem
+fazer ligação com qualquer interface de dispositivo lógico digital, por exemplo, teclados, comutadores, luzes ou
+impressoras. Resumindo, o programa da CPU pode escrever um 0 ou 1, ou ler o estado de entrada de qualquer
+linha, o que dá grande flexibilidade. Um pequeno sistema com CPU que use uma interface PIO pode controlar
+diversos dispositivos físicos, como um robô, torradeira ou microscópio eletrônico. As interfaces PIO são encon-
+tradas frequentemente em sistemas embutidos.
+
+**Figura 3.59  Uma interface PIO de 24 bits.**
+
+Com a Figura 3.59, entramos no detalhamento técnico das interfaces de entrada e saída, explorando como a CPU se comunica com o mundo exterior através de uma Interface de E/S Paralela (PIO) de 24 bits. Este componente é essencial para sistemas embarcados, permitindo que o processador controle periféricos simples, como LEDs, sensores ou teclados, de forma direta.
+
+Estrutura da Interface PIO (Figura 3.59)
+Abaixo, represento o fluxo de sinais entre a CPU (lado esquerdo) e os periféricos (lado direito):
+
+    SINAIS DA CPU                INTERFACE PIO               PERIFÉRICOS
+     __________________          ______________________          ___________
+    |                  |        |                      |   8    |           |
+    | CS# (Chip Select)|------->|                      |=======>|  PORTA A  |
+    | A0-A1 (Endereço) |---/--->|                      |        |___________|
+    |                  |  2     |    REGISTRADORES     |   8    |           |
+    | WR# (Escrita)    |------->|   DE CONFIGURAÇÃO    |=======>|  PORTA B  |
+    | RD# (Leitura)    |------->|    E DE DADOS        |        |___________|
+    | RESET            |------->|                      |   8    |           |
+    | D0-D7 (Dados)    |--<=>---|                      |=======>|  PORTA C  |
+    |__________________|  8     |______________________|        |___________|
+
+![alt text](image-36.png)
+
+### Insight para o seu repositório estruturas_de_dados
+A interface PIO é a personificação física de uma Tabela Hash ou um Vetor no seu diretório estruturas_de_dados:
+
+ - Ao endereçar as portas A, B ou C através de A0-A1, a CPU está basicamente acessando um índice de um array de hardware.
+
+ - No seu projeto de IDS Sentinel v5.0, você poderia usar uma porta PIO para acionar um alarme físico (saída) sempre que um pacote suspeito fosse detectado no seu Ubuntu 24.04.
+
+ - O conceito de "travar" o valor na saída até a próxima escrita é o equivalente em hardware ao armazenamento de uma variável global em C.
+
+A interface PIO é configurada com um registrador de configuração de 3 bits, que especifica se as três portas
+independentes de 8 bits devem ser usadas para entrada (0) ou saída (1) do sinal digital. A definição do valor
+apropriado no registrador de configuração permitirá qualquer combinação de entrada e saída para as três portas.
+Associado com cada porta há um registrador com amostragem de 8 bits. Para estabelecer as linhas em uma porta
+de saída, a CPU apenas escreve um número de 8 bits no registrador correspondente, e esse número aparece nas
+linhas de saída e fica ali até que o registrador seja reescrito. Para usar uma porta para entrada, a CPU apenas lê o
+registrador de 8 bits correspondente.
+
+É possível montar interfaces PIO mais sofisticadas. Por exemplo, um modo de operação popular fornece apre-
+sentação com dispositivos externos. Assim, para enviar a um dispositivo que nem sempre está pronto para aceitar dados, a interface PIO pode apresentar dados em uma porta de saída e esperar que o dispositivo devolva um pulso
+informando que aceitou os dados e quer mais. A lógica necessária para amostrar tais pulsos e torná-los disponíveis
+para a CPU inclui um sinal de pronto e mais uma fila de registradores de 8 bits para cada porta de saída.
+
+Pelo diagrama funcional da interface PIO, podemos ver que, além dos 24 pinos para as três portas, ela tem oito
+linhas que se conectam diretamente com o barramento de dados, uma linha de seleção de chip (chip select), linhas de
+leitura e escrita, duas linhas de endereço e uma para reiniciar o chip. As duas linhas de endereço selecionam um dos
+quatro registradores internos correspondentes às portas A, B, C e ao registrador de configuração de porta. Em geral, as
+duas linhas de endereço estão conectadas aos bits de ordem baixa do barramento de endereço. A linha de seleção de
+chip permite que a interface PIO de 24 bits seja combinada para formar interfaces PIO maiores, acrescentando outras
+linhas de endereço e usando-as para selecionar a interface PIO apropriada, ativando sua linha de seleção de chip.
+
+## 3.7.2 Decodificação de endereço
+Até agora fomos propositalmente superficiais sobre como a seleção do chip é ativada na memória e nos chips
+de E/S que já vimos. Agora, é hora de examinar com mais cuidado como isso é feito. Vamos considerar um com-
+putador embutido simples de 16 bits que consiste em uma CPU, uma EPROM de 2 KB × 8 bytes para o programa,
+uma RAM de 2 KB × 8 bytes para os dados e uma interface PIO. Esse pequeno sistema pode ser usado como
+um protótipo para o cérebro de um brinquedo barato ou um eletrodoméstico simples. Uma vez em produção, a
+EPROM poderia ser substituída por uma ROM.
+
+A interface PIO pode ser selecionada de um entre dois modos: como um verdadeiro dispositivo de E/S
+ou como parte da memória. Se optarmos por usá-la como um dispositivo de E/S, então devemos selecioná-la
+usando uma linha de barramento explícita que indica que um dispositivo de E/S está sendo referenciado, e não
+a memória. Se usarmos a outra abordagem, E/S mapeada para a memória, então temos de lhe designar 4 bytes
+do espaço de memória para as três portas e o registrador de controle. A escolha é, de certa forma, arbitrária.
+Escolheremos E/S mapeada para a memória porque ela ilustra alguns aspectos interessantes da interface de E/S.
+
+A EPROM necessita de 2 KB de espaço de endereço, a RAM também precisa de 2 K de espaço de endereço e
+a PIO precisa de 4 bytes. Como o espaço de endereço de nosso exemplo é 64 K, temos de escolher onde colocar
+os três dispositivos. Uma opção possível é mostrada na Figura 3.60. A EPROM ocupa endereços até 2 K, a RAM
+ocupa endereços de 32 KB a 34 KB e a PIO ocupa os 4 bytes mais altos do espaço de endereço, 65.532 a 65.535.
+Do ponto de vista do programador, não faz diferença quais endereços são usados; contudo, isso não acontece
+quando se trata da interface. Se tivéssemos optado por endereçar a PIO via espaço de E/S, ela não precisaria de
+nenhum endereço de memória, mas precisaria de quatro espaços de endereço de E/S.
+
+Com as designações de endereço da Figura 3.60, a EPROM deve ser selecionada por quaisquer endereços de
+memória de 16 bits da forma 00000xxxxxxxxxxx (binário). Em outras palavras, qualquer endereço de memória
+cujos 5 bits de ordem alta são todos 0s cai na parte inferior da memória de 2 KB, portanto, na EPROM. Por isso,
+a seleção de chip da EPROM poderia ser ligada a um comparador de 5 bits, com uma de suas entradas perma-
+nentemente ligada a 00000.
+
+Uma maneira melhor de conseguir o mesmo efeito é usar uma porta OR de cinco entradas com as cinco
+entradas ligadas às linhas de endereço A11 a A15. Se, e somente se, todas a cinco linhas forem 0, a saída será 0,
+
+
+**Figura 3.60  Localização da EPROM, RAM e PIO em nosso espaço de endereço de 64 KB.**
+
+A Figura 3.60 apresenta o Mapa de Memória de um sistema de 64 KB, demonstrando como diferentes componentes de hardware (EPROM, RAM e a interface PIO da Figura 3.59) são organizados dentro do espaço de endereçamento da CPU. Essa técnica é conhecida como E/S mapeada em memória, onde periféricos são acessados como se fossem endereços comuns de memória.
+
+Mapa de Endereços de 64 KB (Figura 3.60)
+Abaixo, represento a distribuição física desses componentes ao longo dos 65.536 endereços possíveis:
+
+    Endereço (Hex) |  Endereço (Dec) |    Componente Alocado    | Tamanho / Uso
+    ----------------|-----------------|--------------------------|-------------------
+    0000H          |  0K             | [ EPROM ]                | Firmware/BIOS
+    ...            |  ...            | (Espaço Vazio)           | -
+    8000H          |  32K            | [ RAM ]                  | Dados Variáveis
+    ...            |  ...            | (Espaço Vazio)           | -
+    FFFCH          |  ~63.9K         | [ PIO ]                  | Interface de E/S
+    FFFFH          |  64K            | (Fim do Espaço)          | -
+
+![alt text](image-37.png)
+
+### nsight para o seu repositório estruturas_de_dados
+O mapa de memória da Figura 3.60 é a base física para o conceito de Ponteiros que você utiliza no diretório estruturas_de_dados:
+
+ - Em C, um ponteiro nada mais é do que uma variável que armazena um desses números (como 0x8000) para localizar um dado na RAM.
+
+ - Quando você trabalha com Tabelas Hash, você está criando um "mapa lógico" que funciona de forma muito similar a esse mapa de hardware: converter uma chave em um endereço específico de armazenamento.
+
+ - No seu Lenovo IdeaPad Gaming 3, embora o espaço de endereço seja de 64 bits (muito maior que os 16 bits/64 KB desta figura), a lógica de segmentação entre código (EPROM/Flash), dados (RAM) e periféricos (PIO) permanece a mesma.
+
+Processamento	                                                               Armazenamento
+
+Localização: EPROM (0000H)	                                                   Finalidade: Firmware
+
+Ocupa o início do mapa para que a CPU encontre as primeiras instruções de      Armazena o código de inicialização permanente, similar ao suporte do BIOS visto boot assim que é ligada ou resetada.                                           na estrutura do Core i7 (Figura 3.52).
+
+Localização: RAM (8000H)	                                                   Finalidade: Execução 
+
+Posicionada no meio do mapa (32K), oferecendo um bloco contínuo para 	      Espaço onde suas estruturas de dados em C são carregadas e manipuladas durante a armazenamento de dados voláteis.                                              execução no seu Ubuntu 24.04.
+
+Localização: PIO (FFFCH)                                                      Finalidade: Controle de E/S
+
+Alocada no topo do espaço de endereçamento para não interferir nos            Permite que a CPU controle as Portas A, B e C (Figura 3.59) apenas lendo ou blocos principais de memória.                                                        escrevendo neste endereço específico.
+
+
+o que ativa cs (que é ativado baixo). Esse método de endereçamento é ilustrado na Figura 3.61(a) e é chamado
+decodificação de endereço completo.
+
+O mesmo princípio pode ser usado para a RAM. Contudo, a RAM deve responder a endereços binários
+da forma 10000xxxxxxxxxxx, portanto, é preciso um inversor adicional, como mostra a figura. A decodifica-
+ção de endereços PIO é um pouco mais complicada, porque é selecionada pelos quatro endereços da forma
+11111111111111xx. Um possível circuito que assegure cs só quando o endereço correto aparecer no barramento
+de endereço é mostrado na figura. Ele usa duas portas nand de oito entradas para alimentar uma porta or.
+
+Contudo, se o computador de fato tiver apenas uma CPU, dois chips de memória e a PIO, podemos usar
+um truque para conseguir uma decodificação de endereço muito mais simples. Esse truque se baseia no fato de
+que todos os endereços da EPROM, e somente endereços da EPROM, têm um 0 no bit de ordem alta, a15. Por
+conseguinte, basta ligar cs a a15 diretamente, como mostra a Figura 3.61(b).
+
+**Figura 3.61  (a) Decodificação total de endereço. (b) Decodificação parcial de endereço.**
+
+A Figura 3.61 demonstra os métodos utilizados para implementar o mapa de memória que analisamos na figura anterior, focando em como os sinais do barramento de endereço (A_0 a A_15) são usados para ativar componentes específicos através do sinal Chip Select (CS).
+
+(a) Decodificação Total (Alta Precisão)
+Neste modelo, todos os bits de endereço relevantes são verificados por portas NAND e inversores (representados por o) para garantir que o chip responda a apenas um endereço único.
+
+    BARRAMENTO DE ENDEREÇO (A0 - A15)
+    =========================================== A0
+    |   |   |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |   |   |     (A11-A15)
+    |   |   |   |   |  _|_ _|_ _|_ _|_ _|_ 
+    |   |   |   |   |  \                 /
+    |   |   |   |   |   \      NAND     /---> [ o ]---> [ CS ]
+    |   |   |   |   |    \_____________/   Inversor   | EPROM|
+    |   |   |   |   |                                  |______|
+
+(b) Decodificação Parcial (Custo Reduzido)Aqui, apenas os bits mais significativos (como $A_{15}$) são usados. Isso simplifica o hardware, mas cria "apelidos" (aliasing), onde o dispositivo aparece em vários lugares do mapa de memória.
+
+    BARRAMENTO DE ENDEREÇO (A0 - A15)
+    =========================================== A0
+    |                                   |
+    |                                   |     (A15)
+    |      __________                   |      _|_
+    |     |          |                  |     |   |
+    |-----|   RAM    |                  |-----|AND|---> [ CS ]
+    |     | (2K x 8) |                  |     |___|    | PIO  |
+    |     |__________|                  |              |______|
+    |          ^                        |
+    |__________| [ CS ]                 |
+
+![alt text](image-38.png)
+
+### Insight para estruturas_de_dados
+Essa lógica explica como o seu Ubuntu 24.04 isola processos:
+
+ - A Decodificação Total é como um índice único em um Banco de Dados; não há ambiguidade.
+
+ - Se você estivesse programando um driver em C para o seu IDS Sentinel v5.0, entender se a decodificação é total ou parcial ditaria se você precisa se preocupar com endereços espelhados que poderiam corromper dados.
+
+### Insight para o seu repositório estruturas_de_dados
+A decodificação de endereço é o equivalente em hardware à resolução de colisões em uma Tabela Hash:
+
+Na Decodificação Total, você tem uma função hash perfeita: cada chave (endereço) leva a exatamente um balde (dispositivo).
+
+Na Decodificação Parcial, você aceita colisões para economizar recursos, tratando diferentes entradas como se fossem o mesmo local de armazenamento.
+
+Ao depurar seus projetos em C no Ubuntu 24.04, erros de "Segmentation Fault" geralmente ocorrem quando o software tenta acessar um endereço que a lógica de decodificação da Figura 3.61 não mapeou para nenhum componente físico.
+
+
+Nesse ponto, a decisão de colocar a RAM em 8000H pode parecer muito menos arbitrária. A decodifi-
+cação da RAM pode ser feita observando que somente endereços válidos da forma 10xxxxxxxxxxxxxx estão
+na RAM, portanto, 2 bits de decodificação são suficientes. De modo semelhante, qualquer endereço que
+comece com 11 deve ser um endereço PIO. Agora, a lógica completa de decodificação são duas portas nand
+e um inversor.
+
+A lógica de decodificação de endereço da Figura 3.61(b) é denominada decodificação parcial de ende-
+reço, porque não são usados os endereços completos. Ela tem essa propriedade: uma leitura dos endereços
+0001000000000000, 0001100000000000 ou 0010000000000000 dará o mesmo resultado. Na verdade, todo ende-
+reço na metade inferior do espaço de endereço selecionará a EPROM. Como os endereços extras não são usados,
+não há dano algum, mas se estivermos projetando um computador que poderá ser expandido no futuro (o que é
+improvável no caso de um brinquedo), devemos evitar a decodificação parcial porque ela ocupa muito espaço de
+endereço.
+
+Outra técnica comum de decodificação de endereço é usar um decodificador como o mostrado na Figura
+3.13. Conectando as três entradas às três linhas de endereço de ordem alta, obtemos oito saídas correspondentes
+aos endereços nos primeiros 8 K, nos 8 K seguintes e assim por diante. Para um computador com oito RAMs, cada
+uma com 8 K × 8, um chip como esse fornece decodificação completa. Para um computador com oito chips de
+memória de 2 K × 8, um único decodificador também é suficiente, contanto que cada um dos chips de memória
+esteja localizado em porções distintas de 8 KB do espaço de endereço. (Lembre-se de que observamos anterior-
+mente que a posição dos chips de memória e E/S dentro do espaço de endereços tem importância.)
+
+## 3.8 Resumo
+Computadores são construídos com base em chips de circuito integrado que contêm minúsculos elementos
+comutadores denominados portas. As portas mais comuns são and, or, nand, nor e not. Circuitos simples podem
+ser montados ao se combinar diretamente portas individuais.
+
+Circuitos mais complexos são multiplexadores, demultiplexadores, codificadores, decodificadores, deslo-
+cadores e ULAs. Funções booleanas arbitrárias podem ser programadas usando um FPGA. Se forem necessárias
+muitas funções booleanas, os FPGAs costumam ser mais eficientes. As leis da álgebra booleana podem ser usadas
+para transformar circuitos de uma forma para outra. Em muitos casos, é possível produzir circuitos mais econô-
+micos dessa maneira.
+
+A aritmética de computadores é efetuada por somadores. Um somador completo de um só bit pode ser cons-
+truído usando dois meios-somadores. Um somador para uma palavra multibit pode ser construído com a conexão
+de vários somadores completos de tal modo que permita o vai-um para seu vizinho da esquerda.
+
+Os componentes de memórias (estáticas) são latches e flip-flops, cada um dos quais pode armazenar um bit de
+informação. Esses bits podem ser combinados linearmente formando latches octais e flip-flops, ou por logaritmos
+formando memórias completas que usam palavras. Há memórias de vários tipos: RAM, ROM, PROM, EPROM,
+EEPROM e flash. RAMs estáticas não precisam ser renovadas; elas mantêm seus valores armazenados enquanto
+a energia estiver ligada. RAMs dinâmicas, por outro lado, devem ser renovadas periodicamente para compensar a
+fuga de corrente dos pequenos capacitores do chip.
+
+Os componentes de um sistema de computador são conectados por barramentos. Muitos pinos – não todos –
+de um chip de CPU típico comandam diretamente uma linha de barramento. Tais linhas podem ser divididas
+em linhas de endereço, de dados e de controle. Barramentos síncronos são comandados por um clock mestre.
+Barramentos assíncronos usam trocas completas para sincronizar o escravo com o mestre.
+
+O Core i7 é um exemplo de uma CPU moderna. Sistemas modernos que usam esse chip têm um barramento
+de memória, um barramento PCIe e um barramento USB. A interconexão PCIe é o modo mais comum de conectar
+as partes internas de um computador em altas velocidades. A ARM também é uma CPU moderna de alto nível,
+mas é voltada para sistemas embutidos e dispositivos móveis, onde o baixo consumo de energia é importante. O
+Atmel ATmega168 é um exemplo de um chip de baixo preço para aparelhos pequenos, baratos, e muitas outras
+aplicações sensíveis ao preço.
+
+Comutadores, luzes, impressoras e muitos outros dispositivos de E/S podem fazer interface com computadores
+usando interfaces de E/S paralela. Esses chips podem ser configurados como parte do espaço de E/S ou do espaço de
+memória, conforme a necessidade. Eles podem ser total ou parcialmente decodificados, dependendo da aplicação.
 
