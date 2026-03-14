@@ -994,7 +994,8 @@ Com o Latch SR com Clock, o circuito só "escuta" as entradas S e R quando o sin
                                     |     |_______/         |_______/
             R (RESET) --------------+
 
-![alt text](image-2.png)
+    
+![alt text](image-40.png)
 
 ### Insight para o seu repositório estruturas_de_dados
 Pense no Clock como o comando COMMIT de um banco de dados ou o momento em que você pressiona Enter após digitar um valor. Você pode mudar as entradas S e R quantas vezes quiser enquanto o clock estiver em 0; nada será salvo. O hardware só "valida" a informação no instante definido pelo pulso de clock.No seu projeto de Torres de Hanói, isso garante que a posição de um disco só seja atualizada quando o algoritmo de movimento terminar de calcular a trajetória, e não durante o cálculo.
@@ -1037,40 +1038,19 @@ Esse circuito requer 11 transistores. Circuitos mais sofisticados (porém, menos
 No seu diretório estruturas_de_dados, quando você declara uma variável global ou um static int, o compilador reserva um conjunto desses Latches D para segurar esses valores.Enquanto o Clock estiver em 0, você pode mudar o valor de D no barramento (outras operações ocorrendo), mas a sua variável em Q permanecerá intacta.O valor só muda no exato momento do pulso de clock, garantindo que sua lógica de software não sofra com instabilidades elétricas.
 
 ## 3.3.2 Flip-flops
-Em muitos circuitos é necessário ler o valor em determinada linha em dado instante, e armazená-lo. Nessa
-variante, denominada flip-flop, a transição de estado não ocorre quando o clock é 1, mas durante a transição de
-0 para 1 (borda ascendente), ou de 1 para 0 (borda descendente). Assim, o comprimento do pulso do clock não
-é importante, contanto que as transições ocorram rapidamente.
+Em muitos circuitos é necessário ler o valor em determinada linha em dado instante, e armazená-lo. Nessa variante, denominada flip-flop, a transição de estado não ocorre quando o clock é 1, mas durante a transição de 0 para 1 (borda ascendente), ou de 1 para 0 (borda descendente). Assim, o comprimento do pulso do clock não é importante, contanto que as transições ocorram rapidamente.
 
-Para dar ênfase, vamos repetir qual é a diferença entre um flip-flop e um latch. Um flip-flop é disparado pela
-borda, enquanto um latch é disparado pelo nível. Contudo, fique atento, porque esses termos são muito confun-
-didos na literatura. Muitos autores usam “flip-flop” quando estão se referindo a um latch, e vice-versa.
+Para dar ênfase, vamos repetir qual é a diferença entre um flip-flop e um latch. Um flip-flop é disparado pela borda, enquanto um latch é disparado pelo nível. Contudo, fique atento, porque esses termos são muito confundidos na literatura. Muitos autores usam “flip-flop” quando estão se referindo a um latch, e vice-versa.
 
-Há várias formas de projetar um flip-flop. Por exemplo, se houvesse alguma maneira de gerar um pulso muito
-curto na borda ascendente do sinal de clock, esse pulso poderia ser alimentado para um latch D. Na verdade, essa
-maneira existe, e o circuito para ela é mostrado na Figura 3.24(a).
+Há várias formas de projetar um flip-flop. Por exemplo, se houvesse alguma maneira de gerar um pulso muito curto na borda ascendente do sinal de clock, esse pulso poderia ser alimentado para um latch D. Na verdade, essa maneira existe, e o circuito para ela é mostrado na Figura 3.24(a).
 
-À primeira vista, poderia parecer que a saída da porta and seria sempre zero, uma vez que a operação and de
-qualquer sinal com seu inverso é zero, mas a situação é um pouco diferente disso. O inversor tem um atraso de propa-
-gação pequeno, mas não zero, e é esse atraso que faz o circuito funcionar. Suponha que meçamos a tensão nos quatro
-pontos de medição a, b, c e d. O sinal de entrada, medido em a, é um pulso de clock longo, como mostrado na parte
-inferior da Figura 3.24(b). O sinal em b é mostrado acima dele. Observe que ele está invertido e também ligeiramente
-atrasado, quase sempre de alguns nanossegundos, dependendo do tipo de inversor utilizado.
+À primeira vista, poderia parecer que a saída da porta and seria sempre zero, uma vez que a operação and de qualquer sinal com seu inverso é zero, mas a situação é um pouco diferente disso. O inversor tem um atraso de propagação pequeno, mas não zero, e é esse atraso que faz o circuito funcionar. Suponha que meçamos a tensão nos quatro pontos de medição a, b, c e d. O sinal de entrada, medido em a, é um pulso de clock longo, como mostrado na parte inferior da Figura 3.24(b). O sinal em b é mostrado acima dele. Observe que ele está invertido e também ligeiramente atrasado, quase sempre de alguns nanossegundos, dependendo do tipo de inversor utilizado.
 
-O sinal em c também está atrasado, mas apenas pelo tempo correspondente à propagação (à velocidade da
-luz) do sinal. Se a distância física entre a e c for, por exemplo, 20 micra, então o atraso de propagação é 0,0001
-ns, que decerto é desprezível em comparação com o tempo que o sinal leva para se propagar pelo inversor. Assim,
-para todos os efeitos e propósitos, o sinal em c é praticamente idêntico ao sinal em a.
+O sinal em c também está atrasado, mas apenas pelo tempo correspondente à propagação (à velocidade da luz) do sinal. Se a distância física entre a e c for, por exemplo, 20 micra, então o atraso de propagação é 0,0001 ns, que decerto é desprezível em comparação com o tempo que o sinal leva para se propagar pelo inversor. Assim, para todos os efeitos e propósitos, o sinal em c é praticamente idêntico ao sinal em a.
 
-Quando se efetua uma operação and com as entradas para a porta and, b e c, o resultado é um pulso
-curto, como mostra a Figura 3.24(b), onde a largura do pulso, Δ, é igual ao atraso da porta do inversor, em
-geral 5 ns ou menos. A saída da porta and é exatamente esse pulso deslocado pelo atraso da porta and, como
-mostrado na parte superior da Figura 3.24(b). Esse deslocamento de tempo significa apenas que o latch D
-será ativado com um atraso fixo após a fase ascendente do clock, mas não tem efeito sobre a largura do pulso.
-Em uma memória com tempo de ciclo de 10 ns, um pulso de 1 ns para informar quando ler a linha D pode
-ser curto o bastante, caso em que o circuito completo pode ser o da Figura 3.25. Vale a pena observar que
-esse projeto de flip-flop é atraente porque é fácil de entender, embora, na prática, sejam usados flip-flops
-mais sofisticados.
+Quando se efetua uma operação and com as entradas para a porta and, b e c, o resultado é um pulso curto, como mostra a Figura 3.24(b), onde a largura do pulso, Δ, é igual ao atraso da porta do inversor, em geral 5 ns ou menos. A saída da porta and é exatamente esse pulso deslocado pelo atraso da porta and, como
+mostrado na parte superior da Figura 3.24(b). Esse deslocamento de tempo significa apenas que o latch D será ativado com um atraso fixo após a fase ascendente do clock, mas não tem efeito sobre a largura do pulso. Em uma memória com tempo de ciclo de 10 ns, um pulso de 1 ns para informar quando ler a linha D pode
+ser curto o bastante, caso em que o circuito completo pode ser o da Figura 3.25. Vale a pena observar que esse projeto de flip-flop é atraente porque é fácil de entender, embora, na prática, sejam usados flip-flops mais sofisticados.
 
 Figura 3.24   (a) Gerador de pulso. (b) Temporização em quatro pontos do circuito.
 
@@ -1088,15 +1068,10 @@ Esta Figura 3.24 detalha o Gerador de Pulso, um circuito refinado que utiliza o 
                                                          |
                                                 Largura do Pulso = Δ
 
-![alt text](image-4.png)
+![alt text](image-41.png)
 
-Os símbolos padronizados para latches e flip-flops são mostrados na Figura 3.26. A Figura 3.26(a) é um latch
-cujo estado é carregado quando o clock, CK, é 1, ao contrário da Figura 3.26(b), que é um latch cujo clock costuma
-ser 1, mas cai para 0 momentaneamente para carregar o estado a partir de D. As figuras 3.26(c) e (d) são flip-flops
-em vez de latches, o que é indicado pelo símbolo em ângulo nas entradas do clock. A Figura 3.26(c) muda de estado
-na borda ascendente do pulso do clock (transição de 0 para 1), enquanto a Figura 3.26(d) muda de estado na borda descendente (transição de 1 para 0). Muitos latches e flip-flops (mas não todos) também têm Q como uma saída, e
-alguns têm duas entradas adicionais Set ou Preset (que forçam o estado para Q = 1) e Reset ou Clear (que forçam
-o estado para Q = 0).
+Os símbolos padronizados para latches e flip-flops são mostrados na Figura 3.26. A Figura 3.26(a) é um latch cujo estado é carregado quando o clock, CK, é 1, ao contrário da Figura 3.26(b), que é um latch cujo clock costuma ser 1, mas cai para 0 momentaneamente para carregar o estado a partir de D. As figuras 3.26(c) e (d) são flip-flops em vez de latches, o que é indicado pelo símbolo em ângulo nas entradas do clock. A Figura 3.26(c) muda de estado
+na borda ascendente do pulso do clock (transição de 0 para 1), enquanto a Figura 3.26(d) muda de estado na borda descendente (transição de 1 para 0). Muitos latches e flip-flops (mas não todos) também têm Q como uma saída, e alguns têm duas entradas adicionais Set ou Preset (que forçam o estado para Q = 1) e Reset ou Clear (que forçam o estado para Q = 0).
 
 Figura 3.26  Latches e flip-flops D.
 
@@ -1133,18 +1108,10 @@ Imagine que você está implementando uma Fila (Queue) em C no seu diretório es
 Isso é o que permite que o processador faça A = A + 1. Com um Latch, o valor ficaria somando infinitamente enquanto o clock estivesse alto. Com o Flip-Flop D, o valor é lido, somado e o resultado só é gravado "na foto" do próximo ciclo.
 
 ## 3.3.3 Registradores
-Flip-flops podem ser combinados em grupos para criar registradores, que mantêm tipos de dados com
-comprimentos maiores do que 1 bit. O registrador na Figura 3.27 mostra como oito flip-flops podem ser
-ligados para formar um registrador armazenador de 8 bits. O registrador aceita um valor de entrada de 8
-bits (I0 a I7) quando o clock CK fizer uma transição. Para implementar um registrador, todas as linhas de
-clock são conectadas ao mesmo sinal de entrada CK, de modo que, quando o clock fizer uma transição,
-cada registrador aceitará o novo valor de dados de 8 bits no barramento de entrada. Os próprios flip-flops
-são do tipo da Figura 3.26(d), mas as bolhas de inversão nos flip-flops são canceladas pelo inversor ligado
-ao sinal de clock CK, de modo que os flip-flops são carregados na transição ascendente do clock. Todos
-os oito sinais clear também são ligados, de modo que, quando o sinal clear CLR passar para 0, todos os
-flip-flops serão forçados a passar para o seu estado 0. Caso você queira saber por que o sinal de clock CK
-é invertido na entrada e depois invertido novamente em cada flip-flop, um sinal de entrada pode não ter
-corrente suficiente para alimentar todos os oito flip-flops; o inversor da entrada, na realidade, está sendo
+Flip-flops podem ser combinados em grupos para criar registradores, que mantêm tipos de dados com comprimentos maiores do que 1 bit. O registrador na Figura 3.27 mostra como oito flip-flops podem ser ligados para formar um registrador armazenador de 8 bits. O registrador aceita um valor de entrada de 8
+bits (I0 a I7) quando o clock CK fizer uma transição. Para implementar um registrador, todas as linhas de clock são conectadas ao mesmo sinal de entrada CK, de modo que, quando o clock fizer uma transição, cada registrador aceitará o novo valor de dados de 8 bits no barramento de entrada. Os próprios flip-flops
+são do tipo da Figura 3.26(d), mas as bolhas de inversão nos flip-flops são canceladas pelo inversor ligado ao sinal de clock CK, de modo que os flip-flops são carregados na transição ascendente do clock. Todos os oito sinais clear também são ligados, de modo que, quando o sinal clear CLR passar para 0, todos os
+flip-flops serão forçados a passar para o seu estado 0. Caso você queira saber por que o sinal de clock CK é invertido na entrada e depois invertido novamente em cada flip-flop, um sinal de entrada pode não ter corrente suficiente para alimentar todos os oito flip-flops; o inversor da entrada, na realidade, está sendo
 usado como um amplificador.
 
 Figura 3.27   Um registrador de 8 bits construído a partir de flip-flops de único bit.
@@ -1173,20 +1140,10 @@ No seu diretório estruturas_de_dados, quando você manipula um uint8_t, o hardw
 
  - A técnica de usar um inversor como amplificador de corrente é vital em chips reais para evitar a degradação do sinal de clock através de múltiplos componentes.
 
-Quando tivermos projetado um registrador de 8 bits, poderemos usá-lo como um bloco de montagem para
-criar registradores maiores. Por exemplo, um registrador de 32 bits poderia ser criado pela combinação de dois
-registradores de 16 bits, unindo seus sinais de clock CK e sinais de clear CLR. Veremos os registradores e seus
-usos com mais detalhes no Capítulo 4.
+Quando tivermos projetado um registrador de 8 bits, poderemos usá-lo como um bloco de montagem para criar registradores maiores. Por exemplo, um registrador de 32 bits poderia ser criado pela combinação de dois registradores de 16 bits, unindo seus sinais de clock CK e sinais de clear CLR. Veremos os registradores e seus usos com mais detalhes no Capítulo 4.
 
 ## 3.3.4 Organização da memória
-Embora agora tenhamos progredido de uma simples memória de 1 bit da Figura 3.23 para a de 8 bits
-da Figura 3.27, para construir memórias grandes é preciso uma organização diferente, na qual palavras
-individuais podem ser endereçadas. Uma organização de memória muito utilizada e que obedece a esse
-critério é mostrada na Figura 3.28. Esse exemplo ilustra uma memória com quatro palavras de 3 bits. Cada
-operação lê ou escreve uma palavra completa de 3 bits. Embora uma capacidade total de memória de 12
-bits seja pouco mais do que nosso flip-flop octal, ela requer um número menor de pinos e, mais importante,
-o projeto pode ser estendido com facilidade para memórias grandes. Observe que o número de palavras é
-sempre uma potência de 2.
+Embora agora tenhamos progredido de uma simples memória de 1 bit da Figura 3.23 para a de 8 bits da Figura 3.27, para construir memórias grandes é preciso uma organização diferente, na qual palavras individuais podem ser endereçadas. Uma organização de memória muito utilizada e que obedece a esse critério é mostrada na Figura 3.28. Esse exemplo ilustra uma memória com quatro palavras de 3 bits. Cada operação lê ou escreve uma palavra completa de 3 bits. Embora uma capacidade total de memória de 12 bits seja pouco mais do que nosso flip-flop octal, ela requer um número menor de pinos e, mais importante, o projeto pode ser estendido com facilidade para memórias grandes. Observe que o número de palavras é sempre uma potência de 2.
 
 Figura 3.28  Diagrama lógico para uma memória 4 x 3. Cada linha é uma das quatro palavras de 3 bits. Uma operação de leitura ou
 escrita sempre lê ou escreve uma palavra completa.
@@ -1209,7 +1166,7 @@ Memória RAM 4 x 3 (Figura 3.28)
             |   |   |                                |
             |   |   |        CONTROLE (CS, RD, OE) --+
 
-![alt text](image-6.png)
+![alt text](image-42.png)
 
 ### Insight para o seu repositório estruturas_de_dados
 Quando você cria um array int arr[4] no seu diretório estruturas_de_dados, o hardware está fazendo exatamente isto:
@@ -1217,68 +1174,24 @@ Quando você cria um array int arr[4] no seu diretório estruturas_de_dados, o h
  - O índice do array arr[2] é convertido pelos bits de endereço (A_1=1, A_0=0) para ativar a Palavra 2.
  - A largura do tipo (como o seu uint8_t) determina quantas colunas de flip-flops existem em paralelo (neste exemplo da figura, são 3).
 
-Embora à primeira vista talvez pareça complicada, a memória da Figura 3.28 na verdade é bastante
-simples devido à sua estrutura regular. Ela tem oito linhas de entrada e três de saída. Três entradas são de
-dados: I0, I1 e I2; duas são para o endereço: A0 e A1; e três são para controle: cs para chip select (selecionar
-chip), rd para distinguir entre ler e escrever e oe para output enable (habilitar saída). As três saídas são para
-dados: O0, O1 e O2. É interessante notar que essa memória de 12 bits requer menos sinais que o registra-
-dor de 8 bits anterior. Este requer 20 sinais, incluindo alimentação e terra, enquanto a memória de 12 bits
-requer apenas 13 sinais. O bloco de memória requer menos sinais porque, diferente do registrador, os
-bits de memória compartilham um sinal de saída. Nessa memória, cada um dos 4 bits de memória compar-
-tilha um sinal de saída. O valor das linhas de endereço determina quais dos 4 bits de memória pode receber
-ou enviar um valor.
+Embora à primeira vista talvez pareça complicada, a memória da Figura 3.28 na verdade é bastante simples devido à sua estrutura regular. Ela tem oito linhas de entrada e três de saída. Três entradas são de dados: I0, I1 e I2; duas são para o endereço: A0 e A1; e três são para controle: cs para chip select (selecionar
+chip), rd para distinguir entre ler e escrever e oe para output enable (habilitar saída). As três saídas são para dados: O0, O1 e O2. É interessante notar que essa memória de 12 bits requer menos sinais que o registrador de 8 bits anterior. Este requer 20 sinais, incluindo alimentação e terra, enquanto a memória de 12 bits requer apenas 13 sinais. O bloco de memória requer menos sinais porque, diferente do registrador, os bits de memória compartilham um sinal de saída. Nessa memória, cada um dos 4 bits de memória compartilha um sinal de saída. O valor das linhas de endereço determina quais dos 4 bits de memória pode receber ou enviar um valor.
 
-Para selecionar esse bloco de memória, a lógica externa deve estabelecer cs alto e também rd alto (1 lógico)
-para leitura e baixo (0 lógico) para escrita. As duas linhas de endereço devem ser ajustadas para indicar qual das
-quatro palavras de 3 bits deve ser lida ou escrita. Para uma operação de leitura, as linhas de entrada de dados
-não são usadas, mas a palavra selecionada é colocada nas linhas de saída de dados. Para uma operação de escrita,
-os bits presentes nas linhas de entrada de dados são carregados na palavra de memória selecionada; as linhas de
-saída de dados não são usadas.
+Para selecionar esse bloco de memória, a lógica externa deve estabelecer cs alto e também rd alto (1 lógico) para leitura e baixo (0 lógico) para escrita. As duas linhas de endereço devem ser ajustadas para indicar qual das quatro palavras de 3 bits deve ser lida ou escrita. Para uma operação de leitura, as linhas de entrada de dados não são usadas, mas a palavra selecionada é colocada nas linhas de saída de dados. Para uma operação de escrita, os bits presentes nas linhas de entrada de dados são carregados na palavra de memória selecionada; as linhas de saída de dados não são usadas.
 
-Agora, vamos examinar atentamente a Figura 3.28 para ver como isso funciona. As quatro portas and de
-seleção de palavras à esquerda da memória formam um decodificador. Os inversores de entrada foram instalados
-de modo que cada porta é habilitada (saída é alta) por um endereço diferente. Cada porta comanda uma linha
-de seleção de palavra, de cima para baixo, para as palavras 0, 1, 2 e 3. Quando o chip é selecionado para uma
-escrita, a linha vertical rotulada cs · rd estará alta, habilitando uma das quatro portas de escrita, dependendo de
-qual linha de seleção de palavra esteja alta. A saída da porta de escrita comanda todos os sinais ck para a palavra
-selecionada, carregando os dados de entrada nos flip-flops para aquela palavra. Uma escrita é efetuada apenas se
-cs estiver alto e rd estiver baixo, e, ainda assim, somente a palavra selecionada por A0 e A1 é escrita; as outras
-palavras não são alteradas.
+Agora, vamos examinar atentamente a Figura 3.28 para ver como isso funciona. As quatro portas and de seleção de palavras à esquerda da memória formam um decodificador. Os inversores de entrada foram instalados de modo que cada porta é habilitada (saída é alta) por um endereço diferente. Cada porta comanda uma linha de seleção de palavra, de cima para baixo, para as palavras 0, 1, 2 e 3. Quando o chip é selecionado para uma
+escrita, a linha vertical rotulada cs · rd estará alta, habilitando uma das quatro portas de escrita, dependendo de qual linha de seleção de palavra esteja alta. A saída da porta de escrita comanda todos os sinais ck para a palavra selecionada, carregando os dados de entrada nos flip-flops para aquela palavra. Uma escrita é efetuada apenas se cs estiver alto e rd estiver baixo, e, ainda assim, somente a palavra selecionada por A0 e A1 é escrita; as outras palavras não são alteradas.
 
-Ler é semelhante a escrever. A decodificação de endereço é idêntica à da escrita. Mas agora a linha cs · rd está
-baixa, portanto, todas as portas de escrita estão desabilitadas e nenhum dos flip-flops é modificado. Em vez
-disso, a linha de seleção de palavra que for escolhida habilita as portas and vinculadas aos Q bits da palavra
-selecionada. Portanto, a palavra selecionada entrega seus dados às portas or de quatro entradas na parte inferior
-da figura, enquanto as outras três palavras produzem 0s. Em consequência, a saída das portas or é idêntica ao
-valor armazenado na palavra selecionada. As três palavras não selecionadas não dão nenhuma contribuição à
-saída.
+Ler é semelhante a escrever. A decodificação de endereço é idêntica à da escrita. Mas agora a linha cs · rd está baixa, portanto, todas as portas de escrita estão desabilitadas e nenhum dos flip-flops é modificado. Em vez disso, a linha de seleção de palavra que for escolhida habilita as portas and vinculadas aos Q bits da palavra selecionada. Portanto, a palavra selecionada entrega seus dados às portas or de quatro entradas na parte inferior da figura, enquanto as outras três palavras produzem 0s. Em consequência, a saída das portas or é idêntica ao valor armazenado na palavra selecionada. As três palavras não selecionadas não dão nenhuma contribuição à saída.
 
-Embora pudéssemos ter projetado um circuito no qual as três portas or fossem diretamente ligadas às três
-linhas de saída de dados, essa operação às vezes causa problemas. Em particular, mostramos que as linhas de
-entrada de dados e as linhas de saída de dados são diferentes, porém, nas memórias em si, as mesmas linhas são
-usadas. Se tivéssemos vinculado as portas or às linhas de saída de dados, o chip tentaria produzir dados, isto é,
-forçar cada linha a um valor específico, mesmo nas escritas, interferindo desse modo com os dados de entrada.
-Por essa razão, é desejável ter um meio de conectar as portas or às linhas de saída de dados em leituras, mas
-desconectá-las completamente nas escritas. O que precisamos é de um comutador eletrônico que possa estabele-
-cer ou interromper uma conexão em poucos nanossegundos.
+Embora pudéssemos ter projetado um circuito no qual as três portas or fossem diretamente ligadas às três linhas de saída de dados, essa operação às vezes causa problemas. Em particular, mostramos que as linhas de entrada de dados e as linhas de saída de dados são diferentes, porém, nas memórias em si, as mesmas linhas são usadas. Se tivéssemos vinculado as portas or às linhas de saída de dados, o chip tentaria produzir dados, isto é, forçar cada linha a um valor específico, mesmo nas escritas, interferindo desse modo com os dados de entrada. Por essa razão, é desejável ter um meio de conectar as portas or às linhas de saída de dados em leituras, mas desconectá-las completamente nas escritas. O que precisamos é de um comutador eletrônico que possa estabelecer ou interromper uma conexão em poucos nanossegundos.
 
-Felizmente, esses comutadores existem. A Figura 3.29(a) mostra o símbolo para o que denominamos buffer
-não inversor, que tem uma entrada e uma saída de dados e uma entrada de controle. Quando a entrada de con-
-trole estiver alta, o buffer age como um fio, como mostra a Figura 3.29(b). Quando a entrada de controle esti-
-ver baixa, ele age como um circuito aberto, como mostra a Figura 3.29(c); é como se alguém desconectasse a
-saída de dados do resto do circuito com um alicate de corte. Contudo, ao contrário do que aconteceria no caso
-do alicate de corte, a conexão pode ser restaurada logo em seguida, dentro de alguns nanossegundos, apenas
-fazendo o sinal de controle ficar alto novamente.
+Felizmente, esses comutadores existem. A Figura 3.29(a) mostra o símbolo para o que denominamos buffer não inversor, que tem uma entrada e uma saída de dados e uma entrada de controle. Quando a entrada de controle estiver alta, o buffer age como um fio, como mostra a Figura 3.29(b). Quando a entrada de controle esti-
+ver baixa, ele age como um circuito aberto, como mostra a Figura 3.29(c); é como se alguém desconectasse a saída de dados do resto do circuito com um alicate de corte. Contudo, ao contrário do que aconteceria no caso do alicate de corte, a conexão pode ser restaurada logo em seguida, dentro de alguns nanossegundos, apenas fazendo o sinal de controle ficar alto novamente.
 
-A Figura 3.29(d) mostra um buffer inversor, que funciona como um inversor normal quando o controle
-estiver alto, e desconecta a saída do circuito quando o controle estiver baixo. Ambos os tipos de buffers são dispositivos de três estados, porque podem produzir 0, 1, ou nenhum dos dois (circuito aberto). Buffers também
-amplificam sinais, portanto, podem comandar muitas entradas simultaneamente. Às vezes, eles são usados em
-circuitos por essa razão, mesmo quando suas propriedades de comutação não são necessárias.
+A Figura 3.29(d) mostra um buffer inversor, que funciona como um inversor normal quando o controle estiver alto, e desconecta a saída do circuito quando o controle estiver baixo. Ambos os tipos de buffers são dispositivos de três estados, porque podem produzir 0, 1, ou nenhum dos dois (circuito aberto). Buffers também amplificam sinais, portanto, podem comandar muitas entradas simultaneamente. Às vezes, eles são usados em circuitos por essa razão, mesmo quando suas propriedades de comutação não são necessárias.
 
-Voltando ao circuito de memória, agora já deve estar claro para que servem os três buffers não inversores
-nas linhas de saída de dados. Quando cs, rd e oe estiverem todos altos, o sinal output enable também está alto,
-habilitando os buffers e colocando uma palavra nas linhas de saída. Quando qualquer um dos cs, rd ou oe estiver
-baixo, as saídas de dados são desconectadas do resto do circuito.
+Voltando ao circuito de memória, agora já deve estar claro para que servem os três buffers não inversores nas linhas de saída de dados. Quando cs, rd e oe estiverem todos altos, o sinal output enable também está alto, habilitando os buffers e colocando uma palavra nas linhas de saída. Quando qualquer um dos cs, rd ou oe estiver baixo, as saídas de dados são desconectadas do resto do circuito.
 
 Figura 3.29  (a) Buffer não inversor. (b) Efeito de (a) quando o controle está alto. (c) Efeito de (a) quando o controle está baixo. (d)
 Buffer inversor.
@@ -1303,9 +1216,7 @@ Esta Figura 3.29 introduz um componente vital para a comunicação entre os circ
             ^                                 ^
             |-- (0)                           |-- Controle
 
-
-
-![alt text](image-7.png)
+![alt text](image-43.png)
 
 ### nsight para o seu repositório estruturas_de_dados
 No seu diretório estruturas_de_dados, quando você pensa em um barramento compartilhado, imagine uma sala onde várias pessoas querem falar.
@@ -1317,71 +1228,29 @@ No seu diretório estruturas_de_dados, quando você pensa em um barramento compa
  - Se alguém tentar falar com o microfone desligado (Controle=0), ninguém ouve nada (Alta Impedância), e o canal fica livre para outro orador.
 
 ## 3.3.5 Chips de memória
-O bom da memória da Figura 3.28 é que ela pode ser ampliada com facilidade para tamanhos maiores. Em
-nosso desenho, a memória é 4 × 3, isto é, quatro palavras de 3 bits cada. Para ampliá-la para 4 × 8, basta adicionar
-cinco colunas de quatro flip-flops cada, bem como cinco linhas de entrada e cinco linhas de saída. Para passar de
-4 × 3 para 8 × 3, devemos acrescentar quatro linhas de três flip-flops cada, bem como uma linha de endereço A2.
-Com esse tipo de estrutura, o número de palavras na memória deve ser uma potência de 2 para que haja o máximo
-de eficiência, mas o número de bits em uma palavra pode ser qualquer um.
+O bom da memória da Figura 3.28 é que ela pode ser ampliada com facilidade para tamanhos maiores. Em nosso desenho, a memória é 4 × 3, isto é, quatro palavras de 3 bits cada. Para ampliá-la para 4 × 8, basta adicionar cinco colunas de quatro flip-flops cada, bem como cinco linhas de entrada e cinco linhas de saída. Para passar de 4 × 3 para 8 × 3, devemos acrescentar quatro linhas de três flip-flops cada, bem como uma linha de endereço A2. Com esse tipo de estrutura, o número de palavras na memória deve ser uma potência de 2 para que haja o máximo de eficiência, mas o número de bits em uma palavra pode ser qualquer um.
 
-Como a tecnologia de circuitos integrados se ajusta bem à fabricação de chips cuja estrutura interna é um
-padrão bidimensional repetitivo, chips de memória são uma aplicação ideal para ela. À medida que a tecnologia
-melhora, o número de bits que podem ser colocados em um chip continua crescendo, normalmente por um fator
-de dois a cada 18 meses (lei de Moore). Os chips maiores nem sempre tornam os menores obsoletos devido aos
-diferentes compromissos entre capacidade, velocidade, energia, preço e conveniência da interface. Em geral, os
-chips maiores disponíveis no momento são vendidos por preços mais elevados, portanto, são mais caros por bit
-do que os antigos, menores.
+Como a tecnologia de circuitos integrados se ajusta bem à fabricação de chips cuja estrutura interna é um padrão bidimensional repetitivo, chips de memória são uma aplicação ideal para ela. À medida que a tecnologia melhora, o número de bits que podem ser colocados em um chip continua crescendo, normalmente por um fator
+de dois a cada 18 meses (lei de Moore). Os chips maiores nem sempre tornam os menores obsoletos devido aos diferentes compromissos entre capacidade, velocidade, energia, preço e conveniência da interface. Em geral, os chips maiores disponíveis no momento são vendidos por preços mais elevados, portanto, são mais caros por bit do que os antigos, menores.
 
-Há vários modos de organizar o chip para qualquer tamanho de memória dado. A Figura 3.30 mostra duas
-organizações possíveis para um chip de memória mais antigo de 4 Mbits de tamanho: 512 K × 8 e 4.096 K × 1. (A
-propósito, os tamanhos de chips de memória costumam ser citados em bits em vez de bytes, e por isso adotaremos
-essa convenção.) Na Figura 3.30(a), são necessárias 19 linhas de endereço para endereçar um dos 219 bytes e oito
-linhas de dados para carregar e armazenar o byte selecionado.
+Há vários modos de organizar o chip para qualquer tamanho de memória dado. A Figura 3.30 mostra duas organizações possíveis para um chip de memória mais antigo de 4 Mbits de tamanho: 512 K × 8 e 4.096 K × 1. (A propósito, os tamanhos de chips de memória costumam ser citados em bits em vez de bytes, e por isso adotaremos
+essa convenção.) Na Figura 3.30(a), são necessárias 19 linhas de endereço para endereçar um dos 219 bytes e oito linhas de dados para carregar e armazenar o byte selecionado.
 
-Cabe aqui uma observação sobre tecnologia. Em alguns pinos, a alta tensão provoca uma ação. Em outros, é
-a baixa tensão que causa uma ação. Para evitar confusão, preferimos manter a coerência e dizer sempre que o sinal
-é afirmado (em vez de dizer que fica alto ou baixo), o que significa que foi disparado para provocar alguma ação.
-Assim, para alguns pinos, afirmá-lo significa estabelecê-lo alto. Para outros, significa estabelecer o pino baixo. Os
-nomes de sinais de pinos afirmados baixos são distinguidos por uma barra superior. Assim, um sinal com rótulo
-cs é ativado alto, mas um sinal com rótulo cs é ativado baixo. O oposto de afirmado é negado. Quando nada de
-especial estiver acontecendo, os pinos são negados.
+Cabe aqui uma observação sobre tecnologia. Em alguns pinos, a alta tensão provoca uma ação. Em outros, é a baixa tensão que causa uma ação. Para evitar confusão, preferimos manter a coerência e dizer sempre que o sinal é afirmado (em vez de dizer que fica alto ou baixo), o que significa que foi disparado para provocar alguma ação. Assim, para alguns pinos, afirmá-lo significa estabelecê-lo alto. Para outros, significa estabelecer o pino baixo. Os
+nomes de sinais de pinos afirmados baixos são distinguidos por uma barra superior. Assim, um sinal com rótulo cs é ativado alto, mas um sinal com rótulo cs é ativado baixo. O oposto de afirmado é negado. Quando nada de especial estiver acontecendo, os pinos são negados.
 
-Agora, vamos voltar ao nosso chip de memória. Uma vez que um computador costuma ter muitos chips
-de memória, é preciso um sinal para selecionar o chip necessário no momento em questão, de modo que ele
-responda e todos os outros não. O sinal cs (chip select – seleção de chip) existe para essa finalidade e é ativado
-para habilitar o chip. Além disso, é preciso uma maneira de distinguir entre leituras e escritas. O sinal we (write
-enable – habilitar escrita) é usado para indicar que os dados estão sendo escritos, e não lidos. Por fim, o sinal oe
-(output enable – habilitar saída) é afirmado para comandar os sinais de saída. Quando ele não é afirmado, a saída
+Agora, vamos voltar ao nosso chip de memória. Uma vez que um computador costuma ter muitos chips de memória, é preciso um sinal para selecionar o chip necessário no momento em questão, de modo que ele responda e todos os outros não. O sinal cs (chip select – seleção de chip) existe para essa finalidade e é ativado para habilitar o chip. Além disso, é preciso uma maneira de distinguir entre leituras e escritas. O sinal we (write
+enable – habilitar escrita) é usado para indicar que os dados estão sendo escritos, e não lidos. Por fim, o sinal (output enable – habilitar saída) é afirmado para comandar os sinais de saída. Quando ele não é afirmado, a saída
 do chip é desconectada do circuito.
 
-Na Figura 3.30(b), é usado um esquema de endereçamento diferente. Esse chip é organizado internamente
-como uma matriz 2.048 × 2.048 de células de 1 bit, o que dá 4 Mbits. Para endereçar o chip, em primeiro lugar
-uma linha é selecionada ao se colocar seu número de 11 bits nos pinos de endereço. Então o ras (row address
-strobe – strobe de endereço de linha) é afirmado. Em seguida, um número de coluna é colocado nos pinos de
-endereço e o cas (column address strobe – strobe de endereço de coluna) é afirmado. O chip responde aceitando
-ou entregando um bit de dados.
+Na Figura 3.30(b), é usado um esquema de endereçamento diferente. Esse chip é organizado internamente como uma matriz 2.048 × 2.048 de células de 1 bit, o que dá 4 Mbits. Para endereçar o chip, em primeiro lugar uma linha é selecionada ao se colocar seu número de 11 bits nos pinos de endereço. Então o ras (row address
+strobe – strobe de endereço de linha) é afirmado. Em seguida, um número de coluna é colocado nos pinos de endereço e o cas (column address strobe – strobe de endereço de coluna) é afirmado. O chip responde aceitando ou entregando um bit de dados.
 
-Chips de memória de grande porte costumam ser construídos como matrizes n × n endereçadas por linha
-e coluna. Essa organização reduz o número de pinos requerido, mas também torna mais lento o endereçamento
-do chip, já que são necessários dois ciclos, um para a linha e outro para a coluna. Para recuperar um pouco da
-velocidade perdida por esse projeto, alguns chips de memória podem receber um endereço de linha acompanhado
-por uma sequência de endereços de coluna para acessar bits consecutivos em uma linha.
+Chips de memória de grande porte costumam ser construídos como matrizes n × n endereçadas por linha e coluna. Essa organização reduz o número de pinos requerido, mas também torna mais lento o endereçamento do chip, já que são necessários dois ciclos, um para a linha e outro para a coluna. Para recuperar um pouco da velocidade perdida por esse projeto, alguns chips de memória podem receber um endereço de linha acompanhado por uma sequência de endereços de coluna para acessar bits consecutivos em uma linha.
 
-Anos atrás, os maiores chips de memória costumavam ser organizados como os da Figura 3.30(b). À medida
-que as palavras de memória cresciam de 8 bits até 32 bits e mais, os chips de 1 bit começaram a ser inconvenien-
-tes. Construir uma memória com uma palavra de 32 bits usando chips de 4.096 K × 1 requer 32 chips em paralelo.
-Esses 32 chips têm capacidade total de no mínimo 16 MB, ao passo que usar chips de 512 K × 8 requer somente
-quatro chips em paralelo e permite memórias pequenas, de até 2 MB. Para evitar ter 32 chips para memória,
-grande parte dos fabricantes lançou famílias com 4, 8 e 16 bits de largura. A situação com as palavras de 64 bits
-é pior ainda, é claro.
+Anos atrás, os maiores chips de memória costumavam ser organizados como os da Figura 3.30(b). À medida que as palavras de memória cresciam de 8 bits até 32 bits e mais, os chips de 1 bit começaram a ser inconvenientes. Construir uma memória com uma palavra de 32 bits usando chips de 4.096 K × 1 requer 32 chips em paralelo. Esses 32 chips têm capacidade total de no mínimo 16 MB, ao passo que usar chips de 512 K × 8 requer somente quatro chips em paralelo e permite memórias pequenas, de até 2 MB. Para evitar ter 32 chips para memória, grande parte dos fabricantes lançou famílias com 4, 8 e 16 bits de largura. A situação com as palavras de 64 bits é pior ainda, é claro.
 
-Dois exemplos de chips modernos de 512 Mbits são dados na Figura 3.31. Esses chips têm quatro bancos de
-memória internos de 128 Mbits cada, o que requer duas linhas de seleção de banco para escolher um banco. O
-projeto da Figura 3.31(a) é de um chip de 32 M × 16 com 13 linhas para o sinal ras, 10 linhas para o sinal cas e
-2 linhas para a seleção de banco. Juntos, esses 25 sinais permitem o endereçamento de cada uma das 225 células internas de 16 bits. Em comparação, a Figura 3.31(b) apresenta um projeto de 128 M × 4 com 13 linhas para o
-sinal ras, 12 linhas para o sinal cas e 2 linhas para a seleção de banco. Nesse caso, 27 sinais podem selecionar
-quaisquer das 227 células internas de 4 bits a serem endereçadas. A decisão sobre o número de linhas e de colunas
-que um chip tem é tomada por razões de engenharia. A matriz não precisa ser quadrada.
+Dois exemplos de chips modernos de 512 Mbits são dados na Figura 3.31. Esses chips têm quatro bancos de memória internos de 128 Mbits cada, o que requer duas linhas de seleção de banco para escolher um banco. O projeto da Figura 3.31(a) é de um chip de 32 M × 16 com 13 linhas para o sinal ras, 10 linhas para o sinal cas e 2 linhas para a seleção de banco. Juntos, esses 25 sinais permitem o endereçamento de cada uma das 225 células internas de 16 bits. Em comparação, a Figura 3.31(b) apresenta um projeto de 128 M × 4 com 13 linhas para o sinal ras, 12 linhas para o sinal cas e 2 linhas para a seleção de banco. Nesse caso, 27 sinais podem selecionar quaisquer das 227 células internas de 4 bits a serem endereçadas. A decisão sobre o número de linhas e de colunas que um chip tem é tomada por razões de engenharia. A matriz não precisa ser quadrada.
 
 Figura 3.30  Dois modos de organizar um chip de memória de 4 Mbits.
 
@@ -1443,114 +1312,48 @@ No seu repositório arquitetura_computadores, esta organização demonstra como 
                 D15 ............ D0                     D3 D2 D1 D0
             (16 Pinos de Dados)                     (4 Pinos de Dados)
 
+![alt text](image-44.png)
+
 ### Insight para o seu repositório estruturas_de_dados
 Essa estrutura de bancos explica por que, em C, acessar a memória de forma sequencial é muito mais rápido do que acessos aleatórios. Quando você percorre um array no seu diretório estruturas_de_dados, o hardware mantém um Banco aberto, permitindo leituras consecutivas sem a necessidade de enviar novos sinais RAS (Row Address Strobe) o tempo todo.
 
-Esses exemplos demonstram duas questões separadas e independentes para o projeto do chip de memória.
-A primeira é a largura da saída (em bits): o chip entrega 1, 4, 8, 16 ou algum outro número de bits de uma vez
-só? A segunda é se todos os bits de endereço são apresentados em pinos separados de uma vez só ou se as linhas
-e colunas são apresentadas em sequência, como nos exemplos da Figura 3.31. Um projetista de chips de memória
-tem de responder a ambas as perguntas antes de iniciar o projeto do chip.
+Esses exemplos demonstram duas questões separadas e independentes para o projeto do chip de memória. A primeira é a largura da saída (em bits): o chip entrega 1, 4, 8, 16 ou algum outro número de bits de uma vez só? A segunda é se todos os bits de endereço são apresentados em pinos separados de uma vez só ou se as linhas e colunas são apresentadas em sequência, como nos exemplos da Figura 3.31. Um projetista de chips de memória tem de responder a ambas as perguntas antes de iniciar o projeto do chip.
 
 ## 3.3.6 RAMs e ROMs
-Todas as memórias que estudamos até aqui podem ser escritas e lidas. Elas são denominadas memórias RAM
-(Random Access Memory – memória de acesso aleatório), um nome suspeito porque todos os chips de memória
-têm acesso aleatório. No entanto, o termo já é muito utilizado para que o mudemos agora. RAMs podem ser de
-duas variedades, estáticas e dinâmicas. Nas estáticas (Static RAMs – SRAMs), a construção interna usa circuitos
-similares ao nosso flip-flop D básico. Uma das propriedades dessas memórias é que seus conteúdos são conser-
-vados enquanto houver fornecimento de energia: segundos, minutos, horas e até mesmo dias. As RAMs estáticas
-são muito rápidas. Um tempo de acesso típico é da ordem de um nanossegundo ou menos. Por essa razão, elas são
-muito usadas como memória cache.
+Todas as memórias que estudamos até aqui podem ser escritas e lidas. Elas são denominadas memórias RAM (Random Access Memory – memória de acesso aleatório), um nome suspeito porque todos os chips de memória têm acesso aleatório. No entanto, o termo já é muito utilizado para que o mudemos agora. RAMs podem ser de
+duas variedades, estáticas e dinâmicas. Nas estáticas (Static RAMs – SRAMs), a construção interna usa circuitos similares ao nosso flip-flop D básico. Uma das propriedades dessas memórias é que seus conteúdos são conservados enquanto houver fornecimento de energia: segundos, minutos, horas e até mesmo dias. As RAMs estáticas são muito rápidas. Um tempo de acesso típico é da ordem de um nanossegundo ou menos. Por essa razão, elas são muito usadas como memória cache.
 
-RAMS dinâmicas (Dynamic RAMs – DRAMs), ao contrário, não usam flip-flops. Em vez disso, uma RAM
-dinâmica é um arranjo de células, cada uma contendo um transistor e um pequenino capacitor. Os capacitores
-podem ser carregados ou descarregados, permitindo que 0s e 1s sejam armazenados. Como a carga elétrica tende
-a vazar, cada bit em uma RAM dinâmica deve ser renovado (recarregado) com alguns milissegundos de intervalo
-para evitar que os dados desapareçam. Como a lógica externa é que tem de cuidar da renovação, as RAMs dinâmi-
-cas precisam de uma interface mais complexa do que as estáticas, embora em muitas aplicações essa desvantagem
-seja compensada por suas maiores capacidades.
+RAMS dinâmicas (Dynamic RAMs – DRAMs), ao contrário, não usam flip-flops. Em vez disso, uma RAM dinâmica é um arranjo de células, cada uma contendo um transistor e um pequenino capacitor. Os capacitores podem ser carregados ou descarregados, permitindo que 0s e 1s sejam armazenados. Como a carga elétrica tende
+a vazar, cada bit em uma RAM dinâmica deve ser renovado (recarregado) com alguns milissegundos de intervalo para evitar que os dados desapareçam. Como a lógica externa é que tem de cuidar da renovação, as RAMs dinâmicas precisam de uma interface mais complexa do que as estáticas, embora em muitas aplicações essa desvantagem seja compensada por suas maiores capacidades.
 
-Visto que as RAMs dinâmicas precisam de apenas um transistor e um capacitor por bit, em comparação com
-os seis transistores por bit para a melhor RAM estática, elas têm densidade muito alta (muitos bits por chip). Por
-essa razão, as memórias principais quase sempre são construídas com RAMs dinâmicas. Contudo, essa grande
-capacidade tem um preço: são lentas (dezenas de nanossegundos). Dessa maneira, a combinação de uma cache
-de RAM estática e uma memória principal de RAM dinâmica tenta combinar as boas propriedades de cada uma.
+Visto que as RAMs dinâmicas precisam de apenas um transistor e um capacitor por bit, em comparação com os seis transistores por bit para a melhor RAM estática, elas têm densidade muito alta (muitos bits por chip). Por essa razão, as memórias principais quase sempre são construídas com RAMs dinâmicas. Contudo, essa grande capacidade tem um preço: são lentas (dezenas de nanossegundos). Dessa maneira, a combinação de uma cache de RAM estática e uma memória principal de RAM dinâmica tenta combinar as boas propriedades de cada uma.
 
-Existem diversos tipos de RAMs dinâmicas. A mais antiga ainda existente (em computadores antigos) é a
-DRAM FPM (Fast Page Mode – modo de página rápida). Ela é organizada internamente como uma matriz
-de bits e funciona da seguinte maneira: o hardware escolhe um endereço de linha e então seleciona endereços de
-coluna um a um, como descrevemos para o ras e o cas no contexto da Figura 3.30. Sinais explícitos informam
-à memória quando é hora de responder, de modo que ela funciona de forma assíncrona com o clock do sistema
-principal.
+Existem diversos tipos de RAMs dinâmicas. A mais antiga ainda existente (em computadores antigos) é a DRAM FPM (Fast Page Mode – modo de página rápida). Ela é organizada internamente como uma matriz de bits e funciona da seguinte maneira: o hardware escolhe um endereço de linha e então seleciona endereços de
+coluna um a um, como descrevemos para o ras e o cas no contexto da Figura 3.30. Sinais explícitos informam à memória quando é hora de responder, de modo que ela funciona de forma assíncrona com o clock do sistema principal.
 
-A DRAM FPM foi substituída pela EDO (Extended Data Output – saída de dados ampliada), que permite
-iniciar uma segunda referência à memória antes de ser concluída a referência à memória precedente. Esse parale-
-lismo simples não acelerava uma referência individual à memória, mas melhorava a largura de banda da memória,
-resultando em mais palavras por segundo.
+A DRAM FPM foi substituída pela EDO (Extended Data Output – saída de dados ampliada), que permite iniciar uma segunda referência à memória antes de ser concluída a referência à memória precedente. Esse paralelismo simples não acelerava uma referência individual à memória, mas melhorava a largura de banda da memória, resultando em mais palavras por segundo.
 
-FPM e EDO funcionavam bastante bem quando os tempos de ciclo de chips de memória eram de 12 nanos-
-segundos ou mais lentos. Quando os processadores ficaram tão rápidos que era mesmo preciso ter memórias mais
-rápidas, a FPM e a EDO foram substituídas pela SDRAM (Synchronous DRAM – DRAM síncrona), que é uma
-híbrida de RAM estática e dinâmica, comandada pelo clock do sistema principal. A grande vantagem da SDRAM é
-que o clock elimina a necessidade de sinais de controle para informar ao chip de memória quando responder. Em
-vez disso, a CPU informa à memória por quantos ciclos ela deve funcionar e então a inicia. Em cada ciclo subse-
-quente, a memória entrega 4, 8 ou 16 bits, dependendo de quantas linhas de saída ela tem. Eliminar a necessidade
-de sinais de controle aumenta a taxa de dados entre CPU e memória.
+FPM e EDO funcionavam bastante bem quando os tempos de ciclo de chips de memória eram de 12 nanossegundos ou mais lentos. Quando os processadores ficaram tão rápidos que era mesmo preciso ter memórias mais rápidas, a FPM e a EDO foram substituídas pela SDRAM (Synchronous DRAM – DRAM síncrona), que é uma
+híbrida de RAM estática e dinâmica, comandada pelo clock do sistema principal. A grande vantagem da SDRAM é que o clock elimina a necessidade de sinais de controle para informar ao chip de memória quando responder. Em vez disso, a CPU informa à memória por quantos ciclos ela deve funcionar e então a inicia. Em cada ciclo subsequente, a memória entrega 4, 8 ou 16 bits, dependendo de quantas linhas de saída ela tem. Eliminar a necessidade de sinais de controle aumenta a taxa de dados entre CPU e memória.
 
-A melhoria seguinte em relação à SDRAM foi a SDRAM DDR (Double Data Rate – dupla taxa de dados).
-Com esse tipo de memória, o chip de memória produz saída na borda ascendente do clock e também na borda
-descendente, dobrando a taxa de dados. Portanto, um chip DDR de 8 bits de largura funcionando a 200 MHz
-entrega dois valores de 8 bits 200 milhões de vezes por segundo (por um curto intervalo, é claro), o que dá uma
-taxa de saída (burst) teórica de 3,2 Gbps. As interfaces de memória DDR2 e DDR3 oferecem desempenho adi-
-cional em relação à DDR, aumentando as velocidades do barramento de memória para 533 MHz e 1.067 MHz,
-respectivamente. No momento em que este livro era impresso, os chips DDR3 mais velozes poderiam enviar
+A melhoria seguinte em relação à SDRAM foi a SDRAM DDR (Double Data Rate – dupla taxa de dados). Com esse tipo de memória, o chip de memória produz saída na borda ascendente do clock e também na borda descendente, dobrando a taxa de dados. Portanto, um chip DDR de 8 bits de largura funcionando a 200 MHz entrega dois valores de 8 bits 200 milhões de vezes por segundo (por um curto intervalo, é claro), o que dá uma taxa de saída (burst) teórica de 3,2 Gbps. As interfaces de memória DDR2 e DDR3 oferecem desempenho adicional em relação à DDR, aumentando as velocidades do barramento de memória para 533 MHz e 1.067 MHz, respectivamente. No momento em que este livro era impresso, os chips DDR3 mais velozes poderiam enviar
 dados a 17,067 GB/s.
 
 #### Chips de memória não volátil
-RAMs não são o único tipo de chip de memória. Em muitas aplicações, como brinquedos, eletrodomésti-
-cos e carros, o programa e alguns dos dados devem permanecer armazenados mesmo quando o fornecimento
-de energia for interrompido. Além do mais, uma vez instalados, nem o programa nem os dados são alterados.
-Esses requisitos levaram ao desenvolvimento de ROMs (Read-Only Memories – memórias somente de leitura),
-que não podem ser alteradas nem apagadas, seja intencionalmente ou não. Os dados de uma ROM são inseridos
-durante sua fabricação por um processo que expõe um material fotossensível por meio de uma máscara que con-
-tém o padrão de bits desejado e então grava o padrão sobre a superfície exposta (ou não exposta). A única maneira
-de mudar o programa em uma ROM é substituir o chip inteiro.
+RAMs não são o único tipo de chip de memória. Em muitas aplicações, como brinquedos, eletrodomésticos e carros, o programa e alguns dos dados devem permanecer armazenados mesmo quando o fornecimento de energia for interrompido. Além do mais, uma vez instalados, nem o programa nem os dados são alterados.
+Esses requisitos levaram ao desenvolvimento de ROMs (Read-Only Memories – memórias somente de leitura), que não podem ser alteradas nem apagadas, seja intencionalmente ou não. Os dados de uma ROM são inseridos durante sua fabricação por um processo que expõe um material fotossensível por meio de uma máscara que contém o padrão de bits desejado e então grava o padrão sobre a superfície exposta (ou não exposta). A única maneira de mudar o programa em uma ROM é substituir o chip inteiro.
 
-ROMs são muito mais baratas que RAMs quando fabricadas em volumes grandes o bastante para cobrir o
-custo da fabricação da máscara. Todavia, são inflexíveis porque não podem ser alteradas após a manufatura, e
-o tempo decorrido entre fazer o pedido e receber as ROMs pode chegar a semanas. Para facilitar o desenvol-
-vimento pelas empresas de novos produtos com ROM, foi inventada a PROM (Programmable ROM – ROM
-programável). Uma PROM é como uma ROM, exceto que ela pode ser programada (uma vez) em campo, elimi-
-nando o tempo de espera entre produção e entrega. Muitas PROMs contêm um arranjo de minúsculos fusíveis
-em seu interior. Um fusível específico pode ser queimado selecionando sua linha e coluna e então aplicando
-alta tensão a um pino especial no chip.
+ROMs são muito mais baratas que RAMs quando fabricadas em volumes grandes o bastante para cobrir o custo da fabricação da máscara. Todavia, são inflexíveis porque não podem ser alteradas após a manufatura, e o tempo decorrido entre fazer o pedido e receber as ROMs pode chegar a semanas. Para facilitar o desenvol-
+vimento pelas empresas de novos produtos com ROM, foi inventada a PROM (Programmable ROM – ROM programável). Uma PROM é como uma ROM, exceto que ela pode ser programada (uma vez) em campo, eliminando o tempo de espera entre produção e entrega. Muitas PROMs contêm um arranjo de minúsculos fusíveis em seu interior. Um fusível específico pode ser queimado selecionando sua linha e coluna e então aplicando alta tensão a um pino especial no chip.
 
-O desenvolvimento seguinte nessa linha foi a EPROM (Erasable PROM – PROM apagável), que não só pode
-ser programada, mas também apagada em campo. Quando a janela de quartzo de uma EPROM é exposta a uma
-forte luz ultravioleta durante 15 minutos, todos os bits são definidos em 1. Se a expectativa é ter muitas alterações
-durante o ciclo de projeto, as EPROMs são muito mais econômicas do que as PROMs, porque podem ser reuti-
-lizadas. As EPROMS costumam ter a mesma organização que as RAMs estáticas. A EPROM 27C040 de 4 Mbits,
-por exemplo, usa a organização da Figura 3.31(a), que é típica de uma RAM estática. O interessante é que chips
-antigos como este não desaparecem. Eles apenas se tornam mais baratos e são usados em produtos inferiores,
-que são altamente sensíveis ao custo. Um 27C040 agora pode ser comprado no varejo por menos de US$ 3, e por
-muito menos em grandes volumes.
+O desenvolvimento seguinte nessa linha foi a EPROM (Erasable PROM – PROM apagável), que não só pode ser programada, mas também apagada em campo. Quando a janela de quartzo de uma EPROM é exposta a uma forte luz ultravioleta durante 15 minutos, todos os bits são definidos em 1. Se a expectativa é ter muitas alterações
+durante o ciclo de projeto, as EPROMs são muito mais econômicas do que as PROMs, porque podem ser reutilizadas. As EPROMS costumam ter a mesma organização que as RAMs estáticas. A EPROM 27C040 de 4 Mbits, por exemplo, usa a organização da Figura 3.31(a), que é típica de uma RAM estática. O interessante é que chips
+antigos como este não desaparecem. Eles apenas se tornam mais baratos e são usados em produtos inferiores, que são altamente sensíveis ao custo. Um 27C040 agora pode ser comprado no varejo por menos de US$ 3, e por muito menos em grandes volumes.
 
-Ainda melhor do que a EPROM é a EEPROM, que pode ser apagada aplicando-se pulsos em vez de ser
-exposta à luz ultravioleta dentro de uma câmara especial. Além disso, uma EEPROM pode ser reprogramada no
-local, enquanto uma EPROM tem de ser inserida em um dispositivo especial de programação de EPROM para ser
-programada. Uma desvantagem é que a capacidade das maiores EEPROMs é em geral somente 1/64 da capacidade
-das EPROMs comuns, e sua velocidade é a metade. EEPROMs não podem competir com DRAMs ou SRAMs por-
-que são 10 vezes mais lentas, sua capacidade é 100 vezes menor e são muito mais caras. Elas são usadas somente
-em situações em que sua não volatilidade for crucial.
+Ainda melhor do que a EPROM é a EEPROM, que pode ser apagada aplicando-se pulsos em vez de ser exposta à luz ultravioleta dentro de uma câmara especial. Além disso, uma EEPROM pode ser reprogramada no local, enquanto uma EPROM tem de ser inserida em um dispositivo especial de programação de EPROM para ser
+programada. Uma desvantagem é que a capacidade das maiores EEPROMs é em geral somente 1/64 da capacidade das EPROMs comuns, e sua velocidade é a metade. EEPROMs não podem competir com DRAMs ou SRAMs por- que são 10 vezes mais lentas, sua capacidade é 100 vezes menor e são muito mais caras. Elas são usadas somente em situações em que sua não volatilidade for crucial.
 
-Um tipo mais recente de EEPROM é a memória flash. Diferente da EPROM, que é apagada pela exposição à
-luz ultravioleta, e da EEPROM, cujos bytes podem ser apagados, os blocos da memória flash podem ser apagados
-e reescritos. Como a EEPROM, a memória flash pode ser apagada sem ser removida do circuito. Vários fabricantes
-produzem pequenas placas de circuito impresso com até 64 GB de memória flash que são utilizadas como um
-“filme” para armazenar fotos em câmeras digitais e muitas outras finalidades. Como já vimos no Capítulo 2, a
-memória flash agora está começando a substituir os discos mecânicos. Assim como um disco, a memória flash
-oferece tempos de acesso menores com menor consumo de energia, mas com um custo por bit muito mais alto.
-Um resumo dos diversos tipos de memória pode ser visto na Figura 3.32.
+Um tipo mais recente de EEPROM é a memória flash. Diferente da EPROM, que é apagada pela exposição à luz ultravioleta, e da EEPROM, cujos bytes podem ser apagados, os blocos da memória flash podem ser apagados e reescritos. Como a EEPROM, a memória flash pode ser apagada sem ser removida do circuito. Vários fabricantes produzem pequenas placas de circuito impresso com até 64 GB de memória flash que são utilizadas como um “filme” para armazenar fotos em câmeras digitais e muitas outras finalidades. Como já vimos no Capítulo 2, a memória flash agora está começando a substituir os discos mecânicos. Assim como um disco, a memória flash oferece tempos de acesso menores com menor consumo de energia, mas com um custo por bit muito mais alto. Um resumo dos diversos tipos de memória pode ser visto na Figura 3.32.
 
 Figura 3.32  Comparação entre vários tipos de memórias (Arranjo de portas programável em campo).
 
@@ -1573,7 +1376,7 @@ Comparação de Tecnologias de Memória (Figura 3.32)
 | Flash           | Leitura/Escrita        | Elétrico      | Não           | Não      | Filme para Câmera Digital     |
 +-----------------+------------------------+---------------+---------------+----------+-------------------------------+
 
-### nsight para o seu repositório estruturas_de_dados
+### Insight para o seu repositório estruturas_de_dados
 Ao trabalhar em seu diretório estruturas_de_dados, entender essa tabela é crucial para otimização de código.
 
  - O uso de algoritmos que favorecem o cache (SRAM) resulta em uma performance drasticamente superior àqueles que dependem constantemente da memória principal (SDRAM).
@@ -1581,45 +1384,21 @@ Ao trabalhar em seu diretório estruturas_de_dados, entender essa tabela é cruc
  - Para projetos com microcontroladores (como o seu ATmega168), saber que a EEPROM é "Byte Alterável" permite salvar configurações específicas sem precisar regravar todo o firmware via memória Flash.
 
 ### Field-programmable gate arrays
-Como vimos no Capítulo 1, Field-Programmable Gate Arrays (FPGAs) são chips que contêm lógica pro-
-gramável, de modo que podem formar um circuito lógico qualquer simplesmente carregando o FPGA com dados
-de configuração apropriados. A principal vantagem dos FPGAs é que novos circuitos de hardware podem ser
-construídos em horas, em vez dos meses necessários para fabricar ICs. Porém, os circuitos integrados não serão
-extintos, pois ainda possuem uma vantagem de custo significativa em relação aos FPGAs para aplicações de alto
-volume, e também são mais rápidos e usam muito menos energia. Contudo, com suas vantagens de tempo de
-projeto, os FPGAs são usados constantemente para protótipo de projeto e aplicações com baixo volume.
+Como vimos no Capítulo 1, Field-Programmable Gate Arrays (FPGAs) são chips que contêm lógica programável, de modo que podem formar um circuito lógico qualquer simplesmente carregando o FPGA com dados de configuração apropriados. A principal vantagem dos FPGAs é que novos circuitos de hardware podem ser
+construídos em horas, em vez dos meses necessários para fabricar ICs. Porém, os circuitos integrados não serão extintos, pois ainda possuem uma vantagem de custo significativa em relação aos FPGAs para aplicações de alto volume, e também são mais rápidos e usam muito menos energia. Contudo, com suas vantagens de tempo de projeto, os FPGAs são usados constantemente para protótipo de projeto e aplicações com baixo volume.
 
-Agora, vejamos o interior de um FPGA para entender como ele pode ser usado para executar uma grande gama
-de circuitos lógicos. O chip FPGA contém dois componentes principais que são replicados muitas vezes: LUTs
-(LookUp Tables – tabelas de pesquisa) e interconexões programáveis. Vejamos agora como estes são utilizados.
+Agora, vejamos o interior de um FPGA para entender como ele pode ser usado para executar uma grande gama de circuitos lógicos. O chip FPGA contém dois componentes principais que são replicados muitas vezes: LUTs (LookUp Tables – tabelas de pesquisa) e interconexões programáveis. Vejamos agora como estes são utilizados.
 
-Uma LUT, mostrada na Figura 3.33(a), é uma pequena memória programável que produz um sinal de saída
-opcionalmente para um registrador, que é então enviada para a interconexão programável. A memória progra-
-mável é usada para criar uma função lógica qualquer. A LUT na figura tem uma memória de 16 × 4, que pode
-simular qualquer circuito lógico com 4 bits de entrada e 4 bits de saída. A programação da LUT requer a carga
-da memória com as respostas apropriadas da lógica combinatória sendo simulada. Em outras palavras, se a lógica
-combinatória produz o valor Y quando recebe a entrada X, o valor Y é escrito na LUT no índice X.
+Uma LUT, mostrada na Figura 3.33(a), é uma pequena memória programável que produz um sinal de saída opcionalmente para um registrador, que é então enviada para a interconexão programável. A memória programável é usada para criar uma função lógica qualquer. A LUT na figura tem uma memória de 16 × 4, que pode
+simular qualquer circuito lógico com 4 bits de entrada e 4 bits de saída. A programação da LUT requer a carga da memória com as respostas apropriadas da lógica combinatória sendo simulada. Em outras palavras, se a lógica combinatória produz o valor Y quando recebe a entrada X, o valor Y é escrito na LUT no índice X.
 
-O projeto de exemplo na Figura 3.33(b) mostra como uma única LUT de 4 entradas poderia executar um
-contador de 3 bits com reset. O exemplo de contador conta de modo contínuo somando um (módulo 4) ao valor
-atual, a menos que um sinal de reset CLR seja afirmado, que nesse caso retorna o valor do contador a zero.
+O projeto de exemplo na Figura 3.33(b) mostra como uma única LUT de 4 entradas poderia executar um contador de 3 bits com reset. O exemplo de contador conta de modo contínuo somando um (módulo 4) ao valor atual, a menos que um sinal de reset CLR seja afirmado, que nesse caso retorna o valor do contador a zero.
 
-Para pôr em prática o contador do exemplo, as quatro entradas superiores da LUT são todas zero. Essas
-entradas enviam o valor zero quando o contador é reiniciado. Assim, o bit mais significativo da entrada da LUT
-(I3) representa a entrada de reset (CLR) que é ativada com uma lógica 1. Para as entradas restantes da LUT, o
-valor no índice I0..3 da LUT contém o valor (I + 1) módulo 4. Para concluir o projeto, o sinal de saída O0..3 deve
-ser conectado, usando a interconexão programável para o sinal de entrada interno I0..3.
+Para pôr em prática o contador do exemplo, as quatro entradas superiores da LUT são todas zero. Essas entradas enviam o valor zero quando o contador é reiniciado. Assim, o bit mais significativo da entrada da LUT (I3) representa a entrada de reset (CLR) que é ativada com uma lógica 1. Para as entradas restantes da LUT, o valor no índice I0..3 da LUT contém o valor (I + 1) módulo 4. Para concluir o projeto, o sinal de saída O0..3 deve ser conectado, usando a interconexão programável para o sinal de entrada interno I0..3.
 
-Para entender melhor o contador baseado em FPGA com reset, vamos considerar sua operação. Se, por exem-
-plo, o estado atual do contador for 2 e o sinal de reset (CLR) não for afirmado, o endereço de entrada da LUT será
-2, que produzirá uma saída de 3 nos flip-flops. Se o sinal de reset (CLR) fosse afirmado para o mesmo estado, a
-entrada na LUT seria 6, que produziria o próximo estado de 0.
+Para entender melhor o contador baseado em FPGA com reset, vamos considerar sua operação. Se, por exemplo, o estado atual do contador for 2 e o sinal de reset (CLR) não for afirmado, o endereço de entrada da LUT será 2, que produzirá uma saída de 3 nos flip-flops. Se o sinal de reset (CLR) fosse afirmado para o mesmo estado, a entrada na LUT seria 6, que produziria o próximo estado de 0.
 
-Apesar de tudo, esse pode parecer um modo arcaico de se construir um contador com reset e, de fato, um
-projeto totalmente personalizado, com um circuito incrementador e sinais de reset para os flip-flops, seria menor,
-mais rápido e usaria menos energia. A principal vantagem do projeto baseado em FPGA é que você pode ajustá-lo
-em uma hora em casa, enquanto o projeto totalmente personalizado, mais eficiente, deve ser fabricado com base
-no silício, o que poderia levar pelo menos um mês.
+Apesar de tudo, esse pode parecer um modo arcaico de se construir um contador com reset e, de fato, um projeto totalmente personalizado, com um circuito incrementador e sinais de reset para os flip-flops, seria menor, mais rápido e usaria menos energia. A principal vantagem do projeto baseado em FPGA é que você pode ajustá-lo em uma hora em casa, enquanto o projeto totalmente personalizado, mais eficiente, deve ser fabricado com base no silício, o que poderia levar pelo menos um mês.
 
 Figura 3.33  (a) Uma tabela de pesquisa (LUT) de um FPGA. (b) A configuração da LUT para criar um contador de apagamento de 3 bits.
 
@@ -1644,6 +1423,8 @@ Esta Figura 3.33 ilustra o funcionamento interno de um FPGA (Field Programmable 
                     |    x 4    |---> À INTERCONEXÃO
     CLR ----------->|___________|     PROGRAMÁVEL (Q)
 
+![alt text](image-45.png)
+
 ### Insight para o seu repositório estruturas_de_dados
 No seu diretório estruturas_de_dados, você costuma pensar em algoritmos rodando sobre um hardware fixo. Com um FPGA e estas LUTs, você poderia criar um hardware que é, por si só, uma Estrutura de Dados.
 
@@ -1651,59 +1432,27 @@ Por exemplo: você poderia configurar as LUTs para serem um Hash Map físico, on
 
 Com a Figura 3.33, cobrimos desde o bit individual até o hardware reconfigurável! Este é o estado da arte da lógica digital.
 
-![alt text](image-22.png)
+Para usar um FPGA, o projeto precisa ser descrito usando uma descrição de circuito ou uma linguagem de descrição de hardware (ou seja, uma linguagem de programação usada para descrever estruturas de hardware). O projeto é então processado por um sintetizador, que mapeia o circuito para uma arquitetura FPGA específica.
 
-Para usar um FPGA, o projeto precisa ser descrito usando uma descrição de circuito ou uma linguagem de
-descrição de hardware (ou seja, uma linguagem de programação usada para descrever estruturas de hardware).
-O projeto é então processado por um sintetizador, que mapeia o circuito para uma arquitetura FPGA específica.
-
-Um desafio do uso de FPGAs é que o projeto que você quer mapear nunca parece ser o suficiente. Os FPGAs são
-fabricados com uma quantidade variável de LUTs, com quantidades maiores custando mais. Em geral, se o seu
-projeto não for suficiente, você terá que simplificar ou abrir mão de alguma funcionalidade, ou então comprar
-um FPGA maior (e mais caro). Projetos muito grandes podem não caber nos maiores FPGAs, exigindo que o
-projetista mapeie o projeto em vários FPGAs; essa tarefa é definitivamente mais difícil, porém, ainda muito mais
-fácil do que projetar um circuito integrado personalizado completo.
+Um desafio do uso de FPGAs é que o projeto que você quer mapear nunca parece ser o suficiente. Os FPGAs são fabricados com uma quantidade variável de LUTs, com quantidades maiores custando mais. Em geral, se o seu projeto não for suficiente, você terá que simplificar ou abrir mão de alguma funcionalidade, ou então comprar um FPGA maior (e mais caro). Projetos muito grandes podem não caber nos maiores FPGAs, exigindo que o projetista mapeie o projeto em vários FPGAs; essa tarefa é definitivamente mais difícil, porém, ainda muito mais fácil do que projetar um circuito integrado personalizado completo.
 
 ## 3.4 Chips de CPU e barramentos
-Agora que já temos todas essas informações sobre circuitos integrados, clocks e chips de memória, pode-
-mos começar a juntar todas as peças, examinando sistemas completos. Nesta seção, estudaremos primeiro
-alguns aspectos gerais das CPUs do ponto de vista do nível lógico digital, incluindo a pinagem (pinout) (isto é,
-o que significam os sinais dos vários pinos). Como as CPUs estão tão entrelaçadas com o projeto dos barramen-
-tos que utilizam, também faremos uma introdução ao projeto de barramentos nesta seção. Nas seções seguintes,
-daremos exemplos detalhados de CPUs e seus barramentos e de como é a interface entre eles.
+Agora que já temos todas essas informações sobre circuitos integrados, clocks e chips de memória, podemos começar a juntar todas as peças, examinando sistemas completos. Nesta seção, estudaremos primeiro alguns aspectos gerais das CPUs do ponto de vista do nível lógico digital, incluindo a pinagem (pinout) (isto é,
+o que significam os sinais dos vários pinos). Como as CPUs estão tão entrelaçadas com o projeto dos barramentos que utilizam, também faremos uma introdução ao projeto de barramentos nesta seção. Nas seções seguintes, daremos exemplos detalhados de CPUs e seus barramentos e de como é a interface entre eles.
 
 ## 3.4.1 Chips de CPU
-Todas as CPUs modernas são contidas em um único chip, o que faz sua interação com o resto do sistema
-ser bem definida. Cada chip de CPU tem um conjunto de pinos por meio dos quais deve ocorrer toda sua comu-
-nicação com o mundo exterior. Alguns pinos produzem sinais da CPU para o mundo exterior; outros aceitam
-sinais do mundo exterior; alguns podem fazer as duas coisas. Entendendo a função de todos esses pinos, podemos
-aprender como a CPU interage com a memória e os dispositivos de E/S no nível lógico digital.
+Todas as CPUs modernas são contidas em um único chip, o que faz sua interação com o resto do sistema ser bem definida. Cada chip de CPU tem um conjunto de pinos por meio dos quais deve ocorrer toda sua comunicação com o mundo exterior. Alguns pinos produzem sinais da CPU para o mundo exterior; outros aceitam
+sinais do mundo exterior; alguns podem fazer as duas coisas. Entendendo a função de todos esses pinos, podemos aprender como a CPU interage com a memória e os dispositivos de E/S no nível lógico digital.
 
-Os pinos de um chip de CPU podem ser divididos em três tipos: de endereço, de dados e de controle. Eles são
-conectados a pinos similares na memória e a chips de E/S por meio de um conjunto de fios paralelos, denominado
-barramento. Para buscar uma instrução, primeiro a CPU coloca o endereço de memória daquela instrução em seus
-pinos de endereço. Então, ela ativa uma ou mais linhas de controle para informar à memória que ela quer ler uma
-palavra, por exemplo. A memória responde colocando a palavra requisitada nos pinos de dados da CPU e ativando
-um sinal que informa o que acabou de fazer. Quando percebe esse sinal, a CPU aceita a palavra e executa a instrução.
+Os pinos de um chip de CPU podem ser divididos em três tipos: de endereço, de dados e de controle. Eles são conectados a pinos similares na memória e a chips de E/S por meio de um conjunto de fios paralelos, denominado barramento. Para buscar uma instrução, primeiro a CPU coloca o endereço de memória daquela instrução em seus pinos de endereço. Então, ela ativa uma ou mais linhas de controle para informar à memória que ela quer ler uma palavra, por exemplo. A memória responde colocando a palavra requisitada nos pinos de dados da CPU e ativando um sinal que informa o que acabou de fazer. Quando percebe esse sinal, a CPU aceita a palavra e executa a instrução.
 
-A instrução pode requisitar leitura ou escrita de palavras de dados, caso em que todo o processo é repetido
-para cada palavra adicional. Mais adiante, vamos entrar nos detalhes do modo de funcionamento da leitura e da
-escrita. Por enquanto, o importante é entender que a CPU se comunica com a memória e com dispositivos de
-E/S apresentando sinais em seus pinos e aceitando sinais em seus pinos. Nenhuma outra comunicação é possível.
+A instrução pode requisitar leitura ou escrita de palavras de dados, caso em que todo o processo é repetido para cada palavra adicional. Mais adiante, vamos entrar nos detalhes do modo de funcionamento da leitura e da escrita. Por enquanto, o importante é entender que a CPU se comunica com a memória e com dispositivos de E/S apresentando sinais em seus pinos e aceitando sinais em seus pinos. Nenhuma outra comunicação é possível.
 
-Dois dos parâmetros fundamentais que determinam o desempenho de uma CPU são o número de pinos de
-endereço e o número de pinos de dados. Um chip com m pinos de endereço pode endereçar até 2m localizações
-de memória. Valores comuns de m são 16, 32 e 64. De modo semelhante, um chip com n pinos de dados pode ler
-ou escrever uma palavra de n bits em uma única operação. Valores comuns de n são 8, 32 e 64. Uma CPU com 8
-pinos de dados efetuará quatro operações para ler uma palavra de 32 bits, enquanto uma CPU com 32 pinos de
-dados pode executar a mesma tarefa em uma única operação. Assim, o chip com 32 pinos de dados é muito mais
+Dois dos parâmetros fundamentais que determinam o desempenho de uma CPU são o número de pinos de endereço e o número de pinos de dados. Um chip com m pinos de endereço pode endereçar até 2m localizações de memória. Valores comuns de m são 16, 32 e 64. De modo semelhante, um chip com n pinos de dados pode ler
+ou escrever uma palavra de n bits em uma única operação. Valores comuns de n são 8, 32 e 64. Uma CPU com 8 pinos de dados efetuará quatro operações para ler uma palavra de 32 bits, enquanto uma CPU com 32 pinos de dados pode executar a mesma tarefa em uma única operação. Assim, o chip com 32 pinos de dados é muito mais
 rápido; porém, invariavelmente, também é mais caro.
 
-Além dos pinos de endereço e de dados, cada CPU tem alguns pinos de controle. Os pinos de controle regulam
-o fluxo e a temporização de dados que vêm da CPU e vão para ela, além de ter outras utilizações diversas. Todas as
-CPUs têm pinos para energia elétrica (geralmente +1,2 volt a +1,5 volt), para terra e para um sinal de clock (uma
-onda quadrada com uma frequência bem definida), mas os outros pinos variam muito de um chip para outro. Não
-obstante, os pinos de controle podem ser agrupados aproximadamente nas seguintes categorias principais:
+Além dos pinos de endereço e de dados, cada CPU tem alguns pinos de controle. Os pinos de controle regulam o fluxo e a temporização de dados que vêm da CPU e vão para ela, além de ter outras utilizações diversas. Todas as CPUs têm pinos para energia elétrica (geralmente +1,2 volt a +1,5 volt), para terra e para um sinal de clock (uma onda quadrada com uma frequência bem definida), mas os outros pinos variam muito de um chip para outro. Não obstante, os pinos de controle podem ser agrupados aproximadamente nas seguintes categorias principais:
 
     1. Controle de barramento.
     2. Interrupções.
@@ -1712,9 +1461,7 @@ obstante, os pinos de controle podem ser agrupados aproximadamente nas seguintes
     5. Estado.
     6. Diversos.
 
-Logo faremos uma breve descrição de cada uma dessas categorias. Quando examinarmos os chips Intel Core
-i7, TI OMAP4430 e Atmel ATmega168, mais adiante, daremos mais detalhes. Um chip de CPU genérico que usa
-esses grupos de sinais pode ser visto na Figura 3.34.
+Logo faremos uma breve descrição de cada uma dessas categorias. Quando examinarmos os chips Intel Core i7, TI OMAP4430 e Atmel ATmega168, mais adiante, daremos mais detalhes. Um chip de CPU genérico que usa esses grupos de sinais pode ser visto na Figura 3.34.
 
 Figura 3.34  Pinagem lógica de uma CPU genérica. As setas indicam sinais de entrada e sinais de saída. Os segmentos de reta diagonais
 indicam que são utilizados vários pinos. Há um número que indica quantos são os pinos para uma CPU específica.
@@ -1757,44 +1504,25 @@ No seu repositório arquitetura_computadores, este diagrama é o mapa para enten
 ### Insight para o seu repositório estruturas_de_dados
 Ao codificar em C no seu diretório estruturas_de_dados, cada vez que você faz um acesso a ponteiro, você está disparando eletronicamente os pinos de Endereçamento e aguardando a resposta nos pinos de Dados.
 
-Se houver um erro de hardware (como um pino de aterramento solto ou interferência no clock), o seu software apresentará comportamentos imprevisíveis, independentemente de quão perfeita seja a lógica do código.
+Se houver um erro de hardware (como um pino de aterramento solto ou interferência no clock), o seu software apresentará comportamentos imprevisíveis independentemente de quão perfeita seja a lógica do código.
 
 Fechamos o ciclo da lógica digital! Partimos do transistor, passamos pela ULA, pelas memórias e chegamos aos pinos de conexão da CPU.
 
-A maioria dos pinos de controle do barramento são saídas da CPU para o barramento (e, portanto, entradas
-para a memória e chips de E/S) que informam se a CPU quer ler ou escrever na memória ou fazer outra coisa
-qualquer. A CPU usa esses pinos para controlar o resto do sistema e informar o que ela quer fazer.
+A maioria dos pinos de controle do barramento são saídas da CPU para o barramento (e, portanto, entradas para a memória e chips de E/S) que informam se a CPU quer ler ou escrever na memória ou fazer outra coisa qualquer. A CPU usa esses pinos para controlar o resto do sistema e informar o que ela quer fazer.
 
-Os pinos de interrupção são entradas que vêm de dispositivos de E/S para a CPU. Em grande parte dos sis-
-temas, a CPU pode dizer a um dispositivo de E/S que inicie uma operação e então continuar e fazer outra coisa
-qualquer enquanto o dispositivo de E/S está realizando seu trabalho. Quando a E/S estiver concluída, o chip
-controlador de E/S ativa um sinal em um desses pinos para interromper a CPU e fazê-la prestar algum serviço ao
-dispositivo de E/S, por exemplo, verificar se ocorreram erros de E/S. Algumas CPUs têm um pino de saída para
-confirmar o sinal de interrupção.
+Os pinos de interrupção são entradas que vêm de dispositivos de E/S para a CPU. Em grande parte dos sistemas, a CPU pode dizer a um dispositivo de E/S que inicie uma operação e então continuar e fazer outra coisa qualquer enquanto o dispositivo de E/S está realizando seu trabalho. Quando a E/S estiver concluída, o chip controlador de E/S ativa um sinal em um desses pinos para interromper a CPU e fazê-la prestar algum serviço ao dispositivo de E/S, por exemplo, verificar se ocorreram erros de E/S. Algumas CPUs têm um pino de saída para confirmar o sinal de interrupção.
 
-Os pinos de arbitragem de barramento são necessários para disciplinar o tráfego no barramento de modo
-a impedir que dois dispositivos tentem usá-lo ao mesmo tempo. Do ponto de vista da arbitragem, a CPU é um
-dispositivo e tem de requisitar o barramento como qualquer outro.
+Os pinos de arbitragem de barramento são necessários para disciplinar o tráfego no barramento de modo a impedir que dois dispositivos tentem usá-lo ao mesmo tempo. Do ponto de vista da arbitragem, a CPU é um dispositivo e tem de requisitar o barramento como qualquer outro.
 
-Alguns chips de CPUs são projetados para funcionar com coprocessadores, como chips de ponto flutuante,
-mas às vezes também com chips gráficos ou outros chips. Para facilitar a comunicação entre CPU e coprocessador,
-há pinos especiais dedicados a fazer e aceitar requisições.
+Alguns chips de CPUs são projetados para funcionar com coprocessadores, como chips de ponto flutuante, mas às vezes também com chips gráficos ou outros chips. Para facilitar a comunicação entre CPU e coprocessador, há pinos especiais dedicados a fazer e aceitar requisições.
 
-Além desses sinais, há outros pinos diversos presentes em algumas CPUs. Alguns deles fornecem ou aceitam
-informações de estado, outros são úteis para depuração ou para reiniciar o computador, e outros mais estão pre-
-sentes para garantir a compatibilidade com chips de E/S mais antigos.
+Além desses sinais, há outros pinos diversos presentes em algumas CPUs. Alguns deles fornecem ou aceitam informações de estado, outros são úteis para depuração ou para reiniciar o computador, e outros mais estão presentes para garantir a compatibilidade com chips de E/S mais antigos.
 
 ### 3.4.2 Barramentos de computador
-Um barramento é um caminho elétrico comum entre vários dispositivos. Os barramentos podem ser cate-
-gorizados por sua função. Podem ser usados no interior da CPU para transportar dados de e para a ULA ou ser externos à CPU, para conectá-la à memória ou a dispositivos de E/S. Cada tipo tem seus próprios requisitos e
-propriedades. Nesta seção e nas seguintes, focalizaremos barramentos que conectam a CPU à memória e a dispo-
-sitivos de E/S. No capítulo seguinte, examinaremos mais de perto os barramentos internos à CPU.
+Um barramento é um caminho elétrico comum entre vários dispositivos. Os barramentos podem ser categorizados por sua função. Podem ser usados no interior da CPU para transportar dados de e para a ULA ou ser externos à CPU, para conectá-la à memória ou a dispositivos de E/S. Cada tipo tem seus próprios requisitos e propriedades. Nesta seção e nas seguintes, focalizaremos barramentos que conectam a CPU à memória e a dispositivos de E/S. No capítulo seguinte, examinaremos mais de perto os barramentos internos à CPU.
 
-Os primeiros computadores pessoais tinham somente um barramento externo, ou barramento do sistema,
-que consistia em 50 a 100 fios de cobre paralelos gravados na placa-mãe, com conectores a intervalos regulares
-para ligação com a memória e placas de E/S. Os computadores pessoais modernos em geral têm um barramento de
-uso especial entre a CPU e a memória e (pelo menos) outro barramento para os dispositivos de E/S. Um sistema
-mínimo, com um barramento de memória e um barramento de E/S, é ilustrado na Figura 3.35.
+Os primeiros computadores pessoais tinham somente um barramento externo, ou barramento do sistema, que consistia em 50 a 100 fios de cobre paralelos gravados na placa-mãe, com conectores a intervalos regulares para ligação com a memória e placas de E/S. Os computadores pessoais modernos em geral têm um barramento de
+uso especial entre a CPU e a memória e (pelo menos) outro barramento para os dispositivos de E/S. Um sistema mínimo, com um barramento de memória e um barramento de E/S, é ilustrado na Figura 3.35.
 
 Figura 3.35  Sistema de computador com vários barramentos.
 
@@ -1830,95 +1558,47 @@ Faltam as camadas de controle que você já estudou nas figuras anteriores (como
 
  - Alimentação: O chip da CPU não funciona apenas com lógica; ele precisa de energia estável (Vcc/GND) para manter os flip-flops acesos.
 
-Na literatura, às vezes os barramentos são representados por setas largas e sombreadas, como nesta
-figura. A distinção entre essas setas e uma linha reta cortada por um pequeno segmento de reta inclinado
-acompanhado de um número de bits é sutil. Quando todos os bits são do mesmo tipo, por exemplo, todos
-são bits de endereço ou todos são bits de dados, então costuma ser usada a representação pelo segmento de
-reta diagonal. Quando estão envolvidas linhas de endereço, de dados e de controle, a seta larga sombreada
-é a mais comum.
+Na literatura, às vezes os barramentos são representados por setas largas e sombreadas, como nesta figura. A distinção entre essas setas e uma linha reta cortada por um pequeno segmento de reta inclinado acompanhado de um número de bits é sutil. Quando todos os bits são do mesmo tipo, por exemplo, todos
+são bits de endereço ou todos são bits de dados, então costuma ser usada a representação pelo segmento de reta diagonal. Quando estão envolvidas linhas de endereço, de dados e de controle, a seta larga sombreada é a mais comum.
 
-Embora os projetistas de CPUs tenham liberdade para usar qualquer tipo de barramento que quiserem dentro
-do chip, para possibilitar a ligação de placas projetadas por terceiros ao barramento de sistema é preciso haver
-regras bem definidas sobre o modo de funcionamento do barramento, às quais todos os dispositivos a ele ligados
-têm de obedecer. Essas regras são denominadas protocolo de barramento. Além disso, são necessárias especifi-
-cações mecânicas e elétricas, de modo que placas de terceiros caibam no suporte da placa e tenham conectores
-compatíveis com os da placa-mãe, tanto em termos mecânicos quanto em termos de tensões, temporizações etc.
-Ainda assim, outros barramentos não possuem especificações mecânicas, pois são projetados para serem usados
-dentro de um circuito integrado, por exemplo, para unir componentes dentro de um sistema-em-um-chip (SoC –
-System-on-a-Chip).
+Embora os projetistas de CPUs tenham liberdade para usar qualquer tipo de barramento que quiserem dentro do chip, para possibilitar a ligação de placas projetadas por terceiros ao barramento de sistema é preciso haver regras bem definidas sobre o modo de funcionamento do barramento, às quais todos os dispositivos a ele ligados têm de obedecer. Essas regras são denominadas protocolo de barramento. Além disso, são necessárias especificações mecânicas e elétricas, de modo que placas de terceiros caibam no suporte da placa e tenham conectores compatíveis com os da placa-mãe, tanto em termos mecânicos quanto em termos de tensões, temporizações etc. Ainda assim, outros barramentos não possuem especificações mecânicas, pois são projetados para serem usados
+dentro de um circuito integrado, por exemplo, para unir componentes dentro de um sistema-em-um-chip (SoC–System-on-a-Chip).
 
-Há inúmeros barramentos em uso no mundo dos computadores. Alguns dos mais conhecidos, no passado
-e atualmente (com exemplos), são: Omnibus (PDP-8), Unibus (PDP-11), Multibus (8086), barramento VME
-(equipamento para laboratório de física), barramento do IBM PC (PC/XT), barramento ISA (PC/AT), barramento
-EISA (80386), Microchannel (PS/2), Nubus (Macintosh), barramento PCI (muitos PCs), barramento SCSI (mui-
-tos PCs e estações de trabalho), Universal Serial Bus (PCs modernos) e FireWire (equipamentos eletrônicos de
-consumo). O mundo provavelmente seria um lugar melhor se todos os barramentos, menos um, desaparecessem
-repentinamente da face da Terra (tudo bem, menos dois, então). Infelizmente, a padronização nessa área parece
-muito improvável porque muito dinheiro já foi investido em todos esses sistemas incompatíveis.
+Há inúmeros barramentos em uso no mundo dos computadores. Alguns dos mais conhecidos, no passado e atualmente (com exemplos), são: Omnibus (PDP-8), Unibus (PDP-11), Multibus (8086), barramento VME (equipamento para laboratório de física), barramento do IBM PC (PC/XT), barramento ISA (PC/AT), barramento
+EISA (80386), Microchannel (PS/2), Nubus (Macintosh), barramento PCI (muitos PCs), barramento SCSI (muitos PCs e estações de trabalho), Universal Serial Bus (PCs modernos) e FireWire (equipamentos eletrônicos de consumo). O mundo provavelmente seria um lugar melhor se todos os barramentos, menos um, desaparecessem
+repentinamente da face da Terra (tudo bem, menos dois, então). Infelizmente, a padronização nessa área parece muito improvável porque muito dinheiro já foi investido em todos esses sistemas incompatíveis.
 
-A propósito, existe outra interconexão, PCI Express, que geralmente é chamada de barramento, mas na ver-
-dade não é barramento algum. Vamos estudá-la mais adiante neste capítulo.
+A propósito, existe outra interconexão, PCI Express, que geralmente é chamada de barramento, mas na verdade não é barramento algum. Vamos estudá-la mais adiante neste capítulo.
 
-Agora, vamos iniciar nosso estudo do funcionamento dos barramentos. Alguns dispositivos ligados a um
-barramento são ativos e podem iniciar transferências no barramento, ao passo que outros são passivos e esperam
-requisições. Os ativos são denominados mestres; os passivos são denominados escravos. Quando a CPU ordena a
-um controlador que leia ou escreva um bloco, ela está agindo como mestre e o controlador de disco, como escra-
-vo. Todavia, mais tarde, o controlador de disco pode agir como um mestre quando manda a memória aceitar as
-palavras que são lidas do drive de disco. Várias combinações típicas mestre e escravo estão relacionadas na Figura
-3.36. Em nenhuma circunstância a memória pode ser mestre.
+Agora, vamos iniciar nosso estudo do funcionamento dos barramentos. Alguns dispositivos ligados a um barramento são ativos e podem iniciar transferências no barramento, ao passo que outros são passivos e esperam requisições. Os ativos são denominados mestres; os passivos são denominados escravos. Quando a CPU ordena a um controlador que leia ou escreva um bloco, ela está agindo como mestre e o controlador de disco, como escravo. Todavia, mais tarde, o controlador de disco pode agir como um mestre quando manda a memória aceitar as palavras que são lidas do drive de disco. Várias combinações típicas mestre e escravo estão relacionadas na Figura 3.36. Em nenhuma circunstância a memória pode ser mestre.
 
-Figura 3.36   Exemplos de mestres e escravos de barramentos.
+    Figura 3.36   Exemplos de mestres e escravos de barramentos.
 
-+-------------------+-------------------+----------------------------------------------+
-| Mestre            | Escravo           | Exemplo                                      |
-+-------------------+-------------------+----------------------------------------------+
-| CPU               | Memória           | Buscar instruções e dados                    |
-| CPU               | Dispositivo de E/S| Iniciar transferência de dados               |
-| CPU               | Coprocessador     | CPU que passa instruções para o coprocessador|
-| Dispositivo de E/S| Memória           | DMA (acesso direto à memória)                |
-| Coprocessador     | CPU               | Coprocessador que busca operandos na CPU     |
-+-------------------+-------------------+----------------------------------------------+
+    +-------------------+-------------------+----------------------------------------------+
+    | Mestre            | Escravo           | Exemplo                                      |
+    +-------------------+-------------------+----------------------------------------------+
+    | CPU               | Memória           | Buscar instruções e dados                    |
+    | CPU               | Dispositivo de E/S| Iniciar transferência de dados               |
+    | CPU               | Coprocessador     | CPU que passa instruções para o coprocessador|
+    | Dispositivo de E/S| Memória           | DMA (acesso direto à memória)                |
+    | Coprocessador     | CPU               | Coprocessador que busca operandos na CPU     |
+    +-------------------+-------------------+----------------------------------------------+
 
-Os sinais binários emitidos por dispositivos de computador muitas vezes são fracos demais para energizar um
-barramento, em especial se ele for relativamente longo ou tiver muitos dispositivos ligados a ele. Por esse motivo, a
-maioria dos mestres de barramento está conectada a ele por um chip denominado controlador de barramento, que é
-nada mais que um amplificador digital. De modo semelhante, grande parte dos escravos está conectada ao barramento
-por um receptor de barramento. Quando dispositivos podem agir como mestres e também como escravos, é usado um
-chip combinado denominado transceptor de barramento. Essas interfaces de barramento são com frequência disposi-
-tivos de três estados, o que permite que flutuem (se desconectem) quando não são necessários ou então se conectem
-de modo um tanto diferente, denominado coletor aberto, que consegue um efeito semelhante. Quando dois ou mais
-dispositivos em uma linha de coletor aberto ativam a linha ao mesmo tempo, o resultado é o OR booleano de todos os
-sinais. Esse arranjo costuma ser denominado OR cabeado (wired-OR). Na maioria dos barramentos, algumas das linhas
-são de três estados, e outras, que precisam da propriedade OR cabeado, são de coletor aberto.
+Os sinais binários emitidos por dispositivos de computador muitas vezes são fracos demais para energizar um barramento, em especial se ele for relativamente longo ou tiver muitos dispositivos ligados a ele. Por esse motivo, a maioria dos mestres de barramento está conectada a ele por um chip denominado controlador de barramento, que é nada mais que um amplificador digital. De modo semelhante, grande parte dos escravos está conectada ao barramento
+por um receptor de barramento. Quando dispositivos podem agir como mestres e também como escravos, é usado um chip combinado denominado transceptor de barramento. Essas interfaces de barramento são com frequência dispositivos de três estados, o que permite que flutuem (se desconectem) quando não são necessários ou então se conectem de modo um tanto diferente, denominado coletor aberto, que consegue um efeito semelhante. Quando dois ou mais dispositivos em uma linha de coletor aberto ativam a linha ao mesmo tempo, o resultado é o OR booleano de todos os sinais. Esse arranjo costuma ser denominado OR cabeado (wired-OR). Na maioria dos barramentos, algumas das linhas são de três estados, e outras, que precisam da propriedade OR cabeado, são de coletor aberto.
 
-Assim como uma CPU, um barramento também tem linhas de endereço, de dados e de controle. Contudo,
-nem sempre há um mapeamento um-para-um entre os pinos da CPU e os sinais do barramento. Por exemplo,
-algumas CPUs têm três pinos que codificam se ela está fazendo uma leitura de memória, uma escrita na memória,
-uma leitura de E/S, uma escrita de E/S ou alguma outra operação. Um barramento típico poderia ter uma linha
-para leitura de memória, uma segunda para escrita na memória, uma terceira para leitura de E/S, uma quarta para
-escrita de E/S e assim por diante. Nesse caso, seria necessário um chip decodificador entre a CPU e o barramento
-para compatibilizar os dois lados, isto é, converter o sinal de 3 bits codificado em sinais separados que podem
-comandar as linhas do barramento.
+Assim como uma CPU, um barramento também tem linhas de endereço, de dados e de controle. Contudo, nem sempre há um mapeamento um-para-um entre os pinos da CPU e os sinais do barramento. Por exemplo, algumas CPUs têm três pinos que codificam se ela está fazendo uma leitura de memória, uma escrita na memória, uma leitura de E/S, uma escrita de E/S ou alguma outra operação. Um barramento típico poderia ter uma linha para leitura de memória, uma segunda para escrita na memória, uma terceira para leitura de E/S, uma quarta para escrita de E/S e assim por diante. Nesse caso, seria necessário um chip decodificador entre a CPU e o barramento para compatibilizar os dois lados, isto é, converter o sinal de 3 bits codificado em sinais separados que podem comandar as linhas do barramento.
 
-Projeto e operação de barramento são questões de tamanha complexidade que há inúmeros livros escritos
-apenas sobre isso (Anderson et al., 2004; Solari e Willse, 2004). Os principais tópicos do projeto de barramento
-são largura, clock, arbitragem e operações. Cada um desses tópicos tem impacto substancial sobre a velocidade e
-a largura de banda do barramento. Agora, examinaremos cada um nas quatro seções seguintes.
+Projeto e operação de barramento são questões de tamanha complexidade que há inúmeros livros escritos apenas sobre isso (Anderson et al., 2004; Solari e Willse, 2004). Os principais tópicos do projeto de barramento são largura, clock, arbitragem e operações. Cada um desses tópicos tem impacto substancial sobre a velocidade e a largura de banda do barramento. Agora, examinaremos cada um nas quatro seções seguintes.
 
 ## 3.4.3 Largura do barramento
-A largura do barramento é o parâmetro de projeto mais óbvio. Quanto mais linhas de endereço tiver um bar-
-ramento, mais memória a CPU pode endereçar diretamente. Se um barramento tiver n linhas de endereço, então uma CPU pode usá-las para endereçar 2n localizações de memória diferentes. Para memórias de grande porte, os
+A largura do barramento é o parâmetro de projeto mais óbvio. Quanto mais linhas de endereço tiver um barramento, mais memória a CPU pode endereçar diretamente. Se um barramento tiver n linhas de endereço, então uma CPU pode usá-las para endereçar 2n localizações de memória diferentes. Para memórias de grande porte, os
 barramentos precisam de muitas linhas de endereço, o que parece algo bem simples.
 
-O problema é que barramentos largos precisam de mais fios do que os estreitos, e também ocupam mais
-espaço físico (por exemplo, na placa-mãe), além de precisar de conectores maiores. Todos esses fatores encare-
-cem o barramento e, por isso, há um compromisso entre tamanho máximo de memória e custo do sistema. Um
-sistema com barramento de endereços de 64 linhas e 232 bytes de memória custará mais que um com 32 linhas e
-os mesmos 232 bytes de memória. A possibilidade de expansão posterior não é gratuita.
+O problema é que barramentos largos precisam de mais fios do que os estreitos, e também ocupam mais espaço físico (por exemplo, na placa-mãe), além de precisar de conectores maiores. Todos esses fatores encarecem o barramento e, por isso, há um compromisso entre tamanho máximo de memória e custo do sistema. Um
+sistema com barramento de endereços de 64 linhas e 232 bytes de memória custará mais que um com 32 linhas e os mesmos 232 bytes de memória. A possibilidade de expansão posterior não é gratuita.
 
-O resultado dessa observação é que muitos projetistas de sistemas tendem a ser imediatistas, o que provoca
-consequências desastrosas mais tarde. O IBM PC original continha uma CPU 8088 e um barramento de endereços
-de 20 bits, conforme mostra a Figura 3.37(a). Os 20 bits permitiam ao PC endereçar 1 MB de memória.
+O resultado dessa observação é que muitos projetistas de sistemas tendem a ser imediatistas, o que provoca consequências desastrosas mais tarde. O IBM PC original continha uma CPU 8088 e um barramento de endereços de 20 bits, conforme mostra a Figura 3.37(a). Os 20 bits permitiam ao PC endereçar 1 MB de memória.
 
 Figura 3.37   Crescimento de um barramento de endereços ao longo do tempo.
 
