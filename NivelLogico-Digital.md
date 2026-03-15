@@ -2292,7 +2292,7 @@ Talvez não seja um grande exagero dizer que todo equipamento elétrico que cust
 
 Como mencionamos no Capítulo 1, o Atmel ATmega168 provavelmente é o microcontrolador mais popular em uso hoje, em grande parte por causa de seu custo muito baixo (cerca de 1 dólar). Como veremos em breve, ele também é um chip versátil, portanto, fazer interface com ele é algo simples e barato. Agora, vamos examinar esse chip, cuja pinagem física é mostrada na Figura 3.49.
 
-Figura 3.49   Pinagem física do ATmega168.
+### Figura 3.49 Pinagem física do ATmega168.
 
 Esta Figura 3.49 apresenta a pinagem física do ATmega168, um microcontrolador que contrasta radicalmente com o Core i7 e o OMAP4430 que analisamos anteriormente. Enquanto os outros são processadores que dependem de barramentos externos complexos, este chip é um sistema autocontido, projetado para interagir diretamente com o hardware físico sem a necessidade de pinos de endereçamento ou dados externos.
 
@@ -2319,22 +2319,17 @@ Organizei o diagrama para o seu arquivo Nivel-Logica-Digital.md, destacando a di
 
 ![alt text](image-50.png)
 
+### Insight para o seu repositório estruturas_de_dados
+    O ATmega168 é o coração de muitas placas Arduino, e programar para ele exige uma mentalidade diferente no seu diretório estruturas_de_dados.
 
-### nsight para o seu repositório estruturas_de_dados
-O ATmega168 é o coração de muitas placas Arduino, e programar para ele exige uma mentalidade diferente no seu diretório estruturas_de_dados.
+    - Como a SRAM é extremamente limitada (apenas 2KB), você deve evitar o uso de grandes arrays ou alocação dinâmica (malloc).
 
- - Como a SRAM é extremamente limitada (apenas 2KB), você deve evitar o uso de grandes arrays ou alocação dinâmica (malloc).
+    - Em vez de barramentos de alta velocidade, você usará os pinos PD0 e PD1 (UART) para se comunicar com o seu Ubuntu 24.04 via terminal.
 
- - Em vez de barramentos de alta velocidade, você usará os pinos PD0 e PD1 (UART) para se comunicar com o seu Ubuntu 24.04 via terminal.
+    - A manipulação direta de registradores de porta (PORTB, PORTD) é a forma mais rápida de interagir com o hardware, ignorando as camadas de abstração comuns em sistemas maiores.
 
- - A manipulação direta de registradores de porta (PORTB, PORTD) é a forma mais rápida de interagir com o hardware, ignorando as camadas de abstração comuns em sistemas maiores.
-
-Como podemos ver na figura, o ATmega168 normalmente vem em um pacote padrão de 28 pinos, embo-
-ra haja outros pacotes disponíveis. À primeira vista, você talvez tenha notado que a pinagem nesse chip é um
-pouco estranha em comparação com os dois projetos anteriores que examinamos. Em particular, esse chip não
-tem linhas de endereço e dados. Isso porque não foi projetado para ser conectado à memória, só a dispositivos.
-Toda a memória, SRAM e flash, está contida dentro do processador, evitando a necessidade de quaisquer pinos
-de endereço e dados, como mostra a Figura 3.50.
+Como podemos ver na figura, o ATmega168 normalmente vem em um pacote padrão de 28 pinos, embora haja outros pacotes disponíveis. À primeira vista, você talvez tenha notado que a pinagem nesse chip é um pouco estranha em comparação com os dois projetos anteriores que examinamos. Em particular, esse chip não
+tem linhas de endereço e dados. Isso porque não foi projetado para ser conectado à memória, só a dispositivos. Toda a memória, SRAM e flash, está contida dentro do processador, evitando a necessidade de quaisquer pinos de endereço e dados, como mostra a Figura 3.50.
 
 Figura 3.50   Arquitetura interna e pinagem lógica do ATmega168.
 
@@ -2363,135 +2358,58 @@ No seu repositório arquitetura_computadores, este diagrama é o exemplo máximo
         [ PORTA D ]           [ PORTA B ]            [ PORTA C ]
         (PD0 - PD7)           (PB0 - PB7)            (PC0 - PC6)
 
-![alt text](image-11.png)
+![alt text](image-51.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Aqui no ATmega168, o seu conhecimento de Estruturas de Dados é testado ao limite devido à escassez de recursos:
+    Aqui no ATmega168, o seu conhecimento de Estruturas de Dados é testado ao limite devido à escassez de recursos:
 
- - No diretório estruturas_de_dados, você aprenderá que em 2KB de SRAM, uma Lista Encadeada com muitos ponteiros pode causar um Stack Overflow rapidamente.
+    - No diretório estruturas_de_dados, você aprenderá que em 2KB de SRAM, uma Lista Encadeada com muitos ponteiros pode causar um Stack Overflow rapidamente.
 
- - O uso de Bitfields em C é essencial aqui para economizar cada byte de memória interna.
+    - O uso de Bitfields em C é essencial aqui para economizar cada byte de memória interna.
 
- - Como o acesso à Flash é mais lento que à SRAM, você usará modificadores como PROGMEM para manter tabelas de dados constantes fora da memória de trabalho, otimizando o barramento interno.
+    - Como o acesso à Flash é mais lento que à SRAM, você usará modificadores como PROGMEM para manter tabelas de dados constantes fora da memória de trabalho, otimizando o barramento interno.
 
-Em vez de pinos de endereço e dados, o ATmega168 tem 27 portas de E/S digitais, 8 linhas na porta B e D,
-e 7 linhas na porta C. Essas linhas de E/S digitais são projetadas para serem conectadas aos periféricos de E/S, e
-cada uma pode ser configurada internamente pelo software de partida para ser uma entrada ou uma saída. Por
-exemplo, quando usada em um forno de micro-ondas, uma linha de E/S digital seria uma entrada do sensor de
-“porta aberta”. Outra linha de E/S digital seria uma saída usada para ligar e desligar o gerador do micro-ondas. O
-software no ATmega168 verificaria se a porta estava fechada antes de ligar o gerador do micro-ondas. Se a porta
-de repente for aberta, o software deverá cortar a energia. Na prática, as interconexões de hardware também estão
-sempre presentes.
+Em vez de pinos de endereço e dados, o ATmega168 tem 27 portas de E/S digitais, 8 linhas na porta B e D, e 7 linhas na porta C. Essas linhas de E/S digitais são projetadas para serem conectadas aos periféricos de E/S, e cada uma pode ser configurada internamente pelo software de partida para ser uma entrada ou uma saída. Por exemplo, quando usada em um forno de micro-ondas, uma linha de E/S digital seria uma entrada do sensor de “porta aberta”. Outra linha de E/S digital seria uma saída usada para ligar e desligar o gerador do micro-ondas. O software no ATmega168 verificaria se a porta estava fechada antes de ligar o gerador do micro-ondas. Se a porta de repente for aberta, o software deverá cortar a energia. Na prática, as interconexões de hardware também estão sempre presentes.
 
-Como opção, seis das entradas da porta C podem ser configuradas para serem E/S analógica. Pinos de E/S
-analógica podem ler o nível de tensão de uma entrada ou definir o nível de tensão de uma saída. Estendendo
-nosso exemplo de forno de micro-ondas, alguns aparelhos têm um sensor que permite ao usuário aquecer
-o alimento até determinada temperatura. O sensor de temperatura seria conectado a uma entrada de porta
-C, e o software poderia ler a tensão do sensor e depois convertê-la em uma temperatura usando uma função de
-tradução específica do sensor. Os pinos restantes no ATmega168 são a entrada de tensão (vcc), dois pinos de terra
-(gnd) e dois pinos para configurar os circuitos de E/S analógica (aref, avcc).
+Como opção, seis das entradas da porta C podem ser configuradas para serem E/S analógica. Pinos de E/S analógica podem ler o nível de tensão de uma entrada ou definir o nível de tensão de uma saída. Estendendo nosso exemplo de forno de micro-ondas, alguns aparelhos têm um sensor que permite ao usuário aquecer
+o alimento até determinada temperatura. O sensor de temperatura seria conectado a uma entrada de porta C, e o software poderia ler a tensão do sensor e depois convertê-la em uma temperatura usando uma função de tradução específica do sensor. Os pinos restantes no ATmega168 são a entrada de tensão (vcc), dois pinos de terra (gnd) e dois pinos para configurar os circuitos de E/S analógica (aref, avcc).
 
-A arquitetura interna do ATmega168, como a do OMAP4430, é um sistema-em-um-chip com uma rica
-matriz de dispositivos internos e memória. O ATmega168 vem com até 16 KB de memória flash interna, para
-armazenamento de informações não voláteis que mudam com pouca frequência, como instruções de programa.
-Ele também inclui até 1 KB de EEPROM, a memória não volátil que pode ser gravada pelo software. A EEPROM
-guarda dados de configuração do sistema. De novo, usando nosso exemplo de micro-ondas, a EEPROM armaze-
-naria um bit indicando se o micro-ondas mostrará a hora em formato de 12 ou 24 horas. O ATmega168 também
-incorpora até 1 KB de SRAM interna, onde o software pode armazenar variáveis temporárias.
+A arquitetura interna do ATmega168, como a do OMAP4430, é um sistema-em-um-chip com uma rica matriz de dispositivos internos e memória. O ATmega168 vem com até 16 KB de memória flash interna, para armazenamento de informações não voláteis que mudam com pouca frequência, como instruções de programa. Ele também inclui até 1 KB de EEPROM, a memória não volátil que pode ser gravada pelo software. A EEPROM guarda dados de configuração do sistema. De novo, usando nosso exemplo de micro-ondas, a EEPROM armazenaria um bit indicando se o micro-ondas mostrará a hora em formato de 12 ou 24 horas. O ATmega168 também incorpora até 1 KB de SRAM interna, onde o software pode armazenar variáveis temporárias.
 
-O processador interno roda o conjunto de instruções AVR, que é composto de 131 instruções, cada uma
-com 16 bits de extensão. O processador tem 8 bits, o que significa que opera sobre valores de dados de 8
-bits, e internamente seus registradores possuem um tamanho de 8 bits. O conjunto de instruções incorpora
-instruções especiais que permitem ao processador de 8 bits operar de modo eficiente sobre tipos de dados
-maiores. Por exemplo, para realizar adições de 16 bits ou maiores, o processador fornece a instrução “add-
--with-carry” (somar com vai-um), que soma dois valores e mais o “vai-um” da adição anterior. Os outros
-componentes internos englobam o clock em tempo real e uma variedade de lógica de interface, incluindo
-suporte para enlaces seriais, enlaces PWM (pulse-width-modulated – modulado por largura de pulso), enlaces
-I2C (barramento Inter-IC) e controladores analógico e digital.
+O processador interno roda o conjunto de instruções AVR, que é composto de 131 instruções, cada uma com 16 bits de extensão. O processador tem 8 bits, o que significa que opera sobre valores de dados de 8 bits, e internamente seus registradores possuem um tamanho de 8 bits. O conjunto de instruções incorpora
+instruções especiais que permitem ao processador de 8 bits operar de modo eficiente sobre tipos de dados maiores. Por exemplo, para realizar adições de 16 bits ou maiores, o processador fornece a instrução “add-with-carry” (somar com vai-um), que soma dois valores e mais o “vai-um” da adição anterior. Os outros
+componentes internos englobam o clock em tempo real e uma variedade de lógica de interface, incluindo suporte para enlaces seriais, enlaces PWM (pulse-width-modulated – modulado por largura de pulso), enlaces I2C (barramento Inter-IC) e controladores analógico e digital.
 
 ## 3.6 Exemplos de barramentos 
-Barramentos são a cola que mantém a integridade dos sistemas de computadores. Nesta seção, examinaremos
-minuciosamente alguns barramentos populares: o PCI e o USB (Universal Serial Bus – barramento serial univer-
-sal). O PCI é o principal barramento de E/S usado hoje em dia nos PCs. Ele pode ter duas formas, o barramento
-PCI mais antigo, e o novo e muito mais rápido barramento PCI Express (PCIe). O Universal Serial Bus é um
-barramento de E/S cada vez mais popular para periféricos de baixa velocidade, como mouses e teclados. Uma
-segunda e terceira versões do barramento USB rodam com velocidades muito mais altas. Nas próximas seções,
-veremos esses barramentos um por vez, para ver como eles funcionam.
+Barramentos são a cola que mantém a integridade dos sistemas de computadores. Nesta seção, examinaremos minuciosamente alguns barramentos populares: o PCI e o USB (Universal Serial Bus – barramento serial universal). O PCI é o principal barramento de E/S usado hoje em dia nos PCs. Ele pode ter duas formas, o barramento
+PCI mais antigo, e o novo e muito mais rápido barramento PCI Express (PCIe). O Universal Serial Bus é um barramento de E/S cada vez mais popular para periféricos de baixa velocidade, como mouses e teclados. Uma segunda e terceira versões do barramento USB rodam com velocidades muito mais altas. Nas próximas seções, veremos esses barramentos um por vez, para ver como eles funcionam.
 
 ## 3.6.1 O barramento PCI
-No IBM PC original, a maioria das aplicações era baseada em texto. De modo gradual, com a introdução do
-Windows, pouco a pouco começaram a ser usadas as interfaces gráficas de usuário. Nenhuma dessas aplicações
-exigia demais do barramento ISA. Contudo, com o passar do tempo, quando muitas aplicações, em especial jogos
-em multimídia, começaram a usar computadores para exibir vídeo em tela cheia e com movimento completo, a
-situação mudou radicalmente.
+No IBM PC original, a maioria das aplicações era baseada em texto. De modo gradual, com a introdução do Windows, pouco a pouco começaram a ser usadas as interfaces gráficas de usuário. Nenhuma dessas aplicações exigia demais do barramento ISA. Contudo, com o passar do tempo, quando muitas aplicações, em especial jogos em multimídia, começaram a usar computadores para exibir vídeo em tela cheia e com movimento completo, a situação mudou radicalmente.
 
-Vamos fazer um cálculo simples. Considere um vídeo colorido de 1.024 × 768 com 3 bytes/pixel. Um
-quadro contém 2,25 MB de dados. Para um movimento suave, são necessárias ao menos 30 telas por segundo
-para uma taxa de dados de 67,5 MB por segundo. Na verdade, é pior do que isso, pois para apresentar um
-vídeo a partir de um disco rígido, CD-ROM ou DVD, os dados devem passar do drive de disco para o barra-
-mento e ir até a memória. Então, para a apresentação, os dados devem novamente percorrer o barramento até
-o adaptador gráfico. Portanto, precisamos de uma largura de banda de barramento de 135 MB por segundo
-só para o vídeo, sem contar a largura de banda de que a CPU e outros dispositivos precisam.
+Vamos fazer um cálculo simples. Considere um vídeo colorido de 1.024 × 768 com 3 bytes/pixel. Um quadro contém 2,25 MB de dados. Para um movimento suave, são necessárias ao menos 30 telas por segundo para uma taxa de dados de 67,5 MB por segundo. Na verdade, é pior do que isso, pois para apresentar um vídeo a partir de um disco rígido, CD-ROM ou DVD, os dados devem passar do drive de disco para o barramento e ir até a memória. Então, para a apresentação, os dados devem novamente percorrer o barramento até o adaptador gráfico. Portanto, precisamos de uma largura de banda de barramento de 135 MB por segundo só para o vídeo, sem contar a largura de banda de que a CPU e outros dispositivos precisam.
 
-O predecessor do barramento PCI, o ISA, funcionava à taxa máxima de 8,33 MHz e podia transferir 2 bytes
-por ciclo para uma largura de banda máxima de 16,7 MB/s. O barramento ISA avançado, denominado EISA, podia
-movimentar 4 bytes por ciclo, para alcançar 33,3 MB/s. Claro que nenhuma dessas taxas sequer chegava perto do
+O predecessor do barramento PCI, o ISA, funcionava à taxa máxima de 8,33 MHz e podia transferir 2 bytes por ciclo para uma largura de banda máxima de 16,7 MB/s. O barramento ISA avançado, denominado EISA, podia movimentar 4 bytes por ciclo, para alcançar 33,3 MB/s. Claro que nenhuma dessas taxas sequer chegava perto do
 que era necessário para apresentação de vídeo completo em tela.
 
-Com o vídeo de HD completo moderno, a situação é ainda pior. Isso exige 1.920 × 1.080 quadros a 30 qua-
-dros/segundo para uma taxa de dados de 155 MB/s (ou 310 MB/s se os dados tiverem que atravessar o barramento
-duas vezes). É claro que o barramento EISA sequer chegar perto de tratar disso.
+Com o vídeo de HD completo moderno, a situação é ainda pior. Isso exige 1.920 × 1.080 quadros a 30 quadros/segundo para uma taxa de dados de 155 MB/s (ou 310 MB/s se os dados tiverem que atravessar o barramento duas vezes). É claro que o barramento EISA sequer chegar perto de tratar disso.
 
-Em 1990, a Intel percebeu o que estava para acontecer e desenvolveu um novo barramento com uma
-largura de banda muito mais alta do que a do próprio barramento EISA. Foi denominado barramento PCI
-(Peripheral Component Interconnect Bus – barramento de interconexão de componente periférico).
-Para incentivar sua utilização, a Intel patenteou o PCI e então passou todas as patentes para domínio
-público, de modo que qualquer empresa podia construir periféricos para esse barramento sem ter de pagar
-royalties. Ela também organizou um consórcio de empresas, o PCI Special Interest Group, para gerenciar
-o futuro desse barramento. O resultado foi que o PCI alcançou enorme popularidade. Praticamente todos
-os computadores com chips Intel a partir do Pentium têm barramento PCI, e muitos outros computadores
-também. Esse barramento é apresentado com todos os detalhes tétricos em Shanley e Anderson (1999) e
-Solari e Willse (2004).
+Em 1990, a Intel percebeu o que estava para acontecer e desenvolveu um novo barramento com uma largura de banda muito mais alta do que a do próprio barramento EISA. Foi denominado barramento PCI (Peripheral Component Interconnect Bus – barramento de interconexão de componente periférico). Para incentivar sua utilização, a Intel patenteou o PCI e então passou todas as patentes para domínio público, de modo que qualquer empresa podia construir periféricos para esse barramento sem ter de pagar royalties. Ela também organizou um consórcio de empresas, o PCI Special Interest Group, para gerenciar o futuro desse barramento. O resultado foi que o PCI alcançou enorme popularidade. Praticamente todos os computadores com chips Intel a partir do Pentium têm barramento PCI, e muitos outros computadores também. Esse barramento é apresentado com todos os detalhes tétricos em Shanley e Anderson (1999) e Solari e Willse (2004).
 
-O barramento PCI original transferia 32 bits por ciclo e funcionava em 33 MHz (tempo de ciclo de 30
-ns) para uma largura de banda total de 133 MB/s. Em 1993, foi lançado o PCI 2.0 e em 1995 saiu o PCI
-2.1. O PCI 2.2 tem características para computadores portáteis (principalmente para economizar energia da
-bateria). O barramento PCI funciona em até 66 MHz e pode manipular transferências de 64 bits para uma
-largura de banda total de 528 MB/s. Com esse tipo de capacidade, o vídeo de tela inteira e movimento total
-é viável (admitindo que o disco e o resto do sistema estejam à altura do serviço). Seja como for, o PCI não
+O barramento PCI original transferia 32 bits por ciclo e funcionava em 33 MHz (tempo de ciclo de 30 ns) para uma largura de banda total de 133 MB/s. Em 1993, foi lançado o PCI 2.0 e em 1995 saiu o PCI 2.1. O PCI 2.2 tem características para computadores portáteis (principalmente para economizar energia da
+bateria). O barramento PCI funciona em até 66 MHz e pode manipular transferências de 64 bits para uma largura de banda total de 528 MB/s. Com esse tipo de capacidade, o vídeo de tela inteira e movimento total é viável (admitindo que o disco e o resto do sistema estejam à altura do serviço). Seja como for, o PCI não
 será o gargalo.
 
-Mesmo que 528 MB/s pareça muito rápido, ainda há dois problemas. Primeiro, não era muito bom para um
-barramento de memória. Segundo, não era compatível com todas aquelas antigas placas ISA que havia por aí. A
-solução imaginada pela Intel foi projetar computadores com três ou mais barramentos, conforme mostra a Figura
-3.51. Nessa figura, vemos que a CPU pode se comunicar com a memória principal por um barramento de memó-
-ria especial, e que um barramento ISA pode ser conectado ao PCI. Esse arranjo atendia a todos os requisitos e,
-por consequência, foi amplamente usado na década de 1990.
+Mesmo que 528 MB/s pareça muito rápido, ainda há dois problemas. Primeiro, não era muito bom para um barramento de memória. Segundo, não era compatível com todas aquelas antigas placas ISA que havia por aí. A solução imaginada pela Intel foi projetar computadores com três ou mais barramentos, conforme mostra a Figura 3.51. Nessa figura, vemos que a CPU pode se comunicar com a memória principal por um barramento de memória especial, e que um barramento ISA pode ser conectado ao PCI. Esse arranjo atendia a todos os requisitos e, por consequência, foi amplamente usado na década de 1990.
 
-Dois componentes fundamentais dessa arquitetura são os dois chips de pontes, fabricados pela Intel – daí
-seu interesse em todo esse projeto. A ponte PCI conecta a CPU, a memória e o barramento PCI. A ponte ISA
-conecta o barramento PCI ao ISA e também suporta um ou dois discos IDE. Quase todos os sistemas PC usando
-essa arquitetura vêm com um ou mais encaixes PCI livres para acrescentar novos periféricos de alta velocidade e
-um ou mais encaixes ISA para acrescentar periféricos de baixa velocidade.
+Dois componentes fundamentais dessa arquitetura são os dois chips de pontes, fabricados pela Intel – daí seu interesse em todo esse projeto. A ponte PCI conecta a CPU, a memória e o barramento PCI. A ponte ISA conecta o barramento PCI ao ISA e também suporta um ou dois discos IDE. Quase todos os sistemas PC usando essa arquitetura vêm com um ou mais encaixes PCI livres para acrescentar novos periféricos de alta velocidade e um ou mais encaixes ISA para acrescentar periféricos de baixa velocidade.
 
-A grande vantagem do arranjo da Figura 3.51 é que a CPU tem uma largura de banda extremamente alta para
-a memória usando um barramento de memória proprietário; o PCI oferece alta largura de banda para periféricos
-rápidos, como discos SCSI, adaptadores gráficos etc.; e as antigas placas ISA ainda podem ser usadas. A caixa USB
-na figura se refere ao Universal Serial Bus, que será discutido mais adiante neste capítulo.
+A grande vantagem do arranjo da Figura 3.51 é que a CPU tem uma largura de banda extremamente alta para a memória usando um barramento de memória proprietário; o PCI oferece alta largura de banda para periféricos rápidos, como discos SCSI, adaptadores gráficos etc.; e as antigas placas ISA ainda podem ser usadas. A caixa USB na figura se refere ao Universal Serial Bus, que será discutido mais adiante neste capítulo.
 
-Seria bom se houvesse apenas um tipo de placa PCI. Porém, não é esse o caso. Há opções para tensão, lar-
-gura e temporização. Computadores mais antigos usam em geral 5 volts e os mais novos tendem a usar 3,3 volts,
-portanto, o barramento PCI suporta ambos. Os conectores são os mesmos, exceto por dois pedacinhos de plástico
-que estão lá para impedir que as pessoas insiram uma placa de 5 volts em um barramento PCI de 3,3 volts ou
-vice-versa. Felizmente, existem placas universais que suportam ambas as tensões e podem ser ligadas a quaisquer
-dos tipos de encaixe. Além da opção de tensão, as placas também têm versões de 32 bits e 64 bits. As placas de 32
-bits têm 120 pinos; as de 64 bits têm os mesmos 120 pinos mais 64 pinos adicionais. Um sistema de barramento
-PCI que suporta placas de 64 bits também pode aceitar placas de 32 bits, mas o inverso não é verdade. Por fim,
-barramentos e placas PCI podem funcionar em 33 MHz ou 66 MHz. A opção é feita ligando um pino à fonte de
-energia ou ao fio terra. Os conectores são idênticos para ambas as velocidades.
+Seria bom se houvesse apenas um tipo de placa PCI. Porém, não é esse o caso. Há opções para tensão, largura e temporização. Computadores mais antigos usam em geral 5 volts e os mais novos tendem a usar 3,3 volts, portanto, o barramento PCI suporta ambos. Os conectores são os mesmos, exceto por dois pedacinhos de plástico que estão lá para impedir que as pessoas insiram uma placa de 5 volts em um barramento PCI de 3,3 volts ou vice-versa. Felizmente, existem placas universais que suportam ambas as tensões e podem ser ligadas a quaisquer dos tipos de encaixe. Além da opção de tensão, as placas também têm versões de 32 bits e 64 bits. As placas de 32 bits têm 120 pinos; as de 64 bits têm os mesmos 120 pinos mais 64 pinos adicionais. Um sistema de barramento PCI que suporta placas de 64 bits também pode aceitar placas de 32 bits, mas o inverso não é verdade. Por fim, barramentos e placas PCI podem funcionar em 33 MHz ou 66 MHz. A opção é feita ligando um pino à fonte de energia ou ao fio terra. Os conectores são idênticos para ambas as velocidades.
 
-igura 3.51  Arquitetura de um dos primeiros sistemas Pentium. Os barramentos representados por linhas mais largas têm mais largura de
-banda do que os representados por linhas mais finas, mas a figura não está em escala.
+### Figura 3.51  Arquitetura de um dos primeiros sistemas Pentium. 
+Os barramentos representados por linhas mais largas têm mais largura de banda do que os representados por linhas mais finas, mas a figura não está em escala.
 
 Esta Figura 3.51 é um marco histórico na arquitetura de computadores, ilustrando como a Intel resolveu o problema do gargalo de dados nos anos 90. Ela introduz o conceito de hierarquia de barramentos, onde componentes de velocidades diferentes são isolados por "pontes" para que dispositivos lentos (como um mouse) não atrasem os rápidos (como a CPU).
 
@@ -2523,44 +2441,26 @@ No seu repositório arquitetura_computadores, este diagrama é a base para enten
             [ DISCO ]        [ MODEM ]       [ PLACA ]      [ ENCAIXE ]
                 IDE                            DE SOM           ISA
 
-Insight para o seu repositório estruturas_de_dados
-Essa estrutura de barramentos explica por que, ao programar em C no seu diretório estruturas_de_dados, a localidade de referência é tão importante.
+![alt text](image-52.png)
 
- - Se o seu algoritmo acessa dados que estão no Cache L2, ele viaja pelo barramento mais curto e rápido.
+### Insight para o seu repositório estruturas_de_dados
+    Essa estrutura de barramentos explica por que, ao programar em C no seu diretório estruturas_de_dados, a localidade de referência é tão importante.
 
- - Se ele precisar ler algo de um Disco IDE no barramento ISA, os dados precisam atravessar a Ponte ISA, o Barramento PCI e a Ponte PCI antes de chegar à CPU.
+    - Se o seu algoritmo acessa dados que estão no Cache L2, ele viaja pelo barramento mais curto e rápido.
 
- - No seu Ubuntu 24.04, ferramentas como o nmap ou netcat que você usa dependem dessa eficiência: pacotes de rede chegam pelo barramento PCI e precisam ser movidos rapidamente para a RAM para não serem perdidos enquanto a CPU está ocupada.
+    - Se ele precisar ler algo de um Disco IDE no barramento ISA, os dados precisam atravessar a Ponte ISA, o Barramento PCI e a Ponte PCI antes de chegar à CPU.
 
-No final da década de 1990, quase todos concordavam que o barramento ISA estava morto, portanto, os novos
-projetos o excluíram. Contudo, nessa mesma época a resolução de monitores tinha aumentado, em alguns casos
-para 1.600 × 1.200, e a demanda por vídeo de tela inteira e movimento total também cresceu, em especial no con-
-texto de jogos de alto grau de interação, portanto, a Intel acrescentou mais um outro barramento só para comandar
-a placa gráfica. Esse barramento foi denominado barramento AGP (Accelerated Graphics Port bus – barramento
-de porta gráfica acelerada). A versão inicial, AGP 1.0, funcionava a 264 MB/s, o que foi definido como 1x. Embora
-mais lento que o barramento PCI, foi dedicado a comandar a placa gráfica. Com o passar dos anos, saíram novas
-versões, com AGP 3.0 funcionando a 2,1 GB/s (8x). Hoje, até mesmo o barramento AGP 3.0 de alto desempenho
-foi substituído por outros ainda mais rápidos, em particular, o PCI Express, que pode bombear incríveis 16 GB/s de
-dados por enlaces de barramento serial de alta velocidade. Um sistema Core i7 moderno é ilustrado na Figura 3.52.
+    - No seu Ubuntu 24.04, ferramentas como o nmap ou netcat que você usa dependem dessa eficiência: pacotes de rede chegam pelo barramento PCI e precisam ser movidos rapidamente para a RAM para não serem perdidos enquanto a CPU está ocupada.
 
-Em um sistema moderno baseado no Core i7, diversas interfaces foram integradas diretamente no chip
-da CPU. Os dois canais de memória DDR3, rodando a 1.333 transações/s, conectam-se à memória principal e
-oferecem uma largura de banda agregada de 10 GB/s por canal. Também integrado à CPU está um canal PCI
-Express de 16 vias, que idealmente pode ser configurado em um único barramento PCI Express de 16 bits ou
-barramentos PCI Express independentes de 8 bits. As 16 vias juntas oferecem uma largura de banda de 16 GB/s
-para dispositivos de E/S.
+No final da década de 1990, quase todos concordavam que o barramento ISA estava morto, portanto, os novos projetos o excluíram. Contudo, nessa mesma época a resolução de monitores tinha aumentado, em alguns casos para 1.600 × 1.200, e a demanda por vídeo de tela inteira e movimento total também cresceu, em especial no contexto de jogos de alto grau de interação, portanto, a Intel acrescentou mais um outro barramento só para comandar a placa gráfica. Esse barramento foi denominado barramento AGP (Accelerated Graphics Port bus – barramento de porta gráfica acelerada). A versão inicial, AGP 1.0, funcionava a 264 MB/s, o que foi definido como 1x. Embora mais lento que o barramento PCI, foi dedicado a comandar a placa gráfica. Com o passar dos anos, saíram novas versões, com AGP 3.0 funcionando a 2,1 GB/s (8x). Hoje, até mesmo o barramento AGP 3.0 de alto desempenho foi substituído por outros ainda mais rápidos, em particular, o PCI Express, que pode bombear incríveis 16 GB/s de dados por enlaces de barramento serial de alta velocidade. Um sistema Core i7 moderno é ilustrado na Figura 3.52.
 
-A CPU se conecta ao chip da ponte principal, o P67, por meio da interface de mídia direta (DMI) serial de 20
-Gb/s (2,5 GB/s). O P67 oferece interfaces para uma série de interfaces de E/S modernas de alto desempenho. Oito
-vias PCI Express adicionais são fornecidas, mais interfaces de disco SATA. O P67 também executa 14 interfaces
-USB 2.0, Ethernet de 10G e uma de áudio.
+Em um sistema moderno baseado no Core i7, diversas interfaces foram integradas diretamente no chip da CPU. Os dois canais de memória DDR3, rodando a 1.333 transações/s, conectam-se à memória principal e oferecem uma largura de banda agregada de 10 GB/s por canal. Também integrado à CPU está um canal PCI Express de 16 vias, que idealmente pode ser configurado em um único barramento PCI Express de 16 bits ou barramentos PCI Express independentes de 8 bits. As 16 vias juntas oferecem uma largura de banda de 16 GB/s para dispositivos de E/S.
 
-O chip ICH10 oferece suporte a interface legada para dispositivos antigos. Ele está conectado ao P67 por
-meio de uma interface DMI mais lenta. O ICH10 implementa o barramento PCI, Ethernet a 1G, portas USB e
-as clássicas interfaces PCI Express e SATA. Sistemas mais novos não podem incorporar o ICH10; isso é exigido
-apenas se o sistema precisa dar suporte a interfaces legadas.
+A CPU se conecta ao chip da ponte principal, o P67, por meio da interface de mídia direta (DMI) serial de 20 Gb/s (2,5 GB/s). O P67 oferece interfaces para uma série de interfaces de E/S modernas de alto desempenho. Oito vias PCI Express adicionais são fornecidas, mais interfaces de disco SATA. O P67 também executa 14 interfaces USB 2.0, Ethernet de 10G e uma de áudio.
 
-Figura 3.52  Estrutura do barramento de um Core i7 moderno.
+O chip ICH10 oferece suporte a interface legada para dispositivos antigos. Ele está conectado ao P67 por meio de uma interface DMI mais lenta. O ICH10 implementa o barramento PCI, Ethernet a 1G, portas USB e as clássicas interfaces PCI Express e SATA. Sistemas mais novos não podem incorporar o ICH10; isso é exigido apenas se o sistema precisa dar suporte a interfaces legadas.
+
+### Figura 3.52  Estrutura do barramento de um Core i7 moderno.
 
 Estrutura do Core i7 Moderno (Figura 3.52)
 Diferente das arquiteturas antigas, note que o controlador de memória e o controlador gráfico agora estão integrados diretamente na CPU para reduzir a latência.
@@ -2591,41 +2491,25 @@ _________________________________________________________________
                                                             [ 12x USB    ]           [ PCI Bus ]
                                                             [ LAN / GLCI ]           [ BIOS SPI ]
 
+![alt text](image-53.png)
 
+### Insight Final para o seu repositório estruturas_de_dados
+    Esta arquitetura moderna é o que torna os seus projetos no diretório estruturas_de_dados viáveis em larga escala.
 
-![alt text](image-12.png)
+    - Quando você implementa uma Hash Table massiva em C, o fato do controlador de memória estar na CPU (e não na placa-mãe) reduz o tempo de busca em nanosegundos cruciais.
 
-### nsight Final para o seu repositório estruturas_de_dados
-Esta arquitetura moderna é o que torna os seus projetos no diretório estruturas_de_dados viáveis em larga escala.
-
- - Quando você implementa uma Hash Table massiva em C, o fato do controlador de memória estar na CPU (e não na placa-mãe) reduz o tempo de busca em nanosegundos cruciais.
-
- - No seu Ubuntu 24.04, ao usar o nmcli para gerenciar a rede, os dados fluem do controlador LAN Gigabit através do ICH10, sobem pelo link DMI e chegam à CPU sem que você perceba a complexidade física envolvida.
+    - No seu Ubuntu 24.04, ao usar o nmcli para gerenciar a rede, os dados fluem do controlador LAN Gigabit através do ICH10, sobem pelo link DMI e chegam à CPU sem que você perceba a complexidade física envolvida.
 
 ### Operação do barramento PCI
-Como todos os barramentos do PC desde o IBM PC original, o barramento PCI é síncrono. Todas as suas
-transações ocorrem entre um mestre, cujo nome oficial é iniciador, e um escravo, oficialmente denominado alvo.
-Para manter baixo o número de pinos PCI, as linhas de endereços e dados são multiplexadas. Desse modo, nas
-placas PCI são necessários somente 64 pinos para endereço mais sinais de dados, ainda que o PCI suporte ende-
-reços de 64 bits e dados de 64 bits.
+Como todos os barramentos do PC desde o IBM PC original, o barramento PCI é síncrono. Todas as suas transações ocorrem entre um mestre, cujo nome oficial é iniciador, e um escravo, oficialmente denominado alvo. Para manter baixo o número de pinos PCI, as linhas de endereços e dados são multiplexadas. Desse modo, nas
+placas PCI são necessários somente 64 pinos para endereço mais sinais de dados, ainda que o PCI suporte endereços de 64 bits e dados de 64 bits.
 
-Os pinos de endereço e de dados multiplexados funcionam da seguinte maneira. Em uma operação de leitu-
-ra, durante o ciclo 1, o mestre coloca o endereço no barramento. No ciclo 2, ele remove o endereço e o barramento
-muda de sentido, de modo que o escravo possa usá-lo. No ciclo 3, o escravo entrega os dados requisitados. Em
-operações de escrita, o barramento não tem de virar porque o mestre coloca o endereço e também os dados. Não
-obstante, a transação mínima ainda dura três ciclos. Se o escravo não conseguir responder em três ciclos, ele pode
-inserir estados de espera. Também são permitidas transferências de blocos sem limite de tamanho, assim como
-diversos outros tipos de ciclos de barramento.
+Os pinos de endereço e de dados multiplexados funcionam da seguinte maneira. Em uma operação de leitura, durante o ciclo 1, o mestre coloca o endereço no barramento. No ciclo 2, ele remove o endereço e o barramento muda de sentido, de modo que o escravo possa usá-lo. No ciclo 3, o escravo entrega os dados requisitados. Em operações de escrita, o barramento não tem de virar porque o mestre coloca o endereço e também os dados. Não obstante, a transação mínima ainda dura três ciclos. Se o escravo não conseguir responder em três ciclos, ele pode inserir estados de espera. Também são permitidas transferências de blocos sem limite de tamanho, assim como diversos outros tipos de ciclos de barramento.
 
 ### Arbitragem de barramento PCI
-Para usar o barramento PCI, um dispositivo deve antes adquiri-lo. A arbitragem de barramento PCI usa um
-árbitro de barramento centralizado, como mostra a Figura 3.53. Na maioria dos projetos, o árbitro de barramento
-é inserido em um dos chips de ponte. Todo dispositivo PCI tem duas linhas dedicadas que vão dele até o árbitro.
-Uma linha, req#, é usada para requisitar o barramento. A outra linha, gnt#, é usada para receber concessões de
-barramento. Nota: req# é a forma do PCI indicar REQ.
+Para usar o barramento PCI, um dispositivo deve antes adquiri-lo. A arbitragem de barramento PCI usa um árbitro de barramento centralizado, como mostra a Figura 3.53. Na maioria dos projetos, o árbitro de barramento é inserido em um dos chips de ponte. Todo dispositivo PCI tem duas linhas dedicadas que vão dele até o árbitro. Uma linha, req#, é usada para requisitar o barramento. A outra linha, gnt#, é usada para receber concessões de barramento. Nota: req# é a forma do PCI indicar REQ.
 
 **Figura 3.53  O barramento PCI usa um árbitro de barramento centralizado.**
-
 
 ________________________________________________
          |               ÁRBITRO DE BARRAMENTO            |
@@ -2643,34 +2527,17 @@ ________________________________________________
 
 ![alt text](image-32.png)
 
-Para requisitar o barramento, um dispositivo PCI (incluindo a CPU) ativa req# e espera até ver sua linha
-gnt# ativada pelo árbitro. Quando esse evento acontece, o dispositivo pode usar o barramento no próximo ciclo.
-O algoritmo usado pelo árbitro não é definido pela especificação do PCI. Arbitragem por varredura circular, arbi-
-tragem por prioridade e outros esquemas são todos permitidos. Claro que um bom árbitro será justo, de modo a
-não deixar alguns dispositivos esperando para sempre.
+Para requisitar o barramento, um dispositivo PCI (incluindo a CPU) ativa req# e espera até ver sua linha gnt# ativada pelo árbitro. Quando esse evento acontece, o dispositivo pode usar o barramento no próximo ciclo. O algoritmo usado pelo árbitro não é definido pela especificação do PCI. Arbitragem por varredura circular, arbitragem por prioridade e outros esquemas são todos permitidos. Claro que um bom árbitro será justo, de modo a não deixar alguns dispositivos esperando para sempre.
 
-Uma concessão de barramento serve para uma transação apenas, embora em teoria o comprimento dessa
-transação não tenha limite. Se um dispositivo quiser executar uma segunda transação e nenhum outro dispo-
-sitivo estiver requisitando o barramento, ele pode entrar de novo, apesar de ser preciso inserir um ciclo ocioso
-entre transações. Contudo, em circunstâncias especiais, na ausência de disputa pelo barramento, um dispositivo
-pode fazer uma transação atrás da outra sem ter de inserir um ciclo ocioso. Se um mestre de barramento estiver
-realizando uma transferência muito longa e algum outro dispositivo requisitar o barramento, o árbitro pode
-negar a linha gnt#. O mestre de barramento em questão deve monitorar a linha gnt#; portanto, quando perce-
-ber a negação, deve liberar o barramento no próximo ciclo. Esse esquema permite transferências muito longas
-(que são eficientes) quando há só um mestre de barramento candidato, mas ainda assim dá resposta rápida a
-dispositivos concorrentes.
+Uma concessão de barramento serve para uma transação apenas, embora em teoria o comprimento dessa transação não tenha limite. Se um dispositivo quiser executar uma segunda transação e nenhum outro dispo sitivo estiver requisitando o barramento, ele pode entrar de novo, apesar de ser preciso inserir um ciclo ocioso
+entre transações. Contudo, em circunstâncias especiais, na ausência de disputa pelo barramento, um dispositivo pode fazer uma transação atrás da outra sem ter de inserir um ciclo ocioso. Se um mestre de barramento estiver realizando uma transferência muito longa e algum outro dispositivo requisitar o barramento, o árbitro pode negar a linha gnt#. O mestre de barramento em questão deve monitorar a linha gnt#; portanto, quando perceber a negação, deve liberar o barramento no próximo ciclo. Esse esquema permite transferências muito longas (que são eficientes) quando há só um mestre de barramento candidato, mas ainda assim dá resposta rápida a dispositivos concorrentes.
 
 ### Sinais de barramento PCI
-O barramento PCI tem vários sinais obrigatórios, mostrados na Figura 3.54(a), e vários sinais opcionais,
-mostrados na Figura 3.54(b). O restante dos 120 ou 184 pinos são usados para energia, aterramento e diversas
-funções relacionadas, e não aparecem nessa lista. As colunas Mestre (iniciador) e Escravo (alvo) informam quem
-ativa o sinal em uma transação normal. Se o sinal for ativado por um dispositivo diferente (por exemplo, clk),
-ambas as colunas são deixadas em branco.
+O barramento PCI tem vários sinais obrigatórios, mostrados na Figura 3.54(a), e vários sinais opcionais, mostrados na Figura 3.54(b). O restante dos 120 ou 184 pinos são usados para energia, aterramento e diversas funções relacionadas, e não aparecem nessa lista. As colunas Mestre (iniciador) e Escravo (alvo) informam quem ativa o sinal em uma transação normal. Se o sinal for ativado por um dispositivo diferente (por exemplo, clk), ambas as colunas são deixadas em branco.
 
-A análise detalhada do barramento PCI, a Figura 3.54 cataloga a "linguagem" elétrica utilizada por esse padrão, dividindo os sinais entre obrigatórios (essenciais para qualquer comunicação) e opcionais (usados para alta performance ou multiprocessamento).
-No seu repositório arquitetura_computadores, esta tabela funciona como o dicionário de pinagem que permite a implementação física da arbitragem vista na Figura 3.53.
+A análise detalhada do barramento PCI, a Figura 3.54 cataloga a "linguagem" elétrica utilizada por esse padrão, dividindo os sinais entre obrigatório (essenciais para qualquer comunicação) e opcionais (usados para alta performance ou multiprocessamento). No seu repositório arquitetura_computadores, esta tabela funciona como o dicionário de pinagem que permite a implementação física da arbitragem vista na Figura 3.53.
 
-Figura 3.54 (a) - Sinais Obrigatórios do Barramento PCI
+### Figura 3.54 (a) - Sinais Obrigatórios do Barramento PCI
     Estes são os pinos essenciais que todo dispositivo PCI deve implementar para garantir a comunicação básica e a integridade dos dados.
 
     Sinal      | Linhas | M/E* | Descrição Técnica
@@ -2694,7 +2561,7 @@ Figura 3.54 (a) - Sinais Obrigatórios do Barramento PCI
     *M/E: Mestre/Escravo | X: Sinal multiplexado
     _______________________________________________________________________________
 
-Figura 3.54 (b) - Sinais Opcionais do Barramento PCI
+### Figura 3.54 (b) - Sinais Opcionais do Barramento PCI
     Estes sinais são utilizados para extensões de performance (64 bits), multiprocessamento e testes de hardware.
 
     Sinal      | Linhas | M/E* | Descrição Técnica
@@ -2718,85 +2585,47 @@ Durante o primeiro ciclo de clock de uma transação (indicado por FRAME#),     
 Controle (C/BE#): Define se a operação é de leitura ou escrita de memória/E/S.	    Paridade (PAR/PAR64): Garante que os dados salvos ou lidos não foram        corrompidos no trajeto físico.
 
 ### Insight para o seu repositório estruturas_de_dados
-O entendimento desses sinais é o que separa um programador de alto nível de um especialista em sistemas no seu diretório estruturas_de_dados:
+    O entendimento desses sinais é o que separa um programador de alto nível de um especialista em sistemas no seu diretório estruturas_de_dados:
 
- - No seu Ubuntu 24.04, quando você vê um erro de "Bus Error" ou "I/O Error", muitas vezes o que ocorreu foi uma falha nos sinais PERR# ou SERR# captada pelo kernel.
+    - No seu Ubuntu 24.04, quando você vê um erro de "Bus Error" ou "I/O Error", muitas vezes o que ocorreu foi uma falha nos sinais PERR# ou SERR# captada pelo kernel.
 
- - Ao programar em C para dispositivos PCI, você lida com o sinal IDSEL, que permite ao seu software configurar o dispositivo sem precisar saber o endereço físico de memória previamente.
+    - Ao programar em C para dispositivos PCI, você lida com o sinal IDSEL, que permite ao seu software configurar o dispositivo sem precisar saber o endereço físico de memória previamente.
 
- - O sinal LOCK# (opcional) é fundamental se você estiver implementando estruturas de dados concorrentes em multiprocessadores, pois ele garante que uma sequência de leitura-modificação-escrita não seja interrompida por outro núcleo.
+    - O sinal LOCK# (opcional) é fundamental se você estiver implementando estruturas de dados concorrentes em multiprocessadores, pois ele garante que uma sequência de leitura-modificação-escrita não seja interrompida por outro núcleo.
 
-Agora, vamos examinar brevemente cada um dos sinais do barramento PCI. Começaremos com os obrigató-
-rios (32 bits) e em seguida passaremos para os opcionais (64 bits). O sinal clk comanda o barramento. A maioria
-dos outros sinais é síncrona com ele. Ao contrário do ISA, uma transação de barramento PCI começa na borda
+Agora, vamos examinar brevemente cada um dos sinais do barramento PCI. Começaremos com os obrigatórios (32 bits) e em seguida passaremos para os opcionais (64 bits). O sinal clk comanda o barramento. A maioria dos outros sinais é síncrona com ele. Ao contrário do ISA, uma transação de barramento PCI começa na borda
 descendente do clk, que está no meio do ciclo, em vez de estar no início.
 
-Os 32 sinais ad são para endereços e dados (para transações de 32 bits). Em geral, durante o ciclo 1 o ende-
-reço é ativado e durante o ciclo 3 os dados são ativados. O sinal PAR é um bit de paridade para ad. O sinal c/be#
-é usado para duas coisas diferentes. No ciclo 1, ele contém o comando de barramento (leia 1 palavra, leia bloco
-etc.). No ciclo 2, contém um mapa de bits de 4 bits que informa quais bytes da palavra de 32 bits são válidos.
-Usando c/be# é possível ler ou escrever 1, 2 ou 3 bytes quaisquer, bem como uma palavra inteira.
+Os 32 sinais ad são para endereços e dados (para transações de 32 bits). Em geral, durante o ciclo 1 o endereço é ativado e durante o ciclo 3 os dados são ativados. O sinal PAR é um bit de paridade para ad. O sinal c/be# é usado para duas coisas diferentes. No ciclo 1, ele contém o comando de barramento (leia 1 palavra, leia bloco etc.). No ciclo 2, contém um mapa de bits de 4 bits que informa quais bytes da palavra de 32 bits são válidos. Usando c/be# é possível ler ou escrever 1, 2 ou 3 bytes quaisquer, bem como uma palavra inteira.
 
-O sinal frame# é ativado pelo mestre para iniciar uma transação de barramento. Informa ao escravo que os
-comandos de endereço e barramento agora são válidos. Em uma leitura, usualmente o irdy# é ativado ao mesmo tempo em que o frame#. Ele informa que o mestre está pronto para aceitar dados que estão chegando. Em uma
-escrita, o irdy# é ativado mais tarde, quando os dados estão no barramento.
+O sinal frame# é ativado pelo mestre para iniciar uma transação de barramento. Informa ao escravo que os comandos de endereço e barramento agora são válidos. Em uma leitura, usualmente o irdy# é ativado ao mesmo tempo em que o frame#. Ele informa que o mestre está pronto para aceitar dados que estão chegando. Em uma escrita, o irdy# é ativado mais tarde, quando os dados estão no barramento.
 
-O sinal idsel está relacionado ao fato de que todo dispositivo PCI deve ter um espaço de configuração de
-256 bytes que outros dispositivos possam ler (ativando idsel). Esse espaço de configuração contém propriedades
-do dispositivo. A característica plug-and-play de alguns sistemas operacionais usa o espaço de configuração para
-saber quais dispositivos estão no barramento.
+O sinal idsel está relacionado ao fato de que todo dispositivo PCI deve ter um espaço de configuração de 256 bytes que outros dispositivos possam ler (ativando idsel). Esse espaço de configuração contém propriedades do dispositivo. A característica plug-and-play de alguns sistemas operacionais usa o espaço de configuração para saber quais dispositivos estão no barramento.
 
-Agora, chegamos aos sinais ativados pelo escravo. O primeiro deles, devsel#, anuncia que o escravo detectou
-seu endereço nas linhas ad e está preparado para realizar a transação. Se devsel# não for ativado em certo limite
-de tempo, o mestre esgota sua temporização e supõe que o dispositivo endereçado está ausente ou avariado.
+Agora, chegamos aos sinais ativados pelo escravo. O primeiro deles, devsel#, anuncia que o escravo detectou seu endereço nas linhas ad e está preparado para realizar a transação. Se devsel# não for ativado em certo limite de tempo, o mestre esgota sua temporização e supõe que o dispositivo endereçado está ausente ou avariado.
 
-O segundo sinal de escravo é trdy#, que ele ativa em leituras para anunciar que os dados estão nas linhas ad
-e em escritas para anunciar que está preparado para aceitar dados.
+O segundo sinal de escravo é trdy#, que ele ativa em leituras para anunciar que os dados estão nas linhas ad e em escritas para anunciar que está preparado para aceitar dados.
 
-Os três sinais seguintes são para notificar erros. O primeiro deles é stop#, que o escravo ativa se algo desas-
-troso acontecer e ele quiser abortar a transação corrente. O seguinte, perr#, é usado para notificar um erro de
-paridade no ciclo anterior. Para uma leitura, ele é ativado pelo mestre; para uma escrita, pelo escravo. Cabe ao
-receptor executar a ação adequada. Por fim, serr# é para reportar erros de endereço e de sistema.
+Os três sinais seguintes são para notificar erros. O primeiro deles é stop#, que o escravo ativa se algo desastroso acontecer e ele quiser abortar a transação corrente. O seguinte, perr#, é usado para notificar um erro de paridade no ciclo anterior. Para uma leitura, ele é ativado pelo mestre; para uma escrita, pelo escravo. Cabe ao receptor executar a ação adequada. Por fim, serr# é para reportar erros de endereço e de sistema.
 
-Os sinais req# e gnt# são para fazer arbitragem de barramento. Eles não são assegurados pelo mestre de
-transferência de dados em questão, mas por um dispositivo que quer se tornar mestre de barramento. O último
-sinal obrigatório é rst#, usado para reiniciar o sistema, seja porque o usuário apertou a tecla RESET seja porque
-algum dispositivo do sistema notou um erro fatal. Ativar esse sinal restaura todos os dispositivos e reinicia o
-computador.
+Os sinais req# e gnt# são para fazer arbitragem de barramento. Eles não são assegurados pelo mestre de transferência de dados em questão, mas por um dispositivo que quer se tornar mestre de barramento. O último sinal obrigatório é rst#, usado para reiniciar o sistema, seja porque o usuário apertou a tecla RESET seja porque algum dispositivo do sistema notou um erro fatal. Ativar esse sinal restaura todos os dispositivos e reinicia o computador.
 
-Agora, chegamos aos sinais opcionais, cuja maioria está relacionada à expansão de 32 bits para 64 bits. Os
-sinais req64# e ack64# permitem que o mestre peça permissão para conduzir uma transação de 64 bits e permite
-que o escravo aceite, respectivamente. Os sinais ad, par64 e c/be# são apenas extensões dos sinais correspondentes
-de 32 bits.
+Agora, chegamos aos sinais opcionais, cuja maioria está relacionada à expansão de 32 bits para 64 bits. Os sinais req64# e ack64# permitem que o mestre peça permissão para conduzir uma transação de 64 bits e permite que o escravo aceite, respectivamente. Os sinais ad, par64 e c/be# são apenas extensões dos sinais correspondentes de 32 bits.
 
-Os três sinais seguintes não estão relacionados aos 32 bits contra 64 bits, mas a sistemas multiprocessadores,
-algo que as placas PCI não são obrigadas a suportar. O sinal lock permite que o barramento seja travado para múl-
-tiplas transações. Os dois seguintes estão relacionados à escuta do barramento para manter coerência de cache.
+Os três sinais seguintes não estão relacionados aos 32 bits contra 64 bits, mas a sistemas multiprocessadores, algo que as placas PCI não são obrigadas a suportar. O sinal lock permite que o barramento seja travado para múltiplas transações. Os dois seguintes estão relacionados à escuta do barramento para manter coerência de cache.
 
-Os sinais intx são para requisitar interrupções. Uma placa PCI pode conter até quatro dispositivos lógicos
-separados e cada um pode ter sua própria linha e requisição de interrupção. Os sinais jtag são para procedimento
-de teste IEEE 1149.1 JTAG. Por fim, o sinal m66en é ligado alto ou é ligado baixo para estabelecer a velocidade de
-clock. Não deve mudar durante a operação do sistema.
+Os sinais intx são para requisitar interrupções. Uma placa PCI pode conter até quatro dispositivos lógicos separados e cada um pode ter sua própria linha e requisição de interrupção. Os sinais jtag são para procedimento de teste IEEE 1149.1 JTAG. Por fim, o sinal m66en é ligado alto ou é ligado baixo para estabelecer a velocidade de clock. Não deve mudar durante a operação do sistema.
 
 ### Transações de barramento PCI 
-Na realidade, o barramento PCI é muito simples (no que diz respeito a barramentos). Para ter uma ideia
-melhor dele, considere o diagrama temporal da Figura 3.55, onde podemos ver uma transação de leitura seguida
-por um ciclo ocioso, seguida por uma transação de escrita pelo mesmo mestre de barramento.
+Na realidade, o barramento PCI é muito simples (no que diz respeito a barramentos). Para ter uma ideia melhor dele, considere o diagrama temporal da Figura 3.55, onde podemos ver uma transação de leitura seguida por um ciclo ocioso, seguida por uma transação de escrita pelo mesmo mestre de barramento.
 
-Quando a borda descendente do clock acontece durante T1, o mestre põe o endereço de memória em ad e o
-comando de barramento em c/be#. Então, ativa frame# para iniciar a transação de barramento.
+Quando a borda descendente do clock acontece durante T1, o mestre põe o endereço de memória em ad e o comando de barramento em c/be#. Então, ativa frame# para iniciar a transação de barramento.
 
-Durante T2, o mestre libera o barramento de endereço para deixar que ele retorne em preparação para o
-comando do escravo durante T3. O mestre também muda c/be# para indicar quais bytes na palavra endereçada ele
-quer habilitar, isto é, quais quer que sejam lidos.
+Durante T2, o mestre libera o barramento de endereço para deixar que ele retorne em preparação para o comando do escravo durante T3. O mestre também muda c/be# para indicar quais bytes na palavra endereçada ele quer habilitar, isto é, quais quer que sejam lidos.
 
-Em T3, o escravo ativa devsel# de modo que o mestre saiba que ele obteve o endereço e está planejando res-
-ponder. Além disso, põe os dados nas linhas ad e ativa trdy# para informar ao mestre que fez isso. Se o escravo
-não puder responder com tanta rapidez, ainda assim ele ativaria devsel# para anunciar sua presença, mas manteria
-trdy# negado até que pudesse obter os dados que lá estão. Esse procedimento introduziria um ou mais estados
-de espera.
+Em T3, o escravo ativa devsel# de modo que o mestre saiba que ele obteve o endereço e está planejando responder. Além disso, põe os dados nas linhas ad e ativa trdy# para informar ao mestre que fez isso. Se o escravo não puder responder com tanta rapidez, ainda assim ele ativaria devsel# para anunciar sua presença, mas manteria trdy# negado até que pudesse obter os dados que lá estão. Esse procedimento introduziria um ou mais estados de espera.
 
-**Figura 3.55  Exemplos de transações de barramento PCI de 32 bits. Os três primeiros ciclos são usados para uma operação de leitura, em
+### Figura 3.55  Exemplos de transações de barramento PCI de 32 bits. Os três primeiros ciclos são usados para uma operação de leitura, em
 seguida um ciclo ocioso e depois três ciclos para uma operação de escrita.**
 
 A Figura 3.55 detalha o funcionamento temporal de um barramento PCI de 32 bits, ilustrando como os sinais elétricos coordenam as transações de leitura e escrita. Este diagrama é fundamental para entender a eficiência do protocolo, que utiliza multiplexação para economizar pinos físicos.
@@ -2843,44 +2672,24 @@ Verificação Final de HardwareDestaque Técnico: Note que em $T_6$ na escrita, 
 ### Insight para o seu repositório estruturas_de_dados
 O comportamento visto na Figura 3.55 é o motivo pelo qual leituras de memória costumam ser ligeiramente mais lentas que escritas em nível de hardware.No seu diretório estruturas_de_dados, quando você percorre uma lista encadeada (múltiplas leituras dependentes), cada passo exige esse "ciclo de retorno" (T_2) para que a memória responda.Já em uma escrita sequencial em um array, o mestre pode manter o controle das linhas de dados de forma contínua, otimizando o uso do barramento PCI que analisamos nas Figuras 3.51 e 3.52.
 
-Nesse exemplo (e muitas vezes na realidade), o ciclo seguinte é ocioso. Começando em T5, vemos o mesmo
-mestre iniciando uma escrita. Ele começa colocando o endereço e o comando no barramento, como sempre. Só
-que agora, no segundo ciclo, ele ativa os dados. Uma vez que o mesmo dispositivo está comandando as linhas ad,
-não há necessidade de um ciclo de retorno. Em T7, a memória aceita os dados.
+Nesse exemplo (e muitas vezes na realidade), o ciclo seguinte é ocioso. Começando em T5, vemos o mesmo mestre iniciando uma escrita. Ele começa colocando o endereço e o comando no barramento, como sempre. Só que agora, no segundo ciclo, ele ativa os dados. Uma vez que o mesmo dispositivo está comandando as linhas ad, não há necessidade de um ciclo de retorno. Em T7, a memória aceita os dados.
 
 ## 3.6.2 PCI express
-Embora o funcionamento do barramento PCI seja adequado para a maioria das aplicações, a necessidade de
-maior largura de banda de E/S está causando uma confusão na antes limpa arquitetura interna do PC. A Figura
-3.52 deixa claro que o barramento PCI não é mais o elemento central que mantém unidas as partes do PC. O chip
+Embora o funcionamento do barramento PCI seja adequado para a maioria das aplicações, a necessidade de maior largura de banda de E/S está causando uma confusão na antes limpa arquitetura interna do PC. A Figura 3.52 deixa claro que o barramento PCI não é mais o elemento central que mantém unidas as partes do PC. O chip
 ponte se apossou de parte desse papel.
 
-A essência do problema é que há cada vez mais dispositivos de E/S muito rápidos para o barramento PCI.
-Elevar a frequência de clock do barramento não é uma boa solução porque então os problemas de atraso diferen-
-cial no barramento, interferência na fiação e efeitos de capacitância só ficariam piores. Toda vez que um dispo-
-sitivo de E/S fica muito rápido para o barramento PCI (como as placas gráficas, disco rígido, redes etc.), a Intel
-acrescenta uma porta especial para o chip ponte para permitir que o dispositivo contorne o barramento PCI. Claro
-que isso tampouco é uma solução de longo prazo.
+A essência do problema é que há cada vez mais dispositivos de E/S muito rápidos para o barramento PCI. Elevar a frequência de clock do barramento não é uma boa solução porque então os problemas de atraso diferencial no barramento, interferência na fiação e efeitos de capacitância só ficariam piores. Toda vez que um dispositivo de E/S fica muito rápido para o barramento PCI (como as placas gráficas, disco rígido, redes etc.), a Intel acrescenta uma porta especial para o chip ponte para permitir que o dispositivo contorne o barramento PCI. Claro que isso tampouco é uma solução de longo prazo.
 
-Outro problema com o barramento PCI é que as placas são muito grandes. Placas PCI padrão costumam ter
-17,5 cm por 10,7 cm e placas inferiores possuem 12,0 cm por 3,6 cm. Nenhuma delas cabe em laptops e, com
-certeza, não em dispositivos móveis. Os fabricantes gostariam de produzir dispositivos menores ainda. Além
-disso, alguns deles gostariam de repartir o espaço interno do PC, colocando a CPU e a memória dentro de uma
-pequena caixa selada e o disco rígido dentro do monitor. Com as placas PCI é impossível fazer isso.
+Outro problema com o barramento PCI é que as placas são muito grandes. Placas PCI padrão costumam ter 17,5 cm por 10,7 cm e placas inferiores possuem 12,0 cm por 3,6 cm. Nenhuma delas cabe em laptops e, com certeza, não em dispositivos móveis. Os fabricantes gostariam de produzir dispositivos menores ainda. Além disso, alguns deles gostariam de repartir o espaço interno do PC, colocando a CPU e a memória dentro de uma pequena caixa selada e o disco rígido dentro do monitor. Com as placas PCI é impossível fazer isso.
 
-Diversas soluções foram propostas, mas a que tem mais probabilidade de vencer (e em grande parte porque
-a Intel está por trás dela) é denominada PCI Express. Ela tem pouco a ver com o barramento PCI e, na verdade, nem é um barramento, mas o pessoal do marketing não quer largar mão do famoso nome PCI. PCs que contêm
+Diversas soluções foram propostas, mas a que tem mais probabilidade de vencer (e em grande parte porque a Intel está por trás dela) é denominada PCI Express. Ela tem pouco a ver com o barramento PCI e, na verdade, nem é um barramento, mas o pessoal do marketing não quer largar mão do famoso nome PCI. PCs que contêm
 essa solução já estão no mercado há algum tempo. Vamos ver como eles funcionam.
 
 ### Arquitetura do PCI Express
-O coração da solução PCI Express (em geral, abreviado como PCIe) é se livrar do barramento paralelo com
-seus muitos mestres e escravos e passar para um projeto baseado em conexões seriais ponto a ponto de alta
-velocidade. Essa solução representa uma ruptura radical com a tradição do barramento ISA/EISA/PCI e toma
-emprestadas muitas ideias do mundo das redes locais, em especial a Ethernet comutada. A ideia básica se resume
-no seguinte: no fundo, um PC é um conjunto de chips de CPU, memória, controladores de E/S que precisa ser
-interconectado. O que o PCI Express faz é fornecer um comutador de uso geral para conectar chips usando liga-
-ções seriais. Uma configuração típica é ilustrada na Figura 3.56.
+O coração da solução PCI Express (em geral, abreviado como PCIe) é se livrar do barramento paralelo com seus muitos mestres e escravos e passar para um projeto baseado em conexões seriais ponto a ponto de alta velocidade. Essa solução representa uma ruptura radical com a tradição do barramento ISA/EISA/PCI e toma
+emprestadas muitas ideias do mundo das redes locais, em especial a Ethernet comutada. A ideia básica se resume no seguinte: no fundo, um PC é um conjunto de chips de CPU, memória, controladores de E/S que precisa ser interconectado. O que o PCI Express faz é fornecer um comutador de uso geral para conectar chips usando liga- ções seriais. Uma configuração típica é ilustrada na Figura 3.56.
 
-**Figura 3.56  Sistema PCI express típico.**
+### Figura 3.56  Sistema PCI express típico.
 
 A Figura 3.56 ilustra a evolução definitiva dos barramentos paralelos (como o PCI das figuras anteriores) para uma arquitetura baseada em ligações seriais ponto a ponto de alta velocidade. No seu repositório arquitetura_computadores, este diagrama explica como os computadores modernos gerenciam o tráfego massivo de dados sem os problemas de sincronismo das trilhas paralelas.
 
@@ -2918,137 +2727,109 @@ Diferente do barramento compartilhado da Figura 3.51, aqui cada dispositivo poss
     +-------------------------------------+-----------------------------------------------------------------------------------------------------------------------+
 
 ### Insight para o seu repositório estruturas_de_dados
-Entender a Figura 3.56 é vital para otimizar o desempenho do seu Lenovo IdeaPad Gaming 3 no seu diretório estruturas_de_dados:
+    Entender a Figura 3.56 é vital para otimizar o desempenho do seu Lenovo IdeaPad Gaming 3 no seu diretório estruturas_de_dados:
 
- - Quando seu código em C acessa o Disco (NVMe), ele está usando vias PCIe diretas para o processador, o que é ordens de magnitude mais rápido que o antigo barramento ISA (Figura 3.51).
+    - Quando seu código em C acessa o Disco (NVMe), ele está usando vias PCIe diretas para o processador, o que é ordens de magnitude mais rápido que o antigo barramento ISA (Figura 3.51).
 
- - No seu Ubuntu 24.04, ao realizar transferências de dados entre a RAM e a Placa Gráfica para processamento paralelo, você está saturando o link PCIe x16 mostrado no diagrama.
+    - No seu Ubuntu 24.04, ao realizar transferências de dados entre a RAM e a Placa Gráfica para processamento paralelo, você está saturando o link PCIe x16 mostrado no diagrama.
 
- - A estrutura de "pacotes" do PCIe é muito similar às estruturas de dados de rede que você estuda; cada transferência de hardware é, na verdade, um pequeno envelope de dados com cabeçalho e CRC.
+    - A estrutura de "pacotes" do PCIe é muito similar às estruturas de dados de rede que você estuda; cada transferência de hardware é, na verdade, um pequeno envelope de dados com cabeçalho e CRC.
 
-Como mostra a figura, a CPU, a memória e a cache estão conectadas ao chip ponte no modo tradicional. A
-novidade aqui é um comutador conectado à ponte (talvez parte do próprio chip ponte ou integrado diretamente ao
-processador). Cada um dos chips de E/S tem uma conexão ponto a ponto dedicada com o comutador. Cada conexão
-consiste em um par de canais unidirecionais, um que vai para o comutador e outro que vem dele. Cada canal é com-
-posto de dois fios, um para o sinal e outro para o terra, para dar imunidade contra ruído alto durante a transmissão
-de alta velocidade. Essa arquitetura substituirá a atual por um modelo muito mais uniforme, no qual todos os dispo-
-sitivos são tratados igualmente.
+Como mostra a figura, a CPU, a memória e a cache estão conectadas ao chip ponte no modo tradicional. A novidade aqui é um comutador conectado à ponte (talvez parte do próprio chip ponte ou integrado diretamente ao processador). Cada um dos chips de E/S tem uma conexão ponto a ponto dedicada com o comutador. Cada conexão consiste em um par de canais unidirecionais, um que vai para o comutador e outro que vem dele. Cada canal é composto de dois fios, um para o sinal e outro para o terra, para dar imunidade contra ruído alto durante a transmissão de alta velocidade. Essa arquitetura substituirá a atual por um modelo muito mais uniforme, no qual todos os dispositivos são tratados igualmente.
 
-A arquitetura PCI Express tem três pontos de diferença em relação ao antigo barramento PCI. Já vimos dois
-deles: um comutador centralizado contra um barramento multidrop e a utilização de conexões seriais ponto a
-ponto estreitas contra um barramento paralelo largo. O terceiro é mais sutil. O modelo conceitual que fundamen-
-ta o PCI é o de um mestre de barramento que emite um comando a um escravo para ler uma palavra ou um bloco
-de palavras. O modelo do PCI Express é o de um dispositivo que envia um pacote de dados a outro dispositivo.
-O conceito de um pacote, que consiste em um cabeçalho e em uma carga útil, é tirado do mundo das redes.
-O cabeçalho contém informação de controle, o que elimina a necessidade dos muitos sinais de controle presen-
-tes no barramento PCI. A carga útil contém os dados a transferir. Na verdade, um PC com PCI Express é uma
-miniatura de rede de comutação de pacotes.
+A arquitetura PCI Express tem três pontos de diferença em relação ao antigo barramento PCI. Já vimos dois deles: um comutador centralizado contra um barramento multidrop e a utilização de conexões seriais ponto a ponto estreitas contra um barramento paralelo largo. O terceiro é mais sutil. O modelo conceitual que fundamenta o PCI é o de um mestre de barramento que emite um comando a um escravo para ler uma palavra ou um bloco de palavras. O modelo do PCI Express é o de um dispositivo que envia um pacote de dados a outro dispositivo. O conceito de um pacote, que consiste em um cabeçalho e em uma carga útil, é tirado do mundo das redes. O cabeçalho contém informação de controle, o que elimina a necessidade dos muitos sinais de controle presentes no barramento PCI. A carga útil contém os dados a transferir. Na verdade, um PC com PCI Express é uma miniatura de rede de comutação de pacotes.
 
-Além dessas três importantes rupturas com o passado, também há diversas pequenas diferenças. A quarta é
-que o código de detecção de erro é usado somente nos pacotes, o que dá um grau de confiabilidade mais alto do
-que o barramento PCI. A quinta é que a conexão entre um chip e o comutador é mais longa do que era, até 50 cm,
-para permitir a repartição do sistema. A sexta é que o sistema pode ser expandido porque um dispositivo pode per-
-feitamente ser outro comutador, o que permite uma árvore de comutadores. A sétima é que dispositivos podem ser
-acrescentados ou removidos do sistema enquanto ele está em operação. Por fim, uma vez que conectores seriais
-são muito menores do que os antigos conectores PCI, podem-se fabricar dispositivos e computadores muito
-menores. Em resumo, o PCI Express é uma grande ruptura em relação ao barramento PCI.
+Além dessas três importantes rupturas com o passado, também há diversas pequenas diferenças. A quarta é que o código de detecção de erro é usado somente nos pacotes, o que dá um grau de confiabilidade mais alto do que o barramento PCI. A quinta é que a conexão entre um chip e o comutador é mais longa do que era, até 50 cm, para permitir a repartição do sistema. A sexta é que o sistema pode ser expandido porque um dispositivo pode perfeitamente ser outro comutador, o que permite uma árvore de comutadores. A sétima é que dispositivos podem ser acrescentados ou removidos do sistema enquanto ele está em operação. Por fim, uma vez que conectores seriais são muito menores do que os antigos conectores PCI, podem-se fabricar dispositivos e computadores muito menores. Em resumo, o PCI Express é uma grande ruptura em relação ao barramento PCI.
 
 ### Pilha de protocolos do PCI Express
-Condizente com o modelo de uma rede de comutação de pacotes, o sistema PCI Express tem uma pilha de
-protocolos em camadas. Um protocolo é um conjunto de regras que governam a conversa entre duas partes. Uma
-pilha de protocolos é uma hierarquia de protocolos que tratam de questões diferentes em camadas diferentes. Por
-exemplo, considere uma carta comercial. Ela obedece a certas convenções referentes à localização e ao conteúdo
-do cabeçalho, ao endereço do destinatário, à data, aos cumprimentos, ao corpo, à assinatura e assim por dian-
-te. Podemos dizer que tudo isso junto é um protocolo de carta. Além disso, há outro conjunto de convenções
-referentes ao envelope, como tamanho, local e formato do endereço do remetente, local e formato do endereço
-do destinatário, local do selo e assim por diante. Essas duas camadas e seus protocolos são independentes. Por
-exemplo, é possível dar um formato completamente diferente à carta, mas usar o mesmo envelope, e vice-versa.
-Protocolos em camadas são um projeto modular flexível e há décadas são muito usados no mundo dos softwares
-de rede. A novidade, no caso, é montá-los no hardware do “barramento”.
-    A pilha de protocolos do PCI Express é mostrada na Figura 3.57(a). Ela é discutida a seguir.
+Condizente com o modelo de uma rede de comutação de pacotes, o sistema PCI Express tem uma pilha de protocolos em camadas. Um protocolo é um conjunto de regras que governam a conversa entre duas partes. Uma pilha de protocolos é uma hierarquia de protocolos que tratam de questões diferentes em camadas diferentes. Por
+exemplo, considere uma carta comercial. Ela obedece a certas convenções referentes à localização e ao conteúdo do cabeçalho, ao endereço do destinatário, à data, aos cumprimentos, ao corpo, à assinatura e assim por diante. Podemos dizer que tudo isso junto é um protocolo de carta. Além disso, há outro conjunto de convenções referentes ao envelope, como tamanho, local e formato do endereço do remetente, local e formato do endereço
+do destinatário, local do selo e assim por diante. Essas duas camadas e seus protocolos são independentes. Por exemplo, é possível dar um formato completamente diferente à carta, mas usar o mesmo envelope, e vice-versa. Protocolos em camadas são um projeto modular flexível e há décadas são muito usados no mundo dos softwares de rede. A novidade, no caso, é montá-los no hardware do “barramento”.
+    
+A pilha de protocolos do PCI Express é mostrada na Figura 3.57(a). Ela é discutida a seguir.
 
-**Figura 3.57  (a) Pilha de protocolos do PCI Express. (b) Formato de um pacote.**
+### Figura 3.57  (a) Pilha de protocolos do PCI Express. (b) Formato de um pacote.
 
+A Figura 3.57 detalha a arquitetura lógica do PCI Express, revelando que ele opera de forma muito semelhante a uma rede de computadores, utilizando uma pilha de protocolos organizada em camadas para garantir a entrega confiável de dados.
 
+    Pilha de Protocolos do PCI Express
+    A modularidade do PCIe permite que o software interaja com o hardware sem precisar conhecer os detalhes elétricos da transmissão:
 
+    - Camada de Software: É o nível mais alto, onde os drivers do sistema operacional (como os do seu Ubuntu 24.04) emitem solicitações de leitura ou escrita.
 
+    - Camada de Transação: Responsável por gerar os pacotes de transação (TLPs). Ela define o que deve ser feito (ex: ler 4 bytes do endereço X).
 
-Vamos examinar as camadas de baixo para cima. A camada mais baixa é a camada física. Ela trata da movi-
-mentação de bits de um remetente para um destinatário por uma conexão ponto a ponto. Cada conexão ponto a
-ponto consiste em um ou mais pares de enlaces simplex (isto é, unidirecionais). No caso mais simples, há um par
-em cada direção, mas também é permitido ter 2, 4, 8, 16 ou 32 pares. Cada enlace é denominado via. O número
-de vias em cada direção deve ser o mesmo. Produtos de primeira geração devem suportar uma taxa de dados de
-no mínimo 2,5 Gbps, mas espera-se que logo a velocidade passe para 10 Gbps em cada direção.
+    - Camada de Enlace (Data Link): Adiciona um número de sequência (Seq #) e um código de verificação de erros (CRC) para garantir que o pacote chegue intacto ao destino.
 
-Diferente dos barramentos ISA/EISA/PCI, o PCI Express não tem um clock mestre. Os dispositivos têm
-liberdade para começar a transmitir tão logo tenham dados a enviar. Essa liberdade deixa o sistema mais rápido,
-mas também leva a um problema. Suponha que um bit 1 seja codificado como +3 volts e um bit 0, como 0 volt.
-Se os primeiros bytes forem todos 0s, como o destinatário sabe que dados estão sendo transmitidos? Afinal, uma
-sequência de 0 bits parece o mesmo que um enlace ocioso. O problema é resolvido usando o que denominamos
-codificação 8b/10b. Nesse esquema, 10 bits são usados para codificar 1 byte de dados reais em um símbolo de 10
-bits. Entre os 1.024 símbolos de 10 bits possíveis, foram escolhidos como legais os que têm suficientes transições
-de clock para manter remetente e destinatário sincronizados nas fronteiras de bits, mesmo sem um clock mestre.
-Uma consequência da codificação 8b/10b é que um enlace que tenha uma capacidade bruta de 2,5 Gbps só pode
-transmitir 2 Gbps (líquidos) de dados de usuário.
+    - Camada Física: Trata da transmissão real dos bits através das ligações seriais, adicionando caracteres de Quadro para marcar o início e o fim da transmissão.
 
-Enquanto a camada física lida com transmissão de bits, a camada de enlace trata de transmissão de pacotes.
-Ela pega o cabeçalho e a carga útil passados para ela pela camada de transação e acrescenta a eles um número
-de sequência e um código de correção de erro denominado CRC (Cyclic Redundancy Check – verificação por
-redundância cíclica). O CRC é gerado pela execução de certo algoritmo no cabeçalho e nos dados da carga
-útil. Quando um pacote é recebido, o destinatário efetua alguns cálculos no cabeçalho e nos dados e compara o
-resultado com o CRC anexado ao pacote. Se forem compatíveis, ele devolve um curto pacote de reconhecimento
-confirmando sua correta chegada. Se não forem, o destinatário solicita uma retransmissão. Desse modo, a integri-
-dade dos dados melhora muito em relação ao sistema de barramento PCI, que não tem nenhuma prescrição para
-verificação e retransmissão de dados enviados pelo barramento.
+        (a) Pilha de Protocolos do PCI Express (ASCII)
+        +-----------------------+
+        |  CAMADA DE SOFTWARE   | <--- Drivers do Ubuntu 24.04
+        +-----------------------+
+                    |
+        +-----------------------+
+        |  CAMADA DE TRANSAÇÃO  | <--- Criação de TLPs (Leitura/Escrita)
+        +-----------------------+
+                    |
+        +-----------------------+
+        |   CAMADA DE ENLACE    | <--- Controle de Erros (Seq # e CRC)
+        +-----------------------+
+                    |
+        +-----------------------+
+        |     CAMADA FÍSICA     | <--- Sinais Elétricos e Quadros
+        +-----------------------+
 
-Para evitar que um transmissor rápido soterre um receptor lento com pacotes que ele não pode manipu-
-lar, é usado um mecanismo de controle de fluxo que funciona da seguinte maneira: o receptor concede ao
-transmissor certo número de créditos que correspondem em essência à quantidade de espaço de buffer de que
-ele dispõe para armazenar pacotes que chegam. Quando os créditos se esgotam, o transmissor tem de parar de
-enviar pacotes até receber mais créditos. Esse esquema, que é muito usado em todas as redes, evita a perda
-de dados em consequência da incompatibilidade entre as velocidades do transmissor e do receptor.
+        (b) Formato do Pacote (Encapsulamento)
+    Aqui vemos como cada camada "embrulha" os dados originais (Carga Útil) com metadados necessários para a viagem pelo barramento:
 
-A camada de transação trata das ações do barramento. Ler uma palavra da memória requer duas transações:
-uma iniciada pela CPU ou canal DMA que está requisitando alguns dados e outra iniciada pelo alvo que está for-
-necendo os dados. Mas a camada de transação faz mais do que manipular leituras e escritas puras. Ela adiciona
-valor à transmissão de pacotes bruta oferecida pela camada de enlace. Para começar, ela pode dividir cada via em
-até oito circuitos virtuais, cada um manipulando uma classe de tráfego diferente. A camada de transação pode
-rotular pacotes de acordo com sua classe de tráfego, o que pode incluir atributos como “alta prioridade”, “baixa
-prioridade”, “não escute”, “pode ser entregue fora da ordem” e outros mais. O comutador pode usar esses rótulos
-para decidir qual pacote manipulará em seguida.
+    CAMADA:           FORMATO DO PACOTE (FLUXO DE BITS)
+    ----------       -------------------------------------------------
+    TRANSAÇÃO:       [ CABEÇALHO ] [  CARGA ÚTIL (DADOS)  ]
+                        |                |
+    ENLACE:      [SEQ #][ CABEÇALHO ] [  CARGA ÚTIL (DADOS)  ][ CRC ]
+                    |     |                |                  |
+    FÍSICA:  [QUADRO][SEQ #][ CABEÇALHO ] [  CARGA ÚTIL (DADOS)  ][ CRC ][QUADRO]
+            (Início)                                                    (Fim)
+            
+![alt text](image-54.png)
+
+### Insight para seus Projetos
+A estrutura de camadas e o uso de CRC (Cyclic Redundancy Check) vistos aqui são fundamentais para o desenvolvimento de ferramentas de rede e segurança, como o seu "Projeto IDS". No seu diretório estruturas_de_dados, você pode notar que a forma como o hardware organiza esse pacote é análoga ao encapsulamento de dados em protocolos de rede como TCP/IP ou Ethernet.
+
+Vamos examinar as camadas de baixo para cima. A camada mais baixa é a camada física. Ela trata da movimentação de bits de um remetente para um destinatário por uma conexão ponto a ponto. Cada conexão ponto a ponto consiste em um ou mais pares de enlaces simplex (isto é, unidirecionais). No caso mais simples, há um par
+em cada direção, mas também é permitido ter 2, 4, 8, 16 ou 32 pares. Cada enlace é denominado via. O número de vias em cada direção deve ser o mesmo. Produtos de primeira geração devem suportar uma taxa de dados de no mínimo 2,5 Gbps, mas espera-se que logo a velocidade passe para 10 Gbps em cada direção.
+
+Diferente dos barramentos ISA/EISA/PCI, o PCI Express não tem um clock mestre. Os dispositivos têm liberdade para começar a transmitir tão logo tenham dados a enviar. Essa liberdade deixa o sistema mais rápido, mas também leva a um problema. Suponha que um bit 1 seja codificado como +3 volts e um bit 0, como 0 volt.
+Se os primeiros bytes forem todos 0s, como o destinatário sabe que dados estão sendo transmitidos? Afinal, uma sequência de 0 bits parece o mesmo que um enlace ocioso. O problema é resolvido usando o que denominamos codificação 8b/10b. Nesse esquema, 10 bits são usados para codificar 1 byte de dados reais em um símbolo de 10 bits. Entre os 1.024 símbolos de 10 bits possíveis, foram escolhidos como legais os que têm suficientes transições de clock para manter remetente e destinatário sincronizados nas fronteiras de bits, mesmo sem um clock mestre. Uma consequência da codificação 8b/10b é que um enlace que tenha uma capacidade bruta de 2,5 Gbps só pode transmitir 2 Gbps (líquidos) de dados de usuário.
+
+Enquanto a camada física lida com transmissão de bits, a camada de enlace trata de transmissão de pacotes. Ela pega o cabeçalho e a carga útil passados para ela pela camada de transação e acrescenta a eles um número de sequência e um código de correção de erro denominado CRC (Cyclic Redundancy Check – verificação por
+redundância cíclica). O CRC é gerado pela execução de certo algoritmo no cabeçalho e nos dados da carga útil. Quando um pacote é recebido, o destinatário efetua alguns cálculos no cabeçalho e nos dados e compara o resultado com o CRC anexado ao pacote. Se forem compatíveis, ele devolve um curto pacote de reconhecimento
+confirmando sua correta chegada. Se não forem, o destinatário solicita uma retransmissão. Desse modo, a integridade dos dados melhora muito em relação ao sistema de barramento PCI, que não tem nenhuma prescrição para verificação e retransmissão de dados enviados pelo barramento.
+
+Para evitar que um transmissor rápido soterre um receptor lento com pacotes que ele não pode manipular, é usado um mecanismo de controle de fluxo que funciona da seguinte maneira: o receptor concede ao transmissor certo número de créditos que correspondem em essência à quantidade de espaço de buffer de que
+ele dispõe para armazenar pacotes que chegam. Quando os créditos se esgotam, o transmissor tem de parar de enviar pacotes até receber mais créditos. Esse esquema, que é muito usado em todas as redes, evita a perda de dados em consequência da incompatibilidade entre as velocidades do transmissor e do receptor.
+
+A camada de transação trata das ações do barramento. Ler uma palavra da memória requer duas transações: uma iniciada pela CPU ou canal DMA que está requisitando alguns dados e outra iniciada pelo alvo que está fornecendo os dados. Mas a camada de transação faz mais do que manipular leituras e escritas puras. Ela adiciona
+valor à transmissão de pacotes bruta oferecida pela camada de enlace. Para começar, ela pode dividir cada via em até oito circuitos virtuais, cada um manipulando uma classe de tráfego diferente. A camada de transação pode rotular pacotes de acordo com sua classe de tráfego, o que pode incluir atributos como “alta prioridade”, “baixa prioridade”, “não escute”, “pode ser entregue fora da ordem” e outros mais. O comutador pode usar esses rótulos para decidir qual pacote manipulará em seguida.
+    
     Cada transação usa um dos quatro espaços de endereços:
-
+    
     1. Espaço da memória (para leituras e escritas comuns).
     2. Espaço de E/S (para endereçar registradores de dispositivos).
     3. Espaço de configuração (para inicialização do sistema etc.).
     4. Espaço de mensagem (para sinalização, interrupções etc.).
 
-Os espaços de memória e E/S são semelhantes aos dos sistemas existentes. O espaço de configuração pode
-ser usado para executar características como plug-and-play. O espaço de mensagem assume o papel de muitos
-dos sinais de controle existentes. É necessário ter algo parecido com esse espaço porque nenhuma das linhas de
-controle do PCI existe no PCI Express.
+Os espaços de memória e E/S são semelhantes aos dos sistemas existentes. O espaço de configuração pode ser usado para executar características como plug-and-play. O espaço de mensagem assume o papel de muitos dos sinais de controle existentes. É necessário ter algo parecido com esse espaço porque nenhuma das linhas de controle do PCI existe no PCI Express.
 
-A camada de software faz a interface entre sistema PCI Express e sistema operacional. Ela pode emular o
-barramento PCI, possibilitando a execução de sistemas operacionais existentes não modificados em sistemas PCI
-Express. Claro que uma operação como essa não irá explorar todo poder do PCI Express, mas a compatibilidade
-é um mal necessário até que os sistemas operacionais sejam modificados para utilizar totalmente o PCI Express.
-A experiência mostra que isso pode levar algum tempo.
+A camada de software faz a interface entre sistema PCI Express e sistema operacional. Ela pode emular o barramento PCI, possibilitando a execução de sistemas operacionais existentes não modificados em sistemas PCI Express. Claro que uma operação como essa não irá explorar todo poder do PCI Express, mas a compatibilidade é um mal necessário até que os sistemas operacionais sejam modificados para utilizar totalmente o PCI Express. A experiência mostra que isso pode levar algum tempo.
 
-O fluxo de informações é ilustrado na Figura 3.57(b). Quando é dado um comando à camada de software,
-esta o passa para a camada de transação, que o formula em termos de um cabeçalho e uma carga útil. Então, essas
-duas partes são passadas para a camada de enlace, que acrescenta um número de sequência à sua parte anterior e
-um CRC à posterior. Em seguida, esse pacote ampliado é passado à camada física, que acrescenta informações de
-enquadramento de dados a cada extremidade para formar o pacote físico, que é, por fim, transmitido. Na extre-
-midade receptora ocorre o processo inverso – cabeçalho de enlace e as informações que acompanham o bloco de
-dados (trailer) são removidos e o resultado é passado para a camada de transação.
+O fluxo de informações é ilustrado na Figura 3.57(b). Quando é dado um comando à camada de software, esta o passa para a camada de transação, que o formula em termos de um cabeçalho e uma carga útil. Então, essas duas partes são passadas para a camada de enlace, que acrescenta um número de sequência à sua parte anterior e um CRC à posterior. Em seguida, esse pacote ampliado é passado à camada física, que acrescenta informações de enquadramento de dados a cada extremidade para formar o pacote físico, que é, por fim, transmitido. Na extremidade receptora ocorre o processo inverso – cabeçalho de enlace e as informações que acompanham o bloco de dados (trailer) são removidos e o resultado é passado para a camada de transação.
 
-O conceito do acréscimo de informações adicionais aos dados à medida que ele desce pela pilha de protoco-
-los já é usado há décadas no mundo das redes com grande sucesso. A grande diferença entre uma rede e o PCI Express é que, no mundo das redes, o código nas várias camadas quase sempre é um software que faz parte do
+O conceito do acréscimo de informações adicionais aos dados à medida que ele desce pela pilha de protocolos já é usado há décadas no mundo das redes com grande sucesso. A grande diferença entre uma rede e o PCI Express é que, no mundo das redes, o código nas várias camadas quase sempre é um software que faz parte do
 sistema operacional. No PCI Express, ele faz parte do hardware do dispositivo.
 
-O PCI Express é um assunto complicado. Para mais informações, consulte Mayhew e Krishnan, 2003; e
-Solari e Congdon, 2005. Ele ainda está evoluindo. Em 2007, o PCIe 2.0 foi lançado. Ele admite 500 MB/s por
-via em até 32 vias, para uma largura de banda total de 16 GB/s. Depois veio o PCIe 3.0 em 2011, que mudou a
+O PCI Express é um assunto complicado. Para mais informações, consulte Mayhew e Krishnan, 2003; e Solari e Congdon, 2005. Ele ainda está evoluindo. Em 2007, o PCIe 2.0 foi lançado. Ele admite 500 MB/s por via em até 32 vias, para uma largura de banda total de 16 GB/s. Depois veio o PCIe 3.0 em 2011, que mudou a
 codificação de 8b/10b para 128b/130b e pode rodar a 8 bilhões de transações por segundo, o dobro do PCIe 2.0.
 
 ## 3.6.3 Barramento serial universal (USB)
@@ -3255,7 +3036,7 @@ linha, o que dá grande flexibilidade. Um pequeno sistema com CPU que use uma in
 diversos dispositivos físicos, como um robô, torradeira ou microscópio eletrônico. As interfaces PIO são encon-
 tradas frequentemente em sistemas embutidos.
 
-**Figura 3.59  Uma interface PIO de 24 bits.**
+### Figura 3.59  Uma interface PIO de 24 bits.
 
 Com a Figura 3.59, entramos no detalhamento técnico das interfaces de entrada e saída, explorando como a CPU se comunica com o mundo exterior através de uma Interface de E/S Paralela (PIO) de 24 bits. Este componente é essencial para sistemas embarcados, permitindo que o processador controle periféricos simples, como LEDs, sensores ou teclados, de forma direta.
 
@@ -3395,7 +3176,7 @@ um truque para conseguir uma decodificação de endereço muito mais simples. Es
 que todos os endereços da EPROM, e somente endereços da EPROM, têm um 0 no bit de ordem alta, a15. Por
 conseguinte, basta ligar cs a a15 diretamente, como mostra a Figura 3.61(b).
 
-**Figura 3.61  (a) Decodificação total de endereço. (b) Decodificação parcial de endereço.**
+### Figura 3.61  (a) Decodificação total de endereço. (b) Decodificação parcial de endereço.
 
 A Figura 3.61 demonstra os métodos utilizados para implementar o mapa de memória que analisamos na figura anterior, focando em como os sinais do barramento de endereço (A_0 a A_15) são usados para ativar componentes específicos através do sinal Chip Select (CS).
 
