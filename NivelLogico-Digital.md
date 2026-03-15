@@ -1633,89 +1633,36 @@ Ao manipular ponteiros em C no seu diretório estruturas_de_dados, você raramen
 
 Entender a Figura 3.37 explica por que "economizar memória" era uma arte crítica nos anos 80 e por que estruturas de dados complexas como as que você estuda (Hash Tables, Linked Lists) precisavam lidar com a fragmentação dos barramentos antigos.
 
-Quando lançou seu próximo chip de CPU (o 80286), a Intel decidiu aumentar o espaço de endereços para 16
-MB, por isso precisou adicionar quatro linhas de barramento (sem mexer nas 20 originais, por razões de compa-
-tibilidade), como ilustrado na Figura 3.37(b). Infelizmente, mais linhas de controle tiveram de ser acrescentadas
-para lidar com as novas linhas de endereço. Quando o 80386 foi lançado, oito linhas de endereço foram adiciona-
-das, junto com ainda mais linhas de controle, como mostra a Figura 3.37(c). O projeto resultante (o barramento
-EISA) é muito mais confuso do que seria se o barramento tivesse 32 linhas desde o início.
+Quando lançou seu próximo chip de CPU (o 80286), a Intel decidiu aumentar o espaço de endereços para 16 MB, por isso precisou adicionar quatro linhas de barramento (sem mexer nas 20 originais, por razões de compatibilidade), como ilustrado na Figura 3.37(b). Infelizmente, mais linhas de controle tiveram de ser acrescentadas para lidar com as novas linhas de endereço. Quando o 80386 foi lançado, oito linhas de endereço foram adicionadas, junto com ainda mais linhas de controle, como mostra a Figura 3.37(c). O projeto resultante (o barramento EISA) é muito mais confuso do que seria se o barramento tivesse 32 linhas desde o início.
 
-Não é apenas o número de linhas de endereço que tende a crescer com o tempo, mas também o número de
-linhas de dados, porém, por uma razão diferente. Há dois modos de aumentar a largura de banda de dados de um
-barramento: reduzir o tempo deste (mais transferências por segundo) ou aumentar sua largura de dados (mais
-bits por transferência). Acelerar o barramento é possível, mas difícil, porque os sinais trafegam em linhas dife-
-rentes com velocidades ligeiramente diferentes, um problema conhecido como atraso diferencial do barramento.
-Quanto mais rápido o barramento, mais sério se torna o atraso diferencial.
+Não é apenas o número de linhas de endereço que tende a crescer com o tempo, mas também o número de linhas de dados, porém, por uma razão diferente. Há dois modos de aumentar a largura de banda de dados de um barramento: reduzir o tempo deste (mais transferências por segundo) ou aumentar sua largura de dados (mais
+bits por transferência). Acelerar o barramento é possível, mas difícil, porque os sinais trafegam em linhas diferentes com velocidades ligeiramente diferentes, um problema conhecido como atraso diferencial do barramento. Quanto mais rápido o barramento, mais sério se torna o atraso diferencial.
 
-Outro problema com a aceleração é que isso não será compatível. Placas antigas, projetadas para os barra-
-mentos mais lentos, não funcionarão com o novo. Invalidar as placas antigas descontentará não somente seus
-proprietários, mas também os fabricantes. Por conseguinte, a técnica que costuma ser adotada para melhorar
-o desempenho é adicionar linhas de dados, de forma análoga à Figura 3.37. Todavia, como era de esperar, no
-fim das contas esse crescimento incremental não leva a um projeto limpo. O IBM PC e seus sucessores, por
-exemplo, passaram de oito linhas de dados para 16 e em seguida para 32, conservando praticamente o mesmo
-barramento.
+Outro problema com a aceleração é que isso não será compatível. Placas antigas, projetadas para os barramentos mais lentos, não funcionarão com o novo. Invalidar as placas antigas descontentará não somente seus proprietários, mas também os fabricantes. Por conseguinte, a técnica que costuma ser adotada para melhorar o desempenho é adicionar linhas de dados, de forma análoga à Figura 3.37. Todavia, como era de esperar, no fim das contas esse crescimento incremental não leva a um projeto limpo. O IBM PC e seus sucessores, por exemplo, passaram de oito linhas de dados para 16 e em seguida para 32, conservando praticamente o mesmo barramento.
 
-Para contornar o problema de barramentos muito largos, às vezes os projetistas optam por um barramento
-multiplexado. Nesse projeto, em vez de as linhas de endereços e dados serem separadas, há, por exemplo, 32 linhas
-para endereços e dados juntos. No início de uma operação de barramento, as linhas são usadas para o endereço.
+Para contornar o problema de barramentos muito largos, às vezes os projetistas optam por um barramento multiplexado. Nesse projeto, em vez de as linhas de endereços e dados serem separadas, há, por exemplo, 32 linhas para endereços e dados juntos. No início de uma operação de barramento, as linhas são usadas para o endereço.
 
-Mais tarde, são usadas para dados. Para uma escrita na memória, por exemplo, isso significa que as linhas de
-endereço devem ser estabelecidas e propagadas para a memória antes que os dados possam ser colocados no
-barramento. Com linhas separadas, endereços e dados podem ser colocados juntos. Multiplexar as linhas reduz
-a largura (e o custo) do barramento, mas resulta em um sistema mais lento. Quando tomam suas decisões, os
-projetistas de barramento têm de pesar cuidadosamente todas essas opções.
+Mais tarde, são usadas para dados. Para uma escrita na memória, por exemplo, isso significa que as linhas de endereço devem ser estabelecidas e propagadas para a memória antes que os dados possam ser colocados no barramento. Com linhas separadas, endereços e dados podem ser colocados juntos. Multiplexar as linhas reduz
+a largura (e o custo) do barramento, mas resulta em um sistema mais lento. Quando tomam suas decisões, os projetistas de barramento têm de pesar cuidadosamente todas essas opções.
 
 ## 3.4.4 Clock do barramento
-Barramentos podem ser divididos em duas categorias distintas, dependendo de seu clock. Um barramento
-síncrono tem uma linha comandada por um oscilador de cristal. O sinal nessa linha consiste em uma onda qua-
-drada com uma frequência em geral entre 5 e 133 MHz. Todas as atividades do barramento tomam um número
-inteiro desses ciclos denominados ciclos de barramento. O outro tipo de barramento, o barramento assíncrono,
-não tem um clock mestre. Ciclos de barramento podem ter qualquer largura requerida e não são os mesmos entre
-todos os pares de dispositivos. A seguir, estudaremos cada tipo de barramento.
+Barramentos podem ser divididos em duas categorias distintas, dependendo de seu clock. Um barramento síncrono tem uma linha comandada por um oscilador de cristal. O sinal nessa linha consiste em uma onda quadrada com uma frequência em geral entre 5 e 133 MHz. Todas as atividades do barramento tomam um número
+inteiro desses ciclos denominados ciclos de barramento. O outro tipo de barramento, o barramento assíncrono, não tem um clock mestre. Ciclos de barramento podem ter qualquer largura requerida e não são os mesmos entre todos os pares de dispositivos. A seguir, estudaremos cada tipo de barramento.
 
 ### Barramentos síncronos
-Como exemplo do funcionamento de um barramento síncrono, considere o diagrama temporal da Figura
-3.38(a). Nesse exemplo, usaremos um clock de 100 MHz, que dá um ciclo de barramento de 10 nanossegundos.
-Embora isso possa parecer um tanto lento em comparação a velocidades de CPU de 3 GHz ou mais, poucos bar-
-ramentos de PCs são muito mais rápidos. Por exemplo, o popular barramento PCI normalmente funciona a 33 ou
-66 MHz e o barramento PCI-X atualizado (porém agora extinto) funcionava a uma velocidade de até 133 MHz.
-As razões por que os barramentos atuais são lentos já foram dadas: problemas técnicos de projeto, como atraso
+Como exemplo do funcionamento de um barramento síncrono, considere o diagrama temporal da Figura 3.38(a). Nesse exemplo, usaremos um clock de 100 MHz, que dá um ciclo de barramento de 10 nanossegundos. Embora isso possa parecer um tanto lento em comparação a velocidades de CPU de 3 GHz ou mais, poucos barramentos de PCs são muito mais rápidos. Por exemplo, o popular barramento PCI normalmente funciona a 33 ou 66 MHz e o barramento PCI-X atualizado (porém agora extinto) funcionava a uma velocidade de até 133 MHz. As razões por que os barramentos atuais são lentos já foram dadas: problemas técnicos de projeto, como atraso
 diferencial de barramento e necessidade de compatibilidade.
 
-Em nosso exemplo, admitiremos ainda que ler da memória leva 15 ns a partir do instante em que o endereço
-está estável. Como veremos em breve, com esses parâmetros, ler uma palavra levará três ciclos de barramento. O
-primeiro ciclo começa na borda ascendente de T1 e o terceiro termina na borda ascendente de T4, como mostra
-a figura. Observe que nenhuma das bordas ascendentes ou descendentes foi desenhada na linha vertical porque
-nenhum sinal elétrico pode trocar seu valor em tempo zero. Nesse exemplo, admitiremos que leva 1 ns para o
-sinal mudar. As linhas de clock, address, data, mreq, rd e wait, estão todas representadas na mesma escala de
-tempo.
+Em nosso exemplo, admitiremos ainda que ler da memória leva 15 ns a partir do instante em que o endereço está estável. Como veremos em breve, com esses parâmetros, ler uma palavra levará três ciclos de barramento. O primeiro ciclo começa na borda ascendente de T1 e o terceiro termina na borda ascendente de T4, como mostra a figura. Observe que nenhuma das bordas ascendentes ou descendentes foi desenhada na linha vertical porque nenhum sinal elétrico pode trocar seu valor em tempo zero. Nesse exemplo, admitiremos que leva 1 ns para o sinal mudar. As linhas de clock, ADDRESS, DATA, MREQ, RD e WAIT, estão todas representadas na mesma escala de tempo.
 
-O início de T1 é definido pela borda ascendente do clock. A meio caminho de T1 a CPU coloca o endereço da
-palavra que ela quer nas linhas de endereço. Como o endereço não é um valor único, como o clock, não podemos
-mostrá-lo como uma linha única na figura; em vez disso, ele é mostrado como duas linhas que se cruzam no ins-
-tante em que o endereço muda. Além disso, a área sombreada antes do cruzamento indica que o valor nessa área
-não é importante. Usando essa mesma convenção, vemos que o conteúdo das linhas de dados não é significativo
-até uma boa porção de T3.
+O início de T1 é definido pela borda ascendente do clock. A meio caminho de T1 a CPU coloca o endereço da palavra que ela quer nas linhas de endereço. Como o endereço não é um valor único, como o clock, não podemos mostrá-lo como uma linha única na figura; em vez disso, ele é mostrado como duas linhas que se cruzam no instante em que o endereço muda. Além disso, a área sombreada antes do cruzamento indica que o valor nessa área
+não é importante. Usando essa mesma convenção, vemos que o conteúdo das linhas de dados não é significativo até uma boa porção de T3.
 
-Depois que as linhas de endereço tiverem uma chance de se acomodar a seus novos valores, mreq e rd são
-ativados. O primeiro indica que é a memória (e não um dispositivo de E/S) que está sendo acessada e o segun-
-do é ativado (valor 0) para leituras e negado (valor 1) para escritas. Uma vez que a memória leva 15 ns após o
-endereço estar estável (a meio caminho no primeiro ciclo de clock), ela não pode entregar os dados requisitados
-durante T2. Para dizer à CPU que não os espere, a memória ativa a linha wait no início de T2. Essa ação irá inserir
-estados de espera (ciclos extras de barramento) até que a memória conclua e desative wait. Em nosso exemplo,
-foi inserido um estado de espera (T2) porque a memória é muito lenta. No início de T3, quando está certa de que
-terá os dados durante o ciclo corrente, a memória nega wait.
+Depois que as linhas de endereço tiverem uma chance de se acomodar a seus novos valores, MREQ e RD são ativados. O primeiro indica que é a memória (e não um dispositivo de E/S) que está sendo acessada e o segundo é ativado (valor 0) para leituras e negado (valor 1) para escritas. Uma vez que a memória leva 15 ns após o endereço estar estável (a meio caminho no primeiro ciclo de clock), ela não pode entregar os dados requisitados durante T2. Para dizer à CPU que não os espere, a memória ativa a linha wait no início de T2. Essa ação irá inserir estados de espera (ciclos extras de barramento) até que a memória conclua e desative wait. Em nosso exemplo, foi inserido um estado de espera (T2) porque a memória é muito lenta. No início de T3, quando está certa de que terá os dados durante o ciclo corrente, a memória nega wait.
 
-Durante a primeira metade de T3, a memória coloca os dados nas linhas de dados. Na borda descendente de
-T3, a CPU mostra a linha de dados, isto é, lê a linha, armazenando (latching) o valor em um registrador interno.
-Após ter lido os dados, a CPU nega mreq e rd. Se for preciso, outro ciclo de memória pode começar na próxima
-borda ascendente do clock. Essa sequência pode ser repetida indefinidamente.
+Durante a primeira metade de T3, a memória coloca os dados nas linhas de dados. Na borda descendente de T3, a CPU mostra a linha de dados, isto é, lê a linha, armazenando (latching) o valor em um registrador interno. Após ter lido os dados, a CPU nega mreq e rd. Se for preciso, outro ciclo de memória pode começar na próxima borda ascendente do clock. Essa sequência pode ser repetida indefinidamente.
 
-Na especificação temporal da Figura 3.38(b), esclarecemos melhor oito símbolos que aparecem no diagrama.
-TAD, por exemplo, é o intervalo de tempo entre a borda ascendente do clock T1 e o estabelecimento das linhas de
-endereço. Conforme a especificação de temporização, TAD ≤ 4 ns. Isso significa que o fabricante da CPU garante
-que durante qualquer ciclo de leitura a CPU entregará o endereço a ser lido dentro de 4 ns a partir do ponto
-médio da borda ascendente de T1.
+Na especificação temporal da Figura 3.38(b), esclarecemos melhor oito símbolos que aparecem no diagrama. TAD, por exemplo, é o intervalo de tempo entre a borda ascendente do clock T1 e o estabelecimento das linhas de endereço. Conforme a especificação de temporização, TAD ≤ 4 ns. Isso significa que o fabricante da CPU garante que durante qualquer ciclo de leitura a CPU entregará o endereço a ser lido dentro de 4 ns a partir do ponto médio da borda ascendente de T1.
 
 Figura 3.38   (a) Temporização de leitura em um barramento síncrono. (b) Especificação de alguns tempos críticos.
 
@@ -1742,6 +1689,7 @@ Temporização e Estados de Espera (Figura 3.38)
     WAIT  _______________________________/       \___________________
                                         (CPU aguarda a memória)
 
+![alt text](image-46.png)
 
 ### Insight para o seu repositório estruturas_de_dados
 Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait States são os grandes vilões da performance.
@@ -1749,7 +1697,6 @@ Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait St
  - Se a sua estrutura de dados está espalhada pela memória (como uma lista encadeada), cada salto para um novo ponteiro dispara um novo ciclo de leitura com possíveis estados de espera.
 
  - Já um array contínuo permite que o controlador de barramento otimize esses tempos, reduzindo a necessidade do sinal WAIT.
-
 
         +---------------+----------------------------------------------------------+-------+-------+--------+
         | Símbolo       | Parâmetro                                                | Mín.  | Máx.  | Unidade|
@@ -1764,71 +1711,32 @@ Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait St
         | TDH           | Tempo de sustentação dos dados desde a negação de RD     | 0     |       | ns     |
         +---------------+----------------------------------------------------------+-------+-------+--------+
 
-As especificações de temporização também requerem que os dados estejam disponíveis nas linhas de dados
-no mínimo TDS (2 nanossegundos) antes da borda descendente de T3 para lhes dar tempo para se acomodarem
-antes que a CPU os leia. A combinação de restrições impostas a Tad e TDS significa que, na pior das hipóteses, a
-memória terá somente 25 – 4 – 2 = 19 ns desde o instante em que o endereço aparece até o instante em que ela
-deve produzir os dados. Como 10 ns é suficiente, até mesmo no pior caso, uma memória de 10 ns sempre pode
-responder durante T3. Uma memória de 20 ns, entretanto, perderia o momento por pouco e teria de inserir um
-segundo estado de espera e responder durante T4.
+As especificações de temporização também requerem que os dados estejam disponíveis nas linhas de dados no mínimo TDS (2 nanossegundos) antes da borda descendente de T3 para lhes dar tempo para se acomodarem antes que a CPU os leia. A combinação de restrições impostas a Tad e TDS significa que, na pior das hipóteses, a memória terá somente 25 – 4 – 2 = 19 ns desde o instante em que o endereço aparece até o instante em que ela
+deve produzir os dados. Como 10 ns é suficiente, até mesmo no pior caso, uma memória de 10 ns sempre pode responder durante T3. Uma memória de 20 ns, entretanto, perderia o momento por pouco e teria de inserir um segundo estado de espera e responder durante T4.
 
-A especificação de temporização garante ainda mais que o endereço será estabelecido pelo menos 2 nanos-
-segundos antes de mreq ser ativado. Esse tempo pode ser importante se mreq comandar a seleção de chip no chip
-de memória, porque algumas memórias requerem um tempo de estabelecimento de endereço antes da seleção
-do chip. Claro que o projetista do sistema não deve escolher um chip de memória que necessite de um tempo de
-estabelecimento de 3 ns.
+A especificação de temporização garante ainda mais que o endereço será estabelecido pelo menos 2 nanossegundos antes de mreq ser ativado. Esse tempo pode ser importante se mreq comandar a seleção de chip no chip de memória, porque algumas memórias requerem um tempo de estabelecimento de endereço antes da seleção
+do chip. Claro que o projetista do sistema não deve escolher um chip de memória que necessite de um tempo de estabelecimento de 3 ns.
 
-As limitações impostas a TM e TRL significam que ambos, mreq e rd, serão ativados dentro de 3 ns a partir
-da borda descendente T1 do clock. No pior caso, o chip de memória terá somente 10 + 10 – 3 – 2 = 15 ns após a
-ativação de mreq e rd para levar seus dados até o barramento. Essa restrição é adicional ao (e independente do)
-intervalo de 15 ns necessário após o endereço estar estável.
+As limitações impostas a TM e TRL significam que ambos, mreq e rd, serão ativados dentro de 3 ns a partir da borda descendente T1 do clock. No pior caso, o chip de memória terá somente 10 + 10 – 3 – 2 = 15 ns após a ativação de mreq e rd para levar seus dados até o barramento. Essa restrição é adicional ao (e independente do) intervalo de 15 ns necessário após o endereço estar estável.
 
-TMH e TRH informam quanto tempo leva para mreq e rd serem negados após a leitura dos dados. Por fim, TDH
-informa por quanto tempo a memória deve sustentar os dados no barramento após a negação de rd. No que diz
-respeito a nosso exemplo de CPU, a memória pode remover os dados do barramento tão logo rd tenha sido negado;
-porém, em algumas CPUs modernas, os dados devem ser conservados estáveis durante um pouco mais de tempo.
+TMH e TRH informam quanto tempo leva para mreq e rd serem negados após a leitura dos dados. Por fim, TDH informa por quanto tempo a memória deve sustentar os dados no barramento após a negação de rd. No que diz respeito a nosso exemplo de CPU, a memória pode remover os dados do barramento tão logo rd tenha sido negado; porém, em algumas CPUs modernas, os dados devem ser conservados estáveis durante um pouco mais de tempo.
 
-Gostaríamos de destacar que a Figura 3.38 é uma versão muito simplificada das restrições reais de tempo. Na
-realidade, sempre são especificados muitos mais tempos críticos. Ainda assim, ela nos dá uma boa ideia do modo
-de funcionamento de um barramento síncrono.
+Gostaríamos de destacar que a Figura 3.38 é uma versão muito simplificada das restrições reais de tempo. Na realidade, sempre são especificados muitos mais tempos críticos. Ainda assim, ela nos dá uma boa ideia do modo de funcionamento de um barramento síncrono.
 
-Uma última coisa que vale a pena mencionar é que sinais de controle podem ser ativados baixos ou altos.
-Cabe aos projetistas do barramento determinar o que é mais conveniente, mas a escolha é, em essência, arbitrária.
-Podemos entendê-la como equivalente em hardware à decisão que o programador toma de representar blocos de
-discos livres em um mapa de bits como 0s ou 1s.
+Uma última coisa que vale a pena mencionar é que sinais de controle podem ser ativados baixos ou altos. Cabe aos projetistas do barramento determinar o que é mais conveniente, mas a escolha é, em essência, arbitrária. Podemos entendê-la como equivalente em hardware à decisão que o programador toma de representar blocos de discos livres em um mapa de bits como 0s ou 1s.
 
-Barramentos assíncronos
-Embora seja fácil trabalhar com barramentos síncronos por causa de seus intervalos discretos de tempo, eles
-também têm alguns problemas. Por exemplo, tudo funciona como múltiplos do clock do barramento. Ainda que
-CPU e memória possam concluir uma transferência em 3,1 ciclos, elas terão de prolongar o ciclo até 4,0 porque
-ciclos fracionários são proibidos.
+### Barramentos assíncronos
+Embora seja fácil trabalhar com barramentos síncronos por causa de seus intervalos discretos de tempo, eles também têm alguns problemas. Por exemplo, tudo funciona como múltiplos do clock do barramento. Ainda que CPU e memória possam concluir uma transferência em 3,1 ciclos, elas terão de prolongar o ciclo até 4,0 porque ciclos fracionários são proibidos.
 
-Pior ainda, uma vez escolhido o ciclo do barramento e construídas placas de memória e E/S para ele, é difícil
-aproveitar futuros avanços da tecnologia. Por exemplo, suponha que alguns anos após a construção do sistema da
-Figura 3.38 sejam lançadas novas memórias com tempos de acesso de 8 ns em vez de 15 ns, que eliminam o estado
-de espera e dão mais velocidade à máquina. Então, suponha que sejam lançadas memórias de 4 ns. Não haveria
-nenhum ganho adicional de desempenho porque, com esse projeto, o tempo mínimo para uma leitura é dois ciclos.
+Pior ainda, uma vez escolhido o ciclo do barramento e construídas placas de memória e E/S para ele, é difícil aproveitar futuros avanços da tecnologia. Por exemplo, suponha que alguns anos após a construção do sistema da Figura 3.38 sejam lançadas novas memórias com tempos de acesso de 8 ns em vez de 15 ns, que eliminam o estado de espera e dão mais velocidade à máquina. Então, suponha que sejam lançadas memórias de 4 ns. Não haveria nenhum ganho adicional de desempenho porque, com esse projeto, o tempo mínimo para uma leitura é dois ciclos.
 
-Exprimindo esses fatos em termos um pouco diferentes, se um barramento síncrono tiver uma coleção hete-
-rogênea de dispositivos, alguns rápidos, alguns lentos, ele tem de ser ajustado para o mais lento, e os mais rápidos
-não podem usar todo o seu potencial.
+Exprimindo esses fatos em termos um pouco diferentes, se um barramento síncrono tiver uma coleção heterogênea de dispositivos, alguns rápidos, alguns lentos, ele tem de ser ajustado para o mais lento, e os mais rápidos não podem usar todo o seu potencial.
 
-Pode-se utilizar tecnologia mista passando para um barramento assíncrono, isto é, que não tenha um clock
-mestre, como mostra a Figura 3.39. Em vez de vincular tudo ao clock, quando o mestre de barramento tiver ati-
-vado o endereço, mreq, rd e tudo o mais que precisa, em seguida ele ativa um sinal especial que denominaremos
-msyn (Master SYNchronization). Quando o escravo vê esse sinal, ele realiza o trabalho com a maior rapidez que
-puder e, ao concluir essa fase, ativa ssyn (Slave SYNchronization).
+Pode-se utilizar tecnologia mista passando para um barramento assíncrono, isto é, que não tenha um clock mestre, como mostra a Figura 3.39. Em vez de vincular tudo ao clock, quando o mestre de barramento tiver ativado o endereço, MREQ, rd e tudo o mais que precisa, em seguida ele ativa um sinal especial que denominaremos msyn (Master SYNchronization). Quando o escravo vê esse sinal, ele realiza o trabalho com a maior rapidez que puder e, ao concluir essa fase, ativa ssyn (Slave SYNchronization).
 
-Assim que o mestre perceber ssyn ativado, sabe que os dados estão disponíveis, portanto, ele os serializa e
-então desativa as linhas de endereço, junto com mreq, rd e msyn. Quando o escravo percebe a negação de msyn,
-sabe que o ciclo foi concluído, portanto, nega ssyn, e voltamos à situação original, com todos os sinais negados,
-esperando pelo próximo mestre.
+Assim que o mestre perceber ssyn ativado, sabe que os dados estão disponíveis, portanto, ele os serializa e então desativa as linhas de endereço, junto com MREQ, RD e MSYN. Quando o escravo percebe a negação de msyn, sabe que o ciclo foi concluído, portanto, nega ssyn, e voltamos à situação original, com todos os sinais negados, esperando pelo próximo mestre.
 
-Diagramas temporais de barramentos assíncronos (e às vezes também os de barramentos síncronos) usam
-setas para mostrar causa e efeito, como na Figura 3.39. A ativação de msyn faz com que as linhas de dados sejam
-ativadas e também com que o escravo ative ssyn. A ativação de ssyn, por sua vez, causa a negação das linhas de
-endereço, mreq, rd e msyn. Por fim, a negação de msyn causa a negação e ssyn, que conclui a leitura e retorna o
-sistema a seu estado original.
+Diagramas temporais de barramentos assíncronos (e às vezes também os de barramentos síncronos) usam setas para mostrar causa e efeito, como na Figura 3.39. A ativação de msyn faz com que as linhas de dados sejam ativadas e também com que o escravo ative ssyn. A ativação de ssyn, por sua vez, causa a negação das linhas de endereço, mreq, rd e msyn. Por fim, a negação de msyn causa a negação e ssyn, que conclui a leitura e retorna o sistema a seu estado original.
 
 Figura 3.39   Operação de um barramento assíncrono.
 
@@ -1875,50 +1783,22 @@ consiste em quatro eventos:
        ____                                   ____
     4. SSYN é negado em resposta à negação de MSYN.
 
-É preciso que fique claro que operações completas são independentes de temporização. Cada evento é causa-
-do por um evento anterior e não por um pulso de clock. Se determinado par mestre-escravo for lento, não afetará,
-de modo algum, um par mestre-escravo subsequente, que é muito mais rápido.
+É preciso que fique claro que operações completas são independentes de temporização. Cada evento é causado por um evento anterior e não por um pulso de clock. Se determinado par mestre-escravo for lento, não afetará, de modo algum, um par mestre-escravo subsequente, que é muito mais rápido.
 
-Agora, a vantagem de um barramento assíncrono já deve estar bem clara, mas a verdade é que a maioria
-dos barramentos é síncrona. A razão é que é mais fácil construir um sistema síncrono. A CPU apenas ativa seus
-sinais e a memória apenas reage. Não há realimentação (causa e efeito), mas, se os componentes foram escolhidos
-adequadamente, tudo funcionará sem dependência. Além disso, há muito dinheiro investido na tecnologia do
-barramento síncrono.
+Agora, a vantagem de um barramento assíncrono já deve estar bem clara, mas a verdade é que a maioria dos barramentos é síncrona. A razão é que é mais fácil construir um sistema síncrono. A CPU apenas ativa seus sinais e a memória apenas reage. Não há realimentação (causa e efeito), mas, se os componentes foram escolhidos adequadamente, tudo funcionará sem dependência. Além disso, há muito dinheiro investido na tecnologia do barramento síncrono.
 
 ## 3.4.5 Arbitragem de barramento
-Até aqui ficou subentendido que há somente um mestre de barramento, a CPU. Na realidade, chips de E/S
-têm de se tornar mestres de barramento para ler e escrever na memória e também para causar interrupções.
-Coprocessadores também podem precisar se tornar mestres de barramento. Então, surge a pergunta: “O que
-acontece se dois ou mais dispositivos quiserem se tornar mestres de barramento ao mesmo tempo?” A resposta é
-que é preciso algum mecanismo de arbitragem de barramento para evitar o caos.
+Até aqui ficou subentendido que há somente um mestre de barramento, a CPU. Na realidade, chips de E/S têm de se tornar mestres de barramento para ler e escrever na memória e também para causar interrupções. Coprocessadores também podem precisar se tornar mestres de barramento. Então, surge a pergunta: “O que acontece se dois ou mais dispositivos quiserem se tornar mestres de barramento ao mesmo tempo?” A resposta é que é preciso algum mecanismo de arbitragem de barramento para evitar o caos.
 
-Mecanismos de arbitragem podem ser centralizados ou descentralizados. Em primeiro lugar, vamos consi-
-derar a arbitragem centralizada. Uma forma particularmente simples de arbitragem centralizada é mostrada na
-Figura 3.40(a). Nesse esquema, um único árbitro de barramento determina quem entra em seguida. Muitas CPUs
-contêm o árbitro no chip de CPU, mas às vezes é preciso um chip separado. O barramento contém uma única
-linha de requisição OR cabeada que pode ser afirmada por um ou mais dispositivos a qualquer tempo. Não há
-nenhum modo de o árbitro dizer quantos dispositivos requisitaram o barramento. As únicas categorias que ele
+Mecanismos de arbitragem podem ser centralizados ou descentralizados. Em primeiro lugar, vamos considerar a arbitragem centralizada. Uma forma particularmente simples de arbitragem centralizada é mostrada na Figura 3.40(a). Nesse esquema, um único árbitro de barramento determina quem entra em seguida. Muitas CPUs
+contêm o árbitro no chip de CPU, mas às vezes é preciso um chip separado. O barramento contém uma única linha de requisição OR cabeada que pode ser afirmada por um ou mais dispositivos a qualquer tempo. Não há nenhum modo de o árbitro dizer quantos dispositivos requisitaram o barramento. As únicas categorias que ele
 pode distinguir são algumas requisições e nenhuma requisição.
 
-Quando o árbitro vê uma requisição de barramento, emite uma concessão que ativa a linha de concessão
-de barramento. Essa linha está ligada a todos os dispositivos de E/S em série, como um cordão de lâmpadas de árvore de Natal. Quando o dispositivo que está fisicamente mais próximo do árbitro vê a concessão, verifica para
-confirmar se fez uma requisição. Caso positivo, toma o barramento, mas não passa a concessão adiante na linha.
-Se não fez uma requisição, ele propaga a concessão até o próximo dispositivo na linha que se comporta da mesma
-maneira, e assim por diante, até algum deles aceitar a concessão e tomar o barramento. Esse esquema é denomi-
-nado encadeamento em série (daisy chaining). Ele tem a propriedade de designar prioridades aos dispositivos
-dependendo da distância entre eles e o árbitro. O que estiver mais próximo vence.
+Quando o árbitro vê uma requisição de barramento, emite uma concessão que ativa a linha de concessão de barramento. Essa linha está ligada a todos os dispositivos de E/S em série, como um cordão de lâmpadas de árvore de Natal. Quando o dispositivo que está fisicamente mais próximo do árbitro vê a concessão, verifica para confirmar se fez uma requisição. Caso positivo, toma o barramento, mas não passa a concessão adiante na linha. Se não fez uma requisição, ele propaga a concessão até o próximo dispositivo na linha que se comporta da mesma maneira, e assim por diante, até algum deles aceitar a concessão e tomar o barramento. Esse esquema é denominado encadeamento em série (daisy chaining). Ele tem a propriedade de designar prioridades aos dispositivos dependendo da distância entre eles e o árbitro. O que estiver mais próximo vence.
 
-Para contornar as prioridades implícitas baseadas na distância em relação ao árbitro, muitos barramentos têm
-vários níveis de prioridade. Para cada nível de prioridade há uma linha de requisição e uma linha de concessão
-de barramento. O barramento da Figura 3.40(b) tem dois níveis, 1 e 2 (barramentos reais costumam ter 4, 8 ou
-16 níveis). Cada dispositivo está ligado a um dos níveis de requisição do barramento, sendo que os mais críticos
-em relação ao tempo estão ligados aos níveis com prioridade mais alta. Na Figura 3.40(b), os dispositivos 1, 2 e
-4 usam prioridade 1, enquanto os dispositivos 3 e 5 usam prioridade 2.
+Para contornar as prioridades implícitas baseadas na distância em relação ao árbitro, muitos barramentos têm vários níveis de prioridade. Para cada nível de prioridade há uma linha de requisição e uma linha de concessão de barramento. O barramento da Figura 3.40(b) tem dois níveis, 1 e 2 (barramentos reais costumam ter 4, 8 ou 16 níveis). Cada dispositivo está ligado a um dos níveis de requisição do barramento, sendo que os mais críticos em relação ao tempo estão ligados aos níveis com prioridade mais alta. Na Figura 3.40(b), os dispositivos 1, 2 e 4 usam prioridade 1, enquanto os dispositivos 3 e 5 usam prioridade 2.
 
-Se vários níveis de prioridade são requisitados ao mesmo tempo, o árbitro emite uma concessão somente ao
-de prioridade mais alta. Entre os dispositivos da mesma prioridade, é usado o encadeamento em série. Na Figura
-3.40(b), se ocorrer algum conflito, o dispositivo 2 vence o dispositivo 4, que vence o 3. O dispositivo 5 tem a
-menor prioridade porque está no final da linha de encadeamento de menor prioridade.
+Se vários níveis de prioridade são requisitados ao mesmo tempo, o árbitro emite uma concessão somente ao de prioridade mais alta. Entre os dispositivos da mesma prioridade, é usado o encadeamento em série. Na Figura 3.40(b), se ocorrer algum conflito, o dispositivo 2 vence o dispositivo 4, que vence o 3. O dispositivo 5 tem a menor prioridade porque está no final da linha de encadeamento de menor prioridade.
 
 Figura 3.40   (a) Árbitro de barramento centralizado de um nível usando encadeamento em série. (b) Mesmo árbitro, mas com dois níveis.
 
@@ -1951,41 +1831,17 @@ Ao gerenciar processos ou threads no diretório estruturas_de_dados, você usa s
 
 Com a Figura 3.40, chegamos ao coração da coordenação de hardware.
 
-A propósito, tecnicamente não é necessário ligar a linha de concessão de barramento de nível 2 em série
-passando pelos dispositivos 1 e 2, já que eles não podem fazer requisições nessa linha. Contudo, por conveniência
-de execução, é mais fácil ligar todas as linhas de concessão passando por todos os dispositivos, em vez de fazer
-ligações especiais que dependem da prioridade de dispositivo.
+A propósito, tecnicamente não é necessário ligar a linha de concessão de barramento de nível 2 em série passando pelos dispositivos 1 e 2, já que eles não podem fazer requisições nessa linha. Contudo, por conveniência de execução, é mais fácil ligar todas as linhas de concessão passando por todos os dispositivos, em vez de fazer ligações especiais que dependem da prioridade de dispositivo.
 
-Alguns árbitros têm uma terceira linha que um dispositivo ativa quando aceita uma concessão e pega o barra-
-mento. Tão logo tenha ativado essa linha de reconhecimento, as linhas de requisição e concessão podem ser nega-
-das. O resultado é que outros dispositivos podem requisitar barramento enquanto o primeiro o estiver usando.
-No instante em que a transferência for concluída, o próximo mestre de barramento já terá sido selecionado. Ele
-pode começar logo que a linha de reconhecimento tenha sido negada, quando então pode ser iniciada a próxima
-rodada de arbitragem. Esse esquema requer uma linha de barramento extra e mais lógica em cada dispositivo,
-mas faz melhor uso de ciclos de barramento.
+Alguns árbitros têm uma terceira linha que um dispositivo ativa quando aceita uma concessão e pega o barramento. Tão logo tenha ativado essa linha de reconhecimento, as linhas de requisição e concessão podem ser negadas. O resultado é que outros dispositivos podem requisitar barramento enquanto o primeiro o estiver usando. No instante em que a transferência for concluída, o próximo mestre de barramento já terá sido selecionado. Ele pode começar logo que a linha de reconhecimento tenha sido negada, quando então pode ser iniciada a próxima rodada de arbitragem. Esse esquema requer uma linha de barramento extra e mais lógica em cada dispositivo, mas faz melhor uso de ciclos de barramento.
 
-Em sistemas em que a memória está no barramento principal, a CPU deve competir pelo barramento com
-todos os dispositivos de E/S em praticamente todos os ciclos. Uma solução comum para essa situação é dar à
-CPU a prioridade mais baixa, de modo que ela obtenha o barramento apenas quando ninguém mais o quiser.
-Nesse caso, a ideia é que a CPU sempre pode esperar, mas os dispositivos de E/S muitas vezes precisam adqui-
-rir logo o barramento ou então perdem os dados que chegam. Discos que giram a alta velocidade não podem
-esperar. Em muitos sistemas modernos de computadores, esse problema é evitado ao se colocar a memória em
-um barramento separado dos dispositivos de E/S de modo que estes não tenham de competir pelo acesso ao
-barramento.
+Em sistemas em que a memória está no barramento principal, a CPU deve competir pelo barramento com todos os dispositivos de E/S em praticamente todos os ciclos. Uma solução comum para essa situação é dar à CPU a prioridade mais baixa, de modo que ela obtenha o barramento apenas quando ninguém mais o quiser.
+Nesse caso, a ideia é que a CPU sempre pode esperar, mas os dispositivos de E/S muitas vezes precisam adquirir logo o barramento ou então perdem os dados que chegam. Discos que giram a alta velocidade não podem esperar. Em muitos sistemas modernos de computadores, esse problema é evitado ao se colocar a memória em
+um barramento separado dos dispositivos de E/S de modo que estes não tenham de competir pelo acesso ao barramento.
 
-Também é possível haver arbitragem de barramento descentralizada. Por exemplo, um computador poderia
-ter 16 linhas de requisição de barramento priorizadas. Quando um dispositivo quer usar o barramento, ele afirma
-sua linha de requisição. Todos os dispositivos monitoram todas as linhas de requisição, de modo que, ao final
-de cada ciclo de barramento, cada dispositivo sabe se foi o requisitante de prioridade mais alta e, portanto, se
-tem permissão de usar o barramento durante o próximo ciclo. Comparado à arbitragem centralizada, o método
-descentralizado requer mais linhas de barramento, mas evita o custo potencial do árbitro. Além disso, limita o
-número de dispositivos ao número de linhas de requisição.
+Também é possível haver arbitragem de barramento descentralizada. Por exemplo, um computador poderia ter 16 linhas de requisição de barramento priorizadas. Quando um dispositivo quer usar o barramento, ele afirma sua linha de requisição. Todos os dispositivos monitoram todas as linhas de requisição, de modo que, ao final de cada ciclo de barramento, cada dispositivo sabe se foi o requisitante de prioridade mais alta e, portanto, se tem permissão de usar o barramento durante o próximo ciclo. Comparado à arbitragem centralizada, o método descentralizado requer mais linhas de barramento, mas evita o custo potencial do árbitro. Além disso, limita o número de dispositivos ao número de linhas de requisição.
 
-Outro tipo de arbitragem de barramento descentralizada, mostrado na Figura 3.41, usa apenas três linhas,
-não importando quantos dispositivos estiverem presentes. A primeira é uma linha OR cabeada para requisitar
-o barramento. A segunda é denominada busy e é ativada pelo mestre de barramento corrente. A terceira linha é
-usada para arbitrar o barramento. Ela está ligada por encadeamento em série a todos os dispositivos. O início
-dessa cadeia é ativado ligando-o a uma fonte de alimentação.
+Outro tipo de arbitragem de barramento descentralizada, mostrado na Figura 3.41, usa apenas três linhas, não importando quantos dispositivos estiverem presentes. A primeira é uma linha OR cabeada para requisitar o barramento. A segunda é denominada busy e é ativada pelo mestre de barramento corrente. A terceira linha é usada para arbitrar o barramento. Ela está ligada por encadeamento em série a todos os dispositivos. O início dessa cadeia é ativado ligando-o a uma fonte de alimentação.
 
 Figura 3.41   Arbitragem de barramento descentralizada.
 
@@ -2014,32 +1870,16 @@ Este conceito de arbitragem descentralizada é a base física para o que você e
 
  - No seu código em C, entender isso ajuda a visualizar por que certas operações de baixo nível podem sofrer latência variável dependendo da posição física do dispositivo no barramento.
 
-Quando nenhum dispositivo quiser o barramento, a linha de arbitragem ativada é propagada por todos os
-outros. Para adquirir o barramento, um dispositivo primeiro verifica para ver se o barramento está ocioso e se o
-sinal de arbitragem que está recebendo, in (entrada), está ativado. Se in estiver negado, o dispositivo em ques-
-tão não pode se tornar o mestre de barramento e o sinal out (saída) é negado. Entretanto, se in for ativado, o
-dispositivo nega out, o que faz seu vizinho seguinte na cadeia ver in negado e negar seu próprio out. Daí, todos
-os dispositivos depois dele na cadeia veem in negado e, por sua vez, negam out. Quando o processo terminar,
-somente um dispositivo terá in ativado e out negado, e é ele que se torna o mestre de barramento, ativa busy e
-out e inicia sua transferência.
+Quando nenhum dispositivo quiser o barramento, a linha de arbitragem ativada é propagada por todos os outros. Para adquirir o barramento, um dispositivo primeiro verifica para ver se o barramento está ocioso e se o sinal de arbitragem que está recebendo, in (entrada), está ativado. Se in estiver negado, o dispositivo em questão não pode se tornar o mestre de barramento e o sinal out (saída) é negado. Entretanto, se in for ativado, o dispositivo nega out, o que faz seu vizinho seguinte na cadeia ver in negado e negar seu próprio out. Daí, todos os dispositivos depois dele na cadeia veem in negado e, por sua vez, negam out. Quando o processo terminar, somente um dispositivo terá in ativado e out negado, e é ele que se torna o mestre de barramento, ativa busy e out e inicia sua transferência.
 
 Um pouco de raciocínio revelará que o dispositivo mais à esquerda que quiser o barramento o obtém. Assim,
 esse esquema é similar à arbitragem original por encadeamento em série, com a exceção de não ter o árbitro. Por
 isso é mais barato, mais rápido e não está sujeito a falhas do árbitro.
 
 ## 3.4.6 Operações de barramento
-Até agora, discutimos apenas ciclos de barramento comuns, com um mestre (em geral, a CPU) lendo de um
-escravo (em geral, a memória) ou escrevendo nele. Na verdade, existem vários outros tipos de ciclos de barra-
-mento. Em seguida, vamos estudar alguns deles.
+Até agora, discutimos apenas ciclos de barramento comuns, com um mestre (em geral, a CPU) lendo de um escravo (em geral, a memória) ou escrevendo nele. Na verdade, existem vários outros tipos de ciclos de barramento. Em seguida, vamos estudar alguns deles.
 
-Em geral, só uma palavra é transferida por vez. Contudo, quando é usado caching, é desejável buscar uma
-linha inteira de cache (por exemplo, 8 palavras de 64 bits consecutivas) por vez. Transferências de blocos costu-
-mam ser mais eficientes do que transferências individuais sucessivas. Quando uma leitura de bloco é iniciada, o
-mestre de barramento informa ao escravo quantas palavras serão transferidas, por exemplo, colocando o núme-
-ro de palavras nas linhas de dados durante T1. Em vez de retornar apenas uma palavra, o escravo entrega uma
-durante cada ciclo até esgotar aquele número de palavras. A Figura 3.42 mostra uma versão modificada da Figura
-3.38(a), mas agora com um sinal extra, block, que é ativado para indicar que foi requisitada uma transferência de
-bloco. Nesse exemplo, uma leitura de bloco de 4 palavras demora 6 ciclos em vez de 12.
+Em geral, só uma palavra é transferida por vez. Contudo, quando é usado caching, é desejável buscar uma linha inteira de cache (por exemplo, 8 palavras de 64 bits consecutivas) por vez. Transferências de blocos costumam ser mais eficientes do que transferências individuais sucessivas. Quando uma leitura de bloco é iniciada, o mestre de barramento informa ao escravo quantas palavras serão transferidas, por exemplo, colocando o número de palavras nas linhas de dados durante T1. Em vez de retornar apenas uma palavra, o escravo entrega uma durante cada ciclo até esgotar aquele número de palavras. A Figura 3.42 mostra uma versão modificada da Figura 3.38(a), mas agora com um sinal extra, block, que é ativado para indicar que foi requisitada uma transferência de bloco. Nesse exemplo, uma leitura de bloco de 4 palavras demora 6 ciclos em vez de 12.
 
 Figura 3.42   Transferência de bloco.
 
@@ -2071,30 +1911,16 @@ Ao trabalhar com memcpy() ou manipulação de grandes arrays no diretório estru
 
  - Já estruturas Dispersas (como Árvores ou Listas Encadeadas) forçam a CPU a desativar o modo BLOCK e enviar um novo endereço para cada nó, o que é drasticamente mais lento devido à latência de endereçamento repetida.
 
-Há também outros tipos de ciclos de barramento. Por exemplo, em um sistema multiprocessador com duas
-ou mais CPUs no mesmo barramento, muitas vezes é necessário garantir que só uma CPU por vez use alguma
-estrutura de dados crítica na memória. Um modo típico de organizar isso é ter uma variável na memória que é 0
-quando nenhuma CPU estiver usando a estrutura de dados e 1 quando esta estiver em uso. Se uma CPU quiser
-obter acesso à estrutura de dados, deve ler a variável e, se esta for 0, passá-la para 1. O problema é que, com um
-pouco de má sorte, duas CPUs podem ler a variável em ciclos de barramento consecutivos. Se cada uma perceber
-que a variável é 0, então cada uma passa a variável para 1 e acha que é a única CPU que está usando a estrutura
-de dados. Essa sequência de eventos leva ao caos.
+Há também outros tipos de ciclos de barramento. Por exemplo, em um sistema multiprocessador com duas ou mais CPUs no mesmo barramento, muitas vezes é necessário garantir que só uma CPU por vez use alguma estrutura de dados crítica na memória. Um modo típico de organizar isso é ter uma variável na memória que é 0
+quando nenhuma CPU estiver usando a estrutura de dados e 1 quando esta estiver em uso. Se uma CPU quiser obter acesso à estrutura de dados, deve ler a variável e, se esta for 0, passá-la para 1. O problema é que, com um pouco de má sorte, duas CPUs podem ler a variável em ciclos de barramento consecutivos. Se cada uma perceber que a variável é 0, então cada uma passa a variável para 1 e acha que é a única CPU que está usando a estrutura de dados. Essa sequência de eventos leva ao caos.
 
-Para evitar essa situação, sistemas multiprocessadores costumam ter um ciclo de barramento especial ler-
--modificar-escrever que permite a qualquer CPU ler uma palavra da memória, inspecionar e modificar essa pala-
-vra, e escrevê-la novamente na memória, tudo sem liberar o barramento. Esse tipo de ciclo evita que uma CPU
+Para evitar essa situação, sistemas multiprocessadores costumam ter um ciclo de barramento especial ler-modificar-escrever que permite a qualquer CPU ler uma palavra da memória, inspecionar e modificar essa palavra, e escrevê-la novamente na memória, tudo sem liberar o barramento. Esse tipo de ciclo evita que uma CPU
 rival possa usar o barramento e assim interferir com a operação da primeira CPU.
 
-Outro tipo importante de ciclo de barramento é o usado para manipular interrupções. Quando ordena que
-um dispositivo de E/S faça algo, a CPU espera uma interrupção quando o trabalho for concluído. A sinalização
-da interrupção requer o barramento.
+Outro tipo importante de ciclo de barramento é o usado para manipular interrupções. Quando ordena que um dispositivo de E/S faça algo, a CPU espera uma interrupção quando o trabalho for concluído. A sinalização da interrupção requer o barramento.
 
-Uma vez que vários dispositivos podem querer causar uma interrupção simultaneamente, os mesmos tipos
-de problemas de arbitragem que tivemos nos ciclos de barramento comuns também estão presentes aqui. A
-solução normal é atribuir prioridades a dispositivos e usar um árbitro centralizado para dar prioridade aos dis-
-positivos mais críticos em relação ao tempo. Existem chips controladores de interrupção padronizados que são
-muito usados. Em PCs baseados em processador Intel, o chipset incorpora um controlador de interrupção 8259A,
-ilustrado na Figura 3.43.
+Uma vez que vários dispositivos podem querer causar uma interrupção simultaneamente, os mesmos tipos de problemas de arbitragem que tivemos nos ciclos de barramento comuns também estão presentes aqui. A solução normal é atribuir prioridades a dispositivos e usar um árbitro centralizado para dar prioridade aos dis-
+positivos mais críticos em relação ao tempo. Existem chips controladores de interrupção padronizados que são muito usados. Em PCs baseados em processador Intel, o chipset incorpora um controlador de interrupção 8259A, ilustrado na Figura 3.43.
 
 Figura 3.43   Utilização do controlador de interrupção 8259A.
 
@@ -2129,117 +1955,46 @@ Ao programar em C no diretório estruturas_de_dados, você lida com isso atravé
 
  - Sem esse chip, o seu processador teria que gastar ciclos preciosos fazendo "polling" (perguntando constantemente a cada dispositivo se há algo novo), o que destruiria a performance das suas estruturas de dados.
 
-Até oito controladores de E/S 8259A podem ser conectados direto às oito entradas irx (Interrupt Request ­–
-solicitação de interrupção) do 8259A. Quando qualquer um desses dispositivos quiser causar uma interrupção, ele
-ativa sua linha de entrada. Quando uma ou mais entradas são acionadas, o 8259A ativa int (INTerrupt – interrup-
-ção), que impulsiona diretamente o pino de interrupção na CPU. Quando a CPU puder manipular a interrupção,
-ela devolve o pulso ao 8259A por inta (INTerrupt Acknowledge – reconhecimento de interrupção). Nesse ponto,
-o 8259A deve especificar qual entrada causou interrupção passando o número daquela entrada para o barramento
-de dados. Essa operação requer um ciclo de barramento especial. Então, o hardware da CPU usa esse número
-para indexar em uma tabela de ponteiros, denominados vetores de interrupção, para achar o endereço do proce-
-dimento a executar para atender à interrupção.
+Até oito controladores de E/S 8259A podem ser conectados direto às oito entradas irx (Interrupt Request ­solicitação de interrupção) do 8259A. Quando qualquer um desses dispositivos quiser causar uma interrupção, ele ativa sua linha de entrada. Quando uma ou mais entradas são acionadas, o 8259A ativa int (INTerrupt – interrupção), que impulsiona diretamente o pino de interrupção na CPU. Quando a CPU puder manipular a interrupção, ela devolve o pulso ao 8259A por inta (INTerrupt Acknowledge – reconhecimento de interrupção). Nesse ponto, o 8259A deve especificar qual entrada causou interrupção passando o número daquela entrada para o barramento de dados. Essa operação requer um ciclo de barramento especial. Então, o hardware da CPU usa esse número para indexar em uma tabela de ponteiros, denominados vetores de interrupção, para achar o endereço do procedimento a executar para atender à interrupção.
 
-No interior do 8259A há diversos registradores que a CPU pode ler e escrever usando ciclos de barramento
-comuns e os pinos rd (ReaD), wr (WRite), cs (Chip Select) e a0. Quando o software tiver tratado da interrupção e
-estiver pronto para atender à seguinte, ele escreve um código especial em um dos registradores, que faz o 8259A
-negar INT, a menos que haja outra interrupção pendente. Esses registradores também podem ser escritos para
-colocar o 8259A em um de vários modos, mascarar um conjunto de interrupções e habilitar outras características.
+No interior do 8259A há diversos registradores que a CPU pode ler e escrever usando ciclos de barramento comuns e os pinos rd (ReaD), wr (WRite), cs (Chip Select) e a0. Quando o software tiver tratado da interrupção e estiver pronto para atender à seguinte, ele escreve um código especial em um dos registradores, que faz o 8259A negar INT, a menos que haja outra interrupção pendente. Esses registradores também podem ser escritos para colocar o 8259A em um de vários modos, mascarar um conjunto de interrupções e habilitar outras características.
 
-Quando mais de oito dispositivos de E/S estiverem presentes, os 8259As podem funcionar em cascata. No
-caso mais extremo, todas as oito entradas podem ser conectadas às saídas de mais oito 8259As, permitindo até 64
-dispositivos de E/S em uma rede de interrupção de dois estágios. O hub controlador de E/S ICH10 da Intel, um dos
-chips no chipset Core i7, incorpora dois controladores de interrupção 8259A. Isso dá ao ICH10 15 interrupções
-externas, uma a menos que as 16 interrupções nos dois controladores 8259A, pois uma das interrupções é usada
-para a operação em cascata do segundo 8259A para o primeiro. O 8259A tem alguns pinos dedicados a essa ope-
-ração em cascata, que omitimos por questão de simplicidade. Hoje, o “8259A” é, na realidade, parte de outro chip.
+Quando mais de oito dispositivos de E/S estiverem presentes, os 8259As podem funcionar em cascata. No caso mais extremo, todas as oito entradas podem ser conectadas às saídas de mais oito 8259As, permitindo até 64 dispositivos de E/S em uma rede de interrupção de dois estágios. O hub controlador de E/S ICH10 da Intel, um dos chips no chipset Core i7, incorpora dois controladores de interrupção 8259A. Isso dá ao ICH10 15 interrupções externas, uma a menos que as 16 interrupções nos dois controladores 8259A, pois uma das interrupções é usada para a operação em cascata do segundo 8259A para o primeiro. O 8259A tem alguns pinos dedicados a essa operação em cascata, que omitimos por questão de simplicidade. Hoje, o “8259A” é, na realidade, parte de outro chip.
 
-Embora não tenhamos nem de perto esgotado a questão do projeto de barramento, o material que apresenta-
-mos até aqui deve oferecer fundamento suficiente para entender os aspectos essenciais do modo de funcionamen-
-to de um barramento e da interação entre CPUs e barramentos. Agora, vamos passar do geral para o específico e
-examinar alguns exemplos de CPUs reais e seus barramentos.
+Embora não tenhamos nem de perto esgotado a questão do projeto de barramento, o material que apresentamos até aqui deve oferecer fundamento suficiente para entender os aspectos essenciais do modo de funcionamento de um barramento e da interação entre CPUs e barramentos. Agora, vamos passar do geral para o específico e examinar alguns exemplos de CPUs reais e seus barramentos.
 
 ## 3.5 Exemplo de chips de CPUs
-Nesta seção, vamos examinar com algum detalhe os chips Intel Core i7, TI OMAP4430 e Atmel ATmega168
-no nível de hardware.
+Nesta seção, vamos examinar com algum detalhe os chips Intel Core i7, TI OMAP4430 e Atmel ATmega168 no nível de hardware.
 
 ## 3.5.1 O Intel Core i7
-O Core i7 é um descendente direto da CPU 8088 usada no IBM PC original. O primeiro Core i7 foi lançado
-em novembro de 2008 como uma CPU de 731 milhões de transistores de quatro processadores que funcionava em 3,2 GHz com uma largura de linha de 45 nanômetros. Largura da linha quer dizer a largura dos fios entre
-transistores, assim como uma medida do tamanho dos próprios transistores. Quanto menor a largura da linha,
-mais transistores podem caber no chip. No fundo, a lei de Moore se refere à capacidade de os engenheiros de
-processo continuarem a reduzir as larguras das linhas. Para fins de comparação, os fios de cabelo humano ficam
-na faixa de 20 mil a 100 mil nanômetros de diâmetro, sendo o cabelo loiro mais fino do que o preto.
+O Core i7 é um descendente direto da CPU 8088 usada no IBM PC original. O primeiro Core i7 foi lançado em novembro de 2008 como uma CPU de 731 milhões de transistores de quatro processadores que funcionava em 3,2 GHz com uma largura de linha de 45 nanômetros. Largura da linha quer dizer a largura dos fios entre
+transistores, assim como uma medida do tamanho dos próprios transistores. Quanto menor a largura da linha, mais transistores podem caber no chip. No fundo, a lei de Moore se refere à capacidade de os engenheiros de processo continuarem a reduzir as larguras das linhas. Para fins de comparação, os fios de cabelo humano ficam na faixa de 20 mil a 100 mil nanômetros de diâmetro, sendo o cabelo loiro mais fino do que o preto.
 
-A versão inicial da arquitetura Core i7 era baseada na arquitetura “Nahalem”; porém, as versões mais
-novas são montadas sobre a arquitetura “Sandy Bridge” mais recente. A arquitetura nesse contexto representa
-a organização interna da CPU, que costuma receber um codinome. Apesar de serem em geral pessoas sérias,
-os arquitetos de computador às vezes aparecerão com codinomes muito inteligentes para seus projetos. Uma
-arquitetura digna de nota foi a série K da AMD, projetada para quebrar a posição aparentemente invulnerável
-da Intel no segmento de CPU para desktop. O codinome dos processadores da série K foi “Kryptonite”, uma
-referência à única substância capaz de ferir o Super-homem, e um golpe inteligente na dominante Intel.
+A versão inicial da arquitetura Core i7 era baseada na arquitetura “Nahalem”; porém, as versões mais novas são montadas sobre a arquitetura “Sandy Bridge” mais recente. A arquitetura nesse contexto representa a organização interna da CPU, que costuma receber um codinome. Apesar de serem em geral pessoas sérias,
+os arquitetos de computador às vezes aparecerão com codinomes muito inteligentes para seus projetos. Uma arquitetura digna de nota foi a série K da AMD, projetada para quebrar a posição aparentemente invulnerável da Intel no segmento de CPU para desktop. O codinome dos processadores da série K foi “Kryptonite”, uma referência à única substância capaz de ferir o Super-homem, e um golpe inteligente na dominante Intel.
 
-O novo Core i7 baseado na Sandy Bridge evoluiu para ter 1,16 bilhão de transistores e trabalha em veloci-
-dades de até 3,5 GHz, com larguras de linha de 32 nanômetros. Embora o Core i7 esteja longe do 8088 com 29
-mil transistores, ele é totalmente compatível com o 8088 e pode rodar sem modificação os programas binários do
-8088 (sem falar também nos programas para todos os processadores intermediários).
+O novo Core i7 baseado na Sandy Bridge evoluiu para ter 1,16 bilhão de transistores e trabalha em velocidades de até 3,5 GHz, com larguras de linha de 32 nanômetros. Embora o Core i7 esteja longe do 8088 com 29 mil transistores, ele é totalmente compatível com o 8088 e pode rodar sem modificação os programas binários do 8088 (sem falar também nos programas para todos os processadores intermediários).
 
-Do ponto de vista de software, o Core i7 é uma máquina completa de 64 bits. Tem todas as mesmas carac-
-terísticas ISA de nível de usuário que os chips 80386, 80486, Pentium, Pentium II, Pentium Pro, Pentium III e
-Pentium 4, inclusive os mesmos registradores, as mesmas instruções e uma execução completa no chip do padrão
-IEEE 754 de ponto flutuante. Além disso, tem algumas novas instruções destinadas principalmente a operações
-criptográficas.
+Do ponto de vista de software, o Core i7 é uma máquina completa de 64 bits. Tem todas as mesmas características ISA de nível de usuário que os chips 80386, 80486, Pentium, Pentium II, Pentium Pro, Pentium III e Pentium 4, inclusive os mesmos registradores, as mesmas instruções e uma execução completa no chip do padrão IEEE 754 de ponto flutuante. Além disso, tem algumas novas instruções destinadas principalmente a operações criptográficas.
 
-O processador Core i7 é uma CPU multicore (de múltiplos núcleos), de modo que o substrato de silício
-contém vários processadores. A CPU é vendida com um número variável de processadores, que vai de 2 a 6,
-com outras configurações planejadas para o futuro próximo. Se os programadores escreverem um programa
-paralelo, usando threads e locks, é possível obter ganhos significativos na velocidade do programa, explorando
-o paralelismo nos múltiplos processadores. Além disso, as CPUs individuais são “hyperthreaded”, de modo que
-várias threads de hardware podem estar ativas simultaneamente. O hyperthreading (normalmente denominado
-“multithreading simultâneo” pelos arquitetos de computador) permite que latências muito curtas, como faltas
-de cache, sejam toleradas com trocas de thread de hardware. O threading baseado no software só pode tolerar
-latências muito longas, como faltas de página, devido às centenas de ciclos necessárias para executar as trocas de
-threads baseadas em software.
+O processador Core i7 é uma CPU multicore (de múltiplos núcleos), de modo que o substrato de silício contém vários processadores. A CPU é vendida com um número variável de processadores, que vai de 2 a 6, com outras configurações planejadas para o futuro próximo. Se os programadores escreverem um programa
+paralelo, usando threads e locks, é possível obter ganhos significativos na velocidade do programa, explorando o paralelismo nos múltiplos processadores. Além disso, as CPUs individuais são “hyperthreaded”, de modo que várias threads de hardware podem estar ativas simultaneamente. O hyperthreading (normalmente denominado “multithreading simultâneo” pelos arquitetos de computador) permite que latências muito curtas, como faltas de cache, sejam toleradas com trocas de thread de hardware. O threading baseado no software só pode tolerar latências muito longas, como faltas de página, devido às centenas de ciclos necessárias para executar as trocas de threads baseadas em software.
 
-Em sua parte interna, no nível da microarquitetura, o Core i7 é um projeto bastante capaz. Ele é baseado na
-arquitetura de seus predecessores, o Core 2 e Core 2 Due. O processador Core i7 pode executar até quatro ins-
-truções ao mesmo tempo, tornando-o uma máquina superescalar de largura 4. Examinaremos a microarquitetura
+Em sua parte interna, no nível da microarquitetura, o Core i7 é um projeto bastante capaz. Ele é baseado na arquitetura de seus predecessores, o Core 2 e Core 2 Due. O processador Core i7 pode executar até quatro instruções ao mesmo tempo, tornando-o uma máquina superescalar de largura 4. Examinaremos a microarquitetura
 no Capítulo 4.
 
-Todos os processadores Core i7 têm três níveis de cache. Cada processador em um processador Core i7 tem
-uma cache de dados de nível 1 (L1) com 32 KB e uma de instruções de nível 1 com 32 KB. Cada núcleo também
-tem sua própria cache de nível 2 (L2) com 256 KB. A cache de segundo nível é unificada, significando que pode
-ter uma mistura de instruções e dados. Todos os núcleos compartilham uma só cache unificada de nível 3 (L3),
-cujo tamanho varia de 4 a 15 MB, dependendo do modelo de processador. Ter três níveis de cache melhora sig-
-nificativamente o desempenho do processador, mas com um grande custo na área de silício, pois as CPUs Core
-i7 podem ter até 17 MB de cache total em um único substrato de silício.
+Todos os processadores Core i7 têm três níveis de cache. Cada processador em um processador Core i7 tem uma cache de dados de nível 1 (L1) com 32 KB e uma de instruções de nível 1 com 32 KB. Cada núcleo também tem sua própria cache de nível 2 (L2) com 256 KB. A cache de segundo nível é unificada, significando que pode
+ter uma mistura de instruções e dados. Todos os núcleos compartilham uma só cache unificada de nível 3 (L3), cujo tamanho varia de 4 a 15 MB, dependendo do modelo de processador. Ter três níveis de cache melhora significativamente o desempenho do processador, mas com um grande custo na área de silício, pois as CPUs Core i7 podem ter até 17 MB de cache total em um único substrato de silício.
 
-Visto que todos os chips Core i7 têm múltiplos processadores com caches de dados privadas, surge um pro-
-blema quando uma CPU modifica uma palavra na cache privada que esteja contida na de outro processador. Se o
-outro processador tentar ler aquela palavra da memória, obterá um valor ultrapassado, já que palavras de cache
-modificadas não são escritas de imediato de volta na memória. Para manter a consistência da memória, cada CPU
-em um sistema microprocessador escuta (snoops) o barramento de memória em busca de referências de palavras
-que tenha em cache. Quando vê uma dessas referências, ela se apressa em fornecer os dados requisitados antes que
-a memória tenha chance de fazê-lo. Estudaremos a escuta (snooping) no Capítulo 8.
+Visto que todos os chips Core i7 têm múltiplos processadores com caches de dados privadas, surge um problema quando uma CPU modifica uma palavra na cache privada que esteja contida na de outro processador. Se o outro processador tentar ler aquela palavra da memória, obterá um valor ultrapassado, já que palavras de cache modificadas não são escritas de imediato de volta na memória. Para manter a consistência da memória, cada CPU em um sistema microprocessador escuta (snoops) o barramento de memória em busca de referências de palavras que tenha em cache. Quando vê uma dessas referências, ela se apressa em fornecer os dados requisitados antes que a memória tenha chance de fazê-lo. Estudaremos a escuta (snooping) no Capítulo 8.
 
-Dois barramentos externos principais são usados nos sistemas Core i7, ambos síncronos. Um barramento
-de memória DDR3 é usado para acessar a DRAM de memória principal, e um barramento PCI Express conecta o
-processador a dispositivos de E/S. Versões avançadas do Core i7 incluem memória múltipla e barramentos PCI
-Express, e elas também incluem uma porta Quick Path Interconnect (QPI). A porta QPI conecta o processador
-a uma interconexão multiprocessadora externa, permitindo a montagem de sistemas com mais de seis proces-
-sadores. A porta QPI envia e recebe requisições de coerência de cache, mais uma série de outras mensagens de
-gerenciamento de multiprocessador, como interrupções interprocessador.
+Dois barramentos externos principais são usados nos sistemas Core i7, ambos síncronos. Um barramento de memória DDR3 é usado para acessar a DRAM de memória principal, e um barramento PCI Express conecta o processador a dispositivos de E/S. Versões avançadas do Core i7 incluem memória múltipla e barramentos PCI
+Express, e elas também incluem uma porta Quick Path Interconnect (QPI). A porta QPI conecta o processador a uma interconexão multiprocessadora externa, permitindo a montagem de sistemas com mais de seis processadores. A porta QPI envia e recebe requisições de coerência de cache, mais uma série de outras mensagens de gerenciamento de multiprocessador, como interrupções interprocessador.
 
-Um problema com o Core i7, bem como com a maioria das outras CPUs modernas do tipo desktop, é a energia
-que consome e o calor que gera. Para impedir danos ao silício, o calor deve ser afastado do substrato do processador
-logo após ser produzido. O Core i7 consome entre 17 e 150 watts, dependendo da frequência e do modelo. Por
-consequência, a Intel está sempre buscando meios de controlar o calor produzido por seus chips de CPU. As
-tecnologias de resfriamento e os dissipadores de calor são vitais para evitar que o silício se queime.
+Um problema com o Core i7, bem como com a maioria das outras CPUs modernas do tipo desktop, é a energia que consome e o calor que gera. Para impedir danos ao silício, o calor deve ser afastado do substrato do processador logo após ser produzido. O Core i7 consome entre 17 e 150 watts, dependendo da frequência e do modelo. Por consequência, a Intel está sempre buscando meios de controlar o calor produzido por seus chips de CPU. As tecnologias de resfriamento e os dissipadores de calor são vitais para evitar que o silício se queime.
 
-O Core i7 vem em um pacote LGA quadrado com 37,5 mm de borda. Ele contém 1.155 pinos na parte infe-
-rior, dos quais 286 são para alimentação e 360 são aterramento, para reduzir o ruído. Os pinos são arrumados
-mais ou menos como um quadrado de 40 × 40, com os 17 × 25 do meio faltando. Além disso, 20 outros pinos
-estão faltando no perímetro em um padrão assimétrico, para impedir que o chip seja inserido incorretamente em
-sua base. A disposição física dos pinos aparece na Figura 3.44.
+O Core i7 vem em um pacote LGA quadrado com 37,5 mm de borda. Ele contém 1.155 pinos na parte inferior, dos quais 286 são para alimentação e 360 são aterramento, para reduzir o ruído. Os pinos são arrumados mais ou menos como um quadrado de 40 × 40, com os 17 × 25 do meio faltando. Além disso, 20 outros pinos
+estão faltando no perímetro em um padrão assimétrico, para impedir que o chip seja inserido incorretamente em sua base. A disposição física dos pinos aparece na Figura 3.44.
 
 Figura 3.44   Disposição física dos pinos no Core i7.
 
@@ -2277,27 +2032,14 @@ Pode parecer que o calor não afeta o software, mas no diretório estruturas_de_
 
  - Quando isso acontece, o hardware reduz o clock, e sua estrutura de dados, que deveria ser rápida, começa a performar de forma lenta devido à limitação térmica do hardware.
 
-O chip é equipado com uma placa de montagem para um dissipador distribuir o calor e um ventilador para
-resfriá-lo. Para ter uma ideia do tamanho do problema da potência, ligue uma lâmpada incandescente de 150
-watts, deixe-a aquecer e depois coloque suas mãos ao seu redor (mas não a toque). Essa quantidade de calor deve
-ser dissipada continuamente por um processador Core i7 de última geração. Em consequência, quando o Core
-i7 não tiver mais utilidade como uma CPU, ele sempre poderá ser usado como um fogareiro em acampamentos.
+O chip é equipado com uma placa de montagem para um dissipador distribuir o calor e um ventilador para resfriá-lo. Para ter uma ideia do tamanho do problema da potência, ligue uma lâmpada incandescente de 150 watts, deixe-a aquecer e depois coloque suas mãos ao seu redor (mas não a toque). Essa quantidade de calor deve
+ser dissipada continuamente por um processador Core i7 de última geração. Em consequência, quando o Core i7 não tiver mais utilidade como uma CPU, ele sempre poderá ser usado como um fogareiro em acampamentos.
 
-De acordo com as leis da física, qualquer coisa que emita muito calor deve absorver muita energia. Não é
-interessante usar muita energia em um computador portátil com carga de bateria limitada porque a bateria se
-esgota rapidamente. Para resolver essa questão, a Intel oferece um meio de pôr a CPU para dormir quando ela estiver ociosa e de fazê-la cair em sono profundo quando é provável que fique adormecida durante algum tempo.
-Há cinco estados oferecidos, que vão de totalmente ativa a sono profundo. Nos estados intermediários são habi-
-litadas algumas funcionalidades (tal como escuta de cache e manipulação de interrupção), mas outras funções
-são desativadas. Quando em estado de sono profundo, os valores de registradores são preservados, mas as caches são
-esvaziadas e desligadas. Nesse estado, é preciso que haja um sinal de hardware para despertá-la. Ainda não sabe-
-mos se um Core i7 pode sonhar quando está em sono profundo.
+De acordo com as leis da física, qualquer coisa que emita muito calor deve absorver muita energia. Não é interessante usar muita energia em um computador portátil com carga de bateria limitada porque a bateria se esgota rapidamente. Para resolver essa questão, a Intel oferece um meio de pôr a CPU para dormir quando ela estiver ociosa e de fazê-la cair em sono profundo quando é provável que fique adormecida durante algum tempo. Há cinco estados oferecidos, que vão de totalmente ativa a sono profundo. Nos estados intermediários são habilitadas algumas funcionalidades (tal como escuta de cache e manipulação de interrupção), mas outras funções são desativadas. Quando em estado de sono profundo, os valores de registradores são preservados, mas as caches são esvaziadas e desligadas. Nesse estado, é preciso que haja um sinal de hardware para despertá-la. Ainda não sabemos se um Core i7 pode sonhar quando está em sono profundo.
 
 ### Pinagem lógica do Core i7
-Os 1.155 pinos do Core i7 são usados para 447 sinais, 286 conexões de energia elétrica (em diversas volta-
-gens diferentes), 360 terras e 62 reservados para uso futuro. Alguns dos sinais lógicos usam dois ou mais pinos
-(tal como o endereço de memória requisitado), de modo que há somente 131 sinais diferentes. Uma pinagem
-lógica um pouco simplificada é dada na Figura 3.45. No lado esquerdo da figura, há cinco grupos principais de
-sinais de barramento; no lado direito, há diversos sinais variados.
+Os 1.155 pinos do Core i7 são usados para 447 sinais, 286 conexões de energia elétrica (em diversas voltagens diferentes), 360 terras e 62 reservados para uso futuro. Alguns dos sinais lógicos usam dois ou mais pinos (tal como o endereço de memória requisitado), de modo que há somente 131 sinais diferentes. Uma pinagem
+lógica um pouco simplificada é dada na Figura 3.45. No lado esquerdo da figura, há cinco grupos principais de sinais de barramento; no lado direito, há diversos sinais variados.
 
 Figura 3.45   Pinagem lógica do Core i7
 
@@ -2339,92 +2081,43 @@ Essa pinagem explica por que, no seu diretório estruturas_de_dados, a escolha d
  - A enorme quantidade de pinos de energia e terra garante que, mesmo sob carga intensa de processamento de dados, os sinais lógicos permaneçam "limpos" e sem erros de bit.
 
 
-Vamos examinar os sinais, começando com os do barramento. Os dois primeiros sinais são usados para a
-interface com DRAM compatível com DDR3. Esse grupo oferece endereço, dados, controle e clock ao banco de
-DRAMs. O Core i7 admite dois canais DRAM DDR3 independentes, rodando com um clock de barramento de 666
-MHz que transfere nas duas bordas, para permitir 1.333 milhões de transações por segundo. A interface DDR3
-tem 64 bits de largura, e assim, as duas interfaces DDR3 trabalham em sequência para dar aos programas com
-muita utilização de memória até 20 gigabytes de dados a cada segundo.
+Vamos examinar os sinais, começando com os do barramento. Os dois primeiros sinais são usados para a interface com DRAM compatível com DDR3. Esse grupo oferece endereço, dados, controle e clock ao banco de DRAMs. O Core i7 admite dois canais DRAM DDR3 independentes, rodando com um clock de barramento de 666 MHz que transfere nas duas bordas, para permitir 1.333 milhões de transações por segundo. A interface DDR3 tem 64 bits de largura, e assim, as duas interfaces DDR3 trabalham em sequência para dar aos programas com muita utilização de memória até 20 gigabytes de dados a cada segundo.
 
-O terceiro grupo do barramento é a interface PCI Express, que é usada para conectar periféricos diretamente
-à CPU Core i7. A interface PCI Express é uma interface serial de alta velocidade, com cada enlace serial único
-formando uma “via” de comunicação com os periféricos. O enlace do Core i7 é uma interface x16, significando
-que pode utilizar 16 vias simultaneamente para uma largura de banda agregada de 16 GB/s. Apesar de ser um
-canal serial, um rico conjunto de comandos trafega pelos enlaces PCI Express, incluindo comandos de leituras
-de dispositivo, escrita, interrupção e configuração.
+O terceiro grupo do barramento é a interface PCI Express, que é usada para conectar periféricos diretamente à CPU Core i7. A interface PCI Express é uma interface serial de alta velocidade, com cada enlace serial único formando uma “via” de comunicação com os periféricos. O enlace do Core i7 é uma interface x16, significando que pode utilizar 16 vias simultaneamente para uma largura de banda agregada de 16 GB/s. Apesar de ser um canal serial, um rico conjunto de comandos trafega pelos enlaces PCI Express, incluindo comandos de leituras de dispositivo, escrita, interrupção e configuração.
 
-O grupo seguinte é a Direct Media Interface (DMI), que é usada para conectar a CPU do Core i7 ao seu chip-
-set correspondente. A interface DMI é semelhante à interface PCI Express, embora trabalhe com cerca de metade
-da velocidade, pois quatro vias podem fornecer apenas taxas de transferência de dados de até 2,5 GB por segundo.
+O grupo seguinte é a Direct Media Interface (DMI), que é usada para conectar a CPU do Core i7 ao seu chip-set correspondente. A interface DMI é semelhante à interface PCI Express, embora trabalhe com cerca de metade da velocidade, pois quatro vias podem fornecer apenas taxas de transferência de dados de até 2,5 GB por segundo.
 
-O chipset de uma CPU contém um rico conjunto de suporte para interface de periférico adicional, exigido para
-sistemas de mais alto nível, com muitos dispositivos de E/S. O chipset do Core i7 é composto dos chips P67 e
-ICH10. O chip P67 é o canivete suíço dos chips, oferecendo interfaces SATA, USB, Audio, PCIe e memória flash.
-O chip ICH10 oferece suporte para interface legada, incluindo uma interface PCI e a funcionalidade de contro-
-le de interrupção do 8259A. Além disso, o ICH10 contém alguns outros circuitos, como clocks de tempo real,
-temporizadores de eventos e controladores de acesso direto à memória (DMA). Ter chips como esses simplifica
-bastante a construção de um PC completo.
+O chipset de uma CPU contém um rico conjunto de suporte para interface de periférico adicional, exigido para sistemas de mais alto nível, com muitos dispositivos de E/S. O chipset do Core i7 é composto dos chips P67 e ICH10. O chip P67 é o canivete suíço dos chips, oferecendo interfaces SATA, USB, Audio, PCIe e memória flash. O chip ICH10 oferece suporte para interface legada, incluindo uma interface PCI e a funcionalidade de controle de interrupção do 8259A. Além disso, o ICH10 contém alguns outros circuitos, como clocks de tempo real, temporizadores de eventos e controladores de acesso direto à memória (DMA). Ter chips como esses simplifica bastante a construção de um PC completo.
 
-O Core i7 pode ser configurado para usar interrupções do mesmo modo que o 8088 (para fins de compati-
-bilidade) ou também pode usar um novo sistema de interrupção que utiliza um dispositivo denominado APIC
-(Advanced Programmable Interrupt Controller – controlador de interrupção programável avançado).
+O Core i7 pode ser configurado para usar interrupções do mesmo modo que o 8088 (para fins de compatibilidade) ou também pode usar um novo sistema de interrupção que utiliza um dispositivo denominado APIC (Advanced Programmable Interrupt Controller – controlador de interrupção programável avançado).
 
-O Core i7 pode funcionar em quaisquer de várias tensões predefinidas, mas tem de saber qual delas. Os sinais
-de gerenciamento de energia são usados para seleção automática de tensão da fonte de alimentação, para informar
-à CPU que a energia está estável e outros assuntos relacionados com a energia. O controle dos vários estados de
-sono também é feito aqui, já que o sono acontece por razões de gerenciamento de energia.
+O Core i7 pode funcionar em quaisquer de várias tensões predefinidas, mas tem de saber qual delas. Os sinais de gerenciamento de energia são usados para seleção automática de tensão da fonte de alimentação, para informar à CPU que a energia está estável e outros assuntos relacionados com a energia. O controle dos vários estados de sono também é feito aqui, já que o sono acontece por razões de gerenciamento de energia.
 
-A despeito de seu sofisticado gerenciamento de energia, o Core i7 pode ficar muito quente. Para proteger o
-silício, cada processador Core i7 contém vários sensores de calor internos, que detectam quando o chip está para
-superaquecer. O grupo de monitoramento térmico trata do gerenciamento térmico, permitindo que a CPU indi-
-que a seu ambiente que está em risco de superaquecimento. Um dos pinos é ativado pela CPU caso a temperatura
-atinja 130 °C (266°F). Se uma CPU alguma vez atingir essa temperatura, provavelmente estará sonhando com sua
-aposentadoria e posterior transformação em fogareiro de acampamento.
+A despeito de seu sofisticado gerenciamento de energia, o Core i7 pode ficar muito quente. Para proteger o silício, cada processador Core i7 contém vários sensores de calor internos, que detectam quando o chip está para superaquecer. O grupo de monitoramento térmico trata do gerenciamento térmico, permitindo que a CPU indi- que a seu ambiente que está em risco de superaquecimento. Um dos pinos é ativado pela CPU caso a temperatura atinja 130 °C (266°F). Se uma CPU alguma vez atingir essa temperatura, provavelmente estará sonhando com sua aposentadoria e posterior transformação em fogareiro de acampamento.
 
-Até mesmo em temperaturas de fogareiro de acampamento você não precisa se preocupar com a segurança
-do Core i7. Se os sensores internos detectarem que o processador está para superaquecer, ele iniciará o estrangu-
-lamento térmico, uma técnica que logo reduz a geração de calor, usando o processador apenas a cada N-ésimo
-ciclo de clock. Quanto maior o valor de N, mais o processador é estrangulado, e mais rápido ele se resfriará. É
-claro que o custo desse estrangulamento é uma diminuição no desempenho do sistema. Antes da invenção do
-estrangulamento térmico, as CPUs se queimavam se seu sistema de resfriamento falhasse. A evidência desses tem-
-pos negros do gerenciamento térmico da CPU pode ser achada procurando-se por “exploding CPU” no YouTube.
-O vídeo é falso, mas o problema não.
+Até mesmo em temperaturas de fogareiro de acampamento você não precisa se preocupar com a segurança do Core i7. Se os sensores internos detectarem que o processador está para superaquecer, ele iniciará o estrangulamento térmico, uma técnica que logo reduz a geração de calor, usando o processador apenas a cada N-ésimo ciclo de clock. Quanto maior o valor de N, mais o processador é estrangulado, e mais rápido ele se resfriará. É claro que o custo desse estrangulamento é uma diminuição no desempenho do sistema. Antes da invenção do estrangulamento térmico, as CPUs se queimavam se seu sistema de resfriamento falhasse. A evidência desses tempos negros do gerenciamento térmico da CPU pode ser achada procurando-se por “exploding CPU” no YouTube. O vídeo é falso, mas o problema não.
 
-O sinal Clock fornece o clock do sistema ao processador, que internamente é usado para gerar uma variedade
-de clocks com base em um múltiplo ou fração do clock do sistema. Sim, é possível gerar um múltiplo da frequência de
-clock, usando um dispositivo muito inteligente, chamado de delay-locked loop, ou DLL.
+O sinal Clock fornece o clock do sistema ao processador, que internamente é usado para gerar uma variedade de clocks com base em um múltiplo ou fração do clock do sistema. Sim, é possível gerar um múltiplo da frequência de clock, usando um dispositivo muito inteligente, chamado de delay-locked loop, ou DLL.
 
-O grupo Diagnósticos contém sinais para testar e depurar sistemas em conformidade com o padrão de testes
-IEEE 1149.1 JTAG (Joint Test Action Group). Finalmente, o grupo Diversos é uma miscelânea de outros sinais
-que possuem diversas finalidades especiais.
+O grupo Diagnósticos contém sinais para testar e depurar sistemas em conformidade com o padrão de testes IEEE 1149.1 JTAG (Joint Test Action Group). Finalmente, o grupo Diversos é uma miscelânea de outros sinais que possuem diversas finalidades especiais.
 
 ### Paralelismo no barramento de memória do DDR3 do Core i7
-CPUs modernas como o Core i7 colocam grandes demandas sobre as memórias DRAM. Os processadores
-individuais podem criar requisições de acesso muito mais depressa do que uma DRAM lenta consegue produzir
-valores, e esse problema é aumentado quando vários processadores estão fazendo requisições simultâneas. Para
-evitar que as CPUs morram por falta de dados, é essencial conseguir o máximo de vazão possível da memória. Por
-esse motivo, o barramento de memória DDR3 do Core i7 pode ser operado de uma forma paralela, com até quatro
-transações de memória simultâneas ocorrendo ao mesmo tempo. Vimos o conceito de paralelismo (ou pipelining)
-no Capítulo 2, no contexto de uma CPU em paralelo (ver Figura 2.4), mas as memórias também podem trabalhar
+CPUs modernas como o Core i7 colocam grandes demandas sobre as memórias DRAM. Os processadores individuais podem criar requisições de acesso muito mais depressa do que uma DRAM lenta consegue produzir valores, e esse problema é aumentado quando vários processadores estão fazendo requisições simultâneas. Para
+evitar que as CPUs morram por falta de dados, é essencial conseguir o máximo de vazão possível da memória. Por esse motivo, o barramento de memória DDR3 do Core i7 pode ser operado de uma forma paralela, com até quatro transações de memória simultâneas ocorrendo ao mesmo tempo. Vimos o conceito de paralelismo (ou pipelining) no Capítulo 2, no contexto de uma CPU em paralelo (ver Figura 2.4), mas as memórias também podem trabalhar
 com paralelismo.
     Para permitir o paralelismo, as requisições à memória do Core i7 têm três etapas:
 
     1. A fase ACTIVATE da memória, que “abre” uma linha de memória DRAM, aprontando-a para acessos
     subsequentes à memória.
+
     2. A fase READ ou WRITE da memória, na qual vários acessos podem ser feitos a palavras individuais
     dentro da linha DRAM aberta ou a várias palavras sequenciais dentro da linha de DRAM atual, usando
     um modo de rajada.
+    
     3. A fase PRECHARGE, que “fecha” a linha de memória DRAM atual e prepara a memória DRAM para o
     próximo comando ACTIVATE.
 
-O segredo do barramento de memória com paralelismo do Core i7 é que as DRAMs DDR3 são organizadas
-com vários bancos dentro do chip de DRAM. Um banco é um bloco de memória DRAM, que pode ser acessa-
-do em paralelo com outros bancos de memória DRAM, mesmo que estejam contidos no mesmo chip. Um chip
-DRAM DDR3 típico terá até 8 bancos de DRAM. Porém, a especificação de interface DDR3 permite apenas até
-quatro acessos simultâneos sobre um único canal DDR3. O diagrama de temporização da Figura 3.46 ilustra o
-Core i7 fazendo 4 acessos à memória para três bancos de DRAM distintos. Os acessos são totalmente sobrepostos,
-de modo que as leituras de DRAM ocorrem em paralelo dentro do chip de DRAM. Com setas no diagrama de
-temporização, a figura mostra quais comandos levam a outras operações.
+O segredo do barramento de memória com paralelismo do Core i7 é que as DRAMs DDR3 são organizadas com vários bancos dentro do chip de DRAM. Um banco é um bloco de memória DRAM, que pode ser acessado em paralelo com outros bancos de memória DRAM, mesmo que estejam contidos no mesmo chip. Um chip DRAM DDR3 típico terá até 8 bancos de DRAM. Porém, a especificação de interface DDR3 permite apenas até quatro acessos simultâneos sobre um único canal DDR3. O diagrama de temporização da Figura 3.46 ilustra o Core i7 fazendo 4 acessos à memória para três bancos de DRAM distintos. Os acessos são totalmente sobrepostos, de modo que as leituras de DRAM ocorrem em paralelo dentro do chip de DRAM. Com setas no diagrama de temporização, a figura mostra quais comandos levam a outras operações.
 
 Figura 3.46   Requisições de memória com paralelismo na interface DDR3 do Core i7.
 
@@ -2443,7 +2136,7 @@ Figura 3.46   Requisições de memória com paralelismo na interface DDR3 do
                                     [DADO 0] [DADO 1] [DADO 2] [DADO 0]
     DATA  ---------------------------+--------+--------+--------+------
 
-![alt text](image-8.png)
+![alt text](image-47.png)
 
 ### Insight para o seu repositório estruturas_de_dados
 Este nível de paralelismo é o que torna o Cache Prefetching tão eficiente no seu diretório estruturas_de_dados.
@@ -2452,51 +2145,19 @@ Este nível de paralelismo é o que torna o Cache Prefetching tão eficiente no 
 
  - Isso significa que, quando o seu código em C chega na próxima iteração, o dado já está "descendo" pelo barramento, eliminando quase todos os Wait States da Figura 3.38.
 
- Como vemos na Figura 3.46, a interface de memória DDR3 tem quatro caminhos de sinal principais: clock de
-barramento (CK), comando de barramento (CMD), endereço (ADDR) e dados (DATA). O sinal CK de clock
-de barramento orquestra toda a atividade deste. O comando de barramento CMD indica qual atividade é requi-
-sitada da DRAM de conexão. O comando ACTIVATE especifica o endereço de linha de DRAM a ser aberta por
-meio do sinal ADDR. Quando um READ é executado, o endereço de coluna da DRAM é dado por meio de sinais
-ADDR, e a DRAM produz o valor de leitura após um tempo fixo sobre os sinais DATA. Por fim, o comando
-PRECHARGE indica ao banco para pré-carregar por meio dos sinais ADDR. Para a finalidade do exemplo, o
-comando ACTIVATE deverá preceder o primeiro READ para o mesmo banco por dois ciclos de barramento
-DDR3, e os dados são produzidos um ciclo após o comando READ. Além disso, a operação PRECHARGE deverá
-ocorrer pelo menos dois ciclos de barramento após a última operação READ para o mesmo banco de DRAM.
+Como vemos na Figura 3.46, a interface de memória DDR3 tem quatro caminhos de sinal principais: clock de barramento (CK), comando de barramento (CMD), endereço (ADDR) e dados (DATA). O sinal CK de clock de barramento orquestra toda a atividade deste. O comando de barramento CMD indica qual atividade é requisitada da DRAM de conexão. O comando ACTIVATE especifica o endereço de linha de DRAM a ser aberta por meio do sinal ADDR. Quando um READ é executado, o endereço de coluna da DRAM é dado por meio de sinais ADDR, e a DRAM produz o valor de leitura após um tempo fixo sobre os sinais DATA. Por fim, o comando PRECHARGE indica ao banco para pré-carregar por meio dos sinais ADDR. Para a finalidade do exemplo, o comando ACTIVATE deverá preceder o primeiro READ para o mesmo banco por dois ciclos de barramento DDR3, e os dados são produzidos um ciclo após o comando READ. Além disso, a operação PRECHARGE deverá ocorrer pelo menos dois ciclos de barramento após a última operação READ para o mesmo banco de DRAM.
 
-O paralelismo nas requisições de memória pode ser visto na sobreposição das requisições de READ para os
-diferentes bancos de DRAM. Os dois primeiros acessos READ aos bancos 0 e 1 são completamente superpostos, pro-
-duzindo resultados nos ciclos de barramento 3 e 4, respectivamente. O acesso ao banco 2 é em parte superposto ao
-primeiro acesso do banco 1, e por fim a segunda leitura do banco 0 é parcialmente superposta ao acesso ao banco 2.
+O paralelismo nas requisições de memória pode ser visto na sobreposição das requisições de READ para os diferentes bancos de DRAM. Os dois primeiros acessos READ aos bancos 0 e 1 são completamente superpostos, produzindo resultados nos ciclos de barramento 3 e 4, respectivamente. O acesso ao banco 2 é em parte superposto ao primeiro acesso do banco 1, e por fim a segunda leitura do banco 0 é parcialmente superposta ao acesso ao banco 2.
 
-Você pode estar questionando como o Core i7 sabe quando os dados do comando READ retornarão e quando
-ele pode fazer uma nova requisição à memória. A resposta é que ele sabe quando receber e iniciar requisições
-porque modela totalmente as atividades internas de cada DRAM DDR3 conectada. Assim, ele antecipará o retorno
-dos dados no ciclo correto e saberá evitar o início de uma operação de pré-carga antes que se passem dois ciclos
-de sua última operação de leitura. O Core i7 pode antecipar todas essas atividades porque a interface de memória
-DDR3 é uma interface de memória síncrona. Assim, todas as atividades usam um número bem conhecido de
-ciclos de barramento DDR3. Mesmo com todo esse conhecimento, a criação de uma interface de memória DDR3
-com paralelismo completo e com alto desempenho é uma tarefa longe de ser trivial, exigindo muitos temporiza-
-dores internos e detectores de conflito para realizar o tratamento eficaz da requisição de DRAM.
+Você pode estar questionando como o Core i7 sabe quando os dados do comando READ retornarão e quando ele pode fazer uma nova requisição à memória. A resposta é que ele sabe quando receber e iniciar requisições porque modela totalmente as atividades internas de cada DRAM DDR3 conectada. Assim, ele antecipará o retorno
+dos dados no ciclo correto e saberá evitar o início de uma operação de pré-carga antes que se passem dois ciclos de sua última operação de leitura. O Core i7 pode antecipar todas essas atividades porque a interface de memória DDR3 é uma interface de memória síncrona. Assim, todas as atividades usam um número bem conhecido de ciclos de barramento DDR3. Mesmo com todo esse conhecimento, a criação de uma interface de memória DDR3 com paralelismo completo e com alto desempenho é uma tarefa longe de ser trivial, exigindo muitos temporizadores internos e detectores de conflito para realizar o tratamento eficaz da requisição de DRAM.
 
 ## 3.5.2 O sistema-em-um-chip Texas Instruments OMAP4430
-Como nosso segundo exemplo de um chip de CPU, examinaremos agora o sistema-em-um-chip Texas
-Instruments (TI) OMAP4430. O OMAP4430 realiza o conjunto de instruções ARM e é voltado para aplicações
-móveis e embutidas, como smartphones, tablets e dispositivos da Internet. Com um nome apropriado, um
-sistema-em-um-chip incorpora uma grande variedade de dispositivos, de modo que, combinado com periféricos
-físicos (tela sensível ao toque, memória flash etc.), ele executa um dispositivo de computação completo.
+Como nosso segundo exemplo de um chip de CPU, examinaremos agora o sistema-em-um-chip Texas Instruments (TI) OMAP4430. O OMAP4430 realiza o conjunto de instruções ARM e é voltado para aplicações móveis e embutidas, como smartphones, tablets e dispositivos da Internet. Com um nome apropriado, um sistema-em-um-chip incorpora uma grande variedade de dispositivos, de modo que, combinado com periféricos físicos (tela sensível ao toque, memória flash etc.), ele executa um dispositivo de computação completo.
 
-O sistema OMAP4430 inclui dois núcleos ARM A9, aceleradores adicionais e uma grande gama de inter-
-faces periféricas. A organização interna do OMAP4430 aparece na Figura 3.47. Os núcleos ARM A9 são micro-
-arquiteturas superescalares de largura 2. Além disso, existem mais três processadores aceleradores no substrato
-OMAP4430: o processador gráfico POWERVR SGX540, um processador de sinal de imagem (ISP) e um processa-
-dor de vídeo IVA3. O SGX540 oferece uma renderização 3D programável eficaz, semelhante às GPUs encontradas
-em PCs desktop, apesar de menores e mais lentas. O ISP é um processador programável projetado para manipula-
-ção eficiente da imagem, para o tipo de operações que seriam exigidas em uma câmera digital avançada. O IVA3
-executa codificação e decodificação eficientes de vídeo, com desempenho suficiente para dar suporte a aplicações
-3D, como as encontradas em consoles de jogos portáteis. Há também no sistema OMAP4430 uma gama de inter-
-faces periféricas, incluindo uma tela sensível ao toque e controladores de teclado, DRAM e interfaces flash, USB
-e HDMI. A Texas Instruments detalhou um roteiro para a série OMAP de CPUs. Projetos futuros terão mais de
-tudo – mais núcleos ARM, mais GPUs e mais periféricos diversos.
+O sistema OMAP4430 inclui dois núcleos ARM A9, aceleradores adicionais e uma grande gama de interfaces periféricas. A organização interna do OMAP4430 aparece na Figura 3.47. Os núcleos ARM A9 são micro-arquiteturas superescalares de largura 2. Além disso, existem mais três processadores aceleradores no substrato
+OMAP4430: o processador gráfico POWERVR SGX540, um processador de sinal de imagem (ISP) e um processador de vídeo IVA3. O SGX540 oferece uma renderização 3D programável eficaz, semelhante às GPUs encontradas em PCs desktop, apesar de menores e mais lentas. O ISP é um processador programável projetado para manipula-
+ção eficiente da imagem, para o tipo de operações que seriam exigidas em uma câmera digital avançada. O IVA3 executa codificação e decodificação eficientes de vídeo, com desempenho suficiente para dar suporte a aplicações 3D, como as encontradas em consoles de jogos portáteis. Há também no sistema OMAP4430 uma gama de interfaces periféricas, incluindo uma tela sensível ao toque e controladores de teclado, DRAM e interfaces flash, USB e HDMI. A Texas Instruments detalhou um roteiro para a série OMAP de CPUs. Projetos futuros terão mais de tudo – mais núcleos ARM, mais GPUs e mais periféricos diversos.
 
 Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
 
@@ -2548,100 +2209,39 @@ Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
                 |       |          |       |          | sora  |           |       |
                 '-------'          '-------'          '-------'           '-------'
 
+![alt text](image-48.png)
+
 ### Insight para o seu diretório estruturas_de_dados
 Entender o OMAP4430 é vital para o seu trabalho com Sistemas Embarcados. No seu diretório estruturas_de_dados, quando você lida com buffers de áudio ou vídeo, você está interagindo com o SDMA (System DMA) mostrado no diagrama.
 
  - O uso correto de estruturas contíguas na memória permite que o SDMA mova dados diretamente entre o Back-end de Áudio e a LPDDR2 sem interromper o processamento da MPU ARMv7.
 
-O sistema OMAP4430 foi lançado no início de 2011 com dois núcleos ARM A9 rodando a 1 GHz usando
-uma implementação de silício de 45 nanômetros. Um aspecto chave do projeto do OMAP4430 é que ele realiza
-quantidades significativas de cálculo com muito pouca potência, pois é visado para aplicações móveis, alimenta-
-das por uma bateria. Em tais aplicações, quanto mais eficiente for a operação do projeto, mais tempo o usuário
-poderá ficar sem carregar a bateria.
+O sistema OMAP4430 foi lançado no início de 2011 com dois núcleos ARM A9 rodando a 1 GHz usando uma implementação de silício de 45 nanômetros. Um aspecto chave do projeto do OMAP4430 é que ele realiza quantidades significativas de cálculo com muito pouca potência, pois é visado para aplicações móveis, alimenta-
+das por uma bateria. Em tais aplicações, quanto mais eficiente for a operação do projeto, mais tempo o usuário poderá ficar sem carregar a bateria.
 
-Os muitos processadores do OMAP4430 são incorporados para dar suporte à missão de operação com baixa
-potência. O processador gráfico, ISP, e o IVA3 são todos aceleradores programáveis que fornecem capacidades de
-cálculo eficientes com significativamente menos energia em comparação com as mesmas tarefas sendo executadas
-apenas nas CPUs ARM A9. Totalmente alimentado, o sistema IMAP4430 consome apenas 600 mW de potência.
-Em comparação com o Core i7 avançado, o OMAP4430 usa cerca de 1/250 de sua potência. O OMAP4430 tam-
-bém executa um modo de sono muito eficaz; quando todos os componentes estão dormindo, o projeto consome
-somente 100 µW. Modos de sono eficientes são fundamentais para aplicações móveis com longos períodos de
-tempo de standby, como um telefone celular. Quanto menos energia usada no modo de sono, mais tempo o tele-
-fone celular durará no modo standby.
+Os muitos processadores do OMAP4430 são incorporados para dar suporte à missão de operação com baixa potência. O processador gráfico, ISP, e o IVA3 são todos aceleradores programáveis que fornecem capacidades de cálculo eficientes com significativamente menos energia em comparação com as mesmas tarefas sendo executadas apenas nas CPUs ARM A9. Totalmente alimentado, o sistema IMAP4430 consome apenas 600 mW de potência. Em comparação com o Core i7 avançado, o OMAP4430 usa cerca de 1/250 de sua potência. O OMAP4430 também executa um modo de sono muito eficaz; quando todos os componentes estão dormindo, o projeto consome somente 100 µW. Modos de sono eficientes são fundamentais para aplicações móveis com longos períodos de tempo de standby, como um telefone celular. Quanto menos energia usada no modo de sono, mais tempo o tele- fone celular durará no modo standby.
 
-Para reduzir ainda mais as demandas de potência do OMAP4430, o projeto incorpora uma série de facilida-
-des de gerenciamento de energia, incluindo a escalada dinâmica de tensão e o chaveamento de energia. A escala-
-da dinâmica de tensão permite que os componentes sejam executados mais devagar em uma tensão inferior, o que
-reduz bastante os requisitos de potência. Se você não precisa da velocidade de computação mais ardente da CPU,
-a tensão do projeto pode ser reduzida para que a CPU trabalhe em uma velocidade mais lenta e muita energia
-será economizada. O chaveamento de energia é uma técnica de gerenciamento ainda mais agressiva, na qual um
-componente é desligado por completo quando não estiver em uso, eliminando assim seu consumo de energia.
-Por exemplo, em uma aplicação de tablet, se o usuário não estiver assistindo a um filme, o processador de vídeo
-IVA3 é completamente desligado e não consome energia. Por outro lado, quando o usuário está assistindo a um
-filme, o processador de vídeo IVA3 trabalha ao máximo em suas tarefas de decodificação de vídeo, enquanto as
-duas CPUs ARM A9 estão dormindo.
+Para reduzir ainda mais as demandas de potência do OMAP4430, o projeto incorpora uma série de facilidades de gerenciamento de energia, incluindo a escalada dinâmica de tensão e o chaveamento de energia. A escalada dinâmica de tensão permite que os componentes sejam executados mais devagar em uma tensão inferior, o que reduz bastante os requisitos de potência. Se você não precisa da velocidade de computação mais ardente da CPU, a tensão do projeto pode ser reduzida para que a CPU trabalhe em uma velocidade mais lenta e muita energia será economizada. O chaveamento de energia é uma técnica de gerenciamento ainda mais agressiva, na qual um componente é desligado por completo quando não estiver em uso, eliminando assim seu consumo de energia. Por exemplo, em uma aplicação de tablet, se o usuário não estiver assistindo a um filme, o processador de vídeo IVA3 é completamente desligado e não consome energia. Por outro lado, quando o usuário está assistindo a um filme, o processador de vídeo IVA3 trabalha ao máximo em suas tarefas de decodificação de vídeo, enquanto as duas CPUs ARM A9 estão dormindo.
 
-Apesar de sua tendência para uma operação com economia de energia, os núcleos ARM A9 utilizam uma
-microarquitetura bastante capaz. Eles podem decodificar e executar até duas instruções a cada ciclo. Conforme
-aprenderemos no Capítulo 4, essa taxa de execução representa a vazão máxima da microarquitetura. Mas não
-espere que ela execute suas muitas instruções a cada ciclo. Em vez disso, pense nessa taxa como o desempenho
-máximo garantido pelo fabricante, um nível que o processador nunca excederá, não importa o que aconteça. Em
-muitos ciclos, menos de duas instruções serão executadas devido aos milhares de “hazards” (acasos) que podem
-adiar as instruções, levando a uma vazão de execução mais baixa. Para resolver muitos desses limitadores de
-vazão, o ARM A9 incorpora um poderoso previsor de desvio, escalonamento de instruções fora de ordem e um
-sistema de memória altamente otimizado.
+Apesar de sua tendência para uma operação com economia de energia, os núcleos ARM A9 utilizam uma microarquitetura bastante capaz. Eles podem decodificar e executar até duas instruções a cada ciclo. Conforme aprenderemos no Capítulo 4, essa taxa de execução representa a vazão máxima da microarquitetura. Mas não
+espere que ela execute suas muitas instruções a cada ciclo. Em vez disso, pense nessa taxa como o desempenho máximo garantido pelo fabricante, um nível que o processador nunca excederá, não importa o que aconteça. Em muitos ciclos, menos de duas instruções serão executadas devido aos milhares de “hazards” (acasos) que podem adiar as instruções, levando a uma vazão de execução mais baixa. Para resolver muitos desses limitadores de vazão, o ARM A9 incorpora um poderoso previsor de desvio, escalonamento de instruções fora de ordem e um sistema de memória altamente otimizado.
 
-O sistema de memória do OMAP4430 tem duas caches L1 internas principais para cada processador ARM
-A9: uma de 32 KB para instruções e uma de 32 KB para dados. Assim como o Core i7, ele também usa uma
-cache nível 2 (L2) no chip, mas, diferente do Core i7, ela é uma memória de 1 MB relativamente pequena em
-tamanho, sendo compartilhada por ambos os núcleos ARM A9. As caches são alimentadas com canais de DRAM
-duais LPDDR2 de baixa potência. LPDDR2 é derivada do padrão de interface de memória DDR2, porém alterada
-para exigir menos fios e operar em tensões mais eficientes em termos de potência. Além disso, o controlador de
-memória incorpora uma série de otimizações de acesso à memória, como a pré-busca de memória ladrilhada e o
-suporte para rotação na memória.
+O sistema de memória do OMAP4430 tem duas caches L1 internas principais para cada processador ARM A9: uma de 32 KB para instruções e uma de 32 KB para dados. Assim como o Core i7, ele também usa uma cache nível 2 (L2) no chip, mas, diferente do Core i7, ela é uma memória de 1 MB relativamente pequena em
+tamanho, sendo compartilhada por ambos os núcleos ARM A9. As caches são alimentadas com canais de DRAM duais LPDDR2 de baixa potência. LPDDR2 é derivada do padrão de interface de memória DDR2, porém alterada para exigir menos fios e operar em tensões mais eficientes em termos de potência. Além disso, o controlador de memória incorpora uma série de otimizações de acesso à memória, como a pré-busca de memória ladrilhada e o suporte para rotação na memória.
 
-Vamos discutir caching em detalhes no Capítulo 4, mas é bom dizer algumas palavras sobre ela aqui. Toda
-memória principal é dividida em linhas (blocos) de cache de 32 bytes. As 1.024 linhas de instrução mais usadas
-e as 1.024 linhas de dados mais usadas estão na cache de nível 1. Linhas de cache que são muito usadas mas
-não cabem na de nível 1 são mantidas na de nível 2. Essa cache contém linhas de dados e linhas de instrução de
-ambas as CPUs ARM A9 misturadas aleatoriamente. A cache de nível 2 contém as 32.768 linhas acessadas mais
-recentemente na memória principal.
+Vamos discutir caching em detalhes no Capítulo 4, mas é bom dizer algumas palavras sobre ela aqui. Toda memória principal é dividida em linhas (blocos) de cache de 32 bytes. As 1.024 linhas de instrução mais usadas e as 1.024 linhas de dados mais usadas estão na cache de nível 1. Linhas de cache que são muito usadas mas
+não cabem na de nível 1 são mantidas na de nível 2. Essa cache contém linhas de dados e linhas de instrução de ambas as CPUs ARM A9 misturadas aleatoriamente. A cache de nível 2 contém as 32.768 linhas acessadas mais recentemente na memória principal.
 
-Quando há uma ausência na cache de nível 1, a CPU envia o identificador da linha que está procurando
-(endereço de tag) para a cache de nível 2. A resposta (dados de tag) informa à CPU se a linha está ou não na cache
-de nível 2 e, se estiver, informa também o estado em que esta se encontra. Se a linha estiver na cache, a CPU vai
-pegá-la. Para obter um valor da cache de nível 2, são necessários 19 ciclos. Esse é um longo tempo para esperar os
-dados, de modo que programadores inteligentes otimizarão seus programas para usar menos dados, aumentando
-a probabilidade de achar os dados na cache rápida de nível 1.
+Quando há uma ausência na cache de nível 1, a CPU envia o identificador da linha que está procurando (endereço de tag) para a cache de nível 2. A resposta (dados de tag) informa à CPU se a linha está ou não na cache de nível 2 e, se estiver, informa também o estado em que esta se encontra. Se a linha estiver na cache, a CPU vai pegá-la. Para obter um valor da cache de nível 2, são necessários 19 ciclos. Esse é um longo tempo para esperar os dados, de modo que programadores inteligentes otimizarão seus programas para usar menos dados, aumentando a probabilidade de achar os dados na cache rápida de nível 1.
 
-Se a linha de cache não estiver na cache de nível 2, ela deve ser buscada da memória principal por meio da
-interface de memória LPDDR2. A interface LPDDR2 do OMAP4430 é executada no chip de modo que a DRAM
-LPDDR2 possa ser conectada diretamente ao OMAP4430. Para acessar a memória, a CPU primeiro deve enviar
-a parte superior do endereço da DRAM ao chip de DRAM, usando as 13 linhas de endereço. Essa operação, cha-
-mada ACTIVATE, carrega uma linha inteira de memória da DRAM para um buffer de linha. Depois disso, a CPU
-pode emitir vários comandos read ou write, enviando o restante do endereço nas mesmas 13 linhas de endereço
-e enviando (ou recebendo) os dados para a operação nas 32 linhas de dados.
+Se a linha de cache não estiver na cache de nível 2, ela deve ser buscada da memória principal por meio da interface de memória LPDDR2. A interface LPDDR2 do OMAP4430 é executada no chip de modo que a DRAM LPDDR2 possa ser conectada diretamente ao OMAP4430. Para acessar a memória, a CPU primeiro deve enviar a parte superior do endereço da DRAM ao chip de DRAM, usando as 13 linhas de endereço. Essa operação, chamada ACTIVATE, carrega uma linha inteira de memória da DRAM para um buffer de linha. Depois disso, a CPU pode emitir vários comandos read ou write, enviando o restante do endereço nas mesmas 13 linhas de endereço e enviando (ou recebendo) os dados para a operação nas 32 linhas de dados.
 
-Enquanto espera os resultados, a CPU pode perfeitamente continuar executando outro trabalho. Por exem-
-plo, uma ausência na cache durante a busca antecipada de uma instrução não inibe a execução de uma ou mais
-instruções já buscadas, cada uma das quais pode se referir a dados que não estão em quaisquer das caches. Assim,
-várias transações com as mesmas interfaces LPDDR2 podem estar pendentes ao mesmo tempo, até para o mesmo
-processador. Cabe ao controlador de memória monitorar tudo isso e fazer requisições de memória propriamente
-ditas na ordem mais eficiente.
+Enquanto espera os resultados, a CPU pode perfeitamente continuar executando outro trabalho. Por exemplo, uma ausência na cache durante a busca antecipada de uma instrução não inibe a execução de uma ou mais instruções já buscadas, cada uma das quais pode se referir a dados que não estão em quaisquer das caches. Assim, várias transações com as mesmas interfaces LPDDR2 podem estar pendentes ao mesmo tempo, até para o mesmo processador. Cabe ao controlador de memória monitorar tudo isso e fazer requisições de memória propriamente ditas na ordem mais eficiente.
 
-Quando os dados por fim chegam da memória, podem vir em 4 bytes por vez. Uma operação de memória pode
-utilizar uma leitura ou escrita no modo rajada, permitindo que vários endereços contíguos dentro da mesma linha
-da DRAM sejam lidos ou escritos. Esse modo é particularmente eficaz para ler ou escrever blocos de cache. Apenas
-por registro, a descrição do OMAP4430 dada aqui, como a do Core i7 antes dele, foi bastante simplificada, mas a
-essência de sua operação foi descrita.
+Quando os dados por fim chegam da memória, podem vir em 4 bytes por vez. Uma operação de memória pode utilizar uma leitura ou escrita no modo rajada, permitindo que vários endereços contíguos dentro da mesma linha da DRAM sejam lidos ou escritos. Esse modo é particularmente eficaz para ler ou escrever blocos de cache. Apenas por registro, a descrição do OMAP4430 dada aqui, como a do Core i7 antes dele, foi bastante simplificada, mas a essência de sua operação foi descrita.
 
-O OMAP4430 vem em uma matriz em grade de bola (PBGA) de 547 pinos, conforme mostra a Figura 3.48.
-Uma matriz em grade de bola é semelhante a uma matriz de grade de terra, exceto que as conexões no chip são
-pequenas bolas de metal, em vez de plataformas quadradas usadas na LGA. Os dois pacotes não são compatíveis,
-oferecendo mais evidência de que você não pode encaixar uma ponta quadrada em um furo redondo. O pacote
-do OMAP4430 consiste em uma matriz retangular de 28 × 26 bolas, com os dois anéis de bolas mais internos
-faltando, e mais duas meias linhas e colunas assimétricas de bolas faltando, para impedir que o chip seja inserido
-incorretamente no soquete BGA.
+O OMAP4430 vem em uma matriz em grade de bola (PBGA) de 547 pinos, conforme mostra a Figura 3.48. Uma matriz em grade de bola é semelhante a uma matriz de grade de terra, exceto que as conexões no chip são pequenas bolas de metal, em vez de plataformas quadradas usadas na LGA. Os dois pacotes não são compatíveis,
+oferecendo mais evidência de que você não pode encaixar uma ponta quadrada em um furo redondo. O pacote do OMAP4430 consiste em uma matriz retangular de 28 × 26 bolas, com os dois anéis de bolas mais internos faltando, e mais duas meias linhas e colunas assimétricas de bolas faltando, para impedir que o chip seja inserido incorretamente no soquete BGA.
 
 Figura 3.48   A pinagem sistema-em-um-chip OMAP4430.
 
@@ -2670,6 +2270,8 @@ Ao contrário da pinagem lógica (Figura 3.45), esta imagem representa a matriz 
       0000000000000000          0000000000000000
       0000000000000000          0000000000000000
 
+![alt text](image-49.png)
+
 ### Insight para o seu repositório estruturas_de_dados
 Embora você não "programe" a pinagem, entender a Figura 3.48 é crucial para otimizar o uso do seu Lenovo IdeaPad Gaming 3.
 
@@ -2681,33 +2283,14 @@ Embora você não "programe" a pinagem, entender a Figura 3.48 é crucial para o
 
 ![alt text](image-9.png)
 
-É difícil comparar um chip CISC (como o Core i7) e um chip RISC (como o OMAP4430) apenas com
-base na velocidade do clock. Por exemplo, os dois núcleos ARM A9 no OMAP4430 têm uma velocidade
-máxima de execução de quatro instruções por ciclo de clock, dando-lhe quase a mesma taxa de execução dos
-processadores superescalares de largura 4 do Core i7. Entretanto, o Core i7 alcança execução de programa
-mais rápida, pois tem até seis processadores rodando com uma velocidade de clock 3,5 vezes mais rápida
-(3,5 GHz) que o OMAP4430. O OMAP4430 pode parecer uma tartaruga correndo ao lado da lebre do Core
-i7, mas a tartaruga usa muito menos potência, e pode terminar primeiro, ainda mais se a bateria da lebre
-não for muito grande.
+É difícil comparar um chip CISC (como o Core i7) e um chip RISC (como o OMAP4430) apenas com base na velocidade do clock. Por exemplo, os dois núcleos ARM A9 no OMAP4430 têm uma velocidade máxima de execução de quatro instruções por ciclo de clock, dando-lhe quase a mesma taxa de execução dos processadores superescalares de largura 4 do Core i7. Entretanto, o Core i7 alcança execução de programa mais rápida, pois tem até seis processadores rodando com uma velocidade de clock 3,5 vezes mais rápida (3,5 GHz) que o OMAP4430. O OMAP4430 pode parecer uma tartaruga correndo ao lado da lebre do Core i7, mas a tartaruga usa muito menos potência, e pode terminar primeiro, ainda mais se a bateria da lebre não for muito grande.
 
 ## 3.5.3 O microcontrolador Atmel ATmega168
-Tanto o Core i7 quanto a OMAP4430 são exemplos de CPUs de alto desempenho projetadas para construir
-dispositivos de computação altamente eficazes, com o Core i7 voltado para aplicações de desktop enquanto o
-OMAP4430 é voltado para aplicações móveis. Quando pensam em computadores, são esses os tipos de sistemas
-que muitas pessoas têm em mente. Entretanto, existe todo outro universo de computadores que na verdade é
-muito maior: sistemas embutidos. Nesta seção, vamos examinar brevemente esse outro universo.
+Tanto o Core i7 quanto a OMAP4430 são exemplos de CPUs de alto desempenho projetadas para construir dispositivos de computação altamente eficazes, com o Core i7 voltado para aplicações de desktop enquanto o OMAP4430 é voltado para aplicações móveis. Quando pensam em computadores, são esses os tipos de sistemas que muitas pessoas têm em mente. Entretanto, existe todo outro universo de computadores que na verdade é muito maior: sistemas embutidos. Nesta seção, vamos examinar brevemente esse outro universo.
 
-Talvez não seja um grande exagero dizer que todo equipamento elétrico que custe mais de 100 dólares tem
-um computador dentro dele. Hoje, é certo que televisores, telefones celulares, agendas eletrônicas, fornos de
-micro-ondas, filmadoras, aparelhos de DVD, impressoras a laser, alarmes antifurto, aparelhos de surdez, jogos
-eletrônicos e outros incontáveis dispositivos são todos controlados por computador. Os computadores que estão
-dentro desses aparelhos costumam ser otimizados para baixo preço e não para alto desempenho, o que provoca
-compromissos diferentes dos feitos para CPUs de tecnologia avançada que estudamos até aqui.
+Talvez não seja um grande exagero dizer que todo equipamento elétrico que custe mais de 100 dólares tem um computador dentro dele. Hoje, é certo que televisores, telefones celulares, agendas eletrônicas, fornos de micro-ondas, filmadoras, aparelhos de DVD, impressoras a laser, alarmes antifurto, aparelhos de surdez, jogos eletrônicos e outros incontáveis dispositivos são todos controlados por computador. Os computadores que estão dentro desses aparelhos costumam ser otimizados para baixo preço e não para alto desempenho, o que provoca compromissos diferentes dos feitos para CPUs de tecnologia avançada que estudamos até aqui.
 
-Como mencionamos no Capítulo 1, o Atmel ATmega168 provavelmente é o microcontrolador mais popular
-em uso hoje, em grande parte por causa de seu custo muito baixo (cerca de 1 dólar). Como veremos em breve, ele
-também é um chip versátil, portanto, fazer interface com ele é algo simples e barato. Agora, vamos examinar esse
-chip, cuja pinagem física é mostrada na Figura 3.49.
+Como mencionamos no Capítulo 1, o Atmel ATmega168 provavelmente é o microcontrolador mais popular em uso hoje, em grande parte por causa de seu custo muito baixo (cerca de 1 dólar). Como veremos em breve, ele também é um chip versátil, portanto, fazer interface com ele é algo simples e barato. Agora, vamos examinar esse chip, cuja pinagem física é mostrada na Figura 3.49.
 
 Figura 3.49   Pinagem física do ATmega168.
 
@@ -2734,7 +2317,8 @@ Organizei o diagrama para o seu arquivo Nivel-Logica-Digital.md, destacando a di
             PB0  -| 14              15 |-  PB1
                   '-------------------'
 
-![alt text](image-10.png)
+![alt text](image-50.png)
+
 
 ### nsight para o seu repositório estruturas_de_dados
 O ATmega168 é o coração de muitas placas Arduino, e programar para ele exige uma mentalidade diferente no seu diretório estruturas_de_dados.
