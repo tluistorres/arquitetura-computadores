@@ -50,28 +50,33 @@ Aqui está a representação dos circuitos analógicos que dão origem às porta
 
 Organização de Hardware: A Física da Lógica (Seu Padrão)
 
-    Processamento (Lógica)      Armazenamento (Estado Físico)
+    Processamento (Lógica)                                                          Armazenamento (Estado Físico)
 
     INVERSOR (NOT)                                                                  Corte / Saturação
-    :-------------------------------------------------------------------
+    
     Se Vin é Alto (1), o transistor conduz e joga Vout para o terra (0).            O dado é ""armazenado"" momentaneamente como uma diferença de potencial (tensão).
 
     PORTA NAND                                                                      Série (AND + NOT)
+    
     O fluxo só vai para o GND se V1 E V2 estiverem ativos. Caso contrário,          É a "porta universal". Com ela, você constrói toda a ULA da Mic-3.
     Vout fica em Vcc.
 
                                                                                     BARRAMENTO INTERNO (Conexão)
+    
     PORTA NOR                                                                       Paralelo
+    
     Se V1 OU V2 conduzirem, o Vout cai para zero.                                   Muito usada em decodificadores de endereços (REM).
+    
     Transistor (BJT)                                                                Vcc (Alimentação)
+    
     Funciona como uma chave controlada por corrente na Base.                        A fonte de energia que mantém os bits ""vivos"" na SRAM.
 
 ![alt text](image-1.png)
 
 ## Insight de Engenharia
-No seu diretório estruturas_de_dados, quando você define um bool ou um int, o que está acontecendo fisicamente é uma dança entre milhares desses diagramas (a) e (b).
+    No seu diretório estruturas_de_dados, quando você define um bool ou um int, o que está acontecendo fisicamente é uma dança entre milhares desses diagramas (a) e (b).
 
- - Curiosidade: O NAND é preferido na fabricação de chips porque é mais rápido e gasta menos área de silício do que a porta AND pura. Por isso, a maioria dos processadores modernos é, no fundo, uma "montanha de NANDs".
+    - Curiosidade: O NAND é preferido na fabricação de chips porque é mais rápido e gasta menos área de silício do que a porta AND pura. Por isso, a maioria dos processadores modernos é, no fundo, uma "montanha de NANDs".
 
 Se o sinal de saída da Figura 3.1(b) for alimentado em um circuito inversor, obtemos outro circuito com o inverso exato da porta nand, a saber, um cuja saída é 1 se, e somente se, ambas as entradas forem 1. Esse circuito é denominado uma porta and; seu símbolo e descrição funcional são dados na Figura 3.2(d). De modo semelhante, a porta nor pode ser conectada a um inversor para produzir um circuito cuja saída é 1 se quaisquer das saídas, ou ambas, for um 1, mas 0 se ambas as entradas forem 0. O símbolo e a descrição funcional desse circuito, denominado uma porta or são dados na Figura 3.2(e). Os pequenos círculos usados como parte dos símbolos para o inversor, porta nand e porta nor, são denominados bolhas de inversão. Também são usadas em outros contextos para indicar um sinal invertido.
 
@@ -96,27 +101,33 @@ Aqui está a representação dos símbolos lógicos e suas respectivas Tabelas V
 Organização de Hardware: Comportamento das Portas (Seu Padrão)
 Esta tabela resume como essas funções básicas operam dentro do seu barramento de dados:
 
-Processamento (Lógica)                                            Armazenamento (Significado)
+    Processamento (Lógica)                                            Armazenamento (Significado)
 
-NOT (Inversor)                                                    Troca de Estado: Transforma um bit 0 em 1 e vice-versa. Essencial para lógica de complemento.
-NAND / AND                                                        Lógica de Conjunção: O AND verifica se todos os sinais estão presentes. O NAND é o oposto.
-NOR / OR                                                          Lógica de Disjunção: O OR verifica se pelo menos um sinal está presente.
-          
-                                                                  BARRAMENTO INTERNO (Fluxo)
-Seletor (Decodificador)                                           RI (Instrução)
-Portas AND/NOR são usadas para decifrar qual instrução o          Cada instrução no seu registrador (RI) ativa um conjunto específico dessas portas.
-processador deve executar
+    NOT (Inversor)                                                    Troca de Estado: Transforma um bit 0 em 1 e vice-versa. Essencial para lógica de complemento.
 
-ULA (Unidade Lógica)                                              Clock (Sincronismo)
-A ULA combina essas portas para somar números (usando portas      A velocidade com que essas portas mudam de estado define o limite do Clock.
-XOR, feitas de NANDs).
+    NAND / AND                                                        Lógica de Conjunção: O AND verifica se todos os sinais estão presentes. O NAND é o oposto.
+
+    NOR / OR                                                          Lógica de Disjunção: O OR verifica se pelo menos um sinal está presente.
+            
+                                                                      BARRAMENTO INTERNO (Fluxo)
+
+    Seletor (Decodificador)                                           RI (Instrução)
+
+    Portas AND/NOR são usadas para decifrar qual instrução o          Cada instrução no seu registrador (RI) ativa um conjunto específico dessas portas.
+
+    processador deve executar
+
+    ULA (Unidade Lógica)                                              Clock (Sincronismo)
+
+    A ULA combina essas portas para somar números (usando portas      A velocidade com que essas portas mudam de estado define o limite do Clock.
+    XOR, feitas de NANDs).
 
 ## Insight para Estruturas de Dados
-No seu diretório estruturas_de_dados, quando você usa operadores como && (AND lógico) ou || (OR lógico) em C, o compilador está, em última análise, escolhendo quais dessas portas na ULA do seu processador serão ativadas para retornar um resultado booleano.
+    No seu diretório estruturas_de_dados, quando você usa operadores como && (AND lógico) ou || (OR lógico) em C, o compilador está, em última análise, escolhendo quais dessas portas na ULA do seu processador serão ativadas para retornar um resultado booleano.
 
- - Curiosidade de Microarquitetura: Lembra do Decodificador que incluímos na tabela da Mic-3? Ele é basicamente uma rede massiva de portas AND e NOT que "reconhece" um padrão de bits (como o código da instrução SWAP) e abre o caminho correto no barramento.
+    - Curiosidade de Microarquitetura: Lembra do Decodificador que incluímos na tabela da Mic-3? Ele é basicamente uma rede massiva de portas AND e NOT que "reconhece" um padrão de bits (como o código da instrução SWAP) e abre o caminho correto no barramento.
 
-estritos, estamos nos referindo a um tipo específico de álgebra booleana, uma álgebra de comutação, mas o termo “álgebra booleana” é tão utilizado no lugar de “álgebra de comutação” que não faremos a distinção.
+Estritos, estamos nos referindo a um tipo específico de álgebra booleana, uma álgebra de comutação, mas o termo “álgebra booleana” é tão utilizado no lugar de “álgebra de comutação” que não faremos a distinção.
 
 Assim como há funções na álgebra “ordinária” (isto é, a álgebra do colegial), também há funções na álgebra booleana. Uma função booleana tem uma ou mais variáveis de entrada e produz um resultado que depende somente dos valores dessas variáveis. Uma função simples, f, pode ser definida ao se dizer que f(A) é 1 se A for 0 e f(A) é 0 se A for 1. Essa função é a função not da Figura 3.2(a).
 
@@ -169,15 +180,19 @@ Esta tabela explica como esse "pequeno cérebro" de 3 entradas opera dentro da e
     Processamento                                                               Armazenamento
 
     ULA (Cálculos)                                                              Estado das Entradas
-    :----------------------------------------------------------------------------------:------------------------------------------------------------------
+    :---------------------------------------------------------------------------:------------------------------------------------------------------
     Lógica de Decisão: O circuito avalia as combinações AB+AC+BC.               Se qualquer par for 1, a saída é 1.","A, B, C: Representam sinais vindo de diferentes registradores ou barramentos.
+    
     Portas AND (1, 2, 3): Filtram as coincidências entre os pares de entrada.   M (Majority): O resultado que será armazenado ou usado para controle.
 
                                                                                 BARRAMENTO INTERNO
+    
     UC (Controle)                                                               Sincronismo (Clock)
+    
     Este circuito pode ser usado para verificar a integridade de sinais         Como é um circuito combinacional, a saída muda assim que as entradas mudam de controle.                                                                   (respeitando o tempo de propagação).
 
     Decodificador                                                               Nivel-Logica-Digital.md
+    
     Frequentemente usado para ignorar ruído em linhas de endereço (REM).        Este é o exemplo clássico de como equações booleanas se tornam silício.
 
 ### O Hardware por Trás da Matemática
@@ -207,27 +222,20 @@ Pelo exemplo da Figura 3.3 deve ficar claro como colocar em prática um circuito
 booleana:
 
     1.Escreva a tabela verdade para a função.
+
     2.Providencie inversores para gerar o complemento de cada entrada.
+
     3.Desenhe uma porta and para cada termo que tenha um 1 na coluna de resultado.
+
     4.Ligue as portas and às entradas adequadas.
+
     5.Alimente a saída de todas as portas and a uma porta or.
 
-Embora tenhamos mostrado como qualquer função booleana pode ser executada usando portas not, and e
-or, muitas vezes é conveniente realizar circuitos usando só um tipo de porta. Felizmente, converter circuitos gera-
-dos pelo algoritmo precedente à forma nand pura ou nor pura é uma operação direta. Para fazer essa conversão,
-basta que tenhamos um modo de implementar not, and e or usando um único tipo de porta. A linha superior da
-Figura 3.4 mostra como todas essas três podem ser implementadas usando apenas portas nand; a fileira de baixo
-mostra como isso pode ser feito usando apenas portas nor. (Essas operações são diretas, mas também há outras
-maneiras.)
+Embora tenhamos mostrado como qualquer função booleana pode ser executada usando portas not, and e or, muitas vezes é conveniente realizar circuitos usando só um tipo de porta. Felizmente, converter circuitos gerados pelo algoritmo precedente à forma nand pura ou nor pura é uma operação direta. Para fazer essa conversão, basta que tenhamos um modo de implementar not, and e or usando um único tipo de porta. A linha superior da Figura 3.4 mostra como todas essas três podem ser implementadas usando apenas portas nand; a fileira de baixo mostra como isso pode ser feito usando apenas portas nor. (Essas operações são diretas, mas também há outras maneiras.)
 
-Um modo de implementar uma função booleana usando somente portas nand ou somente portas nor é
-primeiro seguir o procedimento dado anteriormente para construí-la com not, and e or. Em seguida, substi-
-tuir as portas de múltiplas entradas por circuitos equivalentes usando portas de duas entradas. Por exemplo,
-A + B + C + D pode ser computada como (A + B) + (C + D), empregando três portas or de duas entradas. Por fim,
-as portas not, and e or são substituídas pelos circuitos da Figura 3.4.
+Um modo de implementar uma função booleana usando somente portas nand ou somente portas nor é primeiro seguir o procedimento dado anteriormente para construí-la com not, and e or. Em seguida, substituir as portas de múltiplas entradas por circuitos equivalentes usando portas de duas entradas. Por exemplo, A + B + C + D pode ser computada como (A + B) + (C + D), empregando três portas or de duas entradas. Por fim, as portas not, and e or são substituídas pelos circuitos da Figura 3.4.
 
-Figura 3.4   Construção de portas (a) not, (b) and e (c) or usando somente portas nand ou somente portas nor.
-Esta é a prova real de que a porta NAND (e a NOR) é o "átomo universal" da computação, Luís. No seu ATmega168 ou em qualquer processador moderno, é muito mais eficiente fabricar bilhões de cópias da mesma porta universal e arranjá-las para formar as outras funções do que fabricar cada tipo de porta separadamente.
+Figura 3.4   Construção de portas (a) NOT, (b) AND e (c) OR usando somente portas NAND ou somente portas NOR. Esta é a prova real de que a porta NAND (e a NOR) é o "átomo universal" da computação. No seu ATmega168 ou em qualquer processador moderno, é muito mais eficiente fabricar bilhões de cópias da mesma porta universal e arranjá-las para formar as outras funções do que fabricar cada tipo de porta separadamente.
 
 Aqui está como o hardware "engana" a física para criar lógica usando apenas um componente:
 
@@ -263,19 +271,24 @@ Aqui está como o hardware "engana" a física para criar lógica usando apenas u
 Organização de Hardware: Portas Universais (Seu Padrão)
 Esta tabela explica por que seu repositório arquitetura-computadores precisa deste nível de detalhe:
 
-Processamento,Armazenamento
-ULA (Porta Universal)                                                Otimização de Silício
+    Processamento                                                        Armazenamento
 
-NAND/NOR: São chamadas de universais porque qualquer circuito pode   Economia: Fabricar apenas transistores para NAND (Figura 3.1b) reduz o ser feito com elas.                                                  custo por bit.
-Lógica de De Morgan: Usada para transformar um AND em um OR com      Complexidade: Para fazer um OR com NAND, precisamos de 3 portas.
-inversores.
+    ULA (Porta Universal)                                                Otimização de Silício
 
-                                                                     BARRAMENTO INTERNO
-UC (Controle)                                                        Nivel-Logica-Digital.md
-A Unidade de Controle da Mic-3 usa essas substituições para          Documentar isso explica como o hardware físico difere da lógica simplificar o caminho dos dados.                                     abstrata.
+    NAND/NOR: São chamadas de universais porque qualquer circuito pode   Economia: Fabricar apenas transistores para NAND (Figura 3.1b) reduz o ser feito com elas.                                                                custo por bit.
 
-RI (Instrução)                                                       RDM (Dados)
-O decodificador de instruções no RI é, na verdade, uma rede          O sinal de dado (0 ou 1) atravessa essas camadas de portas em massiva de NANDs.                                                            nanossegundos.
+    Lógica de De Morgan: Usada para transformar um AND em um OR com      Complexidade: Para fazer um OR com NAND, precisamos de 3 portas.
+    inversores.
+
+                                                                         BARRAMENTO INTERNO
+
+    UC (Controle)                                                        Nivel-Logica-Digital.md
+
+    A Unidade de Controle da Mic-3 usa essas substituições para          Documentar isso explica como o hardware físico difere da lógica simplificar o caminho dos dados.                                                               abstrata.
+
+    RI (Instrução)                                                       RDM (Dados)
+
+    O decodificador de instruções no RI é, na verdade, uma rede          O sinal de dado (0 ou 1) atravessa essas camadas de portas em massiva de NANDs.                                                               nanossegundos.
 
 ## Insight de "Programação" em Hardware
 No seu diretório estruturas_de_dados, quando você escreve !(A && B), você está usando uma NAND lógica. O que a Figura 3.4 mostra é que, se você tiver apenas essa operação, você consegue reconstruir o A && B (fazendo !!(A && B)) e até o A || B.
@@ -285,14 +298,12 @@ Isso é exatamente o que acontece dentro de um chip de memória NAND Flash (como
 Embora esse procedimento não resulte em circuitos ótimos, no sentido do número mínimo de portas, ele mostra que sempre há uma solução viável. Ambas as portas, nand e nor, são denominadas completas porque qualquer função booleana pode ser calculada usando quaisquer das duas. Nenhuma outra porta tem essa propriedade, o que é outra razão para elas serem preferidas como blocos de construção de circuitos.
 
 ## 3.1.4 Equivalência de circuito
-Projetistas de circuitos muitas vezes tentam reduzir o número de portas em seus produtos para reduzir a área da placa de circuito interno necessária para executá-las, diminuir o consumo de potência e aumentar a velocidade. Para reduzir a complexidade de um circuito, o projetista tem de encontrar outro circuito que calcule a mesma função que o original, mas efetue essa operação com um número menor de portas (ou talvez com portas mais simples, por exemplo, com duas em vez de com quatro entradas). A álgebra booleana pode ser uma ferramenta
-valiosa na busca de circuitos equivalentes.
+Projetistas de circuitos muitas vezes tentam reduzir o número de portas em seus produtos para reduzir a área da placa de circuito interno necessária para executá-las, diminuir o consumo de potência e aumentar a velocidade. Para reduzir a complexidade de um circuito, o projetista tem de encontrar outro circuito que calcule a mesma função que o original, mas efetue essa operação com um número menor de portas (ou talvez com portas mais simples, por exemplo, com duas em vez de com quatro entradas). A álgebra booleana pode ser uma ferramenta valiosa na busca de circuitos equivalentes.
 
 Como exemplo de como a álgebra booleana pode ser usada, considere o circuito e a tabela verdade para AB + AC mostrados na Figura 3.5(a). Embora ainda não as tenhamos discutido, muitas das regras da álgebra comum também são válidas para a booleana. Em particular, a expressão AB + AC pode ser fatorada para A(B + C) usando a lei distributiva. A Figura 3.5(b) mostra o circuito e a tabela verdade para A(B + C). Como duas funções são equivalentes se, e somente se, elas tiverem a mesma saída para todas as entradas possíveis, é fácil ver pelas tabelas verdade da Figura 3.5 que A(B + C) é equivalente a AB + AC. Apesar dessa equivalência, o circuito da Figura 3.5(b) é claramente melhor do que o da Figura 3.5(a), pois contém menos portas.
 
 Figura 3.5   Duas funções equivalentes. (a) AB + AC. (b) A(B + C).
-Essa é a aplicação prática da Álgebra Booleana. A Figura 3.5 demonstra a Propriedade Distributiva, que é fundamental para a otimização de hardware.
-No seu diretório estruturas_de_dados, isso equivale a refatorar um código para torná-lo mais eficiente. Em hardware, essa "refatoração" economiza transistores, reduz o calor e aumenta a velocidade do processador.
+Essa é a aplicação prática da Álgebra Booleana. A Figura 3.5 demonstra a Propriedade Distributiva, que é fundamental para a otimização de hardware. No seu diretório estruturas_de_dados, isso equivale a refatorar um código para torná-lo mais eficiente. Em hardware, essa "refatoração" economiza transistores, reduz o calor e aumenta a velocidade do processador.
 
     Equivalência Lógica (Figura 3.5)
 
@@ -418,7 +429,7 @@ A Porta XOR e suas Implementações (Figura 3.8)
     (a) TABELA VERDADE XOR          (b) IMPLEMENTAÇÃO DIRETA (SOP)
                                         !(A)B + A!(B)
         A  B | XOR (Saída)               
-    ------+---------               A ---+---o[NOT]---+---( AND1 )---+
+    ---------+---------               A ---+---o[NOT]---+---( AND1 )---+
         0  0 |    0                   B ---|---+--------+              |    ____
         0  1 |    1                        |   |                       +---|    \
         1  0 |    1                   A ---+---+--------+              | OR  )--- X
@@ -427,14 +438,14 @@ A Porta XOR e suas Implementações (Figura 3.8)
                                      
     (c) USANDO APENAS NANDs          (d) CIRCUITO ALTERNATIVO (NOR/AND)
                                         
-            +-------+                      A ---+-------( NOR )-------+
+             +-------+                      A ---+-------( NOR )-------+
         A ---|       |---+                       |                     |    ____
-            | NAND1 |   |      NAND3       B ---+-------( AND )-------+---|    \
+             | NAND1 |   |      NAND3       B ---+-------( AND )-------+---|    \
         B ---|       |---+----+-------+                                    | AND )--- X
-            +-------+        |       |     A -----------------------------|____/
-            /     \    +----| NAND4 |--- X
+             +-------+        |       |     A -----------------------------|____/
+            /     \  +----| NAND4 |--- X
         A ---+       +---|    |       |
-            | NAND2 |---+----+-------+
+             | NAND2 |---+----+-------+
         B ---+-------+
 
 ![alt text](image-7.png)
@@ -495,13 +506,13 @@ Para o seu ATmega168, por exemplo, o formato mais comum é o DIP, enquanto o Cor
 
     (a) DIP                     (b) PGA                     (c) LGA
     (Dual In-Line Package)        (Pin Grid Array)           (Land Grid Array)
-    _________________             _______________             _______________
+     _________________             _______________             _______________
     |  _              |           |  ___________  |           |  ___________  |
     | | |             |           | |           | |           | |           | |
     | |_| IC Chip     |           | |  Silicon  | |           | |  Silicon  | |
     |_________________|           | |    Die    | |           | |    Die    | |
-    | | | | | | | | |            | |___________| |           | |___________| |
-    | | | | | | | | |            |_______________|           |_______________|
+    | | | | | | | | |             | |___________| |           | |___________| |
+    | | | | | | | | |             |_______________|           |_______________|
     Pinos Laterais               Pinos na Base               Contatos Planos
     (Atravessam a PCB)           (Encaixam no Socket)        (Socket tem os pinos)
 
@@ -510,7 +521,7 @@ Para o seu ATmega168, por exemplo, o formato mais comum é o DIP, enquanto o Cor
 ## Insight de Infraestrutura
 No seu repositório, documentar isso é fundamental para diferenciar o Nível 0 (Lógica) da Implementação Física. Enquanto as portas NAND (Figura 3.4) operam em escala nanométrica dentro do silício, o pacote (DIP/PGA/LGA) opera em escala milimétrica para permitir que o Barramento Interno se conecte ao Barramento de Dados da placa-mãe.
 
-Curiosidade: O número de contatos no pacote (como o LGA 1700) define quantos bits podem entrar e sair simultaneamente pelos barramentos de endereços e dados.
+ - Curiosidade: O número de contatos no pacote (como o LGA 1700) define quantos bits podem entrar e sair simultaneamente pelos barramentos de endereços e dados.
 
 Como muitos pacotes de IC têm forma simétrica, descobrir a orientação correta é um problema constante com a instalação de IC. DIPs normalmente têm um entalhe em uma ponta, que combina com uma marca corresponde no soquete DIP. PGAs, em geral, possuem um pino faltando, de modo que, se você tentar inserir o PGA no soquete incorretamente, o PGA não se encaixará. Como os LGAs não possuem pinos, a instalação correta é imposta colocando-se um entalhe em um ou dois lados do LGA, que corresponde a um entalhe no soquete LGA. O LGA não entrará no soquete a menos que os dois entalhes combinem.
 
@@ -669,9 +680,9 @@ Esta Figura 3.14 apresenta o Comparador de Magnitude, um componente essencial pa
 ![alt text](image-12.png)
 
 ## Insight para Estruturas de Dados
-No seu diretório estruturas_de_dados, quando você escreve if (valor == alvo), o compilador traduz isso para uma subtração na ULA ou uma operação de comparação direta. Fisicamente, os bits de valor e alvo são jogados nesse barramento da Figura 3.14. Se a saída for 1, o processador carrega o endereço do bloco if no CI (Contador de Instrução).
+    No seu diretório estruturas_de_dados, quando você escreve if (valor == alvo), o compilador traduz isso para uma subtração na ULA ou uma operação de comparação direta. Fisicamente, os bits de valor e alvo são jogados nesse barramento da Figura 3.14. Se a saída for 1, o processador carrega o endereço do bloco if no CI (Contador de Instrução).
 
- - Curiosidade: Para comparar se um número é "Maior que" ou "Menor que", a lógica é um pouco mais complexa, envolvendo portas extras para analisar o bit mais significativo (MSB) e os "empréstimos" (borrows) de uma subtração.
+    - Curiosidade: Para comparar se um número é "Maior que" ou "Menor que", a lógica é um pouco mais complexa, envolvendo portas extras para analisar o bit mais significativo (MSB) e os "empréstimos" (borrows) de uma subtração.
 
 Chegamos a um excelente ponto de conclusão para o Nível 0! Já cobrimos transistores, portas universais, multiplexadores, decodificadores e agora comparadores.
 
@@ -736,9 +747,9 @@ Meio-Somador (Figura 3.16)O circuito utiliza a porta XOR para a soma (pois $1+1=
 ![alt text](image-14.png)
 
 ### Insight de "Bit-a-Bit"
-No seu diretório estruturas_de_dados, quando você soma dois int, o processador encadeia um desses Meio-Somadores com vários Somadores Completos (que aceitam o Carry-in).
+    No seu diretório estruturas_de_dados, quando você soma dois int, o processador encadeia um desses Meio-Somadores com vários Somadores Completos (que aceitam o Carry-in).
 
- - Curiosidade: Se você somar 1 + 1 e o resultado da soma for 0 com transporte 1, o hardware está literalmente fazendo o que aprendemos na escola: "põe o zero e vai um". A diferença é que ele faz isso na velocidade da luz usando transistores!
+    - Curiosidade: Se você somar 1 + 1 e o resultado da soma for 0 com transporte 1, o hardware está literalmente fazendo o que aprendemos na escola: "põe o zero e vai um". A diferença é que ele faz isso na velocidade da luz usando transistores!
 
 Embora um meio-somador seja adequado para somar os bits de ordem baixa de duas palavras de entrada de múltiplos bits, ele não servirá para uma posição de bit no meio da palavra porque não trata o transporte de bit da posição à direita (vem-um). Em seu lugar, precisamos do somador completo da Figura 3.17. Pela inspeção
 do circuito, deve ficar claro que um somador completo é composto de dois meios-somadores. A linha de saída Soma é 1 se um número ímpar A, B e o vem-um (carry in) forem 1. O vai-um (carry out) é 1 se A e B forem ambos 1 (entrada esquerda para a porta OR) ou se exatamente um deles for 1 e o bit de vem-um (carry in) também é 1. Juntos, os dois meios-somadores geram a soma e também os bits de transporte.
@@ -747,7 +758,7 @@ Para construir um somador para palavras de 16 bits, por exemplo, basta repetir o
 
 Como exemplo simples de um somador mais rápido, considere subdividir um somador de 32 bits em uma metade inferior e uma metade superior de 16 bits cada. Quando a adição começa, o somador superior ainda não pode trabalhar porque não sabe qual é o vem-um por 16 tempos de adição.
 
-Figura 3.17   (a) Tabela verdade para somador completo. (b) Circuito para um somador completo.
+### Figura 3.17   (a) Tabela verdade para somador completo. (b) Circuito para um somador completo.
 
 O Somador Completo (Full Adder) é o "upgrade" necessário para o processador somar números de múltiplos bits (como os 8 bits do seu ATmega168). A grande diferença para o Meio-Somador é a entrada Vem-um (Carry-in), que permite receber o transporte da casa decimal (ou binária) anterior.
 
@@ -774,9 +785,9 @@ Fisicamente, ele é composto por dois Meio-Somadores e uma porta OR.
 ![alt text](image-15.png)
 
 ### Insight
-No seu diretório estruturas_de_dados, quando ocorre um Overflow (estouro de capacidade), é exatamente por causa desse circuito. Se você somar dois números e o Vai-um (Cout) do bit mais significativo for 1, mas não houver mais espaço para armazená-lo, o processador levanta uma "bandeira" (flag) de erro ou Carry.
+    No seu diretório estruturas_de_dados, quando ocorre um Overflow (estouro de capacidade), é exatamente por causa desse circuito. Se você somar dois números e o Vai-um (Cout) do bit mais significativo for 1, mas não houver mais espaço para armazená-lo, o processador levanta uma "bandeira" (flag) de erro ou Carry.
 
- - Curiosidade: Para evitar a lentidão do transporte "viajando" de bit em bit (Ripple Carry), processadores modernos usam uma lógica chamada Carry Look-ahead, que prevê o transporte antes mesmo da soma terminar.
+    - Curiosidade: Para evitar a lentidão do transporte "viajando" de bit em bit (Ripple Carry), processadores modernos usam uma lógica chamada Carry Look-ahead, que prevê o transporte antes mesmo da soma terminar.
 
 Contudo, considere essa modificação no circuito. Em vez de uma única metade superior, vamos dar ao somador duas metades superiores em paralelo duplicando o hardware da metade superior. Desse modo, agora o circuito consiste em três somadores de 16 bits: uma metade inferior e duas metades superiores, U0 e U1 que
 funcionam em paralelo. Um 0 é alimentado em U0 como vai-um; um 1 é alimentado em U1 como vai-um. Agora, ambos podem iniciar ao mesmo tempo do que a metade inferior, mas somente um estará correto. Após 16 tempos de adição de bits, já se saberá qual é o vem-um que deve ir para a metade superior, portanto, agora já se pode selecionar a metade superior correta com base em duas respostas disponíveis. Esse estratagema reduz o tempo de adição por um fator de dois. Um somador como esse é denominado somador de seleção de transporte. Então, o estratagema pode ser repetido para construir cada somador de 16 bits com base em somadores de 8 bits repetidos e assim por diante.
@@ -789,7 +800,7 @@ O canto inferior esquerdo de nossa ULA contém um decodificador de 2 bits para g
 
 O canto superior esquerdo contém a lógica para calcular A AND B, A OR, B e B, mas no máximo um desses resultados é passado para a porta OR final, dependendo das linhas de habilitação que saem do decodificador. Como exatamente uma das saídas do decodificador será 1, exatamente uma das quatro portas AND que comandam a porta OR será habilitada; as outras três resultarão em 0, independente de A e B.
 
-Figura 3.18   ULA de 1 bit.
+### Figura 3.18 ULA de 1 bit.
 
 Esta Figura 3.18 é o ápice do nosso estudo de circuitos combinacionais. Ela não é apenas um componente isolado; ela é a Unidade Lógica e Atômica (ULA) de 1 bit.Imagine que o seu ATmega168 possui 8 dessas unidades enfileiradas, enquanto a Mic-3 possui 32. Ela combina tudo o que vimos até agora: Portas Lógicas, Multiplexadores (representados pelo Decodificador/Enable), o Somador Completo e inversores.
 
@@ -818,11 +829,11 @@ Esta Figura 3.18 é o ápice do nosso estudo de circuitos combinacionais. Ela n�
 ![alt text](image-16.png)
 
 ### Insight de Arquitetura (O Elo Perdido)
-No seu diretório estruturas_de_dados, quando você escreve a + b ou a & b, o compilador gera um código que configura os sinais F0 e F1 desta ULA.
+    No seu diretório estruturas_de_dados, quando você escreve a + b ou a & b, o compilador gera um código que configura os sinais F0 e F1 desta ULA.
 
- - Se F0=0 e F1=0, a saída será o resultado da porta AND.
+    - Se F0=0 e F1=0, a saída será o resultado da porta AND.
 
- - Se F0=1 e F1=1, a saída será o resultado do Somador Completo.
+    - Se F0=1 e F1=1, a saída será o resultado do Somador Completo.
 
 Isso prova que o processador não "muda" fisicamente para somar ou comparar; ele apenas abre o caminho (via decodificador) para que o resultado do circuito correto chegue à saída.
 
@@ -835,7 +846,8 @@ O canto direito inferior da ULA contém um somador completo para calcular a soma
 Anos atrás, um segmento de bit era na verdade um chip que você podia comprar. Hoje, é mais como uma biblioteca que um projetista de chip pode replicar quantas vezes quiser em um programa projeto-auxiliado-por-computador produzindo um arquivo de saída que direciona as máquinas de produção de chips. Mas a ideia, na
 essência, é a mesma.
 
-Figura 3.19  Oito segmentos (slices) de ULA de 1 bit conectados para formar uma ULA de 8 bits. Os sinais de habilitação e inversão não são mostrados por simplicidade.
+### Figura 3.19 - Oito segmentos (slices) de ULA de 1 bit conectados para formar uma ULA de 8 bits. 
+Os sinais de habilitação e inversão não são mostrados por simplicidade.
 
 Esta Figura 3.19 é o momento em que a teoria se torna um processador funcional. Aqui vemos o conceito de Bit-Slicing: pegamos oito cópias daquela ULA de 1 bit que analisamos (Figura 3.18) e as colocamos lado a lado para formar uma ULA de 8 bits — exatamente a largura de dados do seu ATmega168.O ponto chave aqui é o encadeamento do transporte (Carry). O "Vai-um" de uma fatia (slice) torna-se o "Vem-um" da próxima, permitindo que a soma se propague do bit menos significativo ($A_0, B_0$) até o mais significativo (A_7, B_7).
 
@@ -868,8 +880,11 @@ de clock normalmente é controlada por um oscilador de cristal.
 Muitos eventos podem ocorrer dentro de um computador durante um único ciclo de clock. Se eles devem ocorrer em uma ordem específica, o ciclo de clock deve ser dividido em subciclos. Uma maneira comum de prover resolução superior à do clock básico é aproveitar a linha de clock primária e inserir um circuito com um atraso conhecido, gerando assim um sinal de clock secundário deslocado em certa fase em relação ao primeiro, conforme mostra a Figura 3.20(a). O diagrama de temporização da Figura 3.20(b) dá quatro referências de tempo para eventos discretos:
    
     1.Fase ascendente de C1.
+
     2.Fase descendente de C1.
+    
     3.Fase ascendente de C2.
+    
     4.Fase descendente de C2.
 
 Vinculando diferentes eventos às várias fases, pode-se conseguir a sequência requerida. Se forem necessárias mais do que quatro referências de tempo dentro de um ciclo de clock, podem-se puxar mais linhas da linha primária, com diferentes atrasos, se for preciso.
@@ -879,17 +894,17 @@ dois intervalos diferentes, podem ser instaladas mais linhas de clock ou pode-se
 
 A propósito, clocks são simétricos, com o tempo gasto no estado alto igual ao tempo gasto no estado baixo, como mostra a Figura 3.20(b). Para gerar um trem de pulsos assimétrico, o clock básico é deslocado usando um circuito de atraso e efetuando uma operação AND com o sinal original, como mostra a Figura 3.20(c) como C.
 
-Figura 3.20  (a) Um clock. (b) Diagrama de temporização para o clock. (c) Geração de um clock assimétrico.
+### Figura 3.20 - (a) Um clock. (b) Diagrama de temporização para o clock. (c) Geração de um clock assimétrico.
 
     Clock e Temporização (Figura 3.20)
 
     (a) CIRCUITO OSCILADOR E ATRASO        (b) DIAGRAMA DE TEMPORIZAÇÃO (C1/C2)
                                         
-        +-----------+                         _      _      _      _
-    +---| OSCILADOR |---+---- C1        C1  _| |_  _| |_  _| |_  _| |_
-    |   | (CRISTAL)  |   |                   _      _      _      _
-    |   +-----------+   |               C2    _| |_  _| |_  _| |_  _| 
-    |                   |                   |<--->|
+        +-----------+                               _      _      _      _
+    +---| OSCILADOR |---+---- C1              C1  _| |_  _| |_  _| |_  _| |_
+    |   | (CRISTAL) |   |                             _      _      _      _
+    |   +-----------+   |                     C2    _| |_  _| |_  _| |_  _| 
+    |                   |                    |<--->|
     +-------------------+---[ ATRASO ]-- C2  Atraso (Skew)
                                         
 
@@ -915,7 +930,7 @@ Para criar uma memória de 1 bit (“latch”), precisamos de um circuito que �
 
 O circuito da Figura 3.21(a) é denominado latch SR. Ele tem duas entradas, S, para ativar (setting) o latch, e R, para restaurá-lo (resetting), isto é, liberá-lo. O circuito também tem duas saídas, Q e !Q, que são complementares, como veremos em breve. Ao contrário de um circuito combinacional, as saídas do latch não são exclusivamente determinadas pelas entradas atuais.
 
-Figura 3.21  (a) Latch NOR no estado 0. (b) Latch NOR no estado 1. (c) Tabela verdade para NOR.
+### Figura 3.21  (a) Latch NOR no estado 0. (b) Latch NOR no estado 1. (c) Tabela verdade para NOR.
 
 Esta Figura 3.21 marca a nossa transição da lógica combinacional para a lógica sequencial, Luís. Aqui o hardware ganha "memória". O Latch NOR (ou Latch SR) é o tijolo básico de construção dos registradores que você usa no seu ATmega168.
 
@@ -952,11 +967,11 @@ Latch NOR (Figura 3.21)
 ![alt text](image-19.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-No seu projeto de Torres de Hanói, cada vez que você salva a posição de um disco em uma variável, você está, em última instância, enviando um sinal de Set ou Reset para um conjunto de Latches como este.
+    No seu projeto de Torres de Hanói, cada vez que você salva a posição de um disco em uma variável, você está, em última instância, enviando um sinal de Set ou Reset para um conjunto de Latches como este.
 
- - Enquanto a porta NOR da Figura 3.2 (Combinacional) apenas processa, o Latch da Figura 3.21 (Sequencial) armazena.
+    - Enquanto a porta NOR da Figura 3.2 (Combinacional) apenas processa, o Latch da Figura 3.21 (Sequencial) armazena.
 
-Curiosidade de Baixo Nível: Se você desligar o computador, o feedback é interrompido e os elétrons param de circular entre as portas NOR, por isso a memória RAM é volátil.
+    Curiosidade de Baixo Nível: Se você desligar o computador, o feedback é interrompido e os elétrons param de circular entre as portas NOR, por isso a memória RAM é volátil.
 
 Para ver como isso ocorre, vamos supor que ambos, S e R, sejam 0, o que é verdade na maior parte do tempo. Apenas para polemizar, vamos supor que Q = 0. Como Q é realimentado para a porta NOR superior, ambas as suas entradas são 0, portanto, sua saída, Q, é 1. O 1 é realimentado para a porta inferior que, então, tem entradas 1 e 0, resultando em Q = 0. Esse estado é no mínimo coerente e está retratado na Figura 3.21(a).
 
@@ -970,7 +985,7 @@ força o latch ao estado Q = 0. O circuito “se lembra” se foi S ou R definid
 ### Latches SR com clock
 Muitas vezes é conveniente impedir que o latch mude de estado, a não ser em certos momentos especificados. Para atingir esse objetivo, fazemos uma ligeira modificação no circuito básico, conforme mostra a Figura 3.22, para obter um latch SR com clock.
 
-Figura 3.22   Latch SR com clock.               
+### Figura 3.22   Latch SR com clock.               
 
 Esta Figura 3.22 resolve um dos maiores problemas do projeto de hardware: o caos do tempo. Sem o clock, qualquer ruído elétrico nas linhas S ou R poderia mudar o valor da memória instantaneamente.
 
@@ -1007,7 +1022,7 @@ Até aqui evitamos falar no que acontece quando ambos, S e R, são 1, por uma bo
 ### Latches D com clock
 Uma boa maneira de resolver a instabilidade do latch SR (causada quando S = R = 1) é evitar que ela ocorra. A Figura 3.23 apresenta um circuito de latch com somente uma entrada, D. Como a entrada para a porta AND inferior é sempre o complemento da entrada para a superior, nunca ocorre o problema de ambas as entradas serem 1. Quando D = 1 e o clock for 1, o latch é levado ao estado Q = 1. Quando D = 0 e o clock for 1, ele é levado ao estado Q = 0. Em outras palavras, quando o clock for 1, o valor corrente de D é lido e armazenado no latch. Esse circuito, denominado latch D com clock, é uma verdadeira memória de 1 bit. O valor armazenado sempre estará disponível em Q. Para carregar o valor atual de D na memória, um pulso positivo é colocado na linha do clock.
 
-Figura 3.23   Latch D com clock.
+### Figura 3.23   Latch D com clock.
 O Latch D com Clock é a evolução final da memória de 1 bit que estávamos construindo. Ele resolve o "pecado original" do Latch SR: a condição proibida onde S = R = 1. Ao usar uma única entrada de dados (D) e um inversor, garantimos que as entradas internas do latch sejam sempre opostas, tornando o sistema infalível e previsível.
 
     Latch D com Clock (Figura 3.23)
@@ -1030,7 +1045,7 @@ O Latch D com Clock é a evolução final da memória de 1 bit que estávamos co
                         |
                         +--- (D Negado)
 
-![alt text](image-3.png)
+![alt text](image-55.png)
 
 Esse circuito requer 11 transistores. Circuitos mais sofisticados (porém, menos óbvios) podem armazenar 1 bit com até seis transistores. Esses projetos costumam ser usados na prática. Esse circuito pode permanecer estável indefinidamente, desde que seja aplicada energia (não mostrado). Mais adiante, veremos os circuitos de memória que se esquecem rápido do estado em que estão, a menos que, de alguma forma, sejam “relembrados” constantemente.
 
@@ -1052,7 +1067,7 @@ Quando se efetua uma operação and com as entradas para a porta and, b e c, o r
 mostrado na parte superior da Figura 3.24(b). Esse deslocamento de tempo significa apenas que o latch D será ativado com um atraso fixo após a fase ascendente do clock, mas não tem efeito sobre a largura do pulso. Em uma memória com tempo de ciclo de 10 ns, um pulso de 1 ns para informar quando ler a linha D pode
 ser curto o bastante, caso em que o circuito completo pode ser o da Figura 3.25. Vale a pena observar que esse projeto de flip-flop é atraente porque é fácil de entender, embora, na prática, sejam usados flip-flops mais sofisticados.
 
-Figura 3.24   (a) Gerador de pulso. (b) Temporização em quatro pontos do circuito.
+### Figura 3.24   (a) Gerador de pulso. (b) Temporização em quatro pontos do circuito.
 
 Esta Figura 3.24 detalha o Gerador de Pulso, um circuito refinado que utiliza o atraso de propagação para criar janelas de tempo extremamente precisas. No seu repositório arquitetura_computadores, este conceito explica como o hardware consegue "disparar" uma escrita no exato momento em que o dado está estável no barramento.
 
@@ -1070,10 +1085,9 @@ Esta Figura 3.24 detalha o Gerador de Pulso, um circuito refinado que utiliza o 
 
 ![alt text](image-41.png)
 
-Os símbolos padronizados para latches e flip-flops são mostrados na Figura 3.26. A Figura 3.26(a) é um latch cujo estado é carregado quando o clock, CK, é 1, ao contrário da Figura 3.26(b), que é um latch cujo clock costuma ser 1, mas cai para 0 momentaneamente para carregar o estado a partir de D. As figuras 3.26(c) e (d) são flip-flops em vez de latches, o que é indicado pelo símbolo em ângulo nas entradas do clock. A Figura 3.26(c) muda de estado
-na borda ascendente do pulso do clock (transição de 0 para 1), enquanto a Figura 3.26(d) muda de estado na borda descendente (transição de 1 para 0). Muitos latches e flip-flops (mas não todos) também têm Q como uma saída, e alguns têm duas entradas adicionais Set ou Preset (que forçam o estado para Q = 1) e Reset ou Clear (que forçam o estado para Q = 0).
+Os símbolos padronizados para latches e flip-flops são mostrados na Figura 3.26. A Figura 3.26(a) é um latch cujo estado é carregado quando o clock, CK, é 1, ao contrário da Figura 3.26(b), que é um latch cujo clock costuma ser 1, mas cai para 0 momentaneamente para carregar o estado a partir de D. As figuras 3.26(c) e (d) são flip-flops em vez de latches, o que é indicado pelo símbolo em ângulo nas entradas do clock. A Figura 3.26(c) muda de estado na borda ascendente do pulso do clock (transição de 0 para 1), enquanto a Figura 3.26(d) muda de estado na borda descendente (transição de 1 para 0). Muitos latches e flip-flops (mas não todos) também têm Q como uma saída, e alguns têm duas entradas adicionais Set ou Preset (que forçam o estado para Q = 1) e Reset ou Clear (que forçam o estado para Q = 0).
 
-Figura 3.26  Latches e flip-flops D.
+### Figura 3.26  Latches e flip-flops D.
 
 Esta Figura 3.26 é um divisor de águas na arquitetura de computadores, Luís. Ela consolida a diferença entre um Latch (sensível ao nível) e um Flip-Flop (sensível à borda). No seu ATmega168, essa distinção é o que separa uma memória que "vaza" dados de um registrador que captura o valor no instante exato do pulso de clock.
 
@@ -1099,11 +1113,11 @@ O símbolo do pequeno triângulo na entrada de clock (CK) nos itens (c) e (d) in
             |-- Triângulo = Borda             |-- Círculo + Triângulo
 
 ### nsight para o seu repositório estruturas_de_dados
-Imagine que você está implementando uma Fila (Queue) em C no seu diretório estruturas_de_dados.
+    Imagine que você está implementando uma Fila (Queue) em C no seu diretório estruturas_de_dados.
 
- - O Latch seria como uma porta aberta por onde as pessoas passam enquanto ela estiver aberta.
+    - O Latch seria como uma porta aberta por onde as pessoas passam enquanto ela estiver aberta.
 
- - O Flip-Flop é como uma foto tirada no exato milissegundo em que a porta começa a fechar: apenas quem estava exatamente na linha naquele instante é registrado.
+    - O Flip-Flop é como uma foto tirada no exato milissegundo em que a porta começa a fechar: apenas quem estava exatamente na linha naquele instante é registrado.
 
 Isso é o que permite que o processador faça A = A + 1. Com um Latch, o valor ficaria somando infinitamente enquanto o clock estivesse alto. Com o Flip-Flop D, o valor é lido, somado e o resultado só é gravado "na foto" do próximo ciclo.
 
@@ -1114,7 +1128,7 @@ são do tipo da Figura 3.26(d), mas as bolhas de inversão nos flip-flops são c
 flip-flops serão forçados a passar para o seu estado 0. Caso você queira saber por que o sinal de clock CK é invertido na entrada e depois invertido novamente em cada flip-flop, um sinal de entrada pode não ter corrente suficiente para alimentar todos os oito flip-flops; o inversor da entrada, na realidade, está sendo
 usado como um amplificador.
 
-Figura 3.27   Um registrador de 8 bits construído a partir de flip-flops de único bit.
+### Figura 3.27   Um registrador de 8 bits construído a partir de flip-flops de único bit.
 
 Esta Figura 3.27 representa a aplicação prática de tudo o que estudamos até aqui, Luís. Ao agrupar oito flip-flops D, criamos um Registrador de 8 bits, que é a unidade fundamental de armazenamento interno da CPU, como os registradores que você utiliza em seus projetos de arquitetura e microcontroladores.Neste circuito, os flip-flops operam em uníssono. Quando o sinal de clock (CK) faz uma transição, todos os 8 bits do barramento de entrada ($I_0$ a $I_7$) são capturados simultaneamente e disponibilizados nas saídas ($O_0$ a $O_7$).
 
@@ -1131,21 +1145,21 @@ Esta Figura 3.27 representa a aplicação prática de tudo o que estudamos até 
         O7  O6  O5  O4  O3  O2  O1  O0
         BARRAMENTO DE SAÍDA (O0 - O7)
 
-![alt text](image-5.png)
+![alt text](image-56.png)
 
 ### Insight para o seu repositório arquitetura_computadores
-No seu diretório estruturas_de_dados, quando você manipula um uint8_t, o hardware está utilizando exatamente este circuito da Figura 3.27.
+    No seu diretório estruturas_de_dados, quando você manipula um uint8_t, o hardware está utilizando exatamente este circuito da Figura 3.27.
 
- - O sinal CLR é frequentemente usado durante o "Power-on Reset" do sistema para garantir que todos os registradores comecem em um estado conhecido (zero).
+    - O sinal CLR é frequentemente usado durante o "Power-on Reset" do sistema para garantir que todos os registradores comecem em um estado conhecido (zero).
 
- - A técnica de usar um inversor como amplificador de corrente é vital em chips reais para evitar a degradação do sinal de clock através de múltiplos componentes.
+    - A técnica de usar um inversor como amplificador de corrente é vital em chips reais para evitar a degradação do sinal de clock através de múltiplos componentes.
 
 Quando tivermos projetado um registrador de 8 bits, poderemos usá-lo como um bloco de montagem para criar registradores maiores. Por exemplo, um registrador de 32 bits poderia ser criado pela combinação de dois registradores de 16 bits, unindo seus sinais de clock CK e sinais de clear CLR. Veremos os registradores e seus usos com mais detalhes no Capítulo 4.
 
 ## 3.3.4 Organização da memória
 Embora agora tenhamos progredido de uma simples memória de 1 bit da Figura 3.23 para a de 8 bits da Figura 3.27, para construir memórias grandes é preciso uma organização diferente, na qual palavras individuais podem ser endereçadas. Uma organização de memória muito utilizada e que obedece a esse critério é mostrada na Figura 3.28. Esse exemplo ilustra uma memória com quatro palavras de 3 bits. Cada operação lê ou escreve uma palavra completa de 3 bits. Embora uma capacidade total de memória de 12 bits seja pouco mais do que nosso flip-flop octal, ela requer um número menor de pinos e, mais importante, o projeto pode ser estendido com facilidade para memórias grandes. Observe que o número de palavras é sempre uma potência de 2.
 
-Figura 3.28  Diagrama lógico para uma memória 4 x 3. Cada linha é uma das quatro palavras de 3 bits. Uma operação de leitura ou
+### Figura 3.28  Diagrama lógico para uma memória 4 x 3. Cada linha é uma das quatro palavras de 3 bits. Uma operação de leitura ou
 escrita sempre lê ou escreve uma palavra completa.
 
 Esta Figura 3.28 é o "Grand Finale" do nível de lógica digital, Luís. Aqui, você vê como todos os componentes que estudamos — Decodificadores, Flip-Flops e Portas Lógicas — se unem para formar uma Memória RAM 4 x 3 (4 palavras de 3 bits cada).
@@ -1169,18 +1183,17 @@ Memória RAM 4 x 3 (Figura 3.28)
 ![alt text](image-42.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Quando você cria um array int arr[4] no seu diretório estruturas_de_dados, o hardware está fazendo exatamente isto:
+    Quando você cria um array int arr[4] no seu diretório estruturas_de_dados, o hardware está fazendo exatamente isto:
 
- - O índice do array arr[2] é convertido pelos bits de endereço (A_1=1, A_0=0) para ativar a Palavra 2.
- - A largura do tipo (como o seu uint8_t) determina quantas colunas de flip-flops existem em paralelo (neste exemplo da figura, são 3).
+    - O índice do array arr[2] é convertido pelos bits de endereço (A_1=1, A_0=0) para ativar a Palavra 2.
+    - A largura do tipo (como o seu uint8_t) determina quantas colunas de flip-flops existem em paralelo (neste exemplo da figura, são 3).
 
 Embora à primeira vista talvez pareça complicada, a memória da Figura 3.28 na verdade é bastante simples devido à sua estrutura regular. Ela tem oito linhas de entrada e três de saída. Três entradas são de dados: I0, I1 e I2; duas são para o endereço: A0 e A1; e três são para controle: cs para chip select (selecionar
 chip), rd para distinguir entre ler e escrever e oe para output enable (habilitar saída). As três saídas são para dados: O0, O1 e O2. É interessante notar que essa memória de 12 bits requer menos sinais que o registrador de 8 bits anterior. Este requer 20 sinais, incluindo alimentação e terra, enquanto a memória de 12 bits requer apenas 13 sinais. O bloco de memória requer menos sinais porque, diferente do registrador, os bits de memória compartilham um sinal de saída. Nessa memória, cada um dos 4 bits de memória compartilha um sinal de saída. O valor das linhas de endereço determina quais dos 4 bits de memória pode receber ou enviar um valor.
 
 Para selecionar esse bloco de memória, a lógica externa deve estabelecer cs alto e também rd alto (1 lógico) para leitura e baixo (0 lógico) para escrita. As duas linhas de endereço devem ser ajustadas para indicar qual das quatro palavras de 3 bits deve ser lida ou escrita. Para uma operação de leitura, as linhas de entrada de dados não são usadas, mas a palavra selecionada é colocada nas linhas de saída de dados. Para uma operação de escrita, os bits presentes nas linhas de entrada de dados são carregados na palavra de memória selecionada; as linhas de saída de dados não são usadas.
 
-Agora, vamos examinar atentamente a Figura 3.28 para ver como isso funciona. As quatro portas and de seleção de palavras à esquerda da memória formam um decodificador. Os inversores de entrada foram instalados de modo que cada porta é habilitada (saída é alta) por um endereço diferente. Cada porta comanda uma linha de seleção de palavra, de cima para baixo, para as palavras 0, 1, 2 e 3. Quando o chip é selecionado para uma
-escrita, a linha vertical rotulada cs · rd estará alta, habilitando uma das quatro portas de escrita, dependendo de qual linha de seleção de palavra esteja alta. A saída da porta de escrita comanda todos os sinais ck para a palavra selecionada, carregando os dados de entrada nos flip-flops para aquela palavra. Uma escrita é efetuada apenas se cs estiver alto e rd estiver baixo, e, ainda assim, somente a palavra selecionada por A0 e A1 é escrita; as outras palavras não são alteradas.
+Agora, vamos examinar atentamente a Figura 3.28 para ver como isso funciona. As quatro portas and de seleção de palavras à esquerda da memória formam um decodificador. Os inversores de entrada foram instalados de modo que cada porta é habilitada (saída é alta) por um endereço diferente. Cada porta comanda uma linha de seleção de palavra, de cima para baixo, para as palavras 0, 1, 2 e 3. Quando o chip é selecionado para uma escrita, a linha vertical rotulada cs · rd estará alta, habilitando uma das quatro portas de escrita, dependendo de qual linha de seleção de palavra esteja alta. A saída da porta de escrita comanda todos os sinais ck para a palavra selecionada, carregando os dados de entrada nos flip-flops para aquela palavra. Uma escrita é efetuada apenas se cs estiver alto e rd estiver baixo, e, ainda assim, somente a palavra selecionada por A0 e A1 é escrita; as outras palavras não são alteradas.
 
 Ler é semelhante a escrever. A decodificação de endereço é idêntica à da escrita. Mas agora a linha cs · rd está baixa, portanto, todas as portas de escrita estão desabilitadas e nenhum dos flip-flops é modificado. Em vez disso, a linha de seleção de palavra que for escolhida habilita as portas and vinculadas aos Q bits da palavra selecionada. Portanto, a palavra selecionada entrega seus dados às portas or de quatro entradas na parte inferior da figura, enquanto as outras três palavras produzem 0s. Em consequência, a saída das portas or é idêntica ao valor armazenado na palavra selecionada. As três palavras não selecionadas não dão nenhuma contribuição à saída.
 
@@ -1193,7 +1206,7 @@ A Figura 3.29(d) mostra um buffer inversor, que funciona como um inversor normal
 
 Voltando ao circuito de memória, agora já deve estar claro para que servem os três buffers não inversores nas linhas de saída de dados. Quando cs, rd e oe estiverem todos altos, o sinal output enable também está alto, habilitando os buffers e colocando uma palavra nas linhas de saída. Quando qualquer um dos cs, rd ou oe estiver baixo, as saídas de dados são desconectadas do resto do circuito.
 
-Figura 3.29  (a) Buffer não inversor. (b) Efeito de (a) quando o controle está alto. (c) Efeito de (a) quando o controle está baixo. (d)
+### Figura 3.29 (a) Buffer não inversor. (b) Efeito de (a) quando o controle está alto. (c) Efeito de (a) quando o controle está baixo. (d)
 Buffer inversor.
 
 Esta Figura 3.29 introduz um componente vital para a comunicação entre os circuitos que estudamos e o barramento (bus) do sistema: o Buffer de Três Estados (Tri-state Buffer). Sem ele, se dois registradores tentassem enviar dados ao mesmo tempo, haveria um curto-circuito. O buffer funciona como uma "chave eletrônica" que desconecta fisicamente a saída do barramento quando não está em uso.
@@ -1219,13 +1232,13 @@ Esta Figura 3.29 introduz um componente vital para a comunicação entre os circ
 ![alt text](image-43.png)
 
 ### nsight para o seu repositório estruturas_de_dados
-No seu diretório estruturas_de_dados, quando você pensa em um barramento compartilhado, imagine uma sala onde várias pessoas querem falar.
+    No seu diretório estruturas_de_dados, quando você pensa em um barramento compartilhado, imagine uma sala onde várias pessoas querem falar.
 
- - O Buffer Tri-state é o microfone de cada pessoa.
+    - O Buffer Tri-state é o microfone de cada pessoa.
 
- - A Unidade de Controle (Figura 3.28) garante que apenas uma pessoa ligue o microfone por vez.
+    - A Unidade de Controle (Figura 3.28) garante que apenas uma pessoa ligue o microfone por vez.
 
- - Se alguém tentar falar com o microfone desligado (Controle=0), ninguém ouve nada (Alta Impedância), e o canal fica livre para outro orador.
+    - Se alguém tentar falar com o microfone desligado (Controle=0), ninguém ouve nada (Alta Impedância), e o canal fica livre para outro orador.
 
 ## 3.3.5 Chips de memória
 O bom da memória da Figura 3.28 é que ela pode ser ampliada com facilidade para tamanhos maiores. Em nosso desenho, a memória é 4 × 3, isto é, quatro palavras de 3 bits cada. Para ampliá-la para 4 × 8, basta adicionar cinco colunas de quatro flip-flops cada, bem como cinco linhas de entrada e cinco linhas de saída. Para passar de 4 × 3 para 8 × 3, devemos acrescentar quatro linhas de três flip-flops cada, bem como uma linha de endereço A2. Com esse tipo de estrutura, o número de palavras na memória deve ser uma potência de 2 para que haja o máximo de eficiência, mas o número de bits em uma palavra pode ser qualquer um.
@@ -1239,9 +1252,7 @@ essa convenção.) Na Figura 3.30(a), são necessárias 19 linhas de endereço p
 Cabe aqui uma observação sobre tecnologia. Em alguns pinos, a alta tensão provoca uma ação. Em outros, é a baixa tensão que causa uma ação. Para evitar confusão, preferimos manter a coerência e dizer sempre que o sinal é afirmado (em vez de dizer que fica alto ou baixo), o que significa que foi disparado para provocar alguma ação. Assim, para alguns pinos, afirmá-lo significa estabelecê-lo alto. Para outros, significa estabelecer o pino baixo. Os
 nomes de sinais de pinos afirmados baixos são distinguidos por uma barra superior. Assim, um sinal com rótulo cs é ativado alto, mas um sinal com rótulo cs é ativado baixo. O oposto de afirmado é negado. Quando nada de especial estiver acontecendo, os pinos são negados.
 
-Agora, vamos voltar ao nosso chip de memória. Uma vez que um computador costuma ter muitos chips de memória, é preciso um sinal para selecionar o chip necessário no momento em questão, de modo que ele responda e todos os outros não. O sinal cs (chip select – seleção de chip) existe para essa finalidade e é ativado para habilitar o chip. Além disso, é preciso uma maneira de distinguir entre leituras e escritas. O sinal we (write
-enable – habilitar escrita) é usado para indicar que os dados estão sendo escritos, e não lidos. Por fim, o sinal (output enable – habilitar saída) é afirmado para comandar os sinais de saída. Quando ele não é afirmado, a saída
-do chip é desconectada do circuito.
+Agora, vamos voltar ao nosso chip de memória. Uma vez que um computador costuma ter muitos chips de memória, é preciso um sinal para selecionar o chip necessário no momento em questão, de modo que ele responda e todos os outros não. O sinal cs (chip select – seleção de chip) existe para essa finalidade e é ativado para habilitar o chip. Além disso, é preciso uma maneira de distinguir entre leituras e escritas. O sinal we (write enable – habilitar escrita) é usado para indicar que os dados estão sendo escritos, e não lidos. Por fim, o sinal (output enable – habilitar saída) é afirmado para comandar os sinais de saída. Quando ele não é afirmado, a saída do chip é desconectada do circuito.
 
 Na Figura 3.30(b), é usado um esquema de endereçamento diferente. Esse chip é organizado internamente como uma matriz 2.048 × 2.048 de células de 1 bit, o que dá 4 Mbits. Para endereçar o chip, em primeiro lugar uma linha é selecionada ao se colocar seu número de 11 bits nos pinos de endereço. Então o ras (row address
 strobe – strobe de endereço de linha) é afirmado. Em seguida, um número de coluna é colocado nos pinos de endereço e o cas (column address strobe – strobe de endereço de coluna) é afirmado. O chip responde aceitando ou entregando um bit de dados.
@@ -1252,7 +1263,7 @@ Anos atrás, os maiores chips de memória costumavam ser organizados como os da 
 
 Dois exemplos de chips modernos de 512 Mbits são dados na Figura 3.31. Esses chips têm quatro bancos de memória internos de 128 Mbits cada, o que requer duas linhas de seleção de banco para escolher um banco. O projeto da Figura 3.31(a) é de um chip de 32 M × 16 com 13 linhas para o sinal ras, 10 linhas para o sinal cas e 2 linhas para a seleção de banco. Juntos, esses 25 sinais permitem o endereçamento de cada uma das 225 células internas de 16 bits. Em comparação, a Figura 3.31(b) apresenta um projeto de 128 M × 4 com 13 linhas para o sinal ras, 12 linhas para o sinal cas e 2 linhas para a seleção de banco. Nesse caso, 27 sinais podem selecionar quaisquer das 227 células internas de 4 bits a serem endereçadas. A decisão sobre o número de linhas e de colunas que um chip tem é tomada por razões de engenharia. A matriz não precisa ser quadrada.
 
-Figura 3.30  Dois modos de organizar um chip de memória de 4 Mbits.
+### Figura - 3.30 Dois modos de organizar um chip de memória de 4 Mbits.
 
 ![alt text](image-20.png)
 
@@ -1265,13 +1276,13 @@ No seu repositório arquitetura_computadores, este conceito é essencial para en
     (a) ORGANIZAÇÃO 512K x 8                (b) ORGANIZAÇÃO 4096K x 1
         (Palavras de 1 Byte)                    (Palavras de 1 Bit)
 
-        +-------------------+                   +-------------------+
+          +-------------------+                   +-------------------+
     A0-A18|                   |           A0-A10  |                   |
     ----->|   512K x 8        |           ------->|   4096K x 1       |
-        |   (4 Mbits)       |                   |   (4 Mbits)       |
-        |                   |             RAS ->|                   |
-        |                   |             CAS ->|                   |
-        +-------------------+                   +-------------------+
+          |   (4 Mbits)       |                   |   (4 Mbits)       |
+          |                   |             RAS ->|                   |
+          |                   |             CAS ->|                   |
+          +-------------------+                   +-------------------+
             | | | | | | | |                         |
             D7 D6 D5 D4 D3 D2 D1 D0                 D (Entrada/Saída única)
         (8 Pinos de Dados)                      (1 Pino de Dados)
@@ -1281,15 +1292,15 @@ No seu repositório arquitetura_computadores, este conceito é essencial para en
 Opção (a): Usa 19 linhas de endereço (2^19 = 512K) para acessar 8 bits de uma vez. ----> Byte-Oriented: Ideal para sistemas onde a economia de pinos de endereço é menos crítica que a velocidade de acesso ao byte.
 
 ### Insight para o seu repositório estruturas_de_dados
-Essa organização impacta diretamente como os dados são lidos da RAM para o seu diretório estruturas_de_dados.
+    Essa organização impacta diretamente como os dados são lidos da RAM para o seu diretório estruturas_de_dados.
 
- - Se você estiver usando o chip (a), uma única leitura retorna um char completo.
+    - Se você estiver usando o chip (a), uma única leitura retorna um char completo.
 
- - Se estiver usando o chip (b), o hardware do computador precisa ativar 8 chips simultaneamente para "montar" esse mesmo char.
+    - Se estiver usando o chip (b), o hardware do computador precisa ativar 8 chips simultaneamente para "montar" esse mesmo char.
 
 Curiosidade: A organização (b) é muito popular em memórias modernas porque permite que o chip tenha menos pinos (usando a mesma linha para endereço de linha e coluna em tempos diferentes), o que reduz o custo de fabricação.
 
-Figura 3.31  Dois modos de organizar um chip de memória de 512 Mbits.
+### Figura 3.31  Dois modos de organizar um chip de memória de 512 Mbits.
 
 Esta Figura 3.31 avança na escala de densidade para chips de 512 Mbits, introduzindo o conceito de Bancos de Memória. Diferente dos chips de 4 Mbits da figura anterior, aqui o hardware utiliza bancos internos (Banco 0 e Banco 1) para permitir que certas operações ocorram em paralelo, aumentando a eficiência do seu ATmega168 ou sistemas maiores.
 
@@ -1300,14 +1311,14 @@ No seu repositório arquitetura_computadores, esta organização demonstra como 
         (a) ORGANIZAÇÃO 32M x 16                (b) ORGANIZAÇÃO 128M x 4
             (Palavras de 16 bits/2 Bytes)           (Palavras de 4 bits/Nibble)
 
-            +-------------------+                   +-------------------+
+              +-------------------+                   +-------------------+
         A0-A12|      BANCO 0      |           A0-A12  |      BANCO 0      |
         ----->|      BANCO 1      |           ------->|      BANCO 1      |
-            |   (512 Mbits)     |                   |   (512 Mbits)       |
-            |                   |             RAS ->|                   |
+              |   (512 Mbits)     |                   |   (512 Mbits)     |
+              |                   |             RAS ->|                   |
         RAS ->|   32M x 16        |             CAS ->|   128M x 4        |
         CAS ->|                   |                   |                   |
-            +-------------------+                   +-------------------+
+              +-------------------+                   +-------------------+
                 | | | | | | | | | |                     | | | |
                 D15 ............ D0                     D3 D2 D1 D0
             (16 Pinos de Dados)                     (4 Pinos de Dados)
@@ -1333,15 +1344,13 @@ coluna um a um, como descrevemos para o ras e o cas no contexto da Figura 3.30. 
 
 A DRAM FPM foi substituída pela EDO (Extended Data Output – saída de dados ampliada), que permite iniciar uma segunda referência à memória antes de ser concluída a referência à memória precedente. Esse paralelismo simples não acelerava uma referência individual à memória, mas melhorava a largura de banda da memória, resultando em mais palavras por segundo.
 
-FPM e EDO funcionavam bastante bem quando os tempos de ciclo de chips de memória eram de 12 nanossegundos ou mais lentos. Quando os processadores ficaram tão rápidos que era mesmo preciso ter memórias mais rápidas, a FPM e a EDO foram substituídas pela SDRAM (Synchronous DRAM – DRAM síncrona), que é uma
-híbrida de RAM estática e dinâmica, comandada pelo clock do sistema principal. A grande vantagem da SDRAM é que o clock elimina a necessidade de sinais de controle para informar ao chip de memória quando responder. Em vez disso, a CPU informa à memória por quantos ciclos ela deve funcionar e então a inicia. Em cada ciclo subsequente, a memória entrega 4, 8 ou 16 bits, dependendo de quantas linhas de saída ela tem. Eliminar a necessidade de sinais de controle aumenta a taxa de dados entre CPU e memória.
+FPM e EDO funcionavam bastante bem quando os tempos de ciclo de chips de memória eram de 12 nanossegundos ou mais lentos. Quando os processadores ficaram tão rápidos que era mesmo preciso ter memórias mais rápidas, a FPM e a EDO foram substituídas pela SDRAM (Synchronous DRAM – DRAM síncrona), que é uma híbrida de RAM estática e dinâmica, comandada pelo clock do sistema principal. A grande vantagem da SDRAM é que o clock elimina a necessidade de sinais de controle para informar ao chip de memória quando responder. Em vez disso, a CPU informa à memória por quantos ciclos ela deve funcionar e então a inicia. Em cada ciclo subsequente, a memória entrega 4, 8 ou 16 bits, dependendo de quantas linhas de saída ela tem. Eliminar a necessidade de sinais de controle aumenta a taxa de dados entre CPU e memória.
 
 A melhoria seguinte em relação à SDRAM foi a SDRAM DDR (Double Data Rate – dupla taxa de dados). Com esse tipo de memória, o chip de memória produz saída na borda ascendente do clock e também na borda descendente, dobrando a taxa de dados. Portanto, um chip DDR de 8 bits de largura funcionando a 200 MHz entrega dois valores de 8 bits 200 milhões de vezes por segundo (por um curto intervalo, é claro), o que dá uma taxa de saída (burst) teórica de 3,2 Gbps. As interfaces de memória DDR2 e DDR3 oferecem desempenho adicional em relação à DDR, aumentando as velocidades do barramento de memória para 533 MHz e 1.067 MHz, respectivamente. No momento em que este livro era impresso, os chips DDR3 mais velozes poderiam enviar
 dados a 17,067 GB/s.
 
 #### Chips de memória não volátil
-RAMs não são o único tipo de chip de memória. Em muitas aplicações, como brinquedos, eletrodomésticos e carros, o programa e alguns dos dados devem permanecer armazenados mesmo quando o fornecimento de energia for interrompido. Além do mais, uma vez instalados, nem o programa nem os dados são alterados.
-Esses requisitos levaram ao desenvolvimento de ROMs (Read-Only Memories – memórias somente de leitura), que não podem ser alteradas nem apagadas, seja intencionalmente ou não. Os dados de uma ROM são inseridos durante sua fabricação por um processo que expõe um material fotossensível por meio de uma máscara que contém o padrão de bits desejado e então grava o padrão sobre a superfície exposta (ou não exposta). A única maneira de mudar o programa em uma ROM é substituir o chip inteiro.
+RAMs não são o único tipo de chip de memória. Em muitas aplicações, como brinquedos, eletrodomésticos e carros, o programa e alguns dos dados devem permanecer armazenados mesmo quando o fornecimento de energia for interrompido. Além do mais, uma vez instalados, nem o programa nem os dados são alterados. Esses requisitos levaram ao desenvolvimento de ROMs (Read-Only Memories – memórias somente de leitura), que não podem ser alteradas nem apagadas, seja intencionalmente ou não. Os dados de uma ROM são inseridos durante sua fabricação por um processo que expõe um material fotossensível por meio de uma máscara que contém o padrão de bits desejado e então grava o padrão sobre a superfície exposta (ou não exposta). A única maneira de mudar o programa em uma ROM é substituir o chip inteiro.
 
 ROMs são muito mais baratas que RAMs quando fabricadas em volumes grandes o bastante para cobrir o custo da fabricação da máscara. Todavia, são inflexíveis porque não podem ser alteradas após a manufatura, e o tempo decorrido entre fazer o pedido e receber as ROMs pode chegar a semanas. Para facilitar o desenvol-
 vimento pelas empresas de novos produtos com ROM, foi inventada a PROM (Programmable ROM – ROM programável). Uma PROM é como uma ROM, exceto que ela pode ser programada (uma vez) em campo, eliminando o tempo de espera entre produção e entrega. Muitas PROMs contêm um arranjo de minúsculos fusíveis em seu interior. Um fusível específico pode ser queimado selecionando sua linha e coluna e então aplicando alta tensão a um pino especial no chip.
@@ -1355,7 +1364,7 @@ programada. Uma desvantagem é que a capacidade das maiores EEPROMs é em geral 
 
 Um tipo mais recente de EEPROM é a memória flash. Diferente da EPROM, que é apagada pela exposição à luz ultravioleta, e da EEPROM, cujos bytes podem ser apagados, os blocos da memória flash podem ser apagados e reescritos. Como a EEPROM, a memória flash pode ser apagada sem ser removida do circuito. Vários fabricantes produzem pequenas placas de circuito impresso com até 64 GB de memória flash que são utilizadas como um “filme” para armazenar fotos em câmeras digitais e muitas outras finalidades. Como já vimos no Capítulo 2, a memória flash agora está começando a substituir os discos mecânicos. Assim como um disco, a memória flash oferece tempos de acesso menores com menor consumo de energia, mas com um custo por bit muito mais alto. Um resumo dos diversos tipos de memória pode ser visto na Figura 3.32.
 
-Figura 3.32  Comparação entre vários tipos de memórias (Arranjo de portas programável em campo).
+### Figura 3.32 - Comparação entre vários tipos de memórias (Arranjo de portas programável em campo).
 
 Esta Figura 3.32 é o fechamento perfeito para a sua documentação de hardware, Luís. Ela oferece uma visão comparativa essencial que conecta os componentes físicos que estudamos às aplicações práticas que você encontra no dia a dia do desenvolvimento de sistemas.
 
@@ -1377,11 +1386,11 @@ Comparação de Tecnologias de Memória (Figura 3.32)
 +-----------------+------------------------+---------------+---------------+----------+-------------------------------+
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao trabalhar em seu diretório estruturas_de_dados, entender essa tabela é crucial para otimização de código.
+    Ao trabalhar em seu diretório estruturas_de_dados, entender essa tabela é crucial para otimização de código.
 
- - O uso de algoritmos que favorecem o cache (SRAM) resulta em uma performance drasticamente superior àqueles que dependem constantemente da memória principal (SDRAM).
+    - O uso de algoritmos que favorecem o cache (SRAM) resulta em uma performance drasticamente superior àqueles que dependem constantemente da memória principal (SDRAM).
 
- - Para projetos com microcontroladores (como o seu ATmega168), saber que a EEPROM é "Byte Alterável" permite salvar configurações específicas sem precisar regravar todo o firmware via memória Flash.
+    - Para projetos com microcontroladores (como o seu ATmega168), saber que a EEPROM é "Byte Alterável" permite salvar configurações específicas sem precisar regravar todo o firmware via memória Flash.
 
 ### Field-programmable gate arrays
 Como vimos no Capítulo 1, Field-Programmable Gate Arrays (FPGAs) são chips que contêm lógica programável, de modo que podem formar um circuito lógico qualquer simplesmente carregando o FPGA com dados de configuração apropriados. A principal vantagem dos FPGAs é que novos circuitos de hardware podem ser
@@ -1400,7 +1409,7 @@ Para entender melhor o contador baseado em FPGA com reset, vamos considerar sua 
 
 Apesar de tudo, esse pode parecer um modo arcaico de se construir um contador com reset e, de fato, um projeto totalmente personalizado, com um circuito incrementador e sinais de reset para os flip-flops, seria menor, mais rápido e usaria menos energia. A principal vantagem do projeto baseado em FPGA é que você pode ajustá-lo em uma hora em casa, enquanto o projeto totalmente personalizado, mais eficiente, deve ser fabricado com base no silício, o que poderia levar pelo menos um mês.
 
-Figura 3.33  (a) Uma tabela de pesquisa (LUT) de um FPGA. (b) A configuração da LUT para criar um contador de apagamento de 3 bits.
+### Figura 3.33 - (a) Uma tabela de pesquisa (LUT) de um FPGA. (b) A configuração da LUT para criar um contador de apagamento de 3 bits.
 
 Esta Figura 3.33 ilustra o funcionamento interno de um FPGA (Field Programmable Gate Array), especificamente como uma LUT (Look-Up Table) é utilizada para emular lógica digital de forma flexível. Ao contrário do seu ATmega168, que possui um hardware fixo, o FPGA permite que você "reconfigure" as conexões elétricas para criar qualquer circuito, como este contador de 3 bits.
 
@@ -1455,15 +1464,20 @@ rápido; porém, invariavelmente, também é mais caro.
 Além dos pinos de endereço e de dados, cada CPU tem alguns pinos de controle. Os pinos de controle regulam o fluxo e a temporização de dados que vêm da CPU e vão para ela, além de ter outras utilizações diversas. Todas as CPUs têm pinos para energia elétrica (geralmente +1,2 volt a +1,5 volt), para terra e para um sinal de clock (uma onda quadrada com uma frequência bem definida), mas os outros pinos variam muito de um chip para outro. Não obstante, os pinos de controle podem ser agrupados aproximadamente nas seguintes categorias principais:
 
     1. Controle de barramento.
+    
     2. Interrupções.
+    
     3. Arbitragem de barramento.
+    
     4. Sinalização de coprocessador.
+    
     5. Estado.
+    
     6. Diversos.
 
 Logo faremos uma breve descrição de cada uma dessas categorias. Quando examinarmos os chips Intel Core i7, TI OMAP4430 e Atmel ATmega168, mais adiante, daremos mais detalhes. Um chip de CPU genérico que usa esses grupos de sinais pode ser visto na Figura 3.34.
 
-Figura 3.34  Pinagem lógica de uma CPU genérica. As setas indicam sinais de entrada e sinais de saída. Os segmentos de reta diagonais
+### Figura 3.34 - Pinagem lógica de uma CPU genérica. As setas indicam sinais de entrada e sinais de saída. Os segmentos de reta diagonais
 indicam que são utilizados vários pinos. Há um número que indica quantos são os pinos para uma CPU específica.
 
 Esta Figura 3.34 representa a interface física entre o silício e o mundo externo: a Pinagem Lógica de uma CPU. Enquanto as figuras anteriores focaram no que acontece dentro do chip, esta mostra como o processador se comunica com a memória e os periféricos através do barramento.
@@ -1472,28 +1486,28 @@ No seu repositório arquitetura_computadores, este diagrama é o mapa para enten
 
     Pinagem Lógica (Figura 3.34)
     ______________________________________
-            |                                       |
-    <------//| ENDEREÇAMENTO (Ex: 16, 32, 64 pinos)  |--- (Define o Espaço de Endereçamento)
-            |_______________________________________|
-            |                                       |
+              |                                       |
+    <------// | ENDEREÇAMENTO (Ex: 16, 32, 64 pinos)  |--- (Define o Espaço de Endereçamento)
+              |_______________________________________|
+              |                                       |
     <------>//| DADOS (Ex: 8, 16, 32, 64 pinos)       |--- (Largura da Palavra/Throughput)
-            |_______________________________________|
-            |                                       |
-    <------//| CONTROLE DE BARRAMENTO                |--- (RD, WR, M/IO)
-            |_______________________________________|
-            |                                       |
-    <------- | ARBITRAGEM DE BARRAMENTO              |--- (Bus Request, Bus Grant)
-            |_______________________________________|
-            |                                       |
-    -------> | INTERRUPÇÕES                          |--- (IRQ, NMI)
-            |             MICROPROCESSADOR          |
-    <------- | COPROCESSADOR  TÍPICO                 |--- (Sinais de Extensão)
-            |                                       |
-    <------//| ESTADO                                |--- (Status do Processador)
-            |_______________________________________|
-            |                                       |
-    <------//| DIVERSOS                              |--- (Reset, Ready, Hold)
-            |_______________________________________|
+              |_______________________________________|
+              |                                       |
+    <------// | CONTROLE DE BARRAMENTO                |--- (RD, WR, M/IO)
+              |_______________________________________|
+              |                                       |
+    <-------  | ARBITRAGEM DE BARRAMENTO              |--- (Bus Request, Bus Grant)
+              |_______________________________________|
+              |                                       |
+    ------->  | INTERRUPÇÕES                          |--- (IRQ, NMI)
+              |             MICROPROCESSADOR          |
+    <-------  | COPROCESSADOR  TÍPICO                 |--- (Sinais de Extensão)
+              |                                       |
+    <------// | ESTADO                                |--- (Status do Processador)
+              |_______________________________________|
+              |                                       |
+    <------// | DIVERSOS                              |--- (Reset, Ready, Hold)
+              |_______________________________________|
                 |               |               |
                 Φ               V               ⟒
             ALIMENTAÇÃO        CLOCK        ATERRAMENTO
@@ -1502,11 +1516,11 @@ No seu repositório arquitetura_computadores, este diagrama é o mapa para enten
 ![alt text](image-23.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao codificar em C no seu diretório estruturas_de_dados, cada vez que você faz um acesso a ponteiro, você está disparando eletronicamente os pinos de Endereçamento e aguardando a resposta nos pinos de Dados.
+    Ao codificar em C no seu diretório estruturas_de_dados, cada vez que você faz um acesso a ponteiro, você está disparando eletronicamente os pinos de Endereçamento e aguardando a resposta nos pinos de Dados.
 
-Se houver um erro de hardware (como um pino de aterramento solto ou interferência no clock), o seu software apresentará comportamentos imprevisíveis independentemente de quão perfeita seja a lógica do código.
+    - Se houver um erro de hardware (como um pino de aterramento solto ou interferência no clock), o seu software apresentará comportamentos imprevisíveis independentemente de quão perfeita seja a lógica do código.
 
-Fechamos o ciclo da lógica digital! Partimos do transistor, passamos pela ULA, pelas memórias e chegamos aos pinos de conexão da CPU.
+    - Fechamos o ciclo da lógica digital! Partimos do transistor, passamos pela ULA, pelas memórias e chegamos aos pinos de conexão da CPU.
 
 A maioria dos pinos de controle do barramento são saídas da CPU para o barramento (e, portanto, entradas para a memória e chips de E/S) que informam se a CPU quer ler ou escrever na memória ou fazer outra coisa qualquer. A CPU usa esses pinos para controlar o resto do sistema e informar o que ela quer fazer.
 
@@ -1524,14 +1538,14 @@ Um barramento é um caminho elétrico comum entre vários dispositivos. Os barra
 Os primeiros computadores pessoais tinham somente um barramento externo, ou barramento do sistema, que consistia em 50 a 100 fios de cobre paralelos gravados na placa-mãe, com conectores a intervalos regulares para ligação com a memória e placas de E/S. Os computadores pessoais modernos em geral têm um barramento de
 uso especial entre a CPU e a memória e (pelo menos) outro barramento para os dispositivos de E/S. Um sistema mínimo, com um barramento de memória e um barramento de E/S, é ilustrado na Figura 3.35.
 
-Figura 3.35  Sistema de computador com vários barramentos.
+### Figura 3.35 - Sistema de computador com vários barramentos.
 
 Esta Figura 3.35 representa a macroarquitetura de um sistema de computador, mostrando como os componentes que estudamos individualmente se conectam para formar um organismo funcional. Note que não existe apenas um barramento, mas uma hierarquia deles, cada um otimizado para uma velocidade e propósito específicos.
 
 No seu repositório arquitetura_computadores, este diagrama é o mapa rodoviário que conecta o processamento à memória e aos periféricos.
 
     SINAL DE CLOCK (Fig. 3.20)          ESTRUTURA DE BARRAMENTOS (Fig. 3.35)
-        ___________________________          ____________________________________
+         ___________________________          ____________________________________
         |  [ GERADOR DE CLOCK ]     |        |          CHIP DE CPU               |
         |   (Cristal/Oscilador)     |        |   [ ULA ] <---> [ REGISTRADORES ]  |
         |___________|_______________|        |      ^               ^             |
@@ -1549,14 +1563,16 @@ No seu repositório arquitetura_computadores, este diagrama é o mapa rodoviári
 
 ![alt text](image-24.png)
 
+![alt text](image-57.png)
+
 ### Por que o diagrama original parece incompleto?
-Faltam as camadas de controle que você já estudou nas figuras anteriores (como a 3.34):
+    Faltam as camadas de controle que você já estudou nas figuras anteriores (como a 3.34):
 
- - Arbitragem: Como o Controlador de Barramento decide se o Disco ou a Rede podem falar.
+    - Arbitragem: Como o Controlador de Barramento decide se o Disco ou a Rede podem falar.
 
- - Multiplexação: Como o mesmo barramento carrega Endereços em um ciclo e Dados em outro.
+    - Multiplexação: Como o mesmo barramento carrega Endereços em um ciclo e Dados em outro.
 
- - Alimentação: O chip da CPU não funciona apenas com lógica; ele precisa de energia estável (Vcc/GND) para manter os flip-flops acesos.
+    - Alimentação: O chip da CPU não funciona apenas com lógica; ele precisa de energia estável (Vcc/GND) para manter os flip-flops acesos.
 
 Na literatura, às vezes os barramentos são representados por setas largas e sombreadas, como nesta figura. A distinção entre essas setas e uma linha reta cortada por um pequeno segmento de reta inclinado acompanhado de um número de bits é sutil. Quando todos os bits são do mesmo tipo, por exemplo, todos
 são bits de endereço ou todos são bits de dados, então costuma ser usada a representação pelo segmento de reta diagonal. Quando estão envolvidas linhas de endereço, de dados e de controle, a seta larga sombreada é a mais comum.
@@ -1584,8 +1600,7 @@ Agora, vamos iniciar nosso estudo do funcionamento dos barramentos. Alguns dispo
     | Coprocessador     | CPU               | Coprocessador que busca operandos na CPU     |
     +-------------------+-------------------+----------------------------------------------+
 
-Os sinais binários emitidos por dispositivos de computador muitas vezes são fracos demais para energizar um barramento, em especial se ele for relativamente longo ou tiver muitos dispositivos ligados a ele. Por esse motivo, a maioria dos mestres de barramento está conectada a ele por um chip denominado controlador de barramento, que é nada mais que um amplificador digital. De modo semelhante, grande parte dos escravos está conectada ao barramento
-por um receptor de barramento. Quando dispositivos podem agir como mestres e também como escravos, é usado um chip combinado denominado transceptor de barramento. Essas interfaces de barramento são com frequência dispositivos de três estados, o que permite que flutuem (se desconectem) quando não são necessários ou então se conectem de modo um tanto diferente, denominado coletor aberto, que consegue um efeito semelhante. Quando dois ou mais dispositivos em uma linha de coletor aberto ativam a linha ao mesmo tempo, o resultado é o OR booleano de todos os sinais. Esse arranjo costuma ser denominado OR cabeado (wired-OR). Na maioria dos barramentos, algumas das linhas são de três estados, e outras, que precisam da propriedade OR cabeado, são de coletor aberto.
+Os sinais binários emitidos por dispositivos de computador muitas vezes são fracos demais para energizar um barramento, em especial se ele for relativamente longo ou tiver muitos dispositivos ligados a ele. Por esse motivo, a maioria dos mestres de barramento está conectada a ele por um chip denominado controlador de barramento, que é nada mais que um amplificador digital. De modo semelhante, grande parte dos escravos está conectada ao barramento por um receptor de barramento. Quando dispositivos podem agir como mestres e também como escravos, é usado um chip combinado denominado transceptor de barramento. Essas interfaces de barramento são com frequência dispositivos de três estados, o que permite que flutuem (se desconectem) quando não são necessários ou então se conectem de modo um tanto diferente, denominado coletor aberto, que consegue um efeito semelhante. Quando dois ou mais dispositivos em uma linha de coletor aberto ativam a linha ao mesmo tempo, o resultado é o OR booleano de todos os sinais. Esse arranjo costuma ser denominado OR cabeado (wired-OR). Na maioria dos barramentos, algumas das linhas são de três estados, e outras, que precisam da propriedade OR cabeado, são de coletor aberto.
 
 Assim como uma CPU, um barramento também tem linhas de endereço, de dados e de controle. Contudo, nem sempre há um mapeamento um-para-um entre os pinos da CPU e os sinais do barramento. Por exemplo, algumas CPUs têm três pinos que codificam se ela está fazendo uma leitura de memória, uma escrita na memória, uma leitura de E/S, uma escrita de E/S ou alguma outra operação. Um barramento típico poderia ter uma linha para leitura de memória, uma segunda para escrita na memória, uma terceira para leitura de E/S, uma quarta para escrita de E/S e assim por diante. Nesse caso, seria necessário um chip decodificador entre a CPU e o barramento para compatibilizar os dois lados, isto é, converter o sinal de 3 bits codificado em sinais separados que podem comandar as linhas do barramento.
 
@@ -1600,7 +1615,7 @@ sistema com barramento de endereços de 64 linhas e 232 bytes de memória custar
 
 O resultado dessa observação é que muitos projetistas de sistemas tendem a ser imediatistas, o que provoca consequências desastrosas mais tarde. O IBM PC original continha uma CPU 8088 e um barramento de endereços de 20 bits, conforme mostra a Figura 3.37(a). Os 20 bits permitiam ao PC endereçar 1 MB de memória.
 
-Figura 3.37   Crescimento de um barramento de endereços ao longo do tempo.
+### Figura 3.37   Crescimento de um barramento de endereços ao longo do tempo.
 
 Esta Figura 3.37 ilustra a evolução técnica e o desafio de compatibilidade enfrentado pela Intel ao longo das décadas. O ponto central aqui é como manter a capacidade de rodar softwares antigos enquanto se expande o espaço de endereçamento para suportar mais memória RAM.
 
@@ -1625,11 +1640,11 @@ No seu repositório arquitetura_computadores, este diagrama serve para explicar 
 ![alt text](image-25.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao manipular ponteiros em C no seu diretório estruturas_de_dados, você raramente vê isso, mas o tamanho do seu void* é determinado por essa evolução.
+    Ao manipular ponteiros em C no seu diretório estruturas_de_dados, você raramente vê isso, mas o tamanho do seu void* é determinado por essa evolução.
 
- - Em sistemas de 32 bits (como o 80386), um ponteiro ocupa 4 bytes.
+    - Em sistemas de 32 bits (como o 80386), um ponteiro ocupa 4 bytes.
 
- - Em sistemas modernos de 64 bits, ele ocupa 8 bytes, permitindo endereçar exabytes de memória.
+    - Em sistemas modernos de 64 bits, ele ocupa 8 bytes, permitindo endereçar exabytes de memória.
 
 Entender a Figura 3.37 explica por que "economizar memória" era uma arte crítica nos anos 80 e por que estruturas de dados complexas como as que você estuda (Hash Tables, Linked Lists) precisavam lidar com a fragmentação dos barramentos antigos.
 
@@ -1655,8 +1670,7 @@ diferencial de barramento e necessidade de compatibilidade.
 
 Em nosso exemplo, admitiremos ainda que ler da memória leva 15 ns a partir do instante em que o endereço está estável. Como veremos em breve, com esses parâmetros, ler uma palavra levará três ciclos de barramento. O primeiro ciclo começa na borda ascendente de T1 e o terceiro termina na borda ascendente de T4, como mostra a figura. Observe que nenhuma das bordas ascendentes ou descendentes foi desenhada na linha vertical porque nenhum sinal elétrico pode trocar seu valor em tempo zero. Nesse exemplo, admitiremos que leva 1 ns para o sinal mudar. As linhas de clock, ADDRESS, DATA, MREQ, RD e WAIT, estão todas representadas na mesma escala de tempo.
 
-O início de T1 é definido pela borda ascendente do clock. A meio caminho de T1 a CPU coloca o endereço da palavra que ela quer nas linhas de endereço. Como o endereço não é um valor único, como o clock, não podemos mostrá-lo como uma linha única na figura; em vez disso, ele é mostrado como duas linhas que se cruzam no instante em que o endereço muda. Além disso, a área sombreada antes do cruzamento indica que o valor nessa área
-não é importante. Usando essa mesma convenção, vemos que o conteúdo das linhas de dados não é significativo até uma boa porção de T3.
+O início de T1 é definido pela borda ascendente do clock. A meio caminho de T1 a CPU coloca o endereço da palavra que ela quer nas linhas de endereço. Como o endereço não é um valor único, como o clock, não podemos mostrá-lo como uma linha única na figura; em vez disso, ele é mostrado como duas linhas que se cruzam no instante em que o endereço muda. Além disso, a área sombreada antes do cruzamento indica que o valor nessa área não é importante. Usando essa mesma convenção, vemos que o conteúdo das linhas de dados não é significativo até uma boa porção de T3.
 
 Depois que as linhas de endereço tiverem uma chance de se acomodar a seus novos valores, MREQ e RD são ativados. O primeiro indica que é a memória (e não um dispositivo de E/S) que está sendo acessada e o segundo é ativado (valor 0) para leituras e negado (valor 1) para escritas. Uma vez que a memória leva 15 ns após o endereço estar estável (a meio caminho no primeiro ciclo de clock), ela não pode entregar os dados requisitados durante T2. Para dizer à CPU que não os espere, a memória ativa a linha wait no início de T2. Essa ação irá inserir estados de espera (ciclos extras de barramento) até que a memória conclua e desative wait. Em nosso exemplo, foi inserido um estado de espera (T2) porque a memória é muito lenta. No início de T3, quando está certa de que terá os dados durante o ciclo corrente, a memória nega wait.
 
@@ -1664,7 +1678,7 @@ Durante a primeira metade de T3, a memória coloca os dados nas linhas de dados.
 
 Na especificação temporal da Figura 3.38(b), esclarecemos melhor oito símbolos que aparecem no diagrama. TAD, por exemplo, é o intervalo de tempo entre a borda ascendente do clock T1 e o estabelecimento das linhas de endereço. Conforme a especificação de temporização, TAD ≤ 4 ns. Isso significa que o fabricante da CPU garante que durante qualquer ciclo de leitura a CPU entregará o endereço a ser lido dentro de 4 ns a partir do ponto médio da borda ascendente de T1.
 
-Figura 3.38   (a) Temporização de leitura em um barramento síncrono. (b) Especificação de alguns tempos críticos.
+### Figura 3.38 - (a) Temporização de leitura em um barramento síncrono. (b) Especificação de alguns tempos críticos.
 
 Esta Figura 3.38 detalha o funcionamento de um Barramento Síncrono, onde todas as ações são coordenadas pelas bordas de subida e descida do clock (Φ). O ponto crucial aqui é o Estado de Espera (Wait State), um recurso vital quando a CPU é mais rápida que a memória RAM, algo comum nos seus estudos de microarquitetura.No seu repositório arquitetura_computadores, este diagrama explica por que o tempo de acesso à memória dita o desempenho real do sistema.
 
@@ -1692,9 +1706,9 @@ Temporização e Estados de Espera (Figura 3.38)
 ![alt text](image-46.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait States são os grandes vilões da performance.
+    Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait States são os grandes vilões da performance.
 
- - Se a sua estrutura de dados está espalhada pela memória (como uma lista encadeada), cada salto para um novo ponteiro dispara um novo ciclo de leitura com possíveis estados de espera.
+    - Se a sua estrutura de dados está espalhada pela memória (como uma lista encadeada), cada salto para um novo ponteiro dispara um novo ciclo de leitura com possíveis estados de espera.
 
  - Já um array contínuo permite que o controlador de barramento otimize esses tempos, reduzindo a necessidade do sinal WAIT.
 
@@ -1711,8 +1725,7 @@ Ao implementar algoritmos de busca no diretório estruturas_de_dados, os Wait St
         | TDH           | Tempo de sustentação dos dados desde a negação de RD     | 0     |       | ns     |
         +---------------+----------------------------------------------------------+-------+-------+--------+
 
-As especificações de temporização também requerem que os dados estejam disponíveis nas linhas de dados no mínimo TDS (2 nanossegundos) antes da borda descendente de T3 para lhes dar tempo para se acomodarem antes que a CPU os leia. A combinação de restrições impostas a Tad e TDS significa que, na pior das hipóteses, a memória terá somente 25 – 4 – 2 = 19 ns desde o instante em que o endereço aparece até o instante em que ela
-deve produzir os dados. Como 10 ns é suficiente, até mesmo no pior caso, uma memória de 10 ns sempre pode responder durante T3. Uma memória de 20 ns, entretanto, perderia o momento por pouco e teria de inserir um segundo estado de espera e responder durante T4.
+As especificações de temporização também requerem que os dados estejam disponíveis nas linhas de dados no mínimo TDS (2 nanossegundos) antes da borda descendente de T3 para lhes dar tempo para se acomodarem antes que a CPU os leia. A combinação de restrições impostas a Tad e TDS significa que, na pior das hipóteses, a memória terá somente 25 – 4 – 2 = 19 ns desde o instante em que o endereço aparece até o instante em que ela deve produzir os dados. Como 10 ns é suficiente, até mesmo no pior caso, uma memória de 10 ns sempre pode responder durante T3. Uma memória de 20 ns, entretanto, perderia o momento por pouco e teria de inserir um segundo estado de espera e responder durante T4.
 
 A especificação de temporização garante ainda mais que o endereço será estabelecido pelo menos 2 nanossegundos antes de mreq ser ativado. Esse tempo pode ser importante se mreq comandar a seleção de chip no chip de memória, porque algumas memórias requerem um tempo de estabelecimento de endereço antes da seleção
 do chip. Claro que o projetista do sistema não deve escolher um chip de memória que necessite de um tempo de estabelecimento de 3 ns.
@@ -1732,15 +1745,15 @@ Pior ainda, uma vez escolhido o ciclo do barramento e construídas placas de mem
 
 Exprimindo esses fatos em termos um pouco diferentes, se um barramento síncrono tiver uma coleção heterogênea de dispositivos, alguns rápidos, alguns lentos, ele tem de ser ajustado para o mais lento, e os mais rápidos não podem usar todo o seu potencial.
 
-Pode-se utilizar tecnologia mista passando para um barramento assíncrono, isto é, que não tenha um clock mestre, como mostra a Figura 3.39. Em vez de vincular tudo ao clock, quando o mestre de barramento tiver ativado o endereço, MREQ, rd e tudo o mais que precisa, em seguida ele ativa um sinal especial que denominaremos msyn (Master SYNchronization). Quando o escravo vê esse sinal, ele realiza o trabalho com a maior rapidez que puder e, ao concluir essa fase, ativa ssyn (Slave SYNchronization).
+Pode-se utilizar tecnologia mista passando para um barramento assíncrono, isto é, que não tenha um clock mestre, como mostra a Figura 3.39. Em vez de vincular tudo ao clock, quando o mestre de barramento tiver ativado o endereço, MREQ, RD e tudo o mais que precisa, em seguida ele ativa um sinal especial que denominaremos msyn (Master SYNchronization). Quando o escravo vê esse sinal, ele realiza o trabalho com a maior rapidez que puder e, ao concluir essa fase, ativa ssyn (Slave SYNchronization).
 
 Assim que o mestre perceber ssyn ativado, sabe que os dados estão disponíveis, portanto, ele os serializa e então desativa as linhas de endereço, junto com MREQ, RD e MSYN. Quando o escravo percebe a negação de msyn, sabe que o ciclo foi concluído, portanto, nega ssyn, e voltamos à situação original, com todos os sinais negados, esperando pelo próximo mestre.
 
-Diagramas temporais de barramentos assíncronos (e às vezes também os de barramentos síncronos) usam setas para mostrar causa e efeito, como na Figura 3.39. A ativação de msyn faz com que as linhas de dados sejam ativadas e também com que o escravo ative ssyn. A ativação de ssyn, por sua vez, causa a negação das linhas de endereço, mreq, rd e msyn. Por fim, a negação de msyn causa a negação e ssyn, que conclui a leitura e retorna o sistema a seu estado original.
+Diagramas temporais de barramentos assíncronos (e às vezes também os de barramentos síncronos) usam setas para mostrar causa e efeito, como na Figura 3.39. A ativação de msyn faz com que as linhas de dados sejam ativadas e também com que o escravo ative SSYN. A ativação de ssyn, por sua vez, causa a negação das linhas de endereço, MREQ, RD e MSYN. Por fim, a negação de MSYN causa a negação e ssyn, que conclui a leitura e retorna o sistema a seu estado original.
 
-Figura 3.39   Operação de um barramento assíncrono.
+### Figura 3.39   Operação de um barramento assíncrono.
 
-Esta Figura 3.39 apresenta o contraste fundamental ao modelo anterior: o Barramento Assíncrono. Diferente do barramento síncrono (Figura 3.38), aqui não existe um clock global ($\Phi$) regendo o tempo; em vez disso, a comunicação ocorre por meio de um "aperto de mão" (handshake) entre a CPU e a memória.No seu repositório arquitetura_computadores, este diagrama é essencial para entender sistemas que precisam integrar componentes de velocidades vastamente diferentes sem desperdiçar ciclos de CPU.
+Esta Figura 3.39 apresenta o contraste fundamental ao modelo anterior: o Barramento Assíncrono. Diferente do barramento síncrono (Figura 3.38), aqui não existe um clock global (Φ) regendo o tempo; em vez disso, a comunicação ocorre por meio de um "aperto de mão" (handshake) entre a CPU e a memória.No seu repositório arquitetura_computadores, este diagrama é essencial para entender sistemas que precisam integrar componentes de velocidades vastamente diferentes sem desperdiçar ciclos de CPU.
 
     Barramento Assíncrono (Figura 3.39)
 
@@ -1766,11 +1779,11 @@ Esta Figura 3.39 apresenta o contraste fundamental ao modelo anterior: o Barrame
 ![alt text](image-26.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Este conceito de barramento assíncrono é muito similar aos protocolos de rede que você estuda, como o TCP.
+    Este conceito de barramento assíncrono é muito similar aos protocolos de rede que você estuda, como o TCP.
 
- - Assim como no estruturas_de_dados/redes, onde um pacote só é enviado após o ACK, no barramento assíncrono o dado só é considerado válido após o "reconhecimento" da memória.
+    - Assim como no estruturas_de_dados/redes, onde um pacote só é enviado após o ACK, no barramento assíncrono o dado só é considerado válido após o "reconhecimento" da memória.
 
- - Isso torna o sistema extremamente robusto contra variações de temperatura ou comprimento de cabos, que poderiam causar erros de temporização em um barramento síncrono rígido.
+    - Isso torna o sistema extremamente robusto contra variações de temperatura ou comprimento de cabos, que poderiam causar erros de temporização em um barramento síncrono rígido.
 
 Um conjunto de sinais que se interligam dessa maneira é denominado operação completa. A parte essencial
 consiste em quatro eventos:
@@ -1800,7 +1813,7 @@ Para contornar as prioridades implícitas baseadas na distância em relação ao
 
 Se vários níveis de prioridade são requisitados ao mesmo tempo, o árbitro emite uma concessão somente ao de prioridade mais alta. Entre os dispositivos da mesma prioridade, é usado o encadeamento em série. Na Figura 3.40(b), se ocorrer algum conflito, o dispositivo 2 vence o dispositivo 4, que vence o 3. O dispositivo 5 tem a menor prioridade porque está no final da linha de encadeamento de menor prioridade.
 
-Figura 3.40   (a) Árbitro de barramento centralizado de um nível usando encadeamento em série. (b) Mesmo árbitro, mas com dois níveis.
+### Figura 3.40 - (a) Árbitro de barramento centralizado de um nível usando encadeamento em série. (b) Mesmo árbitro, mas com dois níveis.
 
 Esta Figura 3.40 detalha o mecanismo de Arbitragem de Barramento, essencial para gerenciar quem tem o direito de "falar" no barramento de E/S quando múltiplos periféricos (como o seu SSD e a sua placa de rede) tentam acessá-lo ao mesmo tempo. Sem um árbitro, haveria colisões de dados e instabilidade no sistema.
 
@@ -1823,11 +1836,11 @@ No seu repositório arquitetura_computadores, este diagrama explica a lógica de
 ![alt text](image-27.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao gerenciar processos ou threads no diretório estruturas_de_dados, você usa semáforos ou mutexes; a Arbitragem de Barramento é o equivalente a isso, mas implementado puramente em portas lógicas e fios.
+    Ao gerenciar processos ou threads no diretório estruturas_de_dados, você usa semáforos ou mutexes; a Arbitragem de Barramento é o equivalente a isso, mas implementado puramente em portas lógicas e fios.
 
- - Se você tiver um dispositivo "fominha" (que pede o barramento o tempo todo) no início da cadeia, os dispositivos no final podem sofrer de starvation (fome), nunca conseguindo transmitir seus dados.
+    - Se você tiver um dispositivo "fominha" (que pede o barramento o tempo todo) no início da cadeia, os dispositivos no final podem sofrer de starvation (fome), nunca conseguindo transmitir seus dados.
 
- - É por isso que sistemas modernos usam o modelo (b) ou arbitragem distribuída, garantindo que a sua rede não pare enquanto o disco está sendo lido.
+    - É por isso que sistemas modernos usam o modelo (b) ou arbitragem distribuída, garantindo que a sua rede não pare enquanto o disco está sendo lido.
 
 Com a Figura 3.40, chegamos ao coração da coordenação de hardware.
 
@@ -1835,15 +1848,13 @@ A propósito, tecnicamente não é necessário ligar a linha de concessão de ba
 
 Alguns árbitros têm uma terceira linha que um dispositivo ativa quando aceita uma concessão e pega o barramento. Tão logo tenha ativado essa linha de reconhecimento, as linhas de requisição e concessão podem ser negadas. O resultado é que outros dispositivos podem requisitar barramento enquanto o primeiro o estiver usando. No instante em que a transferência for concluída, o próximo mestre de barramento já terá sido selecionado. Ele pode começar logo que a linha de reconhecimento tenha sido negada, quando então pode ser iniciada a próxima rodada de arbitragem. Esse esquema requer uma linha de barramento extra e mais lógica em cada dispositivo, mas faz melhor uso de ciclos de barramento.
 
-Em sistemas em que a memória está no barramento principal, a CPU deve competir pelo barramento com todos os dispositivos de E/S em praticamente todos os ciclos. Uma solução comum para essa situação é dar à CPU a prioridade mais baixa, de modo que ela obtenha o barramento apenas quando ninguém mais o quiser.
-Nesse caso, a ideia é que a CPU sempre pode esperar, mas os dispositivos de E/S muitas vezes precisam adquirir logo o barramento ou então perdem os dados que chegam. Discos que giram a alta velocidade não podem esperar. Em muitos sistemas modernos de computadores, esse problema é evitado ao se colocar a memória em
-um barramento separado dos dispositivos de E/S de modo que estes não tenham de competir pelo acesso ao barramento.
+Em sistemas em que a memória está no barramento principal, a CPU deve competir pelo barramento com todos os dispositivos de E/S em praticamente todos os ciclos. Uma solução comum para essa situação é dar à CPU a prioridade mais baixa, de modo que ela obtenha o barramento apenas quando ninguém mais o quiser. Nesse caso, a ideia é que a CPU sempre pode esperar, mas os dispositivos de E/S muitas vezes precisam adquirir logo o barramento ou então perdem os dados que chegam. Discos que giram a alta velocidade não podem esperar. Em muitos sistemas modernos de computadores, esse problema é evitado ao se colocar a memória em um barramento separado dos dispositivos de E/S de modo que estes não tenham de competir pelo acesso ao barramento.
 
 Também é possível haver arbitragem de barramento descentralizada. Por exemplo, um computador poderia ter 16 linhas de requisição de barramento priorizadas. Quando um dispositivo quer usar o barramento, ele afirma sua linha de requisição. Todos os dispositivos monitoram todas as linhas de requisição, de modo que, ao final de cada ciclo de barramento, cada dispositivo sabe se foi o requisitante de prioridade mais alta e, portanto, se tem permissão de usar o barramento durante o próximo ciclo. Comparado à arbitragem centralizada, o método descentralizado requer mais linhas de barramento, mas evita o custo potencial do árbitro. Além disso, limita o número de dispositivos ao número de linhas de requisição.
 
 Outro tipo de arbitragem de barramento descentralizada, mostrado na Figura 3.41, usa apenas três linhas, não importando quantos dispositivos estiverem presentes. A primeira é uma linha OR cabeada para requisitar o barramento. A segunda é denominada busy e é ativada pelo mestre de barramento corrente. A terceira linha é usada para arbitrar o barramento. Ela está ligada por encadeamento em série a todos os dispositivos. O início dessa cadeia é ativado ligando-o a uma fonte de alimentação.
 
-Figura 3.41   Arbitragem de barramento descentralizada.
+### Figura 3.41 - rbitragem de barramento descentralizada.
 
 Esta Figura 3.41 apresenta a Arbitragem de Barramento Descentralizada, um modelo que elimina a necessidade de um árbitro central (como o da Figura 3.40) para gerenciar conflitos. Em vez de um chip mestre, os próprios dispositivos de E/S decidem quem assume o controle do barramento através de uma linha de arbitragem compartilhada.
 
@@ -1864,11 +1875,11 @@ No seu repositório arquitetura_computadores, este diagrama representa um sistem
 ![alt text](image-28.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Este conceito de arbitragem descentralizada é a base física para o que você estuda em Sistemas Distribuídos no diretório estruturas_de_dados.
+    Este conceito de arbitragem descentralizada é a base física para o que você estuda em Sistemas Distribuídos no diretório estruturas_de_dados.
 
- - É o equivalente em hardware a um algoritmo de Token Ring ou CSMA/CD, onde os nós precisam de um mecanismo de consenso para evitar colisões no meio de transmissão.
+    - É o equivalente em hardware a um algoritmo de Token Ring ou CSMA/CD, onde os nós precisam de um mecanismo de consenso para evitar colisões no meio de transmissão.
 
- - No seu código em C, entender isso ajuda a visualizar por que certas operações de baixo nível podem sofrer latência variável dependendo da posição física do dispositivo no barramento.
+    - No seu código em C, entender isso ajuda a visualizar por que certas operações de baixo nível podem sofrer latência variável dependendo da posição física do dispositivo no barramento.
 
 Quando nenhum dispositivo quiser o barramento, a linha de arbitragem ativada é propagada por todos os outros. Para adquirir o barramento, um dispositivo primeiro verifica para ver se o barramento está ocioso e se o sinal de arbitragem que está recebendo, in (entrada), está ativado. Se in estiver negado, o dispositivo em questão não pode se tornar o mestre de barramento e o sinal out (saída) é negado. Entretanto, se in for ativado, o dispositivo nega out, o que faz seu vizinho seguinte na cadeia ver in negado e negar seu próprio out. Daí, todos os dispositivos depois dele na cadeia veem in negado e, por sua vez, negam out. Quando o processo terminar, somente um dispositivo terá in ativado e out negado, e é ele que se torna o mestre de barramento, ativa busy e out e inicia sua transferência.
 
@@ -1881,7 +1892,7 @@ Até agora, discutimos apenas ciclos de barramento comuns, com um mestre (em ger
 
 Em geral, só uma palavra é transferida por vez. Contudo, quando é usado caching, é desejável buscar uma linha inteira de cache (por exemplo, 8 palavras de 64 bits consecutivas) por vez. Transferências de blocos costumam ser mais eficientes do que transferências individuais sucessivas. Quando uma leitura de bloco é iniciada, o mestre de barramento informa ao escravo quantas palavras serão transferidas, por exemplo, colocando o número de palavras nas linhas de dados durante T1. Em vez de retornar apenas uma palavra, o escravo entrega uma durante cada ciclo até esgotar aquele número de palavras. A Figura 3.42 mostra uma versão modificada da Figura 3.38(a), mas agora com um sinal extra, block, que é ativado para indicar que foi requisitada uma transferência de bloco. Nesse exemplo, uma leitura de bloco de 4 palavras demora 6 ciclos em vez de 12.
 
-Figura 3.42   Transferência de bloco.
+### Figura 3.42 - Transferência de bloco.
 
 Esta Figura 3.42 apresenta a Transferência de Bloco (também conhecida como Burst Mode), uma técnica de otimização de barramento onde a CPU envia um único endereço inicial e a memória responde com uma sequência contínua de palavras de dados. No seu repositório arquitetura_computadores, este conceito explica como o hardware acelera o carregamento de linhas de cache e vetores de dados.
 
@@ -1905,11 +1916,11 @@ Esta Figura 3.42 apresenta a Transferência de Bloco (também conhecida como Bur
                         (Sinaliza que múltiplos dados serão lidos)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao trabalhar com memcpy() ou manipulação de grandes arrays no diretório estruturas_de_dados, o compilador e o hardware tentam usar este modo de Transferência de Bloco sempre que possível.
+    Ao trabalhar com memcpy() ou manipulação de grandes arrays no diretório estruturas_de_dados, o compilador e o hardware tentam usar este modo de Transferência de Bloco sempre que possível.
 
- - Estruturas de dados Contíguas (como Vetores) se beneficiam diretamente desse hardware, pois os dados estão em endereços adjacentes, permitindo que a memória apenas "vire a página" e continue enviando.
+    - Estruturas de dados Contíguas (como Vetores) se beneficiam diretamente desse hardware, pois os dados estão em endereços adjacentes, permitindo que a memória apenas "vire a página" e continue enviando.
 
- - Já estruturas Dispersas (como Árvores ou Listas Encadeadas) forçam a CPU a desativar o modo BLOCK e enviar um novo endereço para cada nó, o que é drasticamente mais lento devido à latência de endereçamento repetida.
+    - Já estruturas Dispersas (como Árvores ou Listas Encadeadas) forçam a CPU a desativar o modo BLOCK e enviar um novo endereço para cada nó, o que é drasticamente mais lento devido à latência de endereçamento repetida.
 
 Há também outros tipos de ciclos de barramento. Por exemplo, em um sistema multiprocessador com duas ou mais CPUs no mesmo barramento, muitas vezes é necessário garantir que só uma CPU por vez use alguma estrutura de dados crítica na memória. Um modo típico de organizar isso é ter uma variável na memória que é 0
 quando nenhuma CPU estiver usando a estrutura de dados e 1 quando esta estiver em uso. Se uma CPU quiser obter acesso à estrutura de dados, deve ler a variável e, se esta for 0, passá-la para 1. O problema é que, com um pouco de má sorte, duas CPUs podem ler a variável em ciclos de barramento consecutivos. Se cada uma perceber que a variável é 0, então cada uma passa a variável para 1 e acha que é a única CPU que está usando a estrutura de dados. Essa sequência de eventos leva ao caos.
@@ -1922,7 +1933,7 @@ Outro tipo importante de ciclo de barramento é o usado para manipular interrup�
 Uma vez que vários dispositivos podem querer causar uma interrupção simultaneamente, os mesmos tipos de problemas de arbitragem que tivemos nos ciclos de barramento comuns também estão presentes aqui. A solução normal é atribuir prioridades a dispositivos e usar um árbitro centralizado para dar prioridade aos dis-
 positivos mais críticos em relação ao tempo. Existem chips controladores de interrupção padronizados que são muito usados. Em PCs baseados em processador Intel, o chipset incorpora um controlador de interrupção 8259A, ilustrado na Figura 3.43.
 
-Figura 3.43   Utilização do controlador de interrupção 8259A.
+### Figura 3.43   Utilização do controlador de interrupção 8259A.
 
 Esta Figura 3.43 apresenta o funcionamento do Controlador de Interrupção 8259A, um componente vital que atua como um "secretário" para a CPU. No seu repositório arquitetura_computadores, este diagrama explica como o hardware gerencia múltiplos dispositivos externos (teclado, disco, impressora) que precisam da atenção do processador ao mesmo tempo.
 
@@ -1947,13 +1958,13 @@ Esta Figura 3.43 apresenta o funcionamento do Controlador de Interrupção 8259A
 ![alt text](image-29.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Ao programar em C no diretório estruturas_de_dados, você lida com isso através de Interrupt Service Routines (ISRs) ou sinais.
+    Ao programar em C no diretório estruturas_de_dados, você lida com isso através de Interrupt Service Routines (ISRs) ou sinais.
 
- - Quando você pressiona uma tecla enquanto seu programa roda, o hardware do teclado ativa o pino IR1.
+    - Quando você pressiona uma tecla enquanto seu programa roda, o hardware do teclado ativa o pino IR1.
 
- - O 8259A interrompe a execução atual do seu código, salva o estado dos registradores e pula para a função que trata a entrada de dados.
+    - O 8259A interrompe a execução atual do seu código, salva o estado dos registradores e pula para a função que trata a entrada de dados.
 
- - Sem esse chip, o seu processador teria que gastar ciclos preciosos fazendo "polling" (perguntando constantemente a cada dispositivo se há algo novo), o que destruiria a performance das suas estruturas de dados.
+    - Sem esse chip, o seu processador teria que gastar ciclos preciosos fazendo "polling" (perguntando constantemente a cada dispositivo se há algo novo), o que destruiria a performance das suas estruturas de dados.
 
 Até oito controladores de E/S 8259A podem ser conectados direto às oito entradas irx (Interrupt Request ­solicitação de interrupção) do 8259A. Quando qualquer um desses dispositivos quiser causar uma interrupção, ele ativa sua linha de entrada. Quando uma ou mais entradas são acionadas, o 8259A ativa int (INTerrupt – interrupção), que impulsiona diretamente o pino de interrupção na CPU. Quando a CPU puder manipular a interrupção, ela devolve o pulso ao 8259A por inta (INTerrupt Acknowledge – reconhecimento de interrupção). Nesse ponto, o 8259A deve especificar qual entrada causou interrupção passando o número daquela entrada para o barramento de dados. Essa operação requer um ciclo de barramento especial. Então, o hardware da CPU usa esse número para indexar em uma tabela de ponteiros, denominados vetores de interrupção, para achar o endereço do procedimento a executar para atender à interrupção.
 
@@ -1996,7 +2007,7 @@ Um problema com o Core i7, bem como com a maioria das outras CPUs modernas do ti
 O Core i7 vem em um pacote LGA quadrado com 37,5 mm de borda. Ele contém 1.155 pinos na parte inferior, dos quais 286 são para alimentação e 360 são aterramento, para reduzir o ruído. Os pinos são arrumados mais ou menos como um quadrado de 40 × 40, com os 17 × 25 do meio faltando. Além disso, 20 outros pinos
 estão faltando no perímetro em um padrão assimétrico, para impedir que o chip seja inserido incorretamente em sua base. A disposição física dos pinos aparece na Figura 3.44.
 
-Figura 3.44   Disposição física dos pinos no Core i7.
+### Figura 3.44 - Disposição física dos pinos no Core i7.
 
 Esta Figura 3.44 marca a transição da lógica teórica para a realidade física brutal do hardware moderno: a Dissipação Térmica. Enquanto as figuras anteriores focaram em como os elétrons movem dados, esta foca em como o movimento desses elétrons gera calor — e muito calor.
 
@@ -2026,11 +2037,11 @@ No seu repositório arquitetura_computadores, este conceito é o que define os l
 ![alt text](image-30.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Pode parecer que o calor não afeta o software, mas no diretório estruturas_de_dados, a eficiência do seu código impacta diretamente a temperatura do seu Lenovo IdeaPad Gaming 3.
+    Pode parecer que o calor não afeta o software, mas no diretório estruturas_de_dados, a eficiência do seu código impacta diretamente a temperatura do seu Lenovo IdeaPad Gaming 3.
 
- - Algoritmos com alta complexidade computacional que mantêm a CPU em 100% de uso por longos períodos disparam o ventilador e podem causar o Thermal Throttling.
+    - Algoritmos com alta complexidade computacional que mantêm a CPU em 100% de uso por longos períodos disparam o ventilador e podem causar o Thermal Throttling.
 
- - Quando isso acontece, o hardware reduz o clock, e sua estrutura de dados, que deveria ser rápida, começa a performar de forma lenta devido à limitação térmica do hardware.
+    - Quando isso acontece, o hardware reduz o clock, e sua estrutura de dados, que deveria ser rápida, começa a performar de forma lenta devido à limitação térmica do hardware.
 
 O chip é equipado com uma placa de montagem para um dissipador distribuir o calor e um ventilador para resfriá-lo. Para ter uma ideia do tamanho do problema da potência, ligue uma lâmpada incandescente de 150 watts, deixe-a aquecer e depois coloque suas mãos ao seu redor (mas não a toque). Essa quantidade de calor deve
 ser dissipada continuamente por um processador Core i7 de última geração. Em consequência, quando o Core i7 não tiver mais utilidade como uma CPU, ele sempre poderá ser usado como um fogareiro em acampamentos.
@@ -2041,7 +2052,7 @@ De acordo com as leis da física, qualquer coisa que emita muito calor deve abso
 Os 1.155 pinos do Core i7 são usados para 447 sinais, 286 conexões de energia elétrica (em diversas voltagens diferentes), 360 terras e 62 reservados para uso futuro. Alguns dos sinais lógicos usam dois ou mais pinos (tal como o endereço de memória requisitado), de modo que há somente 131 sinais diferentes. Uma pinagem
 lógica um pouco simplificada é dada na Figura 3.45. No lado esquerdo da figura, há cinco grupos principais de sinais de barramento; no lado direito, há diversos sinais variados.
 
-Figura 3.45   Pinagem lógica do Core i7
+### Figura 3.45 - Pinagem lógica do Core i7
 
 Esta Figura 3.45 representa a pinagem lógica do Core i7, mostrando como os conceitos de barramentos (Figura 3.35) e interrupções (Figura 3.43) se materializam em um chip de alta performance.
 
@@ -2074,12 +2085,11 @@ Note a enorme quantidade de pinos dedicados apenas à Energia e ao Terra, reflet
 ![alt text](image-31.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Essa pinagem explica por que, no seu diretório estruturas_de_dados, a escolha de hardware impacta o software:
+    Essa pinagem explica por que, no seu diretório estruturas_de_dados, a escolha de hardware impacta o software:
 
- - Se você tem dois pentes de RAM, a CPU ativa os 248 pinos dos canais DDR, permitindo que suas buscas em Hash Tables sejam muito mais rápidas devido ao acesso paralelo.
+    - Se você tem dois pentes de RAM, a CPU ativa os 248 pinos dos canais DDR, permitindo que suas buscas em Hash Tables sejam muito mais rápidas devido ao acesso paralelo.
 
- - A enorme quantidade de pinos de energia e terra garante que, mesmo sob carga intensa de processamento de dados, os sinais lógicos permaneçam "limpos" e sem erros de bit.
-
+    - A enorme quantidade de pinos de energia e terra garante que, mesmo sob carga intensa de processamento de dados, os sinais lógicos permaneçam "limpos" e sem erros de bit.
 
 Vamos examinar os sinais, começando com os do barramento. Os dois primeiros sinais são usados para a interface com DRAM compatível com DDR3. Esse grupo oferece endereço, dados, controle e clock ao banco de DRAMs. O Core i7 admite dois canais DRAM DDR3 independentes, rodando com um clock de barramento de 666 MHz que transfere nas duas bordas, para permitir 1.333 milhões de transações por segundo. A interface DDR3 tem 64 bits de largura, e assim, as duas interfaces DDR3 trabalham em sequência para dar aos programas com muita utilização de memória até 20 gigabytes de dados a cada segundo.
 
@@ -2119,7 +2129,7 @@ com paralelismo.
 
 O segredo do barramento de memória com paralelismo do Core i7 é que as DRAMs DDR3 são organizadas com vários bancos dentro do chip de DRAM. Um banco é um bloco de memória DRAM, que pode ser acessado em paralelo com outros bancos de memória DRAM, mesmo que estejam contidos no mesmo chip. Um chip DRAM DDR3 típico terá até 8 bancos de DRAM. Porém, a especificação de interface DDR3 permite apenas até quatro acessos simultâneos sobre um único canal DDR3. O diagrama de temporização da Figura 3.46 ilustra o Core i7 fazendo 4 acessos à memória para três bancos de DRAM distintos. Os acessos são totalmente sobrepostos, de modo que as leituras de DRAM ocorrem em paralelo dentro do chip de DRAM. Com setas no diagrama de temporização, a figura mostra quais comandos levam a outras operações.
 
-Figura 3.46   Requisições de memória com paralelismo na interface DDR3 do Core i7.
+### Figura 3.46 - Requisições de memória com paralelismo na interface DDR3 do Core i7.
 
     Paralelismo e Pipelining (Figura 3.46)
 
@@ -2139,11 +2149,11 @@ Figura 3.46   Requisições de memória com paralelismo na interface DDR3 do
 ![alt text](image-47.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Este nível de paralelismo é o que torna o Cache Prefetching tão eficiente no seu diretório estruturas_de_dados.
+    Este nível de paralelismo é o que torna o Cache Prefetching tão eficiente no seu diretório estruturas_de_dados.
 
- - Quando o hardware percebe que você está percorrendo um array contíguo, ele começa a enviar comandos ACT para os próximos bancos de memória antes mesmo de você solicitar o dado.
+    - Quando o hardware percebe que você está percorrendo um array contíguo, ele começa a enviar comandos ACT para os próximos bancos de memória antes mesmo de você solicitar o dado.
 
- - Isso significa que, quando o seu código em C chega na próxima iteração, o dado já está "descendo" pelo barramento, eliminando quase todos os Wait States da Figura 3.38.
+    - Isso significa que, quando o seu código em C chega na próxima iteração, o dado já está "descendo" pelo barramento, eliminando quase todos os Wait States da Figura 3.38.
 
 Como vemos na Figura 3.46, a interface de memória DDR3 tem quatro caminhos de sinal principais: clock de barramento (CK), comando de barramento (CMD), endereço (ADDR) e dados (DATA). O sinal CK de clock de barramento orquestra toda a atividade deste. O comando de barramento CMD indica qual atividade é requisitada da DRAM de conexão. O comando ACTIVATE especifica o endereço de linha de DRAM a ser aberta por meio do sinal ADDR. Quando um READ é executado, o endereço de coluna da DRAM é dado por meio de sinais ADDR, e a DRAM produz o valor de leitura após um tempo fixo sobre os sinais DATA. Por fim, o comando PRECHARGE indica ao banco para pré-carregar por meio dos sinais ADDR. Para a finalidade do exemplo, o comando ACTIVATE deverá preceder o primeiro READ para o mesmo banco por dois ciclos de barramento DDR3, e os dados são produzidos um ciclo após o comando READ. Além disso, a operação PRECHARGE deverá ocorrer pelo menos dois ciclos de barramento após a última operação READ para o mesmo banco de DRAM.
 
@@ -2159,7 +2169,7 @@ O sistema OMAP4430 inclui dois núcleos ARM A9, aceleradores adicionais e uma gr
 OMAP4430: o processador gráfico POWERVR SGX540, um processador de sinal de imagem (ISP) e um processador de vídeo IVA3. O SGX540 oferece uma renderização 3D programável eficaz, semelhante às GPUs encontradas em PCs desktop, apesar de menores e mais lentas. O ISP é um processador programável projetado para manipula-
 ção eficiente da imagem, para o tipo de operações que seriam exigidas em uma câmera digital avançada. O IVA3 executa codificação e decodificação eficientes de vídeo, com desempenho suficiente para dar suporte a aplicações 3D, como as encontradas em consoles de jogos portáteis. Há também no sistema OMAP4430 uma gama de interfaces periféricas, incluindo uma tela sensível ao toque e controladores de teclado, DRAM e interfaces flash, USB e HDMI. A Texas Instruments detalhou um roteiro para a série OMAP de CPUs. Projetos futuros terão mais de tudo – mais núcleos ARM, mais GPUs e mais periféricos diversos.
 
-Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
+### Figura 3.47 - Organização interna do sistema-em-um-chip OMAP4430.
 
     ___________________________________________________________________________
     |                                OMAP4430 SoC                               |
@@ -2167,17 +2177,17 @@ Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
     |  [ MPU ARMv7 ]    [ IVA-HD ]    [ SGX540 ]    [ DUCATI ]    [ SEGURANÇA ] |
     |  (Dual Core)      (1080p)       (GPU 2D/3D)   (Cortex-M3)   (AES/SHA/DMA) |
     |______|_______________|______________|_____________|______________|________|
-         |               |              |             |              |
-    <-----+---------------+-------[ BARRAMENTO L3 ]----+--------------+------>
-        |               |       (ALTA LARGURA)       |              |
-    ______|______   ______|______          ____________|___________    |
+           |               |              |             |              |
+     <-----+---------------+-------[ BARRAMENTO L3 ]----+--------------+------>
+           |               |       (ALTA LARGURA)       |              |
+    ______ |______   ______|______          ____________|___________   |
     | CONTROLADOR | | CONTROLADOR |        |    DISPLAY (DSS)       |  |
     | MEMÓRIA EMIF| |  GPMC / RAM |        | (DSI / HDMI / TV OUT)  |  |
     | (LPDDR2 x2) | |   (48KB)    |        |________________________|  |
     |_____________| |_____________|                     |              |
-                                                        V              |
+                                                          V              |
     <---------------------------[ BARRAMENTO L4 ]---------------------+------>
-        |               |              |             |              |
+         |               |              |             |              |
     [ UART / SPI ]   [ I2C / McBS ]  [ GPIOs ]    [ USB / OTG ]  [ CÂMERA ]
 
 
@@ -2212,9 +2222,9 @@ Figura 3.47   Organização interna do sistema-em-um-chip OMAP4430.
 ![alt text](image-48.png)
 
 ### Insight para o seu diretório estruturas_de_dados
-Entender o OMAP4430 é vital para o seu trabalho com Sistemas Embarcados. No seu diretório estruturas_de_dados, quando você lida com buffers de áudio ou vídeo, você está interagindo com o SDMA (System DMA) mostrado no diagrama.
+    Entender o OMAP4430 é vital para o seu trabalho com Sistemas Embarcados. No seu diretório estruturas_de_dados, quando você lida com buffers de áudio ou vídeo, você está interagindo com o SDMA (System DMA) mostrado no diagrama.
 
- - O uso correto de estruturas contíguas na memória permite que o SDMA mova dados diretamente entre o Back-end de Áudio e a LPDDR2 sem interromper o processamento da MPU ARMv7.
+    - O uso correto de estruturas contíguas na memória permite que o SDMA mova dados diretamente entre o Back-end de Áudio e a LPDDR2 sem interromper o processamento da MPU ARMv7.
 
 O sistema OMAP4430 foi lançado no início de 2011 com dois núcleos ARM A9 rodando a 1 GHz usando uma implementação de silício de 45 nanômetros. Um aspecto chave do projeto do OMAP4430 é que ele realiza quantidades significativas de cálculo com muito pouca potência, pois é visado para aplicações móveis, alimenta-
 das por uma bateria. Em tais aplicações, quanto mais eficiente for a operação do projeto, mais tempo o usuário poderá ficar sem carregar a bateria.
@@ -2226,8 +2236,7 @@ Para reduzir ainda mais as demandas de potência do OMAP4430, o projeto incorpor
 Apesar de sua tendência para uma operação com economia de energia, os núcleos ARM A9 utilizam uma microarquitetura bastante capaz. Eles podem decodificar e executar até duas instruções a cada ciclo. Conforme aprenderemos no Capítulo 4, essa taxa de execução representa a vazão máxima da microarquitetura. Mas não
 espere que ela execute suas muitas instruções a cada ciclo. Em vez disso, pense nessa taxa como o desempenho máximo garantido pelo fabricante, um nível que o processador nunca excederá, não importa o que aconteça. Em muitos ciclos, menos de duas instruções serão executadas devido aos milhares de “hazards” (acasos) que podem adiar as instruções, levando a uma vazão de execução mais baixa. Para resolver muitos desses limitadores de vazão, o ARM A9 incorpora um poderoso previsor de desvio, escalonamento de instruções fora de ordem e um sistema de memória altamente otimizado.
 
-O sistema de memória do OMAP4430 tem duas caches L1 internas principais para cada processador ARM A9: uma de 32 KB para instruções e uma de 32 KB para dados. Assim como o Core i7, ele também usa uma cache nível 2 (L2) no chip, mas, diferente do Core i7, ela é uma memória de 1 MB relativamente pequena em
-tamanho, sendo compartilhada por ambos os núcleos ARM A9. As caches são alimentadas com canais de DRAM duais LPDDR2 de baixa potência. LPDDR2 é derivada do padrão de interface de memória DDR2, porém alterada para exigir menos fios e operar em tensões mais eficientes em termos de potência. Além disso, o controlador de memória incorpora uma série de otimizações de acesso à memória, como a pré-busca de memória ladrilhada e o suporte para rotação na memória.
+O sistema de memória do OMAP4430 tem duas caches L1 internas principais para cada processador ARM A9: uma de 32 KB para instruções e uma de 32 KB para dados. Assim como o Core i7, ele também usa uma cache nível 2 (L2) no chip, mas, diferente do Core i7, ela é uma memória de 1 MB relativamente pequena em tamanho, sendo compartilhada por ambos os núcleos ARM A9. As caches são alimentadas com canais de DRAM duais LPDDR2 de baixa potência. LPDDR2 é derivada do padrão de interface de memória DDR2, porém alterada para exigir menos fios e operar em tensões mais eficientes em termos de potência. Além disso, o controlador de memória incorpora uma série de otimizações de acesso à memória, como a pré-busca de memória ladrilhada e o suporte para rotação na memória.
 
 Vamos discutir caching em detalhes no Capítulo 4, mas é bom dizer algumas palavras sobre ela aqui. Toda memória principal é dividida em linhas (blocos) de cache de 32 bytes. As 1.024 linhas de instrução mais usadas e as 1.024 linhas de dados mais usadas estão na cache de nível 1. Linhas de cache que são muito usadas mas
 não cabem na de nível 1 são mantidas na de nível 2. Essa cache contém linhas de dados e linhas de instrução de ambas as CPUs ARM A9 misturadas aleatoriamente. A cache de nível 2 contém as 32.768 linhas acessadas mais recentemente na memória principal.
@@ -2243,7 +2252,7 @@ Quando os dados por fim chegam da memória, podem vir em 4 bytes por vez. Uma op
 O OMAP4430 vem em uma matriz em grade de bola (PBGA) de 547 pinos, conforme mostra a Figura 3.48. Uma matriz em grade de bola é semelhante a uma matriz de grade de terra, exceto que as conexões no chip são pequenas bolas de metal, em vez de plataformas quadradas usadas na LGA. Os dois pacotes não são compatíveis,
 oferecendo mais evidência de que você não pode encaixar uma ponta quadrada em um furo redondo. O pacote do OMAP4430 consiste em uma matriz retangular de 28 × 26 bolas, com os dois anéis de bolas mais internos faltando, e mais duas meias linhas e colunas assimétricas de bolas faltando, para impedir que o chip seja inserido incorretamente no soquete BGA.
 
-Figura 3.48   A pinagem sistema-em-um-chip OMAP4430.
+### Figura 3.48 - A pinagem sistema-em-um-chip OMAP4430.
 
 Pinagem do SoC OMAP4430 (Figura 3.48)
 Ao contrário da pinagem lógica (Figura 3.45), esta imagem representa a matriz de esferas (BGA) localizada na parte inferior do chip que é soldada diretamente na placa-mãe do dispositivo móvel.
@@ -2273,15 +2282,13 @@ Ao contrário da pinagem lógica (Figura 3.45), esta imagem representa a matriz 
 ![alt text](image-49.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-Embora você não "programe" a pinagem, entender a Figura 3.48 é crucial para otimizar o uso do seu Lenovo IdeaPad Gaming 3.
+    Embora você não "programe" a pinagem, entender a Figura 3.48 é crucial para otimizar o uso do seu Lenovo IdeaPad Gaming 3.
 
- - Dispositivos com essa pinagem densa são extremamente sensíveis a aquecimento.
+    - Dispositivos com essa pinagem densa são extremamente sensíveis a aquecimento.
 
- - No seu diretório estruturas_de_dados, algoritmos que gerenciam mal a memória e causam "thrashing" (excesso de trocas entre cache e RAM externa) forçam a passagem de corrente constante por essas esferas de solda.
+    - No seu diretório estruturas_de_dados, algoritmos que gerenciam mal a memória e causam "thrashing" (excesso de trocas entre cache e RAM externa) forçam a passagem de corrente constante por essas esferas de solda.
 
- - Com o tempo, o estresse térmico pode causar microfissuras nessas conexões físicas, levando a falhas de hardware que nenhum código em C poderá consertar.
-
-![alt text](image-9.png)
+    - Com o tempo, o estresse térmico pode causar microfissuras nessas conexões físicas, levando a falhas de hardware que nenhum código em C poderá consertar.
 
 É difícil comparar um chip CISC (como o Core i7) e um chip RISC (como o OMAP4430) apenas com base na velocidade do clock. Por exemplo, os dois núcleos ARM A9 no OMAP4430 têm uma velocidade máxima de execução de quatro instruções por ciclo de clock, dando-lhe quase a mesma taxa de execução dos processadores superescalares de largura 4 do Core i7. Entretanto, o Core i7 alcança execução de programa mais rápida, pois tem até seis processadores rodando com uma velocidade de clock 3,5 vezes mais rápida (3,5 GHz) que o OMAP4430. O OMAP4430 pode parecer uma tartaruga correndo ao lado da lebre do Core i7, mas a tartaruga usa muito menos potência, e pode terminar primeiro, ainda mais se a bateria da lebre não for muito grande.
 
@@ -2331,7 +2338,7 @@ Organizei o diagrama para o seu arquivo Nivel-Logica-Digital.md, destacando a di
 Como podemos ver na figura, o ATmega168 normalmente vem em um pacote padrão de 28 pinos, embora haja outros pacotes disponíveis. À primeira vista, você talvez tenha notado que a pinagem nesse chip é um pouco estranha em comparação com os dois projetos anteriores que examinamos. Em particular, esse chip não
 tem linhas de endereço e dados. Isso porque não foi projetado para ser conectado à memória, só a dispositivos. Toda a memória, SRAM e flash, está contida dentro do processador, evitando a necessidade de quaisquer pinos de endereço e dados, como mostra a Figura 3.50.
 
-Figura 3.50   Arquitetura interna e pinagem lógica do ATmega168.
+### Figura 3.50 -  Arquitetura interna e pinagem lógica do ATmega168.
 
 Esta Figura 3.50 é a peça final do nosso quebra-cabeça de hardware, Luís, revelando o que acontece por dentro do ATmega168 para que ele funcione sem pinos externos de endereço e dados. Diferente do Core i7, aqui a CPU divide espaço no mesmo chip com memórias e uma vasta gama de periféricos de controle.
 
@@ -2339,10 +2346,10 @@ No seu repositório arquitetura_computadores, este diagrama é o exemplo máximo
 
     Arquitetura Interna ATmega168 (Figura 3.50)
 
-    _________________________________________________________
+        _________________________________________________________
         |               SUPERVISÃO DE ENERGIA / RESET             |
         |_________________________________________________________|
-            |                     |                      |
+              |                     |                      |
     [ OSCILADORES ]       [ FLASH (Prog) ]        [ SRAM (Dados) ]
     [    CLOCK    ]       [      |       ]        [      |       ]
     |________|____________|______V_______|________|______V_______|
@@ -2408,7 +2415,7 @@ A grande vantagem do arranjo da Figura 3.51 é que a CPU tem uma largura de band
 
 Seria bom se houvesse apenas um tipo de placa PCI. Porém, não é esse o caso. Há opções para tensão, largura e temporização. Computadores mais antigos usam em geral 5 volts e os mais novos tendem a usar 3,3 volts, portanto, o barramento PCI suporta ambos. Os conectores são os mesmos, exceto por dois pedacinhos de plástico que estão lá para impedir que as pessoas insiram uma placa de 5 volts em um barramento PCI de 3,3 volts ou vice-versa. Felizmente, existem placas universais que suportam ambas as tensões e podem ser ligadas a quaisquer dos tipos de encaixe. Além da opção de tensão, as placas também têm versões de 32 bits e 64 bits. As placas de 32 bits têm 120 pinos; as de 64 bits têm os mesmos 120 pinos mais 64 pinos adicionais. Um sistema de barramento PCI que suporta placas de 64 bits também pode aceitar placas de 32 bits, mas o inverso não é verdade. Por fim, barramentos e placas PCI podem funcionar em 33 MHz ou 66 MHz. A opção é feita ligando um pino à fonte de energia ou ao fio terra. Os conectores são idênticos para ambas as velocidades.
 
-### Figura 3.51  Arquitetura de um dos primeiros sistemas Pentium. 
+### Figura 3.51 - Arquitetura de um dos primeiros sistemas Pentium. 
 Os barramentos representados por linhas mais largas têm mais largura de banda do que os representados por linhas mais finas, mas a figura não está em escala.
 
 Esta Figura 3.51 é um marco histórico na arquitetura de computadores, ilustrando como a Intel resolveu o problema do gargalo de dados nos anos 90. Ela introduz o conceito de hierarquia de barramentos, onde componentes de velocidades diferentes são isolados por "pontes" para que dispositivos lentos (como um mouse) não atrasem os rápidos (como a CPU).
@@ -2460,7 +2467,7 @@ A CPU se conecta ao chip da ponte principal, o P67, por meio da interface de mí
 
 O chip ICH10 oferece suporte a interface legada para dispositivos antigos. Ele está conectado ao P67 por meio de uma interface DMI mais lenta. O ICH10 implementa o barramento PCI, Ethernet a 1G, portas USB e as clássicas interfaces PCI Express e SATA. Sistemas mais novos não podem incorporar o ICH10; isso é exigido apenas se o sistema precisa dar suporte a interfaces legadas.
 
-### Figura 3.52  Estrutura do barramento de um Core i7 moderno.
+### Figura 3.52 - Estrutura do barramento de um Core i7 moderno.
 
 Estrutura do Core i7 Moderno (Figura 3.52)
 Diferente das arquiteturas antigas, note que o controlador de memória e o controlador gráfico agora estão integrados diretamente na CPU para reduzir a latência.
@@ -2509,7 +2516,7 @@ Os pinos de endereço e de dados multiplexados funcionam da seguinte maneira. Em
 ### Arbitragem de barramento PCI
 Para usar o barramento PCI, um dispositivo deve antes adquiri-lo. A arbitragem de barramento PCI usa um árbitro de barramento centralizado, como mostra a Figura 3.53. Na maioria dos projetos, o árbitro de barramento é inserido em um dos chips de ponte. Todo dispositivo PCI tem duas linhas dedicadas que vão dele até o árbitro. Uma linha, req#, é usada para requisitar o barramento. A outra linha, gnt#, é usada para receber concessões de barramento. Nota: req# é a forma do PCI indicar REQ.
 
-**Figura 3.53  O barramento PCI usa um árbitro de barramento centralizado.**
+### Figura 3.53 - O barramento PCI usa um árbitro de barramento centralizado.
 
 ________________________________________________
          |               ÁRBITRO DE BARRAMENTO            |
@@ -2625,7 +2632,7 @@ Durante T2, o mestre libera o barramento de endereço para deixar que ele retorn
 
 Em T3, o escravo ativa devsel# de modo que o mestre saiba que ele obteve o endereço e está planejando responder. Além disso, põe os dados nas linhas ad e ativa trdy# para informar ao mestre que fez isso. Se o escravo não puder responder com tanta rapidez, ainda assim ele ativaria devsel# para anunciar sua presença, mas manteria trdy# negado até que pudesse obter os dados que lá estão. Esse procedimento introduziria um ou mais estados de espera.
 
-### Figura 3.55  Exemplos de transações de barramento PCI de 32 bits. Os três primeiros ciclos são usados para uma operação de leitura, em
+### Figura 3.55 - Exemplos de transações de barramento PCI de 32 bits. Os três primeiros ciclos são usados para uma operação de leitura, em
 seguida um ciclo ocioso e depois três ciclos para uma operação de escrita.**
 
 A Figura 3.55 detalha o funcionamento temporal de um barramento PCI de 32 bits, ilustrando como os sinais elétricos coordenam as transações de leitura e escrita. Este diagrama é fundamental para entender a eficiência do protocolo, que utiliza multiplexação para economizar pinos físicos.
@@ -2689,7 +2696,7 @@ essa solução já estão no mercado há algum tempo. Vamos ver como eles funcio
 O coração da solução PCI Express (em geral, abreviado como PCIe) é se livrar do barramento paralelo com seus muitos mestres e escravos e passar para um projeto baseado em conexões seriais ponto a ponto de alta velocidade. Essa solução representa uma ruptura radical com a tradição do barramento ISA/EISA/PCI e toma
 emprestadas muitas ideias do mundo das redes locais, em especial a Ethernet comutada. A ideia básica se resume no seguinte: no fundo, um PC é um conjunto de chips de CPU, memória, controladores de E/S que precisa ser interconectado. O que o PCI Express faz é fornecer um comutador de uso geral para conectar chips usando liga- ções seriais. Uma configuração típica é ilustrada na Figura 3.56.
 
-### Figura 3.56  Sistema PCI express típico.
+### Figura 3.56 - Sistema PCI express típico.
 
 A Figura 3.56 ilustra a evolução definitiva dos barramentos paralelos (como o PCI das figuras anteriores) para uma arquitetura baseada em ligações seriais ponto a ponto de alta velocidade. No seu repositório arquitetura_computadores, este diagrama explica como os computadores modernos gerenciam o tráfego massivo de dados sem os problemas de sincronismo das trilhas paralelas.
 
@@ -2748,7 +2755,7 @@ do destinatário, local do selo e assim por diante. Essas duas camadas e seus pr
     
 A pilha de protocolos do PCI Express é mostrada na Figura 3.57(a). Ela é discutida a seguir.
 
-### Figura 3.57  (a) Pilha de protocolos do PCI Express. (b) Formato de um pacote.
+### Figura 3.57 - (a) Pilha de protocolos do PCI Express. (b) Formato de um pacote.
 
 A Figura 3.57 detalha a arquitetura lógica do PCI Express, revelando que ele opera de forma muito semelhante a uma rede de computadores, utilizando uma pilha de protocolos organizada em camadas para garantir a entrega confiável de dados.
 
@@ -2816,8 +2823,11 @@ valor à transmissão de pacotes bruta oferecida pela camada de enlace. Para com
     Cada transação usa um dos quatro espaços de endereços:
     
     1. Espaço da memória (para leituras e escritas comuns).
+
     2. Espaço de E/S (para endereçar registradores de dispositivos).
+    
     3. Espaço de configuração (para inicialização do sistema etc.).
+    
     4. Espaço de mensagem (para sinalização, interrupções etc.).
 
 Os espaços de memória e E/S são semelhantes aos dos sistemas existentes. O espaço de configuração pode ser usado para executar características como plug-and-play. O espaço de mensagem assume o papel de muitos dos sinais de controle existentes. É necessário ter algo parecido com esse espaço porque nenhuma das linhas de controle do PCI existe no PCI Express.
@@ -2833,90 +2843,55 @@ O PCI Express é um assunto complicado. Para mais informações, consulte Mayhew
 codificação de 8b/10b para 128b/130b e pode rodar a 8 bilhões de transações por segundo, o dobro do PCIe 2.0.
 
 ## 3.6.3 Barramento serial universal (USB)
-O barramento PCI e o PCI Express são bons para anexar periféricos de alta velocidade a um computador, mas
-são muito caros para dispositivos de E/S de baixa velocidade, como teclados e mouses. Cada dispositivo padrão de
-E/S era conectado ao computador de modo especial, com alguns encaixes ISA e PCI livres para adicionar novos
-dispositivos. Infelizmente, esse esquema teve problemas desde o início.
+O barramento PCI e o PCI Express são bons para anexar periféricos de alta velocidade a um computador, mas são muito caros para dispositivos de E/S de baixa velocidade, como teclados e mouses. Cada dispositivo padrão de E/S era conectado ao computador de modo especial, com alguns encaixes ISA e PCI livres para adicionar novos dispositivos. Infelizmente, esse esquema teve problemas desde o início.
 
-Por exemplo, cada novo dispositivo de E/S costuma vir com sua própria placa ISA ou PCI. Muitas vezes, o usuá­
-rio é responsável pelo ajuste de comutadores e pontes na placa e por assegurar que tais ajustes não entrem em con-
-flito com as outras placas. Então, ele precisa abrir a torre, inserir cuidadosamente a placa, fechar a torre e reiniciar
-o computador. Para muitos usuários, esse processo é difícil e sujeito a erros. Além disso, o número de encaixes ISA
-e PCI é muito limitado (em geral, dois ou três). Placas plug-and-play eliminam o ajuste das pontes, mas ainda assim
-o usuário tem de abrir o computador para inserir a placa e o número de encaixes do barramento continua limitado.
+Por exemplo, cada novo dispositivo de E/S costuma vir com sua própria placa ISA ou PCI. Muitas vezes, o usuá­rio é responsável pelo ajuste de comutadores e pontes na placa e por assegurar que tais ajustes não entrem em conflito com as outras placas. Então, ele precisa abrir a torre, inserir cuidadosamente a placa, fechar a torre e reiniciar o computador. Para muitos usuários, esse processo é difícil e sujeito a erros. Além disso, o número de encaixes ISA e PCI é muito limitado (em geral, dois ou três). Placas plug-and-play eliminam o ajuste das pontes, mas ainda assim o usuário tem de abrir o computador para inserir a placa e o número de encaixes do barramento continua limitado.
 
-Para tratar desse problema, em 1993, representantes de sete empresas (Compaq, DEC, IBM, Intel, Microsoft,
-NEC e Northern Telecom) se reuniram para buscar a melhor maneira de anexar dispositivos de E/S a um computador.
-Desde então, centenas de outras empresas se juntaram a elas. O padrão resultante, lançado oficialmente em 1998, é
-denominado USB (Universal Serial Bus – barramento serial universal), e é amplamente executado em computadores
-pessoais. Uma descrição mais detalhada desse barramento pode ser encontrada em Anderson (1997) e Tan (1997).
+Para tratar desse problema, em 1993, representantes de sete empresas (Compaq, DEC, IBM, Intel, Microsoft, NEC e Northern Telecom) se reuniram para buscar a melhor maneira de anexar dispositivos de E/S a um computador. Desde então, centenas de outras empresas se juntaram a elas. O padrão resultante, lançado oficialmente em 1998, é denominado USB (Universal Serial Bus – barramento serial universal), e é amplamente executado em computadores pessoais. Uma descrição mais detalhada desse barramento pode ser encontrada em Anderson (1997) e Tan (1997).
+    
     Alguns dos objetivos das empresas que conceberam o USB original e iniciaram o projeto eram os seguintes:
 
     1. Usuários não terão de ajustar comutadores ou pontes em placas ou dispositivos.
+
     2. Usuários não terão de abrir a torre para instalar novos dispositivos de E/S.
+
     3. Haverá apenas um tipo de cabo, que servirá para conectar todos os dispositivos.
+
     4. A energia para os dispositivos de E/S deve ser fornecida por esse cabo.
+
     5. Até 127 dispositivos poderão ser ligados a um único computador.
+    
     6. O sistema deve suportar dispositivos de tempo real (por exemplo, som, telefone).
+
     7. Os dispositivos poderão ser instalados com o computador em funcionamento.
+
     8. Não será preciso reiniciar o computador após a instalação do dispositivo.
+
     9. O custo de produção do novo barramento e de seus dispositivos de E/S não deve ser alto.
 
-O USB cumpre todos esses objetivos. É projetado para dispositivos de baixa velocidade, como teclados, mou-
-ses, câmeras fotográficas, scanners, telefones digitais e assim por diante. A versão 1.0 tem uma largura de banda
-de 1,5 Mbps, que é suficiente para teclados e mouses. A versão 1.1 funciona em 12 Mbps, que é suficiente para
-impressoras, câmeras digitais e muitos outros dispositivos. A versão 2.0 tem suporte para dispositivos com até
-480 Mbps, que é suficiente para trabalhar com drives de disco externos, webcams de alta definição e interfaces de
-rede. O USB versão 3.0, recentemente definido, empurra as velocidades para acima de 5 Gbps; só o tempo dirá
-quais aplicações novas e ávidas por largura de banda aproveitarão essa interface com largura de banda ultra-alta.
+O USB cumpre todos esses objetivos. É projetado para dispositivos de baixa velocidade, como teclados, mouses, câmeras fotográficas, scanners, telefones digitais e assim por diante. A versão 1.0 tem uma largura de banda de 1,5 Mbps, que é suficiente para teclados e mouses. A versão 1.1 funciona em 12 Mbps, que é suficiente para impressoras, câmeras digitais e muitos outros dispositivos. A versão 2.0 tem suporte para dispositivos com até 480 Mbps, que é suficiente para trabalhar com drives de disco externos, webcams de alta definição e interfaces de rede. O USB versão 3.0, recentemente definido, empurra as velocidades para acima de 5 Gbps; só o tempo dirá quais aplicações novas e ávidas por largura de banda aproveitarão essa interface com largura de banda ultra-alta.
 
-Um sistema USB consiste em um hub-raiz (root hub) que é ligado ao barramento principal (veja a Figura
-3.51). Esse hub tem soquetes para cabos que podem ser conectados a dispositivos de E/S ou a hubs de expansão,
-para fornecer mais soquetes, de modo que a topologia de um sistema USB é uma árvore cuja raiz está no hub, dentro do computador. Há diferentes conectores na extremidade dos cabos do hub-raiz e na extremidade do dis-
-positivo para evitar que, por acidente, os usuários liguem dois soquetes entre si.
+Um sistema USB consiste em um hub-raiz (root hub) que é ligado ao barramento principal (veja a Figura 3.51). Esse hub tem soquetes para cabos que podem ser conectados a dispositivos de E/S ou a hubs de expansão, para fornecer mais soquetes, de modo que a topologia de um sistema USB é uma árvore cuja raiz está no hub, dentro do computador. Há diferentes conectores na extremidade dos cabos do hub-raiz e na extremidade do dispositivo para evitar que, por acidente, os usuários liguem dois soquetes entre si.
 
-O cabo consiste em quatro fios: dois para dados, um para energia (+5 volts) e um para terra. O sistema de
-sinalização transmite um 0 como uma transição de tensão e um 1 como ausência de uma transição da tensão,
-portanto, longas carreiras de 0s geram um fluxo regular de pulsos.
+O cabo consiste em quatro fios: dois para dados, um para energia (+5 volts) e um para terra. O sistema de sinalização transmite um 0 como uma transição de tensão e um 1 como ausência de uma transição da tensão, portanto, longas carreiras de 0s geram um fluxo regular de pulsos.
 
-Quando um novo dispositivo de E/S é ligado, o hub-raiz detecta esse evento e interrompe o sistema ope-
-racional, que então pesquisa para descobrir que dispositivo é e de quanta largura de banda USB ele precisa.
-Se o sistema operacional decidir que há suficiente largura de banda para o dispositivo, atribui um endereço
-exclusivo para ele (1–127) e descarrega esse endereço e outras informações em registradores de configura-
-ção dentro do dispositivo. Desse modo, novos dispositivos podem ser acrescentados com o computador em
-funcionamento, sem exigir nenhuma configuração da parte do usuário e sem ter de instalar novas placas ISA
-ou PCI. Placas não inicializadas começam com endereço 0, por isso, podem ser endereçadas. Para simplificar
-o cabeamento, muitos dispositivos USB contêm conexões internas que aceitam dispositivos USB adicionais.
-Por exemplo, um monitor poderia ter dois soquetes de conexão para acomodar os alto-falantes esquerdo e
+Quando um novo dispositivo de E/S é ligado, o hub-raiz detecta esse evento e interrompe o sistema operacional, que então pesquisa para descobrir que dispositivo é e de quanta largura de banda USB ele precisa. Se o sistema operacional decidir que há suficiente largura de banda para o dispositivo, atribui um endereço
+exclusivo para ele (1–127) e descarrega esse endereço e outras informações em registradores de configuração dentro do dispositivo. Desse modo, novos dispositivos podem ser acrescentados com o computador em funcionamento, sem exigir nenhuma configuração da parte do usuário e sem ter de instalar novas placas ISA ou PCI. Placas não inicializadas começam com endereço 0, por isso, podem ser endereçadas. Para simplificar o cabeamento, muitos dispositivos USB contêm conexões internas que aceitam dispositivos USB adicionais. Por exemplo, um monitor poderia ter dois soquetes de conexão para acomodar os alto-falantes esquerdo e
 direito.
 
-Em termos lógicos, o sistema USB pode ser visto como um conjunto de ramificações que saem do hub-raiz
-para os dispositivos de E/S. Cada dispositivo pode subdividir sua própria ramificação em até 16 ramos secundá-
-rios para diferentes tipos de dados (por exemplo, áudio e vídeo). Dentro de cada ramo secundário, os dados fluem
-do hub-raiz até o dispositivo, ou ao contrário. Não há tráfego entre dois dispositivos de E/S.
+Em termos lógicos, o sistema USB pode ser visto como um conjunto de ramificações que saem do hub-raiz para os dispositivos de E/S. Cada dispositivo pode subdividir sua própria ramificação em até 16 ramos secundários para diferentes tipos de dados (por exemplo, áudio e vídeo). Dentro de cada ramo secundário, os dados fluem do hub-raiz até o dispositivo, ou ao contrário. Não há tráfego entre dois dispositivos de E/S.
 
-Exatamente a cada 1,00 ± 0,05 ms, o hub-raiz transmite um novo quadro para manter todos os dispositivos
-sincronizados em relação ao tempo. Um quadro é associado a um caminho de bit e consiste em pacotes, o primei-
-ro dos quais vem do hub-raiz até o dispositivo. Pacotes subsequentes no quadro também podem ir nessa direção
+Exatamente a cada 1,00 ± 0,05 ms, o hub-raiz transmite um novo quadro para manter todos os dispositivos sincronizados em relação ao tempo. Um quadro é associado a um caminho de bit e consiste em pacotes, o primeiro dos quais vem do hub-raiz até o dispositivo. Pacotes subsequentes no quadro também podem ir nessa direção
 ou voltar do dispositivo até o hub-raiz. A Figura 3.58 mostra uma sequência de quatro quadros.
 
-Na Figura 3.58, não há nenhum serviço a ser realizado nos quadros 0 e 2, portanto, basta um pacote SOF
-(Start of Frame – início do quadro). Ele é sempre transmitido para todos os dispositivos. O quadro 1 é uma son-
-dagem (poll), por exemplo, uma requisição para que um scanner devolva os bits que encontrou na imagem que
-está digitalizando. O quadro 3 consiste em entregar dados a algum dispositivo, por exemplo, uma impressora.
+Na Figura 3.58, não há nenhum serviço a ser realizado nos quadros 0 e 2, portanto, basta um pacote SOF (Start of Frame – início do quadro). Ele é sempre transmitido para todos os dispositivos. O quadro 1 é uma sondagem (poll), por exemplo, uma requisição para que um scanner devolva os bits que encontrou na imagem que está digitalizando. O quadro 3 consiste em entregar dados a algum dispositivo, por exemplo, uma impressora.
 
-O USB suporta quatro tipos de quadros: de controle, isócrono, de volume e de interrupção. Quadros de con-
-trole são usados para configurar dispositivos, transmitir-lhes comandos e inquirir seu estado. Quadros isócronos
-são para dispositivos de tempo real, como microfones, alto-falantes e telefones, que precisam enviar ou aceitar
-dados a intervalos de tempo exatos. Eles têm um atraso muito previsível, mas não fazem retransmissões quando ocorrem erros. Quadros de volume são para grandes transferências de e para dispositivos para os quais não há
-requisitos de tempo real, como impressoras. Por fim, quadros de interrupção são necessários porque o USB não
-aceita interrupções. Por exemplo, em vez de fazer com que o teclado cause uma interrupção sempre que uma tecla
-é acionada, o sistema operacional pode fazer uma sondagem a cada 50 ms para coletar qualquer tecla acionada
-que esteja pendente.
+O USB suporta quatro tipos de quadros: de controle, isócrono, de volume e de interrupção. Quadros de controle são usados para configurar dispositivos, transmitir-lhes comandos e inquirir seu estado. Quadros isócronos são para dispositivos de tempo real, como microfones, alto-falantes e telefones, que precisam enviar ou aceitar dados a intervalos de tempo exatos. Eles têm um atraso muito previsível, mas não fazem retransmissões quando ocorrem erros. Quadros de volume são para grandes transferências de e para dispositivos para os quais não há requisitos de tempo real, como impressoras. Por fim, quadros de interrupção são necessários porque o USB não aceita interrupções. Por exemplo, em vez de fazer com que o teclado cause uma interrupção sempre que uma tecla é acionada, o sistema operacional pode fazer uma sondagem a cada 50 ms para coletar qualquer tecla acionada que esteja pendente.
 
-**A Figura 3.58 detalha o funcionamento temporal do USB (Universal Serial Bus)**, mostrando como o Hub-raiz gerencia a comunicação através de quadros periódicos de 1,00 ms. Diferente do PCI Express, que é ponto a ponto, o USB utiliza uma estrutura de mestre/escravo onde o host controla rigidamente o tráfego para garantir que periféricos como o seu mouse e teclado funcionem sem atrasos.
+### A Figura 3.58 detalha o funcionamento temporal do USB (Universal Serial Bus).
+Mostrando como o Hub-raiz gerencia a comunicação através de quadros periódicos de 1,00 ms. Diferente do PCI Express, que é ponto a ponto, o USB utiliza uma estrutura de mestre/escravo onde o host controla rigidamente o tráfego para garantir que periféricos como o seu mouse e teclado funcionem sem atrasos.
 
-**Cronometragem de Quadros USB (Figura 3.58)**
+### Cronometragem de Quadros USB (Figura 3.58)
 O Hub-raiz emite um sinal de início de quadro (SOF - Start of Frame) a cada milissegundo para sincronizar todos os dispositivos no barramento:
 
     TEMPO (ms): |   0 ms   |   1 ms   |   2 ms   |   3 ms   |
@@ -2931,112 +2906,59 @@ O Hub-raiz emite um sinal de início de quadro (SOF - Start of Frame) a cada mil
 
 ![alt text](image-35.png)
 
-Processamento	                                                                            Armazenamento
+    Processamento	                                                                            Armazenamento
 
-Tipos de Pacotes (Raiz)	                                                                    Estrutura do Pacote de Dados
-:---	                                                                                    :---
-SOF (Start of Frame): O marcador de tempo que inicia cada quadro de 1,00 ms.	            SYN (Sync): Padrão de bits inicial para alinhar o clock do receptor com o do transmissor.
+    Tipos de Pacotes (Raiz)	                                                                    Estrutura do Pacote de Dados
+    :---	                                                                                    :---
+    SOF (Start of Frame): O marcador de tempo que inicia cada quadro de 1,00 ms.	            SYN (Sync): Padrão de bits inicial para alinhar o clock do receptor com o do transmissor.
 
-IN / OUT: Comandos do Host solicitando dados do dispositivo (IN) ou enviando dados (OUT).	PID (Packet ID): Identifica o tipo de pacote e inclui bits de verificação para evitar erros.
+    IN / OUT: Comandos do Host solicitando dados do dispositivo (IN) ou enviando dados (OUT).	PID (Packet ID): Identifica o tipo de pacote e inclui bits de verificação para evitar erros.
 
-ACK (Acknowledge): Confirmação de que o pacote foi recebido sem erros de CRC.	            PAYLOAD / CRC: Os dados reais seguidos pelo código de verificação cíclica para integridade.
+    ACK (Acknowledge): Confirmação de que o pacote foi recebido sem erros de CRC.	            PAYLOAD / CRC: Os dados reais seguidos pelo código de verificação cíclica para integridade.
 
-                                                                                            BARRAMENTO INTERNO
+                                                                                                BARRAMENTO INTERNO
 
-Interconexão OMAP4430	                                                                    Nivel-Logica-Digital.md
+    Interconexão OMAP4430	                                                                    Nivel-Logica-Digital.md
 
-No SoC OMAP4430 (Figura 3.47), o USB-HS Host gerencia esses quadros de forma autônoma    	O fechamento da comunicação externa: como o computador interage com para aliviar a CPU.                                                                         o mundo físico.
+    No SoC OMAP4430 (Figura 3.47), o USB-HS Host gerencia esses quadros de forma autônoma    	O fechamento da comunicação externa: como o computador interage com para aliviar a CPU.                                                                         o mundo físico.
 
-Polling vs. Interrupção	                                                                    Frequência de Amostragem
+    Polling vs. Interrupção	                                                                    Frequência de Amostragem
 
-O USB simula interrupções através de polling rápido (como visto nos Quadros 1 e 3).         Garante que dispositivos de interface humana (HID) tenham latência previsível.
+    O USB simula interrupções através de polling rápido (como visto nos Quadros 1 e 3).         Garante que dispositivos de interface humana (HID) tenham latência previsível.
 
 ### Insight para o seu repositório estruturas_de_dados
-A lógica de quadros do USB é um exemplo clássico de escalonamento em tempo real que você pode aplicar no diretório estruturas_de_dados:
+    A lógica de quadros do USB é um exemplo clássico de escalonamento em tempo real que você pode aplicar no diretório estruturas_de_dados:
 
- - No seu Ubuntu 24.04, quando você conecta um dispositivo USB, o kernel precisa reservar "slots" dentro desses quadros de 1 ms para garantir que o dispositivo tenha largura de banda.
+    - No seu Ubuntu 24.04, quando você conecta um dispositivo USB, o kernel precisa reservar "slots" dentro desses quadros de 1 ms para garantir que o dispositivo tenha largura de banda.
 
- - O uso de CRC em cada pacote (Figura 3.58) reforça a importância da integridade de dados que você implementou no "IDS Sentinel v5.0": mesmo em hardware, nada é confiável sem verificação.
+    - O uso de CRC em cada pacote (Figura 3.58) reforça a importância da integridade de dados que você implementou no "IDS Sentinel v5.0": mesmo em hardware, nada é confiável sem verificação.
 
-Um quadro consiste em um ou mais pacotes, alguns possivelmente na mesma direção. Existem quatro tipos
-de pacotes: permissão (token), dados, apresentação (handshake) e especial. Pacotes de permissão vêm da raiz
-até um dispositivo e servem para controle do sistema. Os pacotes SOF, IN e OUT na Figura 3.58 são pacotes
-de permissão. O pacote SOF é o primeiro de cada quadro e marca seu início. Se não houver nenhum trabalho a
-realizar, o pacote SOF é o único no quadro. O pacote de permissão IN é uma sondagem, que pede ao dispositivo
-que retorne certos dados. Campos no pacote IN informam qual caminho está sendo sondado de modo que o
-dispositivo saiba quais dados retornar (se tiver múltiplos fluxos). O pacote de permissão OUT anuncia ao dispo-
-sitivo que serão enviados dados a ele. Um quarto tipo de pacote de permissão, SETUP (não mostrado na figura),
-é usado para configuração.
+Um quadro consiste em um ou mais pacotes, alguns possivelmente na mesma direção. Existem quatro tipos de pacotes: permissão (token), dados, apresentação (handshake) e especial. Pacotes de permissão vêm da raiz até um dispositivo e servem para controle do sistema. Os pacotes SOF, IN e OUT na Figura 3.58 são pacotes de permissão. O pacote SOF é o primeiro de cada quadro e marca seu início. Se não houver nenhum trabalho a realizar, o pacote SOF é o único no quadro. O pacote de permissão IN é uma sondagem, que pede ao dispositivo que retorne certos dados. Campos no pacote IN informam qual caminho está sendo sondado de modo que o dispositivo saiba quais dados retornar (se tiver múltiplos fluxos). O pacote de permissão OUT anuncia ao dispositivo que serão enviados dados a ele. Um quarto tipo de pacote de permissão, SETUP (não mostrado na figura), é usado para configuração.
 
-Além do pacote de permissão há três outros tipos de pacote: DATA (usado para transmitir até 64 bytes de
-informação em qualquer direção), pacotes de apresentação e pacotes especiais. O formato de um pacote de dados
-é mostrado na Figura 3.58. Consiste em um campo de sincronização de 8 bits, um tipo de pacote (PID) de 8 bits,
-a carga útil (payload) e um CRC de 16 bits para detectar erros. São definidos três tipos de pacotes de apresentação:
-ACK (o pacote de dados anterior foi recebido corretamente), NAK (foi detectado um erro CRC) e STALL (favor
-esperar – agora estou ocupado).
+Além do pacote de permissão há três outros tipos de pacote: DATA (usado para transmitir até 64 bytes de informação em qualquer direção), pacotes de apresentação e pacotes especiais. O formato de um pacote de dados é mostrado na Figura 3.58. Consiste em um campo de sincronização de 8 bits, um tipo de pacote (PID) de 8 bits, a carga útil (payload) e um CRC de 16 bits para detectar erros. São definidos três tipos de pacotes de apresentação: ACK (o pacote de dados anterior foi recebido corretamente), NAK (foi detectado um erro CRC) e STALL (favor esperar – agora estou ocupado).
 
-Agora, vamos examinar a Figura 3.58 mais uma vez. A cada 1,00 ms um quadro deve ser enviado do
-hub-raiz, mesmo que não haja trabalho a realizar. Os quadros 0 e 2 consistem em apenas um pacote SOF,
-indicando que não há trabalho a executar. O quadro 1 é uma sondagem, portanto, começa com pacotes SOF
-e IN do computador ao dispositivo de E/S, seguidos por um pacote DATA do dispositivo para o computador.
-O pacote ACK informa ao dispositivo que os dados foram recebidos corretamente. Caso ocorra um erro, um
-NAK é devolvido ao dispositivo e o pacote é retransmitido quando for de volume, mas não quando os dados
-forem isócronos. A estrutura do quadro 3 é semelhante à do quadro 1, exceto que agora o fluxo de dados é
-do computador para o dispositivo.
+Agora, vamos examinar a Figura 3.58 mais uma vez. A cada 1,00 ms um quadro deve ser enviado do hub-raiz, mesmo que não haja trabalho a realizar. Os quadros 0 e 2 consistem em apenas um pacote SOF, indicando que não há trabalho a executar. O quadro 1 é uma sondagem, portanto, começa com pacotes SOF e IN do computador ao dispositivo de E/S, seguidos por um pacote DATA do dispositivo para o computador. O pacote ACK informa ao dispositivo que os dados foram recebidos corretamente. Caso ocorra um erro, um NAK é devolvido ao dispositivo e o pacote é retransmitido quando for de volume, mas não quando os dados forem isócronos. A estrutura do quadro 3 é semelhante à do quadro 1, exceto que agora o fluxo de dados é do computador para o dispositivo.
 
-Após a conclusão do padrão USB em 1998, o pessoal que o projetou não tinha nada para fazer, então, come-
-çou a trabalhar em uma nova versão de alta velocidade do USB, denominada USB 2.0. Esse padrão é semelhante
-ao antigo USB 1.1 e compatível com ele, exceto pela adição de uma terceira velocidade, 480 Mbps, às duas exis-
-tentes. Além disso, há algumas pequenas diferenças, como interface entre hub-raiz e o controlador. O USB 1.1
-tinha duas interfaces disponíveis. A primeira, UHCI (Universal Host Controller Interface – interface universal
-de controlador de hospedeiro), foi projetada pela Intel e passava grande parte da carga para os projetistas de
-software (leia-se: Microsoft). A segunda, OHCI (Open Host Controller Interface – interface aberta de controla-
-dor de hospedeiro), foi projetada pela Microsoft e passava grande parte da carga para os projetistas de hardware
-(leia-se: Intel). No USB 2.0, todos concordaram com uma nova interface única denominada EHCI (Enhanced
-Host Controller Interface – interface melhorada de controlador de hospedeiro).
+Após a conclusão do padrão USB em 1998, o pessoal que o projetou não tinha nada para fazer, então, começou a trabalhar em uma nova versão de alta velocidade do USB, denominada USB 2.0. Esse padrão é semelhante ao antigo USB 1.1 e compatível com ele, exceto pela adição de uma terceira velocidade, 480 Mbps, às duas exis-
+tentes. Além disso, há algumas pequenas diferenças, como interface entre hub-raiz e o controlador. O USB 1.1 tinha duas interfaces disponíveis. A primeira, UHCI (Universal Host Controller Interface – interface universal de controlador de hospedeiro), foi projetada pela Intel e passava grande parte da carga para os projetistas de software (leia-se: Microsoft). A segunda, OHCI (Open Host Controller Interface – interface aberta de controlador de hospedeiro), foi projetada pela Microsoft e passava grande parte da carga para os projetistas de hardware (leia-se: Intel). No USB 2.0, todos concordaram com uma nova interface única denominada EHCI (Enhanced Host Controller Interface – interface melhorada de controlador de hospedeiro).
 
-Agora que o USB funcionava a 480 Mbps, passou a competir com o barramento serial IEEE 1394, mais conhe-
-cido como FireWire, que funciona a 400 Mbps ou 800 Mbps. Visto que praticamente todo novo PC baseado no
-Intel agora vem com USB 2.0 ou USB 3.0 (ver a seguir), é provável que o 1394 desapareça no devido tempo. O
-desaparecimento não é tanto pela obsolescência quanto à guerra por territórios. O USB é um produto da indústria
-da computação, enquanto o 1394 vem do setor de eletrônica de consumo. Quando se trata de conectar câmeras a
-computadores, cada indústria queria que todos usassem seu cabo. Parece que o pessoal do computador ganhou essa.
+Agora que o USB funcionava a 480 Mbps, passou a competir com o barramento serial IEEE 1394, mais conhecido como FireWire, que funciona a 400 Mbps ou 800 Mbps. Visto que praticamente todo novo PC baseado no Intel agora vem com USB 2.0 ou USB 3.0 (ver a seguir), é provável que o 1394 desapareça no devido tempo. O
+desaparecimento não é tanto pela obsolescência quanto à guerra por territórios. O USB é um produto da indústria da computação, enquanto o 1394 vem do setor de eletrônica de consumo. Quando se trata de conectar câmeras a computadores, cada indústria queria que todos usassem seu cabo. Parece que o pessoal do computador ganhou essa.
 
-Oito anos depois da introdução do USB 2.0, o padrão de interface USB 3.0 foi anunciado. O USB 3.0 admite
-incríveis 5 Gbps de largura de banda pelo cabo, embora a modulação do enlace seja adaptativa, e provavelmente
-essa velocidade só poderá ser alcançada com cabeamento de qualidade profissional. Os dispositivos USB 3.0 são
-estruturalmente idênticos aos dispositivos USB anteriores, e executam totalmente o padrão USB 2.0. Se conecta-
-dos a um soquete USB 2.0, eles operarão corretamente.
+Oito anos depois da introdução do USB 2.0, o padrão de interface USB 3.0 foi anunciado. O USB 3.0 admite incríveis 5 Gbps de largura de banda pelo cabo, embora a modulação do enlace seja adaptativa, e provavelmente essa velocidade só poderá ser alcançada com cabeamento de qualidade profissional. Os dispositivos USB 3.0 são estruturalmente idênticos aos dispositivos USB anteriores, e executam totalmente o padrão USB 2.0. Se conectados a um soquete USB 2.0, eles operarão corretamente.
 
 ## 3.7  Interface
-Um sistema de computador típico de pequeno a médio porte consiste em um chip de CPU, chipset, chips de
-memória e alguns controladores de E/S, todos conectados por um barramento. Às vezes, todos esses dispositivos
-estão integrados a um sistema-em-um-chip, como o TI OMAP4430. Já estudamos memórias, CPUs e barramentos
-com certo detalhe. Agora, chegou a hora de examinar a última parte do quebra-cabeça, as interfaces de E/S. É por
-meio dessas portas de E/S que o computador se comunica com o mundo exterior.
+Um sistema de computador típico de pequeno a médio porte consiste em um chip de CPU, chipset, chips de memória e alguns controladores de E/S, todos conectados por um barramento. Às vezes, todos esses dispositivos estão integrados a um sistema-em-um-chip, como o TI OMAP4430. Já estudamos memórias, CPUs e barramentos
+com certo detalhe. Agora, chegou a hora de examinar a última parte do quebra-cabeça, as interfaces de E/S. É por meio dessas portas de E/S que o computador se comunica com o mundo exterior.
 
 ## 3.7.1 Interfaces de E/S
-Há inúmeras interfaces de E/S disponíveis no mercado e novas são lançadas o tempo todo. Entre as interfaces
-comuns estão UARTs, USARTs, controladores de CRT, controladores de disco e PIOs. Uma UART (Universal
-Asynchronous Receiver Transmitter – transmissor receptor assíncrono universal) é uma interface de E/S que
-pode ler um byte do barramento de dados e entregá-lo um bit por vez a um terminal por meio de uma linha serial,
-ou receber dados de um terminal. Em geral, as UARTs permitem várias velocidades de 50 a 19.200 bps; largura de
-caracteres de 5 a 8 bits; 1, 1,5 ou 2 bits de fim; e fornecem paridade par, ímpar ou nenhuma paridade, tudo sob con-
-trole de programa. USARTs (Universal Synchronous Asynchronous Receiver Transmitters – transmissor receptor
-assíncrono síncrono universal) podem manipular transmissão síncrona usando uma variedade de protocolos, bem
-como executando todas as funções da UART. Como as UARTs se tornaram menos importantes com o desapareci-
-mento dos modems de telefone, agora vamos estudar a interface paralela como exemplo de uma interface de E/S.
+Há inúmeras interfaces de E/S disponíveis no mercado e novas são lançadas o tempo todo. Entre as interfaces comuns estão UARTs, USARTs, controladores de CRT, controladores de disco e PIOs. Uma UART (Universal Asynchronous Receiver Transmitter – transmissor receptor assíncrono universal) é uma interface de E/S que
+pode ler um byte do barramento de dados e entregá-lo um bit por vez a um terminal por meio de uma linha serial, ou receber dados de um terminal. Em geral, as UARTs permitem várias velocidades de 50 a 19.200 bps; largura de caracteres de 5 a 8 bits; 1, 1,5 ou 2 bits de fim; e fornecem paridade par, ímpar ou nenhuma paridade, tudo sob controle de programa. USARTs (Universal Synchronous Asynchronous Receiver Transmitters – transmissor receptor assíncrono síncrono universal) podem manipular transmissão síncrona usando uma variedade de protocolos, bem como executando todas as funções da UART. Como as UARTs se tornaram menos importantes com o desaparecimento dos modems de telefone, agora vamos estudar a interface paralela como exemplo de uma interface de E/S.
 
 ### Interfaces PIO
-Uma interface PIO (Parallel Input/Output – entrada e saída paralela) típica é o Intel 8255A, mostrado na
-Figura 3.59. Ele tem uma série de linhas de E/S (por exemplo, 24 linhas de E/S no exemplo da figura) que podem
-fazer ligação com qualquer interface de dispositivo lógico digital, por exemplo, teclados, comutadores, luzes ou
-impressoras. Resumindo, o programa da CPU pode escrever um 0 ou 1, ou ler o estado de entrada de qualquer
-linha, o que dá grande flexibilidade. Um pequeno sistema com CPU que use uma interface PIO pode controlar
-diversos dispositivos físicos, como um robô, torradeira ou microscópio eletrônico. As interfaces PIO são encon-
-tradas frequentemente em sistemas embutidos.
+Uma interface PIO (Parallel Input/Output – entrada e saída paralela) típica é o Intel 8255A, mostrado na Figura 3.59. Ele tem uma série de linhas de E/S (por exemplo, 24 linhas de E/S no exemplo da figura) que podem fazer ligação com qualquer interface de dispositivo lógico digital, por exemplo, teclados, comutadores, luzes ou impressoras. Resumindo, o programa da CPU pode escrever um 0 ou 1, ou ler o estado de entrada de qualquer linha, o que dá grande flexibilidade. Um pequeno sistema com CPU que use uma interface PIO pode controlar diversos dispositivos físicos, como um robô, torradeira ou microscópio eletrônico. As interfaces PIO são encontradas frequentemente em sistemas embutidos.
 
-### Figura 3.59  Uma interface PIO de 24 bits.
+### Figura 3.59 - Uma interface PIO de 24 bits.
 
 Com a Figura 3.59, entramos no detalhamento técnico das interfaces de entrada e saída, explorando como a CPU se comunica com o mundo exterior através de uma Interface de E/S Paralela (PIO) de 24 bits. Este componente é essencial para sistemas embarcados, permitindo que o processador controle periféricos simples, como LEDs, sensores ou teclados, de forma direta.
 
@@ -3058,69 +2980,38 @@ Abaixo, represento o fluxo de sinais entre a CPU (lado esquerdo) e os periféric
 ![alt text](image-36.png)
 
 ### Insight para o seu repositório estruturas_de_dados
-A interface PIO é a personificação física de uma Tabela Hash ou um Vetor no seu diretório estruturas_de_dados:
+    A interface PIO é a personificação física de uma Tabela Hash ou um Vetor no seu diretório estruturas_de_dados:
 
- - Ao endereçar as portas A, B ou C através de A0-A1, a CPU está basicamente acessando um índice de um array de hardware.
+    - Ao endereçar as portas A, B ou C através de A0-A1, a CPU está basicamente acessando um índice de um array de hardware.
 
- - No seu projeto de IDS Sentinel v5.0, você poderia usar uma porta PIO para acionar um alarme físico (saída) sempre que um pacote suspeito fosse detectado no seu Ubuntu 24.04.
+    - No seu projeto de IDS Sentinel v5.0, você poderia usar uma porta PIO para acionar um alarme físico (saída) sempre que um pacote suspeito fosse detectado no seu Ubuntu 24.04.
 
- - O conceito de "travar" o valor na saída até a próxima escrita é o equivalente em hardware ao armazenamento de uma variável global em C.
+    - O conceito de "travar" o valor na saída até a próxima escrita é o equivalente em hardware ao armazenamento de uma variável global em C.
 
-A interface PIO é configurada com um registrador de configuração de 3 bits, que especifica se as três portas
-independentes de 8 bits devem ser usadas para entrada (0) ou saída (1) do sinal digital. A definição do valor
-apropriado no registrador de configuração permitirá qualquer combinação de entrada e saída para as três portas.
-Associado com cada porta há um registrador com amostragem de 8 bits. Para estabelecer as linhas em uma porta
-de saída, a CPU apenas escreve um número de 8 bits no registrador correspondente, e esse número aparece nas
-linhas de saída e fica ali até que o registrador seja reescrito. Para usar uma porta para entrada, a CPU apenas lê o
-registrador de 8 bits correspondente.
+A interface PIO é configurada com um registrador de configuração de 3 bits, que especifica se as três portas independentes de 8 bits devem ser usadas para entrada (0) ou saída (1) do sinal digital. A definição do valor apropriado no registrador de configuração permitirá qualquer combinação de entrada e saída para as três portas. Associado com cada porta há um registrador com amostragem de 8 bits. Para estabelecer as linhas em uma porta de saída, a CPU apenas escreve um número de 8 bits no registrador correspondente, e esse número aparece nas linhas de saída e fica ali até que o registrador seja reescrito. Para usar uma porta para entrada, a CPU apenas lê o registrador de 8 bits correspondente.
 
-É possível montar interfaces PIO mais sofisticadas. Por exemplo, um modo de operação popular fornece apre-
-sentação com dispositivos externos. Assim, para enviar a um dispositivo que nem sempre está pronto para aceitar dados, a interface PIO pode apresentar dados em uma porta de saída e esperar que o dispositivo devolva um pulso
-informando que aceitou os dados e quer mais. A lógica necessária para amostrar tais pulsos e torná-los disponíveis
-para a CPU inclui um sinal de pronto e mais uma fila de registradores de 8 bits para cada porta de saída.
+É possível montar interfaces PIO mais sofisticadas. Por exemplo, um modo de operação popular fornece apresentação com dispositivos externos. Assim, para enviar a um dispositivo que nem sempre está pronto para aceitar dados, a interface PIO pode apresentar dados em uma porta de saída e esperar que o dispositivo devolva um pulso informando que aceitou os dados e quer mais. A lógica necessária para amostrar tais pulsos e torná-los disponíveis para a CPU inclui um sinal de pronto e mais uma fila de registradores de 8 bits para cada porta de saída.
 
-Pelo diagrama funcional da interface PIO, podemos ver que, além dos 24 pinos para as três portas, ela tem oito
-linhas que se conectam diretamente com o barramento de dados, uma linha de seleção de chip (chip select), linhas de
-leitura e escrita, duas linhas de endereço e uma para reiniciar o chip. As duas linhas de endereço selecionam um dos
-quatro registradores internos correspondentes às portas A, B, C e ao registrador de configuração de porta. Em geral, as
-duas linhas de endereço estão conectadas aos bits de ordem baixa do barramento de endereço. A linha de seleção de
-chip permite que a interface PIO de 24 bits seja combinada para formar interfaces PIO maiores, acrescentando outras
-linhas de endereço e usando-as para selecionar a interface PIO apropriada, ativando sua linha de seleção de chip.
+Pelo diagrama funcional da interface PIO, podemos ver que, além dos 24 pinos para as três portas, ela tem oito linhas que se conectam diretamente com o barramento de dados, uma linha de seleção de chip (chip select), linhas de leitura e escrita, duas linhas de endereço e uma para reiniciar o chip. As duas linhas de endereço selecionam um dos quatro registradores internos correspondentes às portas A, B, C e ao registrador de configuração de porta. Em geral, as
+duas linhas de endereço estão conectadas aos bits de ordem baixa do barramento de endereço. A linha de seleção de chip permite que a interface PIO de 24 bits seja combinada para formar interfaces PIO maiores, acrescentando outras linhas de endereço e usando-as para selecionar a interface PIO apropriada, ativando sua linha de seleção de chip.
 
 ## 3.7.2 Decodificação de endereço
-Até agora fomos propositalmente superficiais sobre como a seleção do chip é ativada na memória e nos chips
-de E/S que já vimos. Agora, é hora de examinar com mais cuidado como isso é feito. Vamos considerar um com-
-putador embutido simples de 16 bits que consiste em uma CPU, uma EPROM de 2 KB × 8 bytes para o programa,
-uma RAM de 2 KB × 8 bytes para os dados e uma interface PIO. Esse pequeno sistema pode ser usado como
-um protótipo para o cérebro de um brinquedo barato ou um eletrodoméstico simples. Uma vez em produção, a
-EPROM poderia ser substituída por uma ROM.
+Até agora fomos propositalmente superficiais sobre como a seleção do chip é ativada na memória e nos chips de E/S que já vimos. Agora, é hora de examinar com mais cuidado como isso é feito. Vamos considerar um computador embutido simples de 16 bits que consiste em uma CPU, uma EPROM de 2 KB × 8 bytes para o programa,
+uma RAM de 2 KB × 8 bytes para os dados e uma interface PIO. Esse pequeno sistema pode ser usado como um protótipo para o cérebro de um brinquedo barato ou um eletrodoméstico simples. Uma vez em produção, a EPROM poderia ser substituída por uma ROM.
 
-A interface PIO pode ser selecionada de um entre dois modos: como um verdadeiro dispositivo de E/S
-ou como parte da memória. Se optarmos por usá-la como um dispositivo de E/S, então devemos selecioná-la
-usando uma linha de barramento explícita que indica que um dispositivo de E/S está sendo referenciado, e não
-a memória. Se usarmos a outra abordagem, E/S mapeada para a memória, então temos de lhe designar 4 bytes
-do espaço de memória para as três portas e o registrador de controle. A escolha é, de certa forma, arbitrária.
-Escolheremos E/S mapeada para a memória porque ela ilustra alguns aspectos interessantes da interface de E/S.
+A interface PIO pode ser selecionada de um entre dois modos: como um verdadeiro dispositivo de E/S ou como parte da memória. Se optarmos por usá-la como um dispositivo de E/S, então devemos selecioná-la usando uma linha de barramento explícita que indica que um dispositivo de E/S está sendo referenciado, e não
+a memória. Se usarmos a outra abordagem, E/S mapeada para a memória, então temos de lhe designar 4 bytes do espaço de memória para as três portas e o registrador de controle. A escolha é, de certa forma, arbitrária. Escolheremos E/S mapeada para a memória porque ela ilustra alguns aspectos interessantes da interface de E/S.
 
-A EPROM necessita de 2 KB de espaço de endereço, a RAM também precisa de 2 K de espaço de endereço e
-a PIO precisa de 4 bytes. Como o espaço de endereço de nosso exemplo é 64 K, temos de escolher onde colocar
-os três dispositivos. Uma opção possível é mostrada na Figura 3.60. A EPROM ocupa endereços até 2 K, a RAM
-ocupa endereços de 32 KB a 34 KB e a PIO ocupa os 4 bytes mais altos do espaço de endereço, 65.532 a 65.535.
-Do ponto de vista do programador, não faz diferença quais endereços são usados; contudo, isso não acontece
-quando se trata da interface. Se tivéssemos optado por endereçar a PIO via espaço de E/S, ela não precisaria de
-nenhum endereço de memória, mas precisaria de quatro espaços de endereço de E/S.
+A EPROM necessita de 2 KB de espaço de endereço, a RAM também precisa de 2 K de espaço de endereço e a PIO precisa de 4 bytes. Como o espaço de endereço de nosso exemplo é 64 K, temos de escolher onde colocar os três dispositivos. Uma opção possível é mostrada na Figura 3.60. A EPROM ocupa endereços até 2 K, a RAM
+ocupa endereços de 32 KB a 34 KB e a PIO ocupa os 4 bytes mais altos do espaço de endereço, 65.532 a 65.535. Do ponto de vista do programador, não faz diferença quais endereços são usados; contudo, isso não acontece quando se trata da interface. Se tivéssemos optado por endereçar a PIO via espaço de E/S, ela não precisaria de nenhum endereço de memória, mas precisaria de quatro espaços de endereço de E/S.
 
-Com as designações de endereço da Figura 3.60, a EPROM deve ser selecionada por quaisquer endereços de
-memória de 16 bits da forma 00000xxxxxxxxxxx (binário). Em outras palavras, qualquer endereço de memória
-cujos 5 bits de ordem alta são todos 0s cai na parte inferior da memória de 2 KB, portanto, na EPROM. Por isso,
-a seleção de chip da EPROM poderia ser ligada a um comparador de 5 bits, com uma de suas entradas perma-
-nentemente ligada a 00000.
+Com as designações de endereço da Figura 3.60, a EPROM deve ser selecionada por quaisquer endereços de memória de 16 bits da forma 00000xxxxxxxxxxx (binário). Em outras palavras, qualquer endereço de memória cujos 5 bits de ordem alta são todos 0s cai na parte inferior da memória de 2 KB, portanto, na EPROM. Por isso,
+a seleção de chip da EPROM poderia ser ligada a um comparador de 5 bits, com uma de suas entradas permanentemente ligada a 00000.
 
-Uma maneira melhor de conseguir o mesmo efeito é usar uma porta OR de cinco entradas com as cinco
-entradas ligadas às linhas de endereço A11 a A15. Se, e somente se, todas a cinco linhas forem 0, a saída será 0,
+Uma maneira melhor de conseguir o mesmo efeito é usar uma porta OR de cinco entradas com as cinco entradas ligadas às linhas de endereço A11 a A15. Se, e somente se, todas a cinco linhas forem 0, a saída será 0,
 
 
-**Figura 3.60  Localização da EPROM, RAM e PIO em nosso espaço de endereço de 64 KB.**
+### Figura 3.60 - Localização da EPROM, RAM e PIO em nosso espaço de endereço de 64 KB.
 
 A Figura 3.60 apresenta o Mapa de Memória de um sistema de 64 KB, demonstrando como diferentes componentes de hardware (EPROM, RAM e a interface PIO da Figura 3.59) são organizados dentro do espaço de endereçamento da CPU. Essa técnica é conhecida como E/S mapeada em memória, onde periféricos são acessados como se fossem endereços comuns de memória.
 
@@ -3136,47 +3027,41 @@ Abaixo, represento a distribuição física desses componentes ao longo dos 65.5
     FFFCH          |  ~63.9K         | [ PIO ]                  | Interface de E/S
     FFFFH          |  64K            | (Fim do Espaço)          | -
 
-![alt text](image-37.png)
+![alt text](image-58.png)
 
-### nsight para o seu repositório estruturas_de_dados
-O mapa de memória da Figura 3.60 é a base física para o conceito de Ponteiros que você utiliza no diretório estruturas_de_dados:
+### Insight para o seu repositório estruturas_de_dados
+    O mapa de memória da Figura 3.60 é a base física para o conceito de Ponteiros que você utiliza no diretório estruturas_de_dados:
 
- - Em C, um ponteiro nada mais é do que uma variável que armazena um desses números (como 0x8000) para localizar um dado na RAM.
+    - Em C, um ponteiro nada mais é do que uma variável que armazena um desses números (como 0x8000) para localizar um dado na RAM.
 
- - Quando você trabalha com Tabelas Hash, você está criando um "mapa lógico" que funciona de forma muito similar a esse mapa de hardware: converter uma chave em um endereço específico de armazenamento.
+    - Quando você trabalha com Tabelas Hash, você está criando um "mapa lógico" que funciona de forma muito similar a esse mapa de hardware: converter uma chave em um endereço específico de armazenamento.
 
- - No seu Lenovo IdeaPad Gaming 3, embora o espaço de endereço seja de 64 bits (muito maior que os 16 bits/64 KB desta figura), a lógica de segmentação entre código (EPROM/Flash), dados (RAM) e periféricos (PIO) permanece a mesma.
+    - No seu Lenovo IdeaPad Gaming 3, embora o espaço de endereço seja de 64 bits (muito maior que os 16 bits/64 KB desta figura), a lógica de segmentação entre código (EPROM/Flash), dados (RAM) e periféricos (PIO) permanece a mesma.
 
-Processamento	                                                               Armazenamento
+    Processamento	                                                               Armazenamento
 
-Localização: EPROM (0000H)	                                                   Finalidade: Firmware
+    Localização: EPROM (0000H)	                                                   Finalidade: Firmware
 
-Ocupa o início do mapa para que a CPU encontre as primeiras instruções de      Armazena o código de inicialização permanente, similar ao suporte do BIOS visto boot assim que é ligada ou resetada.                                           na estrutura do Core i7 (Figura 3.52).
+    Ocupa o início do mapa para que a CPU encontre as primeiras instruções de      Armazena o código de inicialização permanente, similar ao suporte do BIOS visto boot assim que é ligada ou resetada.                                     na estrutura do Core i7 (Figura 3.52).
 
-Localização: RAM (8000H)	                                                   Finalidade: Execução 
+    Localização: RAM (8000H)	                                                   Finalidade: Execução 
 
-Posicionada no meio do mapa (32K), oferecendo um bloco contínuo para 	      Espaço onde suas estruturas de dados em C são carregadas e manipuladas durante a armazenamento de dados voláteis.                                              execução no seu Ubuntu 24.04.
+    Posicionada no meio do mapa (32K), oferecendo um bloco contínuo para 	       Espaço onde suas estruturas de dados em C são carregadas e manipuladas durante a armazenamento de dados voláteis.                                     execução no seu Ubuntu 24.04.
 
-Localização: PIO (FFFCH)                                                      Finalidade: Controle de E/S
+    Localização: PIO (FFFCH)                                                       Finalidade: Controle de E/S
 
-Alocada no topo do espaço de endereçamento para não interferir nos            Permite que a CPU controle as Portas A, B e C (Figura 3.59) apenas lendo ou blocos principais de memória.                                                        escrevendo neste endereço específico.
+    Alocada no topo do espaço de endereçamento para não interferir nos             Permite que a CPU controle as Portas A, B e C (Figura 3.59) apenas lendo ou blocos principais de memória.                                                  escrevendo neste endereço específico.
 
 
-o que ativa cs (que é ativado baixo). Esse método de endereçamento é ilustrado na Figura 3.61(a) e é chamado
-decodificação de endereço completo.
+O  que ativa cs (que é ativado baixo). Esse método de endereçamento é ilustrado na Figura 3.61(a) e é chamado decodificação de endereço completo.
 
-O mesmo princípio pode ser usado para a RAM. Contudo, a RAM deve responder a endereços binários
-da forma 10000xxxxxxxxxxx, portanto, é preciso um inversor adicional, como mostra a figura. A decodifica-
-ção de endereços PIO é um pouco mais complicada, porque é selecionada pelos quatro endereços da forma
-11111111111111xx. Um possível circuito que assegure cs só quando o endereço correto aparecer no barramento
-de endereço é mostrado na figura. Ele usa duas portas nand de oito entradas para alimentar uma porta or.
+O mesmo princípio pode ser usado para a RAM. Contudo, a RAM deve responder a endereços binários da forma 10000xxxxxxxxxxx, portanto, é preciso um inversor adicional, como mostra a figura. A decodificação de endereços PIO é um pouco mais complicada, porque é selecionada pelos quatro endereços da forma
+11111111111111xx. Um possível circuito que assegure cs só quando o endereço correto aparecer no barramento de endereço é mostrado na figura. Ele usa duas portas nand de oito entradas para alimentar uma porta or.
 
-Contudo, se o computador de fato tiver apenas uma CPU, dois chips de memória e a PIO, podemos usar
-um truque para conseguir uma decodificação de endereço muito mais simples. Esse truque se baseia no fato de
-que todos os endereços da EPROM, e somente endereços da EPROM, têm um 0 no bit de ordem alta, a15. Por
+Contudo, se o computador de fato tiver apenas uma CPU, dois chips de memória e a PIO, podemos usar um truque para conseguir uma decodificação de endereço muito mais simples. Esse truque se baseia no fato de que todos os endereços da EPROM, e somente endereços da EPROM, têm um 0 no bit de ordem alta, a15. Por
 conseguinte, basta ligar cs a a15 diretamente, como mostra a Figura 3.61(b).
 
-### Figura 3.61  (a) Decodificação total de endereço. (b) Decodificação parcial de endereço.
+### Figura 3.61 - (a) Decodificação total de endereço. (b) Decodificação parcial de endereço.
 
 A Figura 3.61 demonstra os métodos utilizados para implementar o mapa de memória que analisamos na figura anterior, focando em como os sinais do barramento de endereço (A_0 a A_15) são usados para ativar componentes específicos através do sinal Chip Select (CS).
 
@@ -3210,79 +3095,43 @@ Neste modelo, todos os bits de endereço relevantes são verificados por portas 
 ![alt text](image-38.png)
 
 ### Insight para estruturas_de_dados
-Essa lógica explica como o seu Ubuntu 24.04 isola processos:
+    Essa lógica explica como o seu Ubuntu 24.04 isola processos:
 
- - A Decodificação Total é como um índice único em um Banco de Dados; não há ambiguidade.
+    - A Decodificação Total é como um índice único em um Banco de Dados; não há ambiguidade.
 
- - Se você estivesse programando um driver em C para o seu IDS Sentinel v5.0, entender se a decodificação é total ou parcial ditaria se você precisa se preocupar com endereços espelhados que poderiam corromper dados.
+    - Se você estivesse programando um driver em C para o seu IDS Sentinel v5.0, entender se a decodificação é total ou parcial ditaria se você precisa se preocupar com endereços espelhados que poderiam corromper dados.
 
 ### Insight para o seu repositório estruturas_de_dados
-A decodificação de endereço é o equivalente em hardware à resolução de colisões em uma Tabela Hash:
+    A decodificação de endereço é o equivalente em hardware à resolução de colisões em uma Tabela Hash:
 
-Na Decodificação Total, você tem uma função hash perfeita: cada chave (endereço) leva a exatamente um balde (dispositivo).
+    - Na Decodificação Total, você tem uma função hash perfeita: cada chave (endereço) leva a exatamente um balde (dispositivo).
 
-Na Decodificação Parcial, você aceita colisões para economizar recursos, tratando diferentes entradas como se fossem o mesmo local de armazenamento.
+    - Na Decodificação Parcial, você aceita colisões para economizar recursos, tratando diferentes entradas como se fossem o mesmo local de armazenamento.
 
-Ao depurar seus projetos em C no Ubuntu 24.04, erros de "Segmentation Fault" geralmente ocorrem quando o software tenta acessar um endereço que a lógica de decodificação da Figura 3.61 não mapeou para nenhum componente físico.
+    - Ao depurar seus projetos em C no Ubuntu 24.04, erros de "Segmentation Fault" geralmente ocorrem quando o software tenta acessar um endereço que a lógica de decodificação da Figura 3.61 não mapeou para nenhum componente físico.
 
 
-Nesse ponto, a decisão de colocar a RAM em 8000H pode parecer muito menos arbitrária. A decodifi-
-cação da RAM pode ser feita observando que somente endereços válidos da forma 10xxxxxxxxxxxxxx estão
-na RAM, portanto, 2 bits de decodificação são suficientes. De modo semelhante, qualquer endereço que
-comece com 11 deve ser um endereço PIO. Agora, a lógica completa de decodificação são duas portas nand
-e um inversor.
+Nesse ponto, a decisão de colocar a RAM em 8000H pode parecer muito menos arbitrária. A decodificação da RAM pode ser feita observando que somente endereços válidos da forma 10xxxxxxxxxxxxxx estão na RAM, portanto, 2 bits de decodificação são suficientes. De modo semelhante, qualquer endereço que comece com 11 deve ser um endereço PIO. Agora, a lógica completa de decodificação são duas portas NAND e um inversor.
 
-A lógica de decodificação de endereço da Figura 3.61(b) é denominada decodificação parcial de ende-
-reço, porque não são usados os endereços completos. Ela tem essa propriedade: uma leitura dos endereços
-0001000000000000, 0001100000000000 ou 0010000000000000 dará o mesmo resultado. Na verdade, todo ende-
-reço na metade inferior do espaço de endereço selecionará a EPROM. Como os endereços extras não são usados,
-não há dano algum, mas se estivermos projetando um computador que poderá ser expandido no futuro (o que é
-improvável no caso de um brinquedo), devemos evitar a decodificação parcial porque ela ocupa muito espaço de
-endereço.
+A lógica de decodificação de endereço da Figura 3.61(b) é denominada decodificação parcial de endereço, porque não são usados os endereços completos. Ela tem essa propriedade: uma leitura dos endereços 0001000000000000, 0001100000000000 ou 0010000000000000 dará o mesmo resultado. Na verdade, todo endereço na metade inferior do espaço de endereço selecionará a EPROM. Como os endereços extras não são usados, não há dano algum, mas se estivermos projetando um computador que poderá ser expandido no futuro (o que é improvável no caso de um brinquedo), devemos evitar a decodificação parcial porque ela ocupa muito espaço de endereço.
 
-Outra técnica comum de decodificação de endereço é usar um decodificador como o mostrado na Figura
-3.13. Conectando as três entradas às três linhas de endereço de ordem alta, obtemos oito saídas correspondentes
-aos endereços nos primeiros 8 K, nos 8 K seguintes e assim por diante. Para um computador com oito RAMs, cada
-uma com 8 K × 8, um chip como esse fornece decodificação completa. Para um computador com oito chips de
-memória de 2 K × 8, um único decodificador também é suficiente, contanto que cada um dos chips de memória
-esteja localizado em porções distintas de 8 KB do espaço de endereço. (Lembre-se de que observamos anterior-
-mente que a posição dos chips de memória e E/S dentro do espaço de endereços tem importância.)
+Outra técnica comum de decodificação de endereço é usar um decodificador como o mostrado na Figura 3.13. Conectando as três entradas às três linhas de endereço de ordem alta, obtemos oito saídas correspondentes aos endereços nos primeiros 8 K, nos 8 K seguintes e assim por diante. Para um computador com oito RAMs, cada
+uma com 8 K × 8, um chip como esse fornece decodificação completa. Para um computador com oito chips de memória de 2 K × 8, um único decodificador também é suficiente, contanto que cada um dos chips de memória esteja localizado em porções distintas de 8 KB do espaço de endereço. (Lembre-se de que observamos anteriormente que a posição dos chips de memória e E/S dentro do espaço de endereços tem importância.)
 
 ## 3.8 Resumo
-Computadores são construídos com base em chips de circuito integrado que contêm minúsculos elementos
-comutadores denominados portas. As portas mais comuns são and, or, nand, nor e not. Circuitos simples podem
-ser montados ao se combinar diretamente portas individuais.
+Computadores são construídos com base em chips de circuito integrado que contêm minúsculos elementos comutadores denominados portas. As portas mais comuns são and, or, nand, nor e not. Circuitos simples podem ser montados ao se combinar diretamente portas individuais.
 
-Circuitos mais complexos são multiplexadores, demultiplexadores, codificadores, decodificadores, deslo-
-cadores e ULAs. Funções booleanas arbitrárias podem ser programadas usando um FPGA. Se forem necessárias
-muitas funções booleanas, os FPGAs costumam ser mais eficientes. As leis da álgebra booleana podem ser usadas
-para transformar circuitos de uma forma para outra. Em muitos casos, é possível produzir circuitos mais econô-
-micos dessa maneira.
+Circuitos mais complexos são multiplexadores, demultiplexadores, codificadores, decodificadores, deslocadores e ULAs. Funções booleanas arbitrárias podem ser programadas usando um FPGA. Se forem necessárias muitas funções booleanas, os FPGAs costumam ser mais eficientes. As leis da álgebra booleana podem ser usadas
+para transformar circuitos de uma forma para outra. Em muitos casos, é possível produzir circuitos mais econômicos dessa maneira.
 
-A aritmética de computadores é efetuada por somadores. Um somador completo de um só bit pode ser cons-
-truído usando dois meios-somadores. Um somador para uma palavra multibit pode ser construído com a conexão
-de vários somadores completos de tal modo que permita o vai-um para seu vizinho da esquerda.
+A aritmética de computadores é efetuada por somadores. Um somador completo de um só bit pode ser construído usando dois meios-somadores. Um somador para uma palavra multibit pode ser construído com a conexão de vários somadores completos de tal modo que permita o vai-um para seu vizinho da esquerda.
 
-Os componentes de memórias (estáticas) são latches e flip-flops, cada um dos quais pode armazenar um bit de
-informação. Esses bits podem ser combinados linearmente formando latches octais e flip-flops, ou por logaritmos
-formando memórias completas que usam palavras. Há memórias de vários tipos: RAM, ROM, PROM, EPROM,
-EEPROM e flash. RAMs estáticas não precisam ser renovadas; elas mantêm seus valores armazenados enquanto
-a energia estiver ligada. RAMs dinâmicas, por outro lado, devem ser renovadas periodicamente para compensar a
-fuga de corrente dos pequenos capacitores do chip.
+Os componentes de memórias (estáticas) são latches e flip-flops, cada um dos quais pode armazenar um bit de informação. Esses bits podem ser combinados linearmente formando latches octais e flip-flops, ou por logaritmos formando memórias completas que usam palavras. Há memórias de vários tipos: RAM, ROM, PROM, EPROM, EEPROM e flash. RAMs estáticas não precisam ser renovadas; elas mantêm seus valores armazenados enquanto a energia estiver ligada. RAMs dinâmicas, por outro lado, devem ser renovadas periodicamente para compensar a fuga de corrente dos pequenos capacitores do chip.
 
-Os componentes de um sistema de computador são conectados por barramentos. Muitos pinos – não todos –
-de um chip de CPU típico comandam diretamente uma linha de barramento. Tais linhas podem ser divididas
-em linhas de endereço, de dados e de controle. Barramentos síncronos são comandados por um clock mestre.
+Os componentes de um sistema de computador são conectados por barramentos. Muitos pinos – não todos – de um chip de CPU típico comandam diretamente uma linha de barramento. Tais linhas podem ser divididas em linhas de endereço, de dados e de controle. Barramentos síncronos são comandados por um clock mestre.
 Barramentos assíncronos usam trocas completas para sincronizar o escravo com o mestre.
 
-O Core i7 é um exemplo de uma CPU moderna. Sistemas modernos que usam esse chip têm um barramento
-de memória, um barramento PCIe e um barramento USB. A interconexão PCIe é o modo mais comum de conectar
-as partes internas de um computador em altas velocidades. A ARM também é uma CPU moderna de alto nível,
-mas é voltada para sistemas embutidos e dispositivos móveis, onde o baixo consumo de energia é importante. O
-Atmel ATmega168 é um exemplo de um chip de baixo preço para aparelhos pequenos, baratos, e muitas outras
-aplicações sensíveis ao preço.
+O Core i7 é um exemplo de uma CPU moderna. Sistemas modernos que usam esse chip têm um barramento de memória, um barramento PCIe e um barramento USB. A interconexão PCIe é o modo mais comum de conectar as partes internas de um computador em altas velocidades. A ARM também é uma CPU moderna de alto nível, mas é voltada para sistemas embutidos e dispositivos móveis, onde o baixo consumo de energia é importante. O Atmel ATmega168 é um exemplo de um chip de baixo preço para aparelhos pequenos, baratos, e muitas outras aplicações sensíveis ao preço.
 
-Comutadores, luzes, impressoras e muitos outros dispositivos de E/S podem fazer interface com computadores
-usando interfaces de E/S paralela. Esses chips podem ser configurados como parte do espaço de E/S ou do espaço de
-memória, conforme a necessidade. Eles podem ser total ou parcialmente decodificados, dependendo da aplicação.
+Comutadores, luzes, impressoras e muitos outros dispositivos de E/S podem fazer interface com computadores usando interfaces de E/S paralela. Esses chips podem ser configurados como parte do espaço de E/S ou do espaço de memória, conforme a necessidade. Eles podem ser total ou parcialmente decodificados, dependendo da aplicação.
 
