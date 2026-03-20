@@ -1,3 +1,5 @@
+![alt text](image-73.png)
+
 # O nível de microarquitetura
 
 O nível acima do lógico digital é o nível de microarquitetura. Sua função é executar o nível ISA (Instruction Set Architecture – arquitetura do conjunto de instruções) acima dele, como ilustrado na Figura 1.2. O projeto do nível de microarquitetura depende da ISA que está sendo implementada, bem como das metas

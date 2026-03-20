@@ -1,3 +1,5 @@
+![alt text](image-74.png)
+
 # O NÍVEL DE LINGUAGEM DE MONTAGEM
 
 Este capítulo trata principalmente de outro nível que, em essência, também está presente em todos os computadores modernos: o nível da linguagem de montagem (ou assembly). 

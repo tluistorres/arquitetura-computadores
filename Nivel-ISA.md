@@ -1,3 +1,5 @@
+![alt text](image-72.png)
+
 # O nível de arquitetura do conjunto de instrução
 
 O Nível ISA: A Interface Fundamental

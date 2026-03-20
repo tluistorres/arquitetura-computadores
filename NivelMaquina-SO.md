@@ -1,3 +1,5 @@
+![alt text](image-75.png)
+
 # Nível OSM (Operating System Machine).
 
 Em resumo, o computador é visto como uma hierarquia de níveis onde cada camada adiciona funcionalidades à inferior. O nível OSM situa-se acima do nível ISA (Instruction Set Architecture) e funciona como uma interface estendida para o programador.
