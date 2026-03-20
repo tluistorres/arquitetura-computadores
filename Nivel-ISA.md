@@ -652,22 +652,22 @@ Esta seção é fundamental para quem trabalha com Estruturas de Dados, pois abo
 
     Representação dos Dados Não Numéricos (Nível ISA)
 
-    Tamanho Típico          Estrutura e Representação no Hardware
-    +----------------+---------------------------------------+
-    |     8 bits     |                ASCII                  |
-    |    (1 Byte)    |   (Valor numérico mapeado para char)  |
-    +----------------+---------------------------------------+
-    |     8 bits     |               BOOLEANO                |
-    |    (1 Byte)    |    (0 = Falso | Outro = Verdadeiro)   |
-    +----------------+---------------------------------------+
-    |     1 bit      |                BITMAP                 |
-    |  (por valor)   | (Vetor de bits em palavra de 32/64b)  |
-    +----------------+---------------------------------------+
-    |  32 ou 64 bits |               PONTEIRO                |
-    |  (Endereço)    |    (Endereço bruto que aponta p/ REM) |
-    +----------------+---------------------------------------+
+        Tamanho Típico          Estrutura e Representação no Hardware
+        +----------------+---------------------------------------+
+        |     8 bits     |                ASCII                  |
+        |    (1 Byte)    |   (Valor numérico mapeado para char)  |
+        +----------------+---------------------------------------+
+        |     8 bits     |               BOOLEANO                |
+        |    (1 Byte)    |    (0 = Falso | Outro = Verdadeiro)   |
+        +----------------+---------------------------------------+
+        |     1 bit      |                BITMAP                 |
+        |  (por valor)   | (Vetor de bits em palavra de 32/64b)  |
+        +----------------+---------------------------------------+
+        |  32 ou 64 bits |               PONTEIRO                |
+        |  (Endereço)    |    (Endereço bruto que aponta p/ REM) |
+        +----------------+---------------------------------------+
 
-## nsight para seus projetos em estruturas_de_dados
+## Insight para seus projetos em estruturas_de_dados
 No seu diretório estruturas_de_dados, entender isso muda sua forma de programar:
 
 Economia de Memória: Se você precisa de 1000 flags booleanas, usar bool flags[1000] consumirá 1000 bytes. Usar um Bitmap consumirá apenas 125 bytes.
@@ -690,9 +690,10 @@ O Core i7 suporta uma vasta gama de formatos para garantir que tanto softwares a
 2. Otimização e Alinhamento
 Embora o Core i7 seja flexível e aceite dados em qualquer endereço, ele "prefere" que os dados de 32 bits comecem em endereços múltiplos de 4. Se você não fizer isso, a UC terá que coordenar dois acessos à memória em vez de um, prejudicando a performance.
 
-    Representação dos Tipos de Dados (Core i7)
+Representação dos Tipos de Dados (Core i7)
 
     Tamanho Suportado        Tipos e Formatos no Hardware (Core i7)
+   
     +----------------+-----------------------------------------+
     |  8, 16, 32, 64 |         INTEIROS (CPL2 / SEM SINAL)     |
     |     (Bits)     |    (Base para aritmética e lógica)      |
@@ -707,7 +708,7 @@ Embora o Core i7 seja flexível e aceite dados em qualquer endereço, ele "prefe
     |                |    (Instruções especiais de Busca/Cópia)|
     +----------------+-----------------------------------------+
 
-    Tabela: Tipos de Dados Numéricos do Core i7
+Tabela: Tipos de Dados Numéricos do Core i7
 
     Tipo de Dado        Disponibilidade por Tamanho (bits)
     +----------------------+---------------------------------------+
@@ -739,20 +740,20 @@ Enquanto outras CPUs apenas movem os bits, a ARM permite especificar o tratament
 
 2. Comparativo de Suporte: ARM OMAP4430
 
-    Tamanho Suportado        Tipos e Formatos no Hardware (ARM v7)
-    +----------------+---------------------------------------+
-    |  8, 16, 32 bits|         INTEIROS (CPL2 / SEM SINAL)   |
-    |                |    (Convertidos p/ 32 bits no Load)   |
-    +----------------+---------------------------------------+
-    |     ----       |         DECIMAL BINÁRIO (BCD)         |
-    |                |    (Não suportado pelo Hardware)      |
-    +----------------+---------------------------------------+
-    |  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)    |
-    |                |    (Suporte via Coprocessador VFP)    |
-    +----------------+---------------------------------------+
-    |     ----       |         STRINGS / CARACTERES          |
-    |                |    (Manipulados apenas via Software)  |
-    +----------------+---------------------------------------+
+        Tamanho Suportado        Tipos e Formatos no Hardware (ARM v7)
+        +----------------+---------------------------------------+
+        |  8, 16, 32 bits|         INTEIROS (CPL2 / SEM SINAL)   |
+        |                |    (Convertidos p/ 32 bits no Load)   |
+        +----------------+---------------------------------------+
+        |     ----       |         DECIMAL BINÁRIO (BCD)         |
+        |                |    (Não suportado pelo Hardware)      |
+        +----------------+---------------------------------------+
+        |  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)    |
+        |                |    (Suporte via Coprocessador VFP)    |
+        +----------------+---------------------------------------+
+        |     ----       |         STRINGS / CARACTERES          |
+        |                |    (Manipulados apenas via Software)  |
+        +----------------+---------------------------------------+
 
 Tabela: Tipos de Dados Numéricos do OMAP4430 
 
@@ -868,20 +869,20 @@ Endereçamento/Operandos: São os "substantivos" (os dados ou onde eles estão).
 2. Formatos de Instrução: Comparativo ASCII
 Abaixo, a representação visual dos quatro formatos comuns mencionados no texto, adaptada para o seu padrão de diagramas:
 
-    Tipo de Instrução         Estrutura Binária (Opcode + Endereços)
-    +-------------------+-----------------------------------------------+
-    | (a) Zero Endereços| [   OPCODE   ]                                |
-    |     (Ex: HALT)    | (Ação implícita ou sobre a pilha)             |
-    +-------------------+-----------------------------------------------+
-    | (b) Um Endereço   | [   OPCODE   ] [      ENDEREÇO 1       ]      |
-    |     (Ex: PUSH X)  | (Comum em máquinas de Acumulador)             |
-    +-------------------+-----------------------------------------------+
-    | (c) Dois Endereços| [   OPCODE   ] [  END. 1  ] [  END. 2  ]      |
-    |     (Ex: MOV A, B)| (Destino e Origem)                            |
-    +-------------------+-----------------------------------------------+
-    | (d) Três Endereços| [   OPCODE   ] [ END1 ] [ END2 ] [ END3 ]     |
-    |     (Ex: ADD A,B,C)| (Destino, Operando 1, Operando 2)            |
-    +-------------------+-----------------------------------------------+
+        Tipo de Instrução         Estrutura Binária (Opcode + Endereços)
+        +-------------------+-----------------------------------------------+
+        | (a) Zero Endereços| [   OPCODE   ]                                |
+        |     (Ex: HALT)    | (Ação implícita ou sobre a pilha)             |
+        +-------------------+-----------------------------------------------+
+        | (b) Um Endereço   | [   OPCODE   ] [      ENDEREÇO 1       ]      |
+        |     (Ex: PUSH X)  | (Comum em máquinas de Acumulador)             |
+        +-------------------+-----------------------------------------------+
+        | (c) Dois Endereços| [   OPCODE   ] [  END. 1  ] [  END. 2  ]      |
+        |     (Ex: MOV A, B)| (Destino e Origem)                            |
+        +-------------------+-----------------------------------------------+
+        | (d) Três Endereços| [   OPCODE   ] [ END1 ] [ END2 ] [ END3 ]     |
+        |     (Ex: ADD A,B,C)| (Destino, Operando 1, Operando 2)            |
+        +-------------------+-----------------------------------------------+
 
 3. Relação com o Comprimento da Palavra
 Instruções de Tamanho Fixo: Típicas de arquiteturas RISC (ARM, AVR). Todas têm o mesmo tamanho (ex: 32 bits). Isso torna o Decodificador extremamente rápido, mas pode desperdiçar memória.
@@ -938,32 +939,32 @@ Aqui o texto toca em um ponto que afeta diretamente seus projetos em C: Endereç
 
    Solução Moderna: Quase todas as CPUs modernas (Core i7, ARM) usam endereçamento de byte para facilitar a vida do programador, mas o hardware lê "linhas de cache" inteiras (64 bytes) de uma vez só para compensar a lentidão da RAM.
 
-    Representação dos Critérios de Projeto
+Representação dos Critérios de Projeto
 
-    Fatores de Escolha          Impacto no Sistema Final
-    +---------------------------+--------------------------------------------+
-    |   Comprimento da Inst.    | Curto = +Velocidade / Longo = +Poder       |
-    +---------------------------+--------------------------------------------+
-    |   Número de Registradores | Muitos = +Rápido / Poucos = +RAM           |
-    +---------------------------+--------------------------------------------+
-    |   Tamanho do Opcode       | Pequeno = -Instruções / Grande = +Expansão |
-    +---------------------------+--------------------------------------------+
-    |   Resolução de Memória    | Byte = Fácil p/ Strings / Palavra = +RAM   |
-    +---------------------------+--------------------------------------------+
+        Fatores de Escolha          Impacto no Sistema Final
+        +---------------------------+--------------------------------------------+
+        |   Comprimento da Inst.    | Curto = +Velocidade / Longo = +Poder       |
+        +---------------------------+--------------------------------------------+
+        |   Número de Registradores | Muitos = +Rápido / Poucos = +RAM           |
+        +---------------------------+--------------------------------------------+
+        |   Tamanho do Opcode       | Pequeno = -Instruções / Grande = +Expansão |
+        +---------------------------+--------------------------------------------+
+        |   Resolução de Memória    | Byte = Fácil p/ Strings / Palavra = +RAM   |
+        +---------------------------+--------------------------------------------+
 
-    Tabela: Trade-offs de Design 
+Tabela: Trade-offs de Design 
 
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-    | Decisão de Projeto            | Vantagem                                           | Desvantagem                                             |
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-    | Instruções Curtas             | Menor uso de largura de banda de memória.          | Difícil de decodificar e codificar operações complexas. |
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-    | Muitos Registradores          | Menos acessos à memória lenta (RAM).               | Aumenta o custo e o consumo de energia do chip.         |
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-    | Resolução de Byte             | Excelente para manipular cadeias (Strings).        | Exige campos de endereço mais longos nas instruções.    |
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-    | Opcodes Livres                | Facilita a evolução da ISA (Retrocompatibilidade). | Desperdiça bits que poderiam encurtar a instrução.      |
-    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        | Decisão de Projeto            | Vantagem                                           | Desvantagem                                             |
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        | Instruções Curtas             | Menor uso de largura de banda de memória.          | Difícil de decodificar e codificar operações complexas. |
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        | Muitos Registradores          | Menos acessos à memória lenta (RAM).               | Aumenta o custo e o consumo de energia do chip.         |
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        | Resolução de Byte             | Excelente para manipular cadeias (Strings).        | Exige campos de endereço mais longos nas instruções.    |
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+        | Opcodes Livres                | Facilita a evolução da ISA (Retrocompatibilidade). | Desperdiça bits que poderiam encurtar a instrução.      |
+        +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
 
 ## 5.3.2 Expansão de opcodes
 A expansão de opcodes é uma técnica engenhosa de design de hardware para maximizar a utilidade de uma instrução de tamanho fixo. O segredo é usar um "valor de escape" no opcode para indicar que os bits que normalmente seriam endereços devem ser interpretados como parte do opcode.
@@ -981,7 +982,7 @@ O hardware usa o último valor possível do opcode (no exemplo, o 15 ou 1111) co
 
  - Se forem 1111 (15), o Decodificador avança para os próximos 4 bits para descobrir qual é a instrução.
 
-    Representação da Expansão de Opcode (Exemplo Figura 5.12)
+Representação da Expansão de Opcode (Exemplo Figura 5.12)
 
     Formato da Instrução (16 bits)          | Qtd. de Opcodes Disponíveis
     +---------------------------------------+-----------------------------+
@@ -994,7 +995,7 @@ O hardware usa o último valor possível do opcode (no exemplo, o 15 ou 1111) co
     | [ 1111 ] [ 1111 ] [ 1111 ] [ OPCODE ] | 16 (Instruções sem End.)    |
     +---------------------------------------+-----------------------------+
 
-    Tabela: Resumo da Expansão
+Tabela: Resumo da Expansão
 
     +-------------------------------+-----------------------------------+-------------------------------+--------------------+
     | Tipo de Instrução             | Estrutura do Opcode (Bits)        | Endereços Restantes           | Total de Instruções|
@@ -1019,7 +1020,7 @@ Esta seção descreve como a lógica de hardware "negocia" espaço dentro de uma
 
 Aqui está a representação visual da Figura 5.12 e os detalhes técnicos para o seu repositório:
 
-    Hierarquia de Expansão de Opcode (16 bits)
+Hierarquia de Expansão de Opcode (16 bits)
 
     Bits:  [15....12]  [11.....8]  [7......4]  [3......0]
             +----------+----------+----------+----------+
@@ -1032,7 +1033,7 @@ Aqui está a representação visual da Figura 5.12 e os detalhes técnicos para 
     (0 End)|   1111   |   1111   |   1111   | 0000-1111| -> 16 Inst.
             +----------+----------+----------+----------+
 
-    Tabela: Estrutura da Expansão
+Tabela: Estrutura da Expansão
 
     +-------------------------------+---------------------------------+---------------------------------+------------------------------------------------------+
     | Tipo de Instrução             | Aridade                         | Prefixo de Escape (Binário)     | Faixa do Opcode             | Endereços (4 bits cada)|
@@ -1078,7 +1079,7 @@ O Core i7 segue a regra de instrução de dois operandos, mas com uma limitaçã
 
    Regra de Ouro: Se um operando estiver na memória, o outro obrigatoriamente deve estar em um registrador. O hardware não consegue somar "Memória + Memória" em uma única instrução.
 
-    Representação do Formato de Instrução (Core i7)
+Representação do Formato de Instrução (Core i7)
 
     Campos da Instrução            | Tamanho (Bytes) |  Opcional? 
     +-------------------------------------+------------------+------------+
@@ -1095,7 +1096,7 @@ O Core i7 segue a regra de instrução de dois operandos, mas com uma limitaçã
     | IMEDIATO (Constante)                |     0, 1, 2 ou 4 |     SIM    |
     +-------------------------------------+------------------+------------+
 
-    Tabela: ModR/M e SIB
+Tabela: ModR/M e SIB
 
     Byte ModR/M (8 bits)              Byte SIB (Opcional - 8 bits)
     +-------+-----------+-----------+     +--------+-----------+-----------+
@@ -1155,7 +1156,8 @@ Representação dos Formatos ARM (32 bits)
                             Imediato?    Update
                                         Flags?
 
-    Tabela: Campos da Instrução ARM
+Tabela: Campos da Instrução ARM
+
     +---------------+--------+---------------------------------------------------------------------------+
     | Campo         | Bits   | Função                                                                    |
     +---------------+--------+---------------------------------------------------------------------------+
@@ -1196,7 +1198,7 @@ Detalhamento dos Formatos:
  - Formato 4 (Load/Store com Deslocamento): Usa um endereço base implícito (X, Y ou Z) e soma um pequeno valor constante (6 bits).
  - Formato 5 e 6 (Saltos/Jumps): O formato 5 é relativo (pula para perto do PC atual), enquanto o 6 é absoluto (pode pular para qualquer lugar na Flash de 22 bits).
 
-    Representação dos Formatos AVR
+Representação dos Formatos AVR
 
     Tamanho | Formato | Estrutura Típica (Bits)          | Exemplo
     +--------+---------+----------------------------------+------------------+
@@ -1210,7 +1212,8 @@ Detalhamento dos Formatos:
     +--------+---------+----------------------------------+------------------+
     *Legenda: Rd = Registro Destino, Rr = Registro Origem, K = Constante/Imediato
 
-    Tabela: Comparativo de Formatos do ATmega168
+Tabela: Comparativo de Formatos do ATmega168
+
     +---------+---------+---------------------------------------+--------------------------------------------+
     | Formato | Tamanho | Foco Principal                        | Limitação                                  |
     +---------+---------+---------------------------------------+--------------------------------------------+
@@ -1287,7 +1290,8 @@ Diferente de buscar um valor em uma variável (que exige um endereço), o imedia
 2. Representação Visual (Figura 5.16)
 Aqui está o diagrama ASCII da instrução MOV R1, 4 conforme o seu padrão de blocos:
 
-    Formato de Instrução com Endereçamento Imediato
+Formato de Instrução com Endereçamento Imediato
+
     +----------------+----------------+--------------------------+
     |    OPCODE      |  REGISTRADOR   |    VALOR IMEDIATO        |
     |    (MOV)       |      (R1)      |         (4)              |
@@ -1296,7 +1300,7 @@ Aqui está o diagrama ASCII da instrução MOV R1, 4 conforme o seu padrão de b
         v                v                    v
     "Mova para..."   "...este destino"    "...este valor fixo"
 
-    Tabela: Prós e Contras do Endereçamento Imediato 
+Tabela: Prós e Contras do Endereçamento Imediato 
 
     +-----------------+--------------------------------------------------------------------+
     | Característica  | Descrição                                                          |
@@ -1339,7 +1343,8 @@ Essas duas formas de endereçamento são os pilares da movimentação de dados. 
             | Adr: 1024 [ Dado ] |                |   R1: [ Dado ]     |
             +--------------------+                +--------------------+
 
-    Tabela: Prós e Contras
+Tabela: Prós e Contras
+
     +-----------------+-----------------------------------+--------------------------------------+
     | Característica  | Endereçamento Direto              | Endereçamento de Registrador         |
     +-----------------+-----------------------------------+--------------------------------------+
@@ -1430,7 +1435,8 @@ Representação Visual: Soma de Vetor (Figura 5.17)
     |  BLT LOOP                      |      | [ A+4 ] -> Valor 2       |
     +--------------------------------+      +--------------------------+
 
-    Tabela: Comparativo de Indireção
+Tabela: Comparativo de Indireção
+
     +--------------------+--------------------------------+------------------------------------L---+
     | Atributo           | Endereçamento Direto           | Indireto de Registrador (Ponteiro)     |
     +--------------------+--------------------------------+----------------------------------------+
@@ -1590,6 +1596,7 @@ Quando um operador chega:
 - Se o operador tiver precedência menor ou igual, o operador do topo sai da pilha (vai para o Rio) e o novo operador entra na pilha.
 
 Figura 5.21   Tabela de decisão usada pelo algoritmo de notação infixa para notação polonesa invertida.
+
     +-----+-----+-----+-----+-----+-----+-----+-----+
     |     | +   | -   | x   | /   | (   | )   | ⊥   |
     +-----+-----+-----+-----+-----+-----+-----+-----+
@@ -1606,7 +1613,8 @@ Figura 5.21   Tabela de decisão usada pelo algoritmo de notação infixa pa
     | (   | 5   | 5   | 5   | 5   | 1   | 1   | 3   |
     +-----+-----+-----+-----+-----+-----+-----+-----+
 
-    Figura 5.22   Alguns exemplos de expressões infixas e seus equivalentes em notação polonesa invertida.
+Figura 5.22   Alguns exemplos de expressões infixas e seus equivalentes em notação polonesa invertida.
+
     +---------------------------------+-------------------------------+
     | Notação infixa                  | Notação polonesa invertida    |
     +---------------------------------+-------------------------------+
@@ -1735,7 +1743,8 @@ O texto também descreve um modelo altamente flexível (semelhante ao PDP-11 e V
 
     - Vantagem: Extrema facilidade para o compilador, pois as operações podem ocorrer diretamente entre memórias ou registradores de forma simétrica.
 
-    Resumo Comparativo
+Resumo Comparativo
+
     +-----------------+-----------------------------+-----------------------------+
     | CARACTERÍSTICA  |   MÁQUINA DE 3 ENDEREÇOS    |   MÁQUINA DE 2 ENDEREÇOS    |
     +-----------------+-----------------------------+-----------------------------+
