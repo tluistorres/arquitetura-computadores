@@ -28,76 +28,76 @@ O nível ISA define o que a Unidade de Controle (UC) é capaz de entender. Sem u
 
 Figura 5.1: Interface entre Compiladores e Hardware
 
-+---------------------------------------------------------------------------------------+
-| NÍVEL ISA: A INTERFACE ENTRE SOFTWARE E HARDWARE                                      |
-+--------------------------+----------------------------+-------------------------------+
-| CAMADA                   | COMPONENTE / PROCESSO      | DESTINO FINAL                 |
-+--------------------------+----------------------------+-------------------------------+
-|                          | [ Programa em FORTRAN ] ---|--> [ Compilador FORTRAN ]     |
-| SOFTWARE (Alto Nível)    |                            |               |               |
-|                          | [ Programa em C ] ---------|--> [ Compilador C ]           |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| INTERFACE DE ABSTRAÇÃO   |      NÍVEL ISA (O Código Binário Comum / Executável)       |
-|                          |                            |               |               |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| HARDWARE (Execução)      |      MICROARQUITETURA (Microprograma ou Hardware)          |
-|                          |                            |               |               |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| HARDWARE (Físico)        |      CIRCUITOS DIGITAIS (Portas Lógicas e Memória)         |
-|                          |                            |               |               |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    | NÍVEL ISA: A INTERFACE ENTRE SOFTWARE E HARDWARE                                      |
+    +--------------------------+----------------------------+-------------------------------+
+    | CAMADA                   | COMPONENTE / PROCESSO      | DESTINO FINAL                 |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          | [ Programa em FORTRAN ] ---|--> [ Compilador FORTRAN ]     |
+    | SOFTWARE (Alto Nível)    |                            |               |               |
+    |                          | [ Programa em C ] ---------|--> [ Compilador C ]           |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | INTERFACE DE ABSTRAÇÃO   |      NÍVEL ISA (O Código Binário Comum / Executável)       |
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | HARDWARE (Execução)      |      MICROARQUITETURA (Microprograma ou Hardware)          |
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | HARDWARE (Físico)        |      CIRCUITOS DIGITAIS (Portas Lógicas e Memória)         |
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+-------------------------------+
 
-O Dilema da ISA: Inovação vs. Compatibilidade
+    O Dilema da ISA: Inovação vs. Compatibilidade
 
- - A "Ditadura" da Compatibilidade: Os clientes não compram hardware que os obrigue a reescrever software. Isso mantém ISAs como o x86 (da Intel/AMD) vivas por décadas, apesar de suas falhas de projeto.
+    - A "Ditadura" da Compatibilidade: Os clientes não compram hardware que os obrigue a reescrever software. Isso mantém ISAs como o x86 (da Intel/AMD) vivas por décadas, apesar de suas falhas de projeto.
 
- - Liberdade na Microarquitetura: Enquanto a ISA (a interface) permanecer igual, os engenheiros podem mudar tudo "por baixo do capô". Você pode sair de um processador simples para um Superescalar ou Paralelo, e o programa do usuário nem perceberá — ele apenas rodará mais rápido.
+    - Liberdade na Microarquitetura: Enquanto a ISA (a interface) permanecer igual, os engenheiros podem mudar tudo "por baixo do capô". Você pode sair de um processador simples para um Superescalar ou Paralelo, e o programa do usuário nem perceberá — ele apenas rodará mais rápido.
 
- - O que define uma "Boa" ISA:
+    - O que define uma "Boa" ISA:
 
-   1. Eficiência Tecnológica: Deve ser implementável hoje e escalável para o futuro sem desperdiçar transistores (portas lógicas).
+    1. Eficiência Tecnológica: Deve ser implementável hoje e escalável para o futuro sem desperdiçar transistores (portas lógicas).
 
-   2. Regularidade para Compiladores: Deve ser fácil para o compilador traduzir código de alto nível para ela. Se houver muitas exceções ou regras estranhas, o desempenho cai.
+    2. Regularidade para Compiladores: Deve ser fácil para o compilador traduzir código de alto nível para ela. Se houver muitas exceções ou regras estranhas, o desempenho cai.
 
 Figura 5.1 Revisitada: A Realidade do Mercado
 Conforme sua solicitação, aqui está a representação da evolução tecnológica sob a restrição da compatibilidade:
 
-+---------------------------------------------------------------------------------------+
-|  A REALIDADE DA COMPATIBILIDADE (ISA COMO CONTRATO PERMANENTE)                        |
-+--------------------------+----------------------------+-------------------------------+
-| CAMADA                   | EVOLUÇÃO DO SOFTWARE       | COMPATIBILIDADE               |
-+--------------------------+----------------------------+-------------------------------+
-|                          | [ Aplicações Antigas ] ----|--> CONTINUAM FUNCIONANDO      |
-| SOFTWARE (O Investimento)|                            |               |               |
-|                          | [ Novas Aplicações ] ------|--> EXIGEM NOVAS INSTRUÇÕES    |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| INTERFACE (O CONTRATO)   |   NÍVEL ISA (Imutável ou com Acréscimos "Add-on")          |
-|                          |                            |               |               |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| MICROARQUITETURA         |  [ CPU ANTIGA ]  -->  [ CPU MODERNA ]  -->  [ CPU FUTURA ] |
-| (Liberdade Total)        |  (Simples)            (Superescalar)        (Quântica?)    |
-|                          |                            |               |               |
-+--------------------------+----------------------------+---------------+---------------+
-|                          |                            |               |               |
-| HARDWARE (Físico)        |  [ Transistores ]  -->  [ Nanotecnologia ] --> [ Fotônica ]|
-|                          |                            |               |               |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    |  A REALIDADE DA COMPATIBILIDADE (ISA COMO CONTRATO PERMANENTE)                        |
+    +--------------------------+----------------------------+-------------------------------+
+    | CAMADA                   | EVOLUÇÃO DO SOFTWARE       | COMPATIBILIDADE               |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          | [ Aplicações Antigas ] ----|--> CONTINUAM FUNCIONANDO      |
+    | SOFTWARE (O Investimento)|                            |               |               |
+    |                          | [ Novas Aplicações ] ------|--> EXIGEM NOVAS INSTRUÇÕES    |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | INTERFACE (O CONTRATO)   |   NÍVEL ISA (Imutável ou com Acréscimos "Add-on")          |
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | MICROARQUITETURA         |  [ CPU ANTIGA ]  -->  [ CPU MODERNA ]  -->  [ CPU FUTURA ] |
+    | (Liberdade Total)        |  (Simples)            (Superescalar)        (Quântica?)    |
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+---------------+---------------+
+    |                          |                            |               |               |
+    | HARDWARE (Físico)        |  [ Transistores ]  -->  [ Nanotecnologia ] --> [ Fotônica ]|
+    |                          |                            |               |               |
+    +--------------------------+----------------------------+-------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
-Em estruturas_de_dados, essa "triste realidade" se traduz em Legado.
+    Em estruturas_de_dados, essa "triste realidade" se traduz em Legado.
 
- - Imagine que você criou uma biblioteca de busca em 2024 que usa um Array fixo.
+    - Imagine que você criou uma biblioteca de busca em 2024 que usa um Array fixo.
 
- - Em 2026, você quer mudar para uma Árvore AVL para ser mais rápido.
+    - Em 2026, você quer mudar para uma Árvore AVL para ser mais rápido.
 
- - Se você mudar a "Interface" (o nome da função ou os parâmetros), você quebra todos os programas que usam sua biblioteca.
+    - Se você mudar a "Interface" (o nome da função ou os parâmetros), você quebra todos os programas que usam sua biblioteca.
 
- - A ISA nos ensina que: mude a estrutura interna (o hardware/algoritmo), mas mantenha a interface (ISA) intacta para o usuário.
+    - A ISA nos ensina que: mude a estrutura interna (o hardware/algoritmo), mas mantenha a interface (ISA) intacta para o usuário.
 
 ## 5.1 Visão geral do nível ISA
 
@@ -110,87 +110,87 @@ Este trecho aprofunda o conceito do nível ISA como uma "especificação técnic
 
 A ISA define o que é visível para quem escreve compiladores. Se uma característica do hardware (como o paralelismo) puder ser aproveitada pelo software para ganhar desempenho, ela acaba tornando-se parte "extraoficial" da ISA.
 
-Os Pilares da Especificação ISA
+    Os Pilares da Especificação ISA
 
- - Modelo de Memória: Como a memória é endereçada e organizada.
+    - Modelo de Memória: Como a memória é endereçada e organizada.
 
- - Registradores: Quantidade, tamanho e função de cada um.
+    - Registradores: Quantidade, tamanho e função de cada um.
 
- - Tipos de Dados e Instruções: O que a máquina consegue processar nativamente.
+    - Tipos de Dados e Instruções: O que a máquina consegue processar nativamente.
 
- - Modos de Operação: 1.  Modo Núcleo (Kernel): Poder total; executa o SO e instruções sensíveis.
-   
- - Modo Usuário: Restrito; executa aplicações e protege o hardware de acessos indevidos.
+    - Modos de Operação: 1.  Modo Núcleo (Kernel): Poder total; executa o SO e instruções sensíveis.
+    
+    - Modo Usuário: Restrito; executa aplicações e protege o hardware de acessos indevidos.
 
 Figura: O Documento de Definição ISA (O "Contrato")
 Conforme o formato solicitado, aqui está a representação de como uma definição formal (como a ARM v7) organiza a construção de chips e softwares:
 
-+---------------------------------------------------------------------------------------+
-|  DOCUMENTO DE DEFINIÇÃO ISA (EX: ARM v7, Intel x86)                                   |
-+--------------------------+----------------------------+-------------------------------+
-| SEÇÃO                    | TIPO DE REGRA              | EXEMPLO / IMPACTO             |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            | "Executar opcode inválido     |
-| NORMATIVA (Obrigatória)  | DEVE / NÃO PODE            | DEVE causar uma exceção."     |
-|                          |                            |                               |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            | "O comportamento é definido   |
-| DEFINIDO PELA            | LIBERDADE DE PROJETO       | pela implementação" (Dá margem |
-| IMPLEMENTAÇÃO            |                            | para inovação do fabricante). |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            | Sugestões de otimização para  |
-| INFORMATIVA (Auxiliar)   | DEVERIA / SUGESTÃO         | melhor desempenho.            |
-|                          |                            |                               |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            |                               |
-| MODOS DE OPERAÇÃO        | NÚCLEO vs. USUÁRIO         | Proteção do Hardware contra   |
-|                          |                            | software mal-intencionado.    |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    |  DOCUMENTO DE DEFINIÇÃO ISA (EX: ARM v7, Intel x86)                                   |
+    +--------------------------+----------------------------+-------------------------------+
+    | SEÇÃO                    | TIPO DE REGRA              | EXEMPLO / IMPACTO             |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          |                            | "Executar opcode inválido     |
+    | NORMATIVA (Obrigatória)  | DEVE / NÃO PODE            | DEVE causar uma exceção."     |
+    |                          |                            |                               |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          |                            | "O comportamento é definido   |
+    | DEFINIDO PELA            | LIBERDADE DE PROJETO       | pela implementação" (Dá margem |
+    | IMPLEMENTAÇÃO            |                            | para inovação do fabricante). |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          |                            | Sugestões de otimização para  |
+    | INFORMATIVA (Auxiliar)   | DEVERIA / SUGESTÃO         | melhor desempenho.            |
+    |                          |                            |                               |
+    +--------------------------+----------------------------+-------------------------------+
+    |                          |                            |                               |
+    | MODOS DE OPERAÇÃO        | NÚCLEO vs. USUÁRIO         | Proteção do Hardware contra   |
+    |                          |                            | software mal-intencionado.    |
+    +--------------------------+----------------------------+-------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
-O conceito de "Definido pela Implementação" mencionado no texto é exatamente o que acontece em C/C++ com o tamanho de um int.
+    O conceito de "Definido pela Implementação" mencionado no texto é exatamente o que acontece em C/C++ com o tamanho de um int.
 
- - A linguagem (ISA do C) diz que um int deve existir, mas o tamanho exato pode mudar dependendo do compilador e da máquina.
+    - A linguagem (ISA do C) diz que um int deve existir, mas o tamanho exato pode mudar dependendo do compilador e da máquina.
 
- - No seu diretório estruturas_de_dados, isso é um perigo: se você assume que um int tem 4 bytes e move o código para uma máquina onde ele tem 2, sua estrutura (como um buffer ou struct) vai corromper. A ISA bem definida (como a ARM v7) tenta evitar esse tipo de ambiguidade para que o binário seja 100% previsível.
+    - No seu diretório estruturas_de_dados, isso é um perigo: se você assume que um int tem 4 bytes e move o código para uma máquina onde ele tem 2, sua estrutura (como um buffer ou struct) vai corromper. A ISA bem definida (como a ARM v7) tenta evitar esse tipo de ambiguidade para que o binário seja 100% previsível.
 
 ## 5.1.2 Modelos de Memória e Alinhamento
-A memória é uma sequência de células (geralmente de 8 bits/1 byte). Para processar volumes maiores, a CPU agrupa esses bytes em Palavras (Words).
+    A memória é uma sequência de células (geralmente de 8 bits/1 byte). Para processar volumes maiores, a CPU agrupa esses bytes em Palavras (Words).
 
- - Alinhamento: Significa que o endereço de início de um dado deve ser um múltiplo do seu tamanho.
- 
-   - Dado de 4 bytes $\rightarrow$ Endereço múltiplo de 4 ($0, 4, 8, 12 \dots$).
-   - Dado de 8 bytes $\rightarrow$ Endereço múltiplo de 8 ($0, 8, 16, 24 \dots$).
-   
- - O Porquê: Interfaces modernas (como DDR3/DDR4) buscam blocos fixos da memória. Se um dado de 8 bytes está desalinhado (ex: começa no endereço 12), a CPU precisaria fazer duas leituras (uma para os primeiros bytes e outra para o restante) e depois "colar" os pedaços, o que gera desperdício de desempenho.
+    - Alinhamento: Significa que o endereço de início de um dado deve ser um múltiplo do seu tamanho.
+    
+    - Dado de 4 bytes $\rightarrow$ Endereço múltiplo de 4 ($0, 4, 8, 12 \dots$).
+    - Dado de 8 bytes $\rightarrow$ Endereço múltiplo de 8 ($0, 8, 16, 24 \dots$).
+    
+    - O Porquê: Interfaces modernas (como DDR3/DDR4) buscam blocos fixos da memória. Se um dado de 8 bytes está desalinhado (ex: começa no endereço 12), a CPU precisaria fazer duas leituras (uma para os primeiros bytes e outra para o restante) e depois "colar" os pedaços, o que gera desperdício de desempenho.
 
 Figura 5.2: Alinhamento de Memória (Diagrama ASCII)
 Seguindo o formato solicitado, aqui está a visualização da diferença entre um acesso eficiente e um ineficiente:
 
-+---------------------------------------------------------------------------------------+
-|  ALINHAMENTO DE PALAVRAS NA MEMÓRIA (Exemplo: Palavra de 8 Bytes)                     |
-+--------------------------+----------------------------+-------------------------------+
-| ESTADO                   | ENDEREÇAMENTO (BYTES)      | RESULTADO NO HARDWARE         |
-+--------------------------+----------------------------+-------------------------------+
-| (a) ALINHADA             | [08][09][10][11][12][13][14][15] | EFICIENTE: Lido em um   |
-|     (Início no end. 8)   | <------- 1 PALAVRA -------> | único ciclo de memória.      |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            |                               |
-| (b) NÃO ALINHADA         |       [12][13][14][15][16][17][18][19] | INEFICIENTE: Requer     |
-|     (Início no end. 12)  |       <------- 1 PALAVRA -------> | DUAS leituras físicas. |
-+--------------------------+----------------------------+-------------------------------+
-|                          |                            |                               |
-| REGRA DE OURO            | Endereço % Tamanho == 0    | Garante performance máxima.   |
-+--------------------------+----------------------------+-------------------------------+
+    +----------------------------------------------------------------------------------------+
+    |  ALINHAMENTO DE PALAVRAS NA MEMÓRIA (Exemplo: Palavra de 8 Bytes)                      |
+    +--------------------------+----------------------------+--------------------------------+
+    | ESTADO                   | ENDEREÇAMENTO (BYTES)      | RESULTADO NO HARDWARE          |
+    +--------------------------+----------------------------+--------------------------------+
+    | (a) ALINHADA             | [08][09][10][11][12][13][14][15] | EFICIENTE: Lido em um    |
+    |     (Início no end. 8)   | <------- 1 PALAVRA -------> | único ciclo de memória.       |
+    +--------------------------+----------------------------+--------------------------------+
+    |                          |                            |                                |
+    | (b) NÃO ALINHADA         |       [12][13][14][15][16][17][18][19] | INEFICIENTE: Requer|
+    |     (Início no end. 12)  |       <------- 1 PALAVRA -------> | DUAS leituras físicas.  |
+    +--------------------------+----------------------------+--------------------------------+
+    |                          |                            |                                |
+    | REGRA DE OURO            | Endereço % Tamanho == 0    | Garante performance máxima.    |
+    +--------------------------+----------------------------+--------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No seu diretório estruturas_de_dados, o alinhamento é a razão pela qual uma struct em C pode ocupar mais espaço do que a soma dos seus membros.
 
-struct Exemplo {
-    char a;     // 1 byte
-    // O compilador insere 3 bytes de "padding" aqui para alinhar o próximo int
-    int b;      // 4 bytes
-}; // Total: 8 bytes (em vez de 5)
+    struct Exemplo {
+        char a;     // 1 byte
+        // O compilador insere 3 bytes de "padding" aqui para alinhar o próximo int
+        int b;      // 4 bytes
+    }; // Total: 8 bytes (em vez de 5)
 
 Se você não entender o alinhamento, suas estruturas de dados podem desperdiçar memória ou, pior, causar erros de performance graves ao serem movidas.
 
@@ -214,25 +214,25 @@ O Core i7 ainda suporta acessos desalinhados para manter vivos programas da era 
 3. Semântica e Ordenação de Memória
 A microarquitetura moderna reordena instruções para ganhar tempo, o que pode causar erros lógicos onde um LOAD lê um valor antigo antes que um STORE termine.
 
-+---------------------+---------------------------------------+------------------------+
-| ESTRATÉGIA          | FUNCIONAMENTO                         | IMPACTO                |
-+---------------------+---------------------------------------+------------------------+
-| Serialização        | Executa as instruções estritamente na | LENTO, mas simples     |
-|                     | ordem em que aparecem no programa.    | para o programador.    |
-+---------------------+---------------------------------------+------------------------+
-| Instrução SYNC      | O hardware executa fora de ordem; o   | RÁPIDO, mas transfere  |
-| (Fences/Barreiras)  | programador deve "frear" manualmente.  | a carga ao compilador.|
-+---------------------+---------------------------------------+------------------------+
-| Bloqueio            | O hardware detecta conflitos (RAW/WAR)| EQUILIBRADO, comum     |
-| Automático          | e para a execução sozinho se necessário.| em ISAs modernas.    |
-+---------------------+---------------------------------------+------------------------+
+    +---------------------+---------------------------------------+------------------------+
+    | ESTRATÉGIA          | FUNCIONAMENTO                         | IMPACTO                |
+    +---------------------+---------------------------------------+------------------------+
+    | Serialização        | Executa as instruções estritamente na | LENTO, mas simples     |
+    |                     | ordem em que aparecem no programa.    | para o programador.    |
+    +---------------------+---------------------------------------+------------------------+
+    | Instrução SYNC      | O hardware executa fora de ordem; o   | RÁPIDO, mas transfere  |
+    | (Fences/Barreiras)  | programador deve "frear" manualmente.  | a carga ao compilador.|
+    +---------------------+---------------------------------------+------------------------+
+    | Bloqueio            | O hardware detecta conflitos (RAW/WAR)| EQUILIBRADO, comum     |
+    | Automático          | e para a execução sozinho se necessário.| em ISAs modernas.    |
+    +---------------------+---------------------------------------+------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
-O conceito de Bloqueio Automático lida com dependências que você certamente encontrará ao estudar algoritmos paralelos:
+    O conceito de Bloqueio Automático lida com dependências que você certamente encontrará ao estudar algoritmos paralelos:
 
- - RAW (Read After Write): Tentar ler um dado antes que ele tenha sido gravado.
+    - RAW (Read After Write): Tentar ler um dado antes que ele tenha sido gravado.
 
- - WAR (Write After Read): Tentar gravar um dado antes que a leitura anterior tenha terminado.
+    - WAR (Write After Read): Tentar gravar um dado antes que a leitura anterior tenha terminado.
 
 No seu diretório estruturas_de_dados, entender essas dependências é vital para criar estruturas thread-safe. O hardware tenta resolver isso sozinho, mas em sistemas de alto desempenho, você acaba precisando usar a estratégia da Instrução SYNC explicitamente no seu código.
 
@@ -262,47 +262,47 @@ Os registradores no nível ISA são o que o programador (ou compilador) pode man
 
 Bits de Condição (Flags) do Registrador PSW
 
-+------+----------+-----------------------------------------------------------+
-| FLAG | NOME     | DESCRIÇÃO                                                 |
-+------+----------+-----------------------------------------------------------+
-|  N   | Negativo | O resultado da última operação foi menor que zero.        |
-+------+----------+-----------------------------------------------------------+
-|  Z   | Zero     | O resultado foi exatamente zero (essencial p/ IF/Compara).|
-+------+----------+-----------------------------------------------------------+
-|  V   | Overflow | Houve estouro de capacidade em aritmética com sinal.      |
-+------+----------+-----------------------------------------------------------+
-|  C   | Carry    | Ocorreu um "Vai-um" no bit mais significativo (MSB).      |
-+------+----------+-----------------------------------------------------------+
-|  P   | Paridade | O resultado possui um número par de bits de valor 1.      |
-+------+----------+-----------------------------------------------------------+
+    +------+----------+-----------------------------------------------------------+
+    | FLAG | NOME     | DESCRIÇÃO                                                 |
+    +------+----------+-----------------------------------------------------------+
+    |  N   | Negativo | O resultado da última operação foi menor que zero.        |
+    +------+----------+-----------------------------------------------------------+
+    |  Z   | Zero     | O resultado foi exatamente zero (essencial p/ IF/Compara).|
+    +------+----------+-----------------------------------------------------------+
+    |  V   | Overflow | Houve estouro de capacidade em aritmética com sinal.      |
+    +------+----------+-----------------------------------------------------------+
+    |  C   | Carry    | Ocorreu um "Vai-um" no bit mais significativo (MSB).      |
+    +------+----------+-----------------------------------------------------------+
+    |  P   | Paridade | O resultado possui um número par de bits de valor 1.      |
+    +------+----------+-----------------------------------------------------------+
 
 Estrutura dos Registradores ISA
 Seguindo o formato de diagrama solicitado para o seu estudo:
 
-+---------------------------------------------------------------------------------------+
-| MODELO DE REGISTRADORES NO NÍVEL ISA                                                  |
-+--------------------------+----------------------------+-------------------------------+
-| CATEGORIA                | EXEMPLOS / NOMES           | VISIBILIDADE / ACESSO         |
-+--------------------------+----------------------------+-------------------------------+
-| USO GERAL                | R0 até R31 (RISC)          | L/E Total (Usuário e Núcleo)  |
-| (Registradores de Dados) | EAX, EBX, ECX (x86)        | Alvo principal do Compilador. |
-+--------------------------+----------------------------+-------------------------------+
-| USO ESPECIAL             | CI (PC), Ponteiro de Pilha | Essencial p/ fluxo do código. |
-| (Controle de Fluxo)      | (Stack Pointer)            | L/E (Muitas vezes implícita). |
-+--------------------------+----------------------------+-------------------------------+
-| ESTADO DO PROGRAMA       | PSW / FLAGS (Z, N, V, C)   | L (Usuário) / E (Núcleo)      |
-| (Status Word)            |                            | Define desvios condicionais.  |
-+--------------------------+----------------------------+-------------------------------+
-| MODO NÚCLEO              | Registradores de Cache,    | SOMENTE NÚCLEO (SO).          |
-| (Privilegiados)          | MMU, Controle de I/O       | Invisível para o usuário.     |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    | MODELO DE REGISTRADORES NO NÍVEL ISA                                                  |
+    +--------------------------+----------------------------+-------------------------------+
+    | CATEGORIA                | EXEMPLOS / NOMES           | VISIBILIDADE / ACESSO         |
+    +--------------------------+----------------------------+-------------------------------+
+    | USO GERAL                | R0 até R31 (RISC)          | L/E Total (Usuário e Núcleo)  |
+    | (Registradores de Dados) | EAX, EBX, ECX (x86)        | Alvo principal do Compilador. |
+    +--------------------------+----------------------------+-------------------------------+
+    | USO ESPECIAL             | CI (PC), Ponteiro de Pilha | Essencial p/ fluxo do código. |
+    | (Controle de Fluxo)      | (Stack Pointer)            | L/E (Muitas vezes implícita). |
+    +--------------------------+----------------------------+-------------------------------+
+    | ESTADO DO PROGRAMA       | PSW / FLAGS (Z, N, V, C)   | L (Usuário) / E (Núcleo)      |
+    | (Status Word)            |                            | Define desvios condicionais.  |
+    +--------------------------+----------------------------+-------------------------------+
+    | MODO NÚCLEO              | Registradores de Cache,    | SOMENTE NÚCLEO (SO).          |
+    | (Privilegiados)          | MMU, Controle de I/O       | Invisível para o usuário.     |
+    +--------------------------+----------------------------+-------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
-Em estruturas_de_dados, entender os registradores explica por que as Convenções de Chamada (Calling Conventions) são vitais:
+    Em estruturas_de_dados, entender os registradores explica por que as Convenções de Chamada (Calling Conventions) são vitais:
 
- - Se você escreve uma função que usa o registrador R1, mas a biblioteca que você chamou também usa R1 sem salvar o valor antigo, seu dado será corrompido.
+    - Se você escreve uma função que usa o registrador R1, mas a biblioteca que você chamou também usa R1 sem salvar o valor antigo, seu dado será corrompido.
 
- - No seu diretório, ao analisar o custo de um algoritmo, lembre-se: acessar um Registrador leva 1 ciclo de clock. Acessar a RAM pode levar centenas. Otimizar o uso de registradores é o que torna um código de estrutura de dados realmente veloz.
+    - No seu diretório, ao analisar o custo de um algoritmo, lembre-se: acessar um Registrador leva 1 ciclo de clock. Acessar a RAM pode levar centenas. Otimizar o uso de registradores é o que torna um código de estrutura de dados realmente veloz.
 
 ## 5.1.4 Instruções
 
@@ -326,18 +326,18 @@ Esta seção descreve a fascinante (e às vezes bizarra) evolução da arquitetu
 2. Os Três Modos de Operação do Core i7
 O processador funciona como uma "máquina do tempo", podendo regredir para proteger o legado:
 
-+--------------+-------------------------------+---------------------------------------+
-| MODO         | DESCRIÇÃO                     | COMPORTAMENTO                         |
-+--------------+-------------------------------+---------------------------------------+
-| Real         | Age como um 8088 antigo.      | SEM PROTEÇÃO: um erro de software     |
-|              |                               | derruba a máquina ("Modo Chimpanzé"). |
-+--------------+-------------------------------+---------------------------------------+
-| Virtual 8086 | Janela MS-DOS protegida.      | ISOLADO: Executa código antigo; se    |
-|              |                               | falhar, o SO intercepta e trata.      |
-+--------------+-------------------------------+---------------------------------------+
-| Protegido    | O "Verdadeiro" Core i7.       | SEGURO: Usa anéis de privilégio (0-3) |
-|              |                               | para garantir a estabilidade do SO.   |
-+--------------+-------------------------------+---------------------------------------+
+    +--------------+-------------------------------+---------------------------------------+
+    | MODO         | DESCRIÇÃO                     | COMPORTAMENTO                         |
+    +--------------+-------------------------------+---------------------------------------+
+    | Real         | Age como um 8088 antigo.      | SEM PROTEÇÃO: um erro de software     |
+    |              |                               | derruba a máquina ("Modo Chimpanzé"). |
+    +--------------+-------------------------------+---------------------------------------+
+    | Virtual 8086 | Janela MS-DOS protegida.      | ISOLADO: Executa código antigo; se    |
+    |              |                               | falhar, o SO intercepta e trata.      |
+    +--------------+-------------------------------+---------------------------------------+
+    | Protegido    | O "Verdadeiro" Core i7.       | SEGURO: Usa anéis de privilégio (0-3) |
+    |              |                               | para garantir a estabilidade do SO.   |
+    +--------------+-------------------------------+---------------------------------------+
 
 3. Registradores e Endereçamento
 O Core i7 utiliza o formato Little-Endian (o byte de menor valor fica no endereço mais baixo) e possui registradores com nomes históricos:
@@ -353,23 +353,23 @@ O Core i7 utiliza o formato Little-Endian (o byte de menor valor fica no endere�
 Figura 5.3: Estrutura dos Registradores Core i7 (ASCII)
 Para seu diretório de estudos, veja como os registradores de 32 bits (Extended) englobam os antigos de 16 e 8 bits:
 
-+---------------------------------------------------------------------------------------+
-| ESTRUTURA DOS REGISTRADORES DE USO GERAL (IA-32)                                      |
-+--------------------------+----------------------------+-------------------------------+
-| REGISTRADOR (32 bits)    | PARTE DE 16 BITS (Low)     | PARTE DE 8 BITS (H/L)         |
-+--------------------------+----------------------------+-------------------------------+
-| [          EAX         ] | [          AX          ]   | [   AH   ] [   AL   ]         |
-| (Acumulador)             | (16 bits iniciais)         | (High Byte)  (Low Byte)       |
-+--------------------------+----------------------------+-------------------------------+
-| [          EBX         ] | [          BX          ]   | [   BH   ] [   BL   ]         |
-| (Base / Ponteiro)        |                            |                               |
-+--------------------------+----------------------------+-------------------------------+
-| [          ECX         ] | [          CX          ]   | [   CH   ] [   CL   ]         |
-| (Contador de Loops)      |                            |                               |
-+--------------------------+----------------------------+-------------------------------+
-| [          EDX         ] | [          DX          ]   | [   DH   ] [   DL   ]         |
-| (Dados / Mult / Div)     |                            |                               |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    | ESTRUTURA DOS REGISTRADORES DE USO GERAL (IA-32)                                      |
+    +--------------------------+----------------------------+-------------------------------+
+    | REGISTRADOR (32 bits)    | PARTE DE 16 BITS (Low)     | PARTE DE 8 BITS (H/L)         |
+    +--------------------------+----------------------------+-------------------------------+
+    | [          EAX         ] | [          AX          ]   | [   AH   ] [   AL   ]         |
+    | (Acumulador)             | (16 bits iniciais)         | (High Byte)  (Low Byte)       |
+    +--------------------------+----------------------------+-------------------------------+
+    | [          EBX         ] | [          BX          ]   | [   BH   ] [   BL   ]         |
+    | (Base / Ponteiro)        |                            |                               |
+    +--------------------------+----------------------------+-------------------------------+
+    | [          ECX         ] | [          CX          ]   | [   CH   ] [   CL   ]         |
+    | (Contador de Loops)      |                            |                               |
+    +--------------------------+----------------------------+-------------------------------+
+    | [          EDX         ] | [          DX          ]   | [   DH   ] [   DL   ]         |
+    | (Dados / Mult / Div)     |                            |                               |
+    +--------------------------+----------------------------+-------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 O formato Little-Endian é crucial em estruturas_de_dados ao lidar com arquivos binários ou redes.
@@ -394,79 +394,79 @@ CS, SS, DS, ES, FS, GS: No passado, serviam para "esticar" a memória do 8088. H
 
 Figura 5.3: Estrutura de Registradores do Core i7
 
-+---------------------------------------------------------------------------------------+
-| MODELO DE REGISTRADORES CORE i7 (IA-32)                                               |
-+--------------------------+----------------------------+-------------------------------+
-| CATEGORIA                | REGISTRADORES              | FUNÇÃO PRINCIPAL              |
-+--------------------------+----------------------------+-------------------------------+
-| DADOS (Geral)            | EAX, EBX, ECX, EDX         | Cálculos, Loops e I/O.        |
-+--------------------------+----------------------------+-------------------------------+
-| ÍNDICE (Strings)         | ESI, EDI                   | Fonte e Destino de Memória.   |
-+--------------------------+----------------------------+-------------------------------+
-| PILHA (Stack)            | EBP, ESP                   | Base do Quadro e Topo da Pilha|
-+--------------------------+----------------------------+-------------------------------+
-| SEGMENTO (Legado)        | CS, SS, DS, ES, FS, GS     | Histórico (Endereçamento 16b).|
-+--------------------------+----------------------------+-------------------------------+
-| CONTROLE                 | EIP (Contador de Programa) | Próxima Instrução (Endereço). |
-|                          | EFLAGS (PSW)               | Status e Bits de Condição.    |
-+--------------------------+----------------------------+-------------------------------+
+    +---------------------------------------------------------------------------------------+
+    | MODELO DE REGISTRADORES CORE i7 (IA-32)                                               |
+    +--------------------------+----------------------------+-------------------------------+
+    | CATEGORIA                | REGISTRADORES              | FUNÇÃO PRINCIPAL              |
+    +--------------------------+----------------------------+-------------------------------+
+    | DADOS (Geral)            | EAX, EBX, ECX, EDX         | Cálculos, Loops e I/O.        |
+    +--------------------------+----------------------------+-------------------------------+
+    | ÍNDICE (Strings)         | ESI, EDI                   | Fonte e Destino de Memória.   |
+    +--------------------------+----------------------------+-------------------------------+
+    | PILHA (Stack)            | EBP, ESP                   | Base do Quadro e Topo da Pilha|
+    +--------------------------+----------------------------+-------------------------------+
+    | SEGMENTO (Legado)        | CS, SS, DS, ES, FS, GS     | Histórico (Endereçamento 16b).|
+    +--------------------------+----------------------------+-------------------------------+
+    | CONTROLE                 | EIP (Contador de Programa) | Próxima Instrução (Endereço). |
+    |                          | EFLAGS (PSW)               | Status e Bits de Condição.    |
+    +--------------------------+----------------------------+-------------------------------+
 
 Organização de Hardware (Seu Padrão)
 No seu modelo, note que o EIP (CI) e o EBP trabalham juntos com o REM para localizar tanto a próxima instrução quanto as variáveis que você está usando agora:
 
-UNIDADE DE PROCESSAMENTO (CPU)
-   __________________________________________________________
-  |                                                          |
-  |   [ ULA ] <----------+---- [ BARRAMENTO INTERNO ]        |
-  |     |                |           ^          ^            |
-  |  (Calcula            |           |          |            |
-  |   Offsets)      [ REGISTRADORES ]      [  UC   ]         |
-  |     |           (ESI, EDI, EBP, ESP)   (Monitora         |
-  |     |                                   EFLAGS)          |
-  |     v                +-----------+          |            |
-  |   [ REM ] <----------|  [ CI ]   | <--------+            |
-  | (Endereço =          |  (EIP)    |          |            |
-  | Base+Offset)         +-----------+          v            |
-  |     |                      ^          [ DECODIFICADOR ]  |
-  |     |                      |          (Habilita Pts.)    |
-  |_____|______________________|________________|____________|
-        |                      |                |
-        v                      v                v
-   [ B. ENDEREÇOS ]     [  B. DADOS   ]    [ B. CONTROLE ]
-  ______|______________________|________________|____________
- |                                                           |
- |                 MEMÓRIA PRINCIPAL (RAM)                   |
- |        (Contém Pilha, Código e Dados Globais)             |
- |___________________________________________________________|
-O Quadro de Pilha (Stack Frame) na RAM
+    UNIDADE DE PROCESSAMENTO (CPU)
+     __________________________________________________________
+    |                                                          |
+    |   [ ULA ] <----------+---- [ BARRAMENTO INTERNO ]        |
+    |     |                |           ^          ^            |
+    |  (Calcula            |           |          |            |
+    |   Offsets)      [ REGISTRADORES ]      [  UC   ]         |
+    |     |           (ESI, EDI, EBP, ESP)   (Monitora         |
+    |     |                                   EFLAGS)          |
+    |     v                +-----------+          |            |
+    |   [ REM ] <----------|  [ CI ]   | <--------+            |
+    | (Endereço =          |  (EIP)    |          |            |
+    | Base+Offset)         +-----------+          v            |
+    |     |                      ^          [ DECODIFICADOR ]  |
+    |     |                      |          (Habilita Pts.)    |
+    |_____|______________________|________________|____________|
+          |                      |                |
+          v                      v                v
+    [ B. ENDEREÇOS ]     [  B. DADOS   ]    [ B. CONTROLE ]
+    ______|______________________|________________|____________
+    |                                                           |
+    |                 MEMÓRIA PRINCIPAL (RAM)                   |
+    |        (Contém Pilha, Código e Dados Globais)             |
+    |___________________________________________________________|
+    O Quadro de Pilha (Stack Frame) na RAM
 
-Endereços Altos
-      |
-      v
-+--------------------------+ 
-|   Parâmetros da Função   |  <-- Enviados pela função chamadora
-+--------------------------+ 
-|   Endereço de Retorno    |  <-- Onde o CI (EIP) deve voltar depois
-+--------------------------+ 
-|      EBP Anterior        |  <-- [EBP] aponta aqui (âncora)
-+--------------------------+ 
-|     Variáveis Locais     |  <-- Acessadas como [EBP - offset]
-|    (Arrays, Structs)     |  
-+--------------------------+ 
-|      Topo da Pilha       |  <-- [ESP] aponta aqui (muda com PUSH/POP)
-+--------------------------+ 
-      |
-      v
-Endereços Baixos
+    Endereços Altos
+        |
+        v
+    +--------------------------+ 
+    |   Parâmetros da Função   |  <-- Enviados pela função chamadora
+    +--------------------------+ 
+    |   Endereço de Retorno    |  <-- Onde o CI (EIP) deve voltar depois
+    +--------------------------+ 
+    |      EBP Anterior        |  <-- [EBP] aponta aqui (âncora)
+    +--------------------------+ 
+    |     Variáveis Locais     |  <-- Acessadas como [EBP - offset]
+    |    (Arrays, Structs)     |  
+    +--------------------------+ 
+    |      Topo da Pilha       |  <-- [ESP] aponta aqui (muda com PUSH/POP)
+    +--------------------------+ 
+        |
+        v
+    Endereços Baixos
 
 ## Insight para seus projetos em estruturas_de_dados
-No diretório estruturas_de_dados, o registrador EBP é o seu melhor amigo silencioso.
+    No diretório estruturas_de_dados, o registrador EBP é o seu melhor amigo silencioso.
 
-Quando você cria uma variável local dentro de uma função, o compilador não sabe o endereço exato dela na RAM antecipadamente.
+    - Quando você cria uma variável local dentro de uma função, o compilador não sabe o endereço exato dela na RAM antecipadamente.
 
-Ele gera código que diz: "Pegue o valor que está no EBP e subtraia 4 bytes".
+    - Ele gera código que diz: "Pegue o valor que está no EBP e subtraia 4 bytes".
 
-É através do EBP que o hardware consegue implementar o conceito de Escopo Local. Sem ele, seria impossível ter funções recursivas ou múltiplas chamadas sem que uma variável atropelasse a outra.
+    - É através do EBP que o hardware consegue implementar o conceito de Escopo Local. Sem ele, seria impossível ter funções recursivas ou múltiplas chamadas sem  que uma variável atropelasse a outra.
 
 ## 5.1.6 Visão geral do nível da ISA ARM do OMAP4430
 
@@ -480,49 +480,49 @@ A arquitetura ARM representa uma filosofia diferente do x86 (Core i7). Enquanto 
 2. Registradores ARM v7: Simplicidade e Flexibilidade
 A ARM possui 16 registradores de uso geral (R0-R15), mas com uma característica única: o PC (Contador de Programa) é o próprio registrador R15. Isso permite fazer "pulos" no código usando simples operações matemáticas.
 
-Arquivo de Registradores ARM v7
+    Arquivo de Registradores ARM v7
 
-BANCO DE REGISTRADORES ARM (32-bit)
-+---------------------------------------------+
-| R0  (A1) |  Parâmetros de Função / Retorno  |
-| R1  (A2) |  Parâmetros de Função            |
-| R2  (A3) |  Parâmetros de Função            |
-| R3  (A4) |  Parâmetros de Função            |
-+----------+----------------------------------+
-| R4  (V1) |                                  |
-| R5  (V2) |                                  |
-| R6  (V3) |                                  |
-| R7  (V4) |         Variáveis Locais         |
-| R8  (V5) |       (Preservadas pelo          |
-| R9  (V6) |          Procedimento)           |
-| R10 (V7) |                                  |
-| R11 (V8) |                                  |
-+----------+----------------------------------+
-| R12 (IP) |  Ponteiro Intra-procedimento     |
-+----------+----------------------------------+
-| R13 (SP) |  Ponteiro de Pilha (Stack Ptr)   |
-+----------+----------------------------------+
-| R14 (LR) |  Link Register (End. Retorno)    |
-+----------+----------------------------------+
-| R15 (PC) |  Contador de Programa (Prog Ctr) |
-+---------------------------------------------+
-| CPSR     |  Status (Flags N, Z, C, V)       |
-+---------------------------------------------+
+    BANCO DE REGISTRADORES ARM (32-bit)
+    +---------------------------------------------+
+    | R0  (A1) |  Parâmetros de Função / Retorno  |
+    | R1  (A2) |  Parâmetros de Função            |
+    | R2  (A3) |  Parâmetros de Função            |
+    | R3  (A4) |  Parâmetros de Função            |
+    +----------+----------------------------------+
+    | R4  (V1) |                                  |
+    | R5  (V2) |                                  |
+    | R6  (V3) |                                  |
+    | R7  (V4) |         Variáveis Locais         |
+    | R8  (V5) |       (Preservadas pelo          |
+    | R9  (V6) |          Procedimento)           |
+    | R10 (V7) |                                  |
+    | R11 (V8) |                                  |
+    +----------+----------------------------------+
+    | R12 (IP) |  Ponteiro Intra-procedimento     |
+    +----------+----------------------------------+
+    | R13 (SP) |  Ponteiro de Pilha (Stack Ptr)   |
+    +----------+----------------------------------+
+    | R14 (LR) |  Link Register (End. Retorno)    |
+    +----------+----------------------------------+
+    | R15 (PC) |  Contador de Programa (Prog Ctr) |
+    +---------------------------------------------+
+    | CPSR     |  Status (Flags N, Z, C, V)       |
+    +---------------------------------------------+
 
-Arquitetura Load/Store
-Diferente do x86, na ARM você nunca faz uma soma diretamente na memória. Você deve carregar os dados para os registradores primeiro.
+    Arquitetura Load/Store
+    Diferente do x86, na ARM você nunca faz uma soma diretamente na memória. Você deve carregar os dados para os registradores primeiro.
 
-[ MEMÓRIA RAM ]           [ PROCESSADOR ARM ]
-          |                          |
-          | <--- (1) LOAD -----------|--- [ R0 ] --+
-          |                          |             |
-          | ---- (2) DADO ---------->|--- [ R1 ] --|--> [ ULA ]
-          |                          |             |      |
-          | <--- (4) STORE ----------|--- [ R2 ] <-+      |
-          |                          |      ^             |
-          | <--- (5) RESULTADO ------|------+-------------+
+    [ MEMÓRIA RAM ]           [ PROCESSADOR ARM ]
+            |                          |
+            | <--- (1) LOAD -----------|--- [ R0 ] --+
+            |                          |             |
+            | ---- (2) DADO ---------->|--- [ R1 ] --|--> [ ULA ]
+            |                          |             |      |
+            | <--- (4) STORE ----------|--- [ R2 ] <-+      |
+            |                          |      ^             |
+            | <--- (5) RESULTADO ------|------+-------------+
 
-## nsight para seus projetos em estruturas_de_dados
+## Insight para seus projetos em estruturas_de_dados
 Performance: Note que os registradores R0-R3 passam parâmetros. Em C, se sua função tiver até 4 argumentos, a ARM nem toca na memória RAM para chamá-la. Isso torna suas estruturas de dados muito mais rápidas do que no x86 clássico, que usa a pilha (RAM) para quase tudo.
 
 Arquitetura Load/Store: Se você estiver implementando uma ordenação (como um QuickSort) em ARM, lembre-se que cada comparação exige que os valores sejam movidos para os registradores primeiro. O custo de acesso à memória é o seu maior gargalo.
@@ -548,35 +548,34 @@ Registradores de Uso Especial:
 
  - SP (Stack Pointer): Um registrador de 16 bits (dividido em dois endereços de 8 bits: 0x80 e 0x81) que aponta para o topo da pilha na SRAM.
 
-Tabela de Registradores e Memória
+    Tabela de Registradores e Memória
 
-Endereço (Dec)      Estrutura da Memória SRAM
-+----------------+---------------------------------------+
-|    0 -- 31     |   32 Registradores de Uso Geral (R)   |
-+----------------+---------------------------------------+
-|   32 -- 95     |      Registradores de E/S (I/O)       |
-|                |  (Inclui SP nos endereços 80-81)      |
-+----------------+---------------------------------------+
-|   96 -- 1023   |             SRAM INTERNA              |
-|                |    (Variáveis, Structs e Pilha)       |
-+----------------+---------------------------------------+
+    Endereço (Dec)      Estrutura da Memória SRAM
+    +----------------+---------------------------------------+
+    |    0 -- 31     |   32 Registradores de Uso Geral (R)   |
+    +----------------+---------------------------------------+
+    |   32 -- 95     |      Registradores de E/S (I/O)       |
+    |                |  (Inclui SP nos endereços 80-81)      |
+    +----------------+---------------------------------------+
+    |   96 -- 1023   |             SRAM INTERNA              |
+    |                |    (Variáveis, Structs e Pilha)       |
+    +----------------+---------------------------------------+
 
-Organização do ATmega168
+    Organização do ATmega168
 
-MEMÓRIA DE PROGRAMA (FLASH)          MEMÓRIA DE DADOS (SRAM)
-    +---------------------------+        +---------------------------+
-    |      Área de Aplicação    |        | R0 ... R31 (Registradores)| 0-31
-    |      (Código do Usuário)  |        +---------------------------+
-    |                           |        | Registradores de E/S      | 32-95
-    +---------------------------+        +---------------------------+
-    | Carregador Inicialização  |        |                           |
-    | (Bootloader Seguro)       |        |      DADOS TEMPORÁRIOS    |
-    +---------------------------+        |      (Variáveis e Pilha)  |
-                                         |                           |
-                                         +---------------------------+ 1023
+    MEMÓRIA DE PROGRAMA (FLASH)          MEMÓRIA DE DADOS (SRAM)
+        +---------------------------+        +---------------------------+
+        |      Área de Aplicação    |        | R0 ... R31 (Registradores)| 0-31
+        |      (Código do Usuário)  |        +---------------------------+
+        |                           |        | Registradores de E/S      | 32-95
+        +---------------------------+        +---------------------------+
+        | Carregador Inicialização  |        |                           |
+        | (Bootloader Seguro)       |        |      DADOS TEMPORÁRIOS    |
+        +---------------------------+        |      (Variáveis e Pilha)  |
+                                            |                           |
+                                            +---------------------------+ 1023
 
-
-## nsight para seus projetos em estruturas_de_dados
+## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, trabalhar com um ATmega168 é um exercício de extrema economia:
 
 Espaço Crítico: Você tem apenas 1 KB de RAM. Se você criar um array de int (2 bytes cada no AVR) com 512 posições, você esgota toda a memória do chip e a pilha não terá espaço para funcionar, causando um travamento.
@@ -584,7 +583,6 @@ Espaço Crítico: Você tem apenas 1 KB de RAM. Se você criar um array de int (
 Ponteiros de 16 bits: Embora o processador seja de 8 bits, os ponteiros para a memória de dados precisam de 16 bits para endereçar até 64 KB (embora este chip use apenas 1 KB). Isso significa que manipular um ponteiro em C para este chip é mais custoso do que manipular um char.      
 
 ## 5.2 Tipos de dados
-
 Esta seção aborda a base de tudo o que você manipula no seu diretório estruturas_de_dados: como a informação é interpretada fisicamente pelos circuitos. A grande diferença entre um "tipo de dado" em C e no hardware é o suporte de hardware.
 
 1. Suporte de Hardware vs. Implementação em Software
@@ -632,42 +630,42 @@ Esta seção é fundamental para quem trabalha com Estruturas de Dados, pois abo
 
  - Risco: Erros com ponteiros (como acessar um endereço inválido) são a causa número um de falhas catastróficas em sistemas.
 
-Representação de Dados Não Numéricos
+    Representação de Dados Não Numéricos
 
-[ CARACTERE ASCII ]               [ VALOR BOOLEANO ]
-    +-----------------------+         +-----------------------+
-    | 0 | 1 | 0 | 0 | 0 | 0 |         | 0 | 0 | 0 | 0 | 0 | 0 | -> 0 (Falso)
-    +-----------------------+         +-----------------------+
-    | 1 | 0 | (8 bits / 1B) |         | 0 | 0 | 0 | 0 | 0 | 1 | -> 1 (Verdadeiro)
-    +-----------------------+         +-----------------------+
-      Ex: 'A' = 65 decimal              (Geralmente usa 1 Byte)
+    [ CARACTERE ASCII ]               [ VALOR BOOLEANO ]
+        +-----------------------+         +-----------------------+
+        | 0 | 1 | 0 | 0 | 0 | 0 |         | 0 | 0 | 0 | 0 | 0 | 0 | -> 0 (Falso)
+        +-----------------------+         +-----------------------+
+        | 1 | 0 | (8 bits / 1B) |         | 0 | 0 | 0 | 0 | 0 | 1 | -> 1 (Verdadeiro)
+        +-----------------------+         +-----------------------+
+        Ex: 'A' = 65 decimal              (Geralmente usa 1 Byte)
 
 
-       [ MAPA DE BITS ]                  [ PONTEIRO (ENDEREÇO) ]
-    +---+---+---+---+---+---+         +-----------------------+
-    | 1 | 0 | 1 | 1 | 0 | 1 |         |  0x7FFECA001234       |
-    +---+---+---+---+---+---+         +-----------------------+
-      ^   ^   ^   ^   ^   ^             (32 ou 64 bits de 
-      |   |   |   |   |   |              endereço bruto que 
-     B1  B2  B3  B4  B5  B6              aponta para o REM)
-     (Cada bit = um estado)
+        [ MAPA DE BITS ]                  [ PONTEIRO (ENDEREÇO) ]
+        +---+---+---+---+---+---+         +-----------------------+
+        | 1 | 0 | 1 | 1 | 0 | 1 |         |  0x7FFECA001234       |
+        +---+---+---+---+---+---+         +-----------------------+
+        ^   ^   ^   ^   ^   ^             (32 ou 64 bits de 
+        |   |   |   |   |   |              endereço bruto que 
+        B1  B2  B3  B4  B5  B6              aponta para o REM)
+        (Cada bit = um estado)
 
-Representação dos Dados Não Numéricos (Nível ISA)
+    Representação dos Dados Não Numéricos (Nível ISA)
 
-Tamanho Típico          Estrutura e Representação no Hardware
-+----------------+---------------------------------------+
-|     8 bits     |                ASCII                  |
-|    (1 Byte)    |   (Valor numérico mapeado para char)   |
-+----------------+---------------------------------------+
-|     8 bits     |               BOOLEANO                |
-|    (1 Byte)    |    (0 = Falso | Outro = Verdadeiro)   |
-+----------------+---------------------------------------+
-|     1 bit      |                BITMAP                 |
-|  (por valor)   | (Vetor de bits em palavra de 32/64b)  |
-+----------------+---------------------------------------+
-|  32 ou 64 bits |               PONTEIRO                |
-|  (Endereço)    |    (Endereço bruto que aponta p/ REM) |
-+----------------+---------------------------------------+
+    Tamanho Típico          Estrutura e Representação no Hardware
+    +----------------+---------------------------------------+
+    |     8 bits     |                ASCII                  |
+    |    (1 Byte)    |   (Valor numérico mapeado para char)  |
+    +----------------+---------------------------------------+
+    |     8 bits     |               BOOLEANO                |
+    |    (1 Byte)    |    (0 = Falso | Outro = Verdadeiro)   |
+    +----------------+---------------------------------------+
+    |     1 bit      |                BITMAP                 |
+    |  (por valor)   | (Vetor de bits em palavra de 32/64b)  |
+    +----------------+---------------------------------------+
+    |  32 ou 64 bits |               PONTEIRO                |
+    |  (Endereço)    |    (Endereço bruto que aponta p/ REM) |
+    +----------------+---------------------------------------+
 
 ## nsight para seus projetos em estruturas_de_dados
 No seu diretório estruturas_de_dados, entender isso muda sua forma de programar:
@@ -692,40 +690,39 @@ O Core i7 suporta uma vasta gama de formatos para garantir que tanto softwares a
 2. Otimização e Alinhamento
 Embora o Core i7 seja flexível e aceite dados em qualquer endereço, ele "prefere" que os dados de 32 bits comecem em endereços múltiplos de 4. Se você não fizer isso, a UC terá que coordenar dois acessos à memória em vez de um, prejudicando a performance.
 
-Representação dos Tipos de Dados (Core i7)
+    Representação dos Tipos de Dados (Core i7)
 
+    Tamanho Suportado        Tipos e Formatos no Hardware (Core i7)
+    +----------------+-----------------------------------------+
+    |  8, 16, 32, 64 |         INTEIROS (CPL2 / SEM SINAL)     |
+    |     (Bits)     |    (Base para aritmética e lógica)      |
+    +----------------+-----------------------------------------+
+    |  8, 16, 32 bits|         DECIMAL BINÁRIO (BCD)           |
+    |                |    (Uso financeiro / Legado)            |
+    +----------------+-----------------------------------------+
+    |  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)      |
+    |                |    (Cálculos decimais de precisão)      |
+    +----------------+-----------------------------------------+
+    |     8 bits     |         CARACTERES (ASCII)              |
+    |                |    (Instruções especiais de Busca/Cópia)|
+    +----------------+-----------------------------------------+
 
-Tamanho Suportado        Tipos e Formatos no Hardware (Core i7)
-+----------------+-----------------------------------------+
-|  8, 16, 32, 64 |         INTEIROS (CPL2 / SEM SINAL)     |
-|     (Bits)     |    (Base para aritmética e lógica)      |
-+----------------+-----------------------------------------+
-|  8, 16, 32 bits|         DECIMAL BINÁRIO (BCD)           |
-|                |    (Uso financeiro / Legado)            |
-+----------------+-----------------------------------------+
-|  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)      |
-|                |    (Cálculos decimais de precisão)      |
-+----------------+-----------------------------------------+
-|     8 bits     |         CARACTERES (ASCII)              |
-|                |    (Instruções especiais de Busca/Cópia)|
-+----------------+-----------------------------------------+
+    Tabela: Tipos de Dados Numéricos do Core i7
 
-Tabela: Tipos de Dados Numéricos do Core i7
-
-Tipo de Dado        Disponibilidade por Tamanho (bits)
-+----------------------+---------------------------------------+
-|  Inteiro com sinal   |   [ 8 ]   [ 16 ]   [ 32 ]   [ 64* ]   |
-|                      |        (* Somente em modo 64 bits)    |
-+----------------------+---------------------------------------+
-|  Inteiro sem sinal   |   [ 8 ]   [ 16 ]   [ 32 ]   [ 64* ]   |
-|                      |        (* Somente em modo 64 bits)    |
-+----------------------+---------------------------------------+
-|   Decimal (BCD)      |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
-|                      |        (Código Binário Decimal)       |
-+----------------------+---------------------------------------+
-|   Ponto Flutuante    |     --      --     [ 32 ]   [ 64 ]    |
-|                      |        (Padrão IEEE 754)              |
-+----------------------+---------------------------------------+
+    Tipo de Dado        Disponibilidade por Tamanho (bits)
+    +----------------------+---------------------------------------+
+    |  Inteiro com sinal   |   [ 8 ]   [ 16 ]   [ 32 ]   [ 64* ]   |
+    |                      |        (* Somente em modo 64 bits)    |
+    +----------------------+---------------------------------------+
+    |  Inteiro sem sinal   |   [ 8 ]   [ 16 ]   [ 32 ]   [ 64* ]   |
+    |                      |        (* Somente em modo 64 bits)    |
+    +----------------------+---------------------------------------+
+    |   Decimal (BCD)      |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
+    |                      |        (Código Binário Decimal)       |
+    +----------------------+---------------------------------------+
+    |   Ponto Flutuante    |     --      --     [ 32 ]   [ 64 ]    |
+    |                      |        (Padrão IEEE 754)              |
+    +----------------------+---------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Ao trabalhar no diretório estruturas_de_dados, lembre-se: se você definir um int em um sistema 64 bits, ele costuma ocupar 4 bytes, mas o ponteiro para ele ocupará 8 bytes. O Core i7 usa o RDM de 64 bits para buscar esse ponteiro de uma vez só, mas se o dado estiver desalinhado na RAM, o CLOCK terá que esperar um ciclo extra para a montagem do dado.
@@ -742,37 +739,37 @@ Enquanto outras CPUs apenas movem os bits, a ARM permite especificar o tratament
 
 2. Comparativo de Suporte: ARM OMAP4430
 
-Tamanho Suportado        Tipos e Formatos no Hardware (ARM v7)
-+----------------+---------------------------------------+
-|  8, 16, 32 bits|         INTEIROS (CPL2 / SEM SINAL)   |
-|                |    (Convertidos p/ 32 bits no Load)   |
-+----------------+---------------------------------------+
-|     ----       |         DECIMAL BINÁRIO (BCD)         |
-|                |    (Não suportado pelo Hardware)      |
-+----------------+---------------------------------------+
-|  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)    |
-|                |    (Suporte via Coprocessador VFP)    |
-+----------------+---------------------------------------+
-|     ----       |         STRINGS / CARACTERES          |
-|                |    (Manipulados apenas via Software)  |
-+----------------+---------------------------------------+
+    Tamanho Suportado        Tipos e Formatos no Hardware (ARM v7)
+    +----------------+---------------------------------------+
+    |  8, 16, 32 bits|         INTEIROS (CPL2 / SEM SINAL)   |
+    |                |    (Convertidos p/ 32 bits no Load)   |
+    +----------------+---------------------------------------+
+    |     ----       |         DECIMAL BINÁRIO (BCD)         |
+    |                |    (Não suportado pelo Hardware)      |
+    +----------------+---------------------------------------+
+    |  32, 64 bits   |         PONTO FLUTUANTE (IEEE 754)    |
+    |                |    (Suporte via Coprocessador VFP)    |
+    +----------------+---------------------------------------+
+    |     ----       |         STRINGS / CARACTERES          |
+    |                |    (Manipulados apenas via Software)  |
+    +----------------+---------------------------------------+
 
 Tabela: Tipos de Dados Numéricos do OMAP4430 
 
-Tipo de Dado        Disponibilidade por Tamanho (bits)
-+----------------------+---------------------------------------+
-|  Inteiro com sinal   |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
-|                      |      (Suporta Extensão de Sinal)      |
-+----------------------+---------------------------------------+
-|  Inteiro sem sinal   |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
-|                      |      (Zero-fill nos bits altos)       |
-+----------------------+---------------------------------------+
-|   Decimal (BCD)      |     --      --       --        --     |
-|                      |      (Não suportado em Hardware)      |
-+----------------------+---------------------------------------+
-|   Ponto Flutuante    |     --      --     [ 32 ]   [ 64 ]    |
-|                      |      (Padrão IEEE 754 via VFP)        |
-+----------------------+---------------------------------------+
+    Tipo de Dado        Disponibilidade por Tamanho (bits)
+    +----------------------+---------------------------------------+
+    |  Inteiro com sinal   |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
+    |                      |      (Suporta Extensão de Sinal)      |
+    +----------------------+---------------------------------------+
+    |  Inteiro sem sinal   |   [ 8 ]   [ 16 ]   [ 32 ]      --     |
+    |                      |      (Zero-fill nos bits altos)       |
+    +----------------------+---------------------------------------+
+    |   Decimal (BCD)      |     --      --       --        --     |
+    |                      |      (Não suportado em Hardware)      |
+    +----------------------+---------------------------------------+
+    |   Ponto Flutuante    |     --      --     [ 32 ]   [ 64 ]    |
+    |                      |      (Padrão IEEE 754 via VFP)        |
+    +----------------------+---------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, quando você estiver programando para ARM:
@@ -805,52 +802,52 @@ Como a memória de dados pode ter mais de 256 bytes, o hardware permite "colar" 
 
 Representação dos Tipos de Dados (AVR ATmega168)
 
-Tamanho Suportado        Tipos e Formatos no Hardware (AVR)
-+----------------+---------------------------------------+
-|     8 bits     |         INTEIROS (CPL2 / SEM SINAL)   |
-|    (Nativo)    |   (Base para quase todas as operações)|
-+----------------+---------------------------------------+
-|     8 bits     |                CARACTERES             |
-|                |   (Mesmo tratamento dos inteiros)     |
-+----------------+---------------------------------------+
-|     16 bits    |         PONTEIROS (X, Y, Z)           |
-|  (Composto)    |   (Pares de registradores p/ RAM)     |
-+----------------+---------------------------------------+
-|     ----       |      BCD / PONTO FLUTUANTE            |
-|                |   (Apenas via emulação de Software)   |
-+----------------+---------------------------------------+
+    Tamanho Suportado        Tipos e Formatos no Hardware (AVR)
+    +----------------+---------------------------------------+
+    |     8 bits     |         INTEIROS (CPL2 / SEM SINAL)   |
+    |    (Nativo)    |   (Base para quase todas as operações)|
+    +----------------+---------------------------------------+
+    |     8 bits     |                CARACTERES             |
+    |                |   (Mesmo tratamento dos inteiros)     |
+    +----------------+---------------------------------------+
+    |     16 bits    |         PONTEIROS (X, Y, Z)           |
+    |  (Composto)    |   (Pares de registradores p/ RAM)     |
+    +----------------+---------------------------------------+
+    |     ----       |      BCD / PONTO FLUTUANTE            |
+    |                |   (Apenas via emulação de Software)   |
+    +----------------+---------------------------------------+
 
-Tabela: Tipos de Dados Numéricos do ATmega168
+    Tabela: Tipos de Dados Numéricos do ATmega168
 
-+----------------------------+-------+-------+-------+----------+
-| Tipo                       | 8 bits| 16 bits| 32 bits| 64 bits|
-+----------------------------+-------+-------+-------+----------+
-| Inteiro com sinal          | x     |       |       |          |
-+----------------------------+-------+-------+-------+----------+
-| Inteiro sem sinal          | x     |       |       |          |
-+----------------------------+-------+-------+-------+----------+
-| Decimal Binário (BCD)      |       |       |       |          |
-+----------------------------+-------+-------+-------+----------+
-| Ponto Flutuante            |       |       |       |          |
-+----------------------------+-------+-------+-------+----------+
-| Ponteiro                   |       | x     |       |          |
-+----------------------------+-------+-------+-------+----------+
+    +----------------------------+-------+-------+-------+----------+
+    | Tipo                       | 8 bits| 16 bits| 32 bits| 64 bits|
+    +----------------------------+-------+-------+-------+----------+
+    | Inteiro com sinal          | x     |       |       |          |
+    +----------------------------+-------+-------+-------+----------+
+    | Inteiro sem sinal          | x     |       |       |          |
+    +----------------------------+-------+-------+-------+----------+
+    | Decimal Binário (BCD)      |       |       |       |          |
+    +----------------------------+-------+-------+-------+----------+
+    | Ponto Flutuante            |       |       |       |          |
+    +----------------------------+-------+-------+-------+----------+
+    | Ponteiro                   |       | x     |       |          |
+    +----------------------------+-------+-------+-------+----------+
 
 Organização de Hardware: Visão AVR (Seu Padrão)
 Abaixo, a tabela de hardware mostrando a limitação de 8 bits no barramento, mas a capacidade de 16 bits no endereçamento (REM).
 
-+--------------------------------------+-------------------------------------------------+
-| Processamento                        | Armazenamento                                   |
-+--------------------------------------+-------------------------------------------------+
-| ULA (Operações puras de 8 bits)      | Registradores (R0 a R31 - X, Y, Z de 16 bits)   |
-+--------------------------------------+-------------------------------------------------+
-| BARRAMENTO INTERNO (8 bits)          | MEMÓRIA DE DADOS (SRAM)                         |
-+--------------------------------------+-------------------------------------------------+
-| UC (Gerencia Auto-incremento de Pts) | CI (Program Counter)                            |
-| RI (Instrução da Flash)              | REM (Endereço de 16 bits - REM = X/Y/Z)         |
-| Decodificador (Simples)              | RDM (Dados de 8 bits da SRAM)                   |
-| CLOCK (Baixo Consumo)                |                                                 |
-+--------------------------------------+-------------------------------------------------+
+    +--------------------------------------+-------------------------------------------------+
+    | Processamento                        | Armazenamento                                   |
+    +--------------------------------------+-------------------------------------------------+
+    | ULA (Operações puras de 8 bits)      | Registradores (R0 a R31 - X, Y, Z de 16 bits)   |
+    +--------------------------------------+-------------------------------------------------+
+    | BARRAMENTO INTERNO (8 bits)          | MEMÓRIA DE DADOS (SRAM)                         |
+    +--------------------------------------+-------------------------------------------------+
+    | UC (Gerencia Auto-incremento de Pts) | CI (Program Counter)                            |
+    | RI (Instrução da Flash)              | REM (Endereço de 16 bits - REM = X/Y/Z)         |
+    | Decodificador (Simples)              | RDM (Dados de 8 bits da SRAM)                   |
+    | CLOCK (Baixo Consumo)                |                                                 |
+    +--------------------------------------+-------------------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Ao programar para o ATmega168:
@@ -871,20 +868,20 @@ Endereçamento/Operandos: São os "substantivos" (os dados ou onde eles estão).
 2. Formatos de Instrução: Comparativo ASCII
 Abaixo, a representação visual dos quatro formatos comuns mencionados no texto, adaptada para o seu padrão de diagramas:
 
-Tipo de Instrução         Estrutura Binária (Opcode + Endereços)
-+-------------------+-----------------------------------------------+
-| (a) Zero Endereços| [   OPCODE   ]                                |
-|     (Ex: HALT)    | (Ação implícita ou sobre a pilha)             |
-+-------------------+-----------------------------------------------+
-| (b) Um Endereço   | [   OPCODE   ] [      ENDEREÇO 1       ]      |
-|     (Ex: PUSH X)  | (Comum em máquinas de Acumulador)             |
-+-------------------+-----------------------------------------------+
-| (c) Dois Endereços| [   OPCODE   ] [  END. 1  ] [  END. 2  ]      |
-|     (Ex: MOV A, B)| (Destino e Origem)                            |
-+-------------------+-----------------------------------------------+
-| (d) Três Endereços| [   OPCODE   ] [ END1 ] [ END2 ] [ END3 ]     |
-|     (Ex: ADD A,B,C)| (Destino, Operando 1, Operando 2)            |
-+-------------------+-----------------------------------------------+
+    Tipo de Instrução         Estrutura Binária (Opcode + Endereços)
+    +-------------------+-----------------------------------------------+
+    | (a) Zero Endereços| [   OPCODE   ]                                |
+    |     (Ex: HALT)    | (Ação implícita ou sobre a pilha)             |
+    +-------------------+-----------------------------------------------+
+    | (b) Um Endereço   | [   OPCODE   ] [      ENDEREÇO 1       ]      |
+    |     (Ex: PUSH X)  | (Comum em máquinas de Acumulador)             |
+    +-------------------+-----------------------------------------------+
+    | (c) Dois Endereços| [   OPCODE   ] [  END. 1  ] [  END. 2  ]      |
+    |     (Ex: MOV A, B)| (Destino e Origem)                            |
+    +-------------------+-----------------------------------------------+
+    | (d) Três Endereços| [   OPCODE   ] [ END1 ] [ END2 ] [ END3 ]     |
+    |     (Ex: ADD A,B,C)| (Destino, Operando 1, Operando 2)            |
+    +-------------------+-----------------------------------------------+
 
 3. Relação com o Comprimento da Palavra
 Instruções de Tamanho Fixo: Típicas de arquiteturas RISC (ARM, AVR). Todas têm o mesmo tamanho (ex: 32 bits). Isso torna o Decodificador extremamente rápido, mas pode desperdiçar memória.
@@ -902,25 +899,25 @@ Ao manipular estruturas complexas no diretório estruturas_de_dados, como uma Á
 
 O CI (Contador de Instrução) precisa saber exatamente o tamanho de cada formato para "pular" para a próxima instrução corretamente. Se o CI pular um byte a menos em uma instrução de tamanho variável (Core i7), ele tentará executar um dado como se fosse um opcode, causando o crash do programa.
 
-Relação Comprimento de Instrução vs. Palavra
+    Relação Comprimento de Instrução vs. Palavra
 
-(a) Instrução = Palavra          (b) Instrução < Palavra
-      +-----------------------+        +-----------+-----------+
-      |      Instrução 1      |        |  Inst. 1  |  Inst. 2  |
-      +-----------------------+        +-----------+-----------+
-      |      Instrução 2      |        |  Inst. 3  |  Inst. 4  |
-      +-----------------------+        +-----------+-----------+
-         (Ex: RISC / ARM)                 (Economia de Espaço)
+    (a) Instrução = Palavra          (b) Instrução < Palavra
+        +-----------------------+        +-----------+-----------+
+        |      Instrução 1      |        |  Inst. 1  |  Inst. 2  |
+        +-----------------------+        +-----------+-----------+
+        |      Instrução 2      |        |  Inst. 3  |  Inst. 4  |
+        +-----------------------+        +-----------+-----------+
+            (Ex: RISC / ARM)                 (Economia de Espaço)
 
 
-       (c) Instrução > Palavra          (d) Tamanho Variável
-      +-----------------------+        +-----------------------+
-      |     Instrução 1       |        |  Inst. 1 (Curta)      |
-      |      (Parte 1)        |        +-----------+-----------+
-      +-----------------------+        |  Inst. 2 (Longa)      |
-      |      (Parte 2)        |        |  (Continuação...)     |
-      +-----------------------+        +-----------------------+
-         (Instruções Longas)              (Ex: CISC / Core i7)
+        (c) Instrução > Palavra          (d) Tamanho Variável
+        +-----------------------+        +-----------------------+
+        |     Instrução 1       |        |  Inst. 1 (Curta)      |
+        |      (Parte 1)        |        +-----------+-----------+
+        +-----------------------+        |  Inst. 2 (Longa)      |
+        |      (Parte 2)        |        |  (Continuação...)     |
+        +-----------------------+        +-----------------------+
+            (Instruções Longas)              (Ex: CISC / Core i7)
 
 ## 5.3.1 Critérios de projeto para formatos de instrução
 Esta seção descreve os "dilemas" que os projetistas de hardware enfrentam ao criar uma ISA. No seu diretório estruturas_de_dados, entender esses critérios é o que separa um código que apenas funciona de um código que extrai a performance máxima do silício.
@@ -941,32 +938,32 @@ Aqui o texto toca em um ponto que afeta diretamente seus projetos em C: Endereç
 
    Solução Moderna: Quase todas as CPUs modernas (Core i7, ARM) usam endereçamento de byte para facilitar a vida do programador, mas o hardware lê "linhas de cache" inteiras (64 bytes) de uma vez só para compensar a lentidão da RAM.
 
-Representação dos Critérios de Projeto
+    Representação dos Critérios de Projeto
 
-Fatores de Escolha          Impacto no Sistema Final
-+---------------------------+--------------------------------------------+
-|   Comprimento da Inst.    | Curto = +Velocidade / Longo = +Poder       |
-+---------------------------+--------------------------------------------+
-|   Número de Registradores | Muitos = +Rápido / Poucos = +RAM           |
-+---------------------------+--------------------------------------------+
-|   Tamanho do Opcode       | Pequeno = -Instruções / Grande = +Expansão |
-+---------------------------+--------------------------------------------+
-|   Resolução de Memória    | Byte = Fácil p/ Strings / Palavra = +RAM   |
-+---------------------------+--------------------------------------------+
+    Fatores de Escolha          Impacto no Sistema Final
+    +---------------------------+--------------------------------------------+
+    |   Comprimento da Inst.    | Curto = +Velocidade / Longo = +Poder       |
+    +---------------------------+--------------------------------------------+
+    |   Número de Registradores | Muitos = +Rápido / Poucos = +RAM           |
+    +---------------------------+--------------------------------------------+
+    |   Tamanho do Opcode       | Pequeno = -Instruções / Grande = +Expansão |
+    +---------------------------+--------------------------------------------+
+    |   Resolução de Memória    | Byte = Fácil p/ Strings / Palavra = +RAM   |
+    +---------------------------+--------------------------------------------+
 
-Tabela: Trade-offs de Design 
+    Tabela: Trade-offs de Design 
 
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-| Decisão de Projeto            | Vantagem                                           | Desvantagem                                             |
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-| Instruções Curtas             | Menor uso de largura de banda de memória.          | Difícil de decodificar e codificar operações complexas. |
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-| Muitos Registradores          | Menos acessos à memória lenta (RAM).               | Aumenta o custo e o consumo de energia do chip.         |
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-| Resolução de Byte             | Excelente para manipular cadeias (Strings).        | Exige campos de endereço mais longos nas instruções.    |
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
-| Opcodes Livres                | Facilita a evolução da ISA (Retrocompatibilidade). | Desperdiça bits que poderiam encurtar a instrução.      |
-+-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    | Decisão de Projeto            | Vantagem                                           | Desvantagem                                             |
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    | Instruções Curtas             | Menor uso de largura de banda de memória.          | Difícil de decodificar e codificar operações complexas. |
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    | Muitos Registradores          | Menos acessos à memória lenta (RAM).               | Aumenta o custo e o consumo de energia do chip.         |
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    | Resolução de Byte             | Excelente para manipular cadeias (Strings).        | Exige campos de endereço mais longos nas instruções.    |
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
+    | Opcodes Livres                | Facilita a evolução da ISA (Retrocompatibilidade). | Desperdiça bits que poderiam encurtar a instrução.      |
+    +-------------------------------+----------------------------------------------------+---------------------------------------------------------+
 
 ## 5.3.2 Expansão de opcodes
 A expansão de opcodes é uma técnica engenhosa de design de hardware para maximizar a utilidade de uma instrução de tamanho fixo. O segredo é usar um "valor de escape" no opcode para indicar que os bits que normalmente seriam endereços devem ser interpretados como parte do opcode.
@@ -984,32 +981,32 @@ O hardware usa o último valor possível do opcode (no exemplo, o 15 ou 1111) co
 
  - Se forem 1111 (15), o Decodificador avança para os próximos 4 bits para descobrir qual é a instrução.
 
-Representação da Expansão de Opcode (Exemplo Figura 5.12)
+    Representação da Expansão de Opcode (Exemplo Figura 5.12)
 
-Formato da Instrução (16 bits)          | Qtd. de Opcodes Disponíveis
-+---------------------------------------+-----------------------------+
-| [ OPCODE 4b ] [E1 4b] [E2 4b] [E3 4b] | 15 (0000 até 1110)          |
-+---------------------------------------+-----------------------------+
-| [ 1111 ] [ OPCODE 4b ] [E2 4b] [E3 4b]| 14 (1111 0000 até 1111 1101)|
-+---------------------------------------+-----------------------------+
-| [ 1111 ] [ 1110 ] [ OPCODE 4b ] [E3 ] | 31 (Instruções de 1 End.)   |
-+---------------------------------------+-----------------------------+
-| [ 1111 ] [ 1111 ] [ 1111 ] [ OPCODE ] | 16 (Instruções sem End.)    |
-+---------------------------------------+-----------------------------+
+    Formato da Instrução (16 bits)          | Qtd. de Opcodes Disponíveis
+    +---------------------------------------+-----------------------------+
+    | [ OPCODE 4b ] [E1 4b] [E2 4b] [E3 4b] | 15 (0000 até 1110)          |
+    +---------------------------------------+-----------------------------+
+    | [ 1111 ] [ OPCODE 4b ] [E2 4b] [E3 4b]| 14 (1111 0000 até 1111 1101)|
+    +---------------------------------------+-----------------------------+
+    | [ 1111 ] [ 1110 ] [ OPCODE 4b ] [E3 ] | 31 (Instruções de 1 End.)   |
+    +---------------------------------------+-----------------------------+
+    | [ 1111 ] [ 1111 ] [ 1111 ] [ OPCODE ] | 16 (Instruções sem End.)    |
+    +---------------------------------------+-----------------------------+
 
-Tabela: Resumo da Expansão
+    Tabela: Resumo da Expansão
 
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
-| Tipo de Instrução             | Estrutura do Opcode (Bits)        | Endereços Restantes           | Total de Instruções|
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
-| 3 Endereços                   | 0 a 14 (4 bits)                   | 3 (4 bits cada)               | 15                 |
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
-| 2 Endereços                   | 15 + (0 a 13) (8 bits)            | 2 (4 bits cada)               | 14                 |
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
-| 1 Endereço                    | 15 + 14 + (0 a 30) (12 bits)      | 1 (4 bits)                    | 3                  |
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
-| 0 Endereço                    | 15 + 15 + 15 + (0 a 15) (16 bits) | 0                             | 1                  |
-+-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    | Tipo de Instrução             | Estrutura do Opcode (Bits)        | Endereços Restantes           | Total de Instruções|
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    | 3 Endereços                   | 0 a 14 (4 bits)                   | 3 (4 bits cada)               | 15                 |
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    | 2 Endereços                   | 15 + (0 a 13) (8 bits)            | 2 (4 bits cada)               | 14                 |
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    | 1 Endereço                    | 15 + 14 + (0 a 30) (12 bits)      | 1 (4 bits)                    | 3                  |
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
+    | 0 Endereço                    | 15 + 15 + 15 + (0 a 15) (16 bits) | 0                             | 1                  |
+    +-------------------------------+-----------------------------------+-------------------------------+--------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, a expansão de opcodes explica por que algumas instruções são "mais caras" que outras:
@@ -1022,32 +1019,32 @@ Esta seção descreve como a lógica de hardware "negocia" espaço dentro de uma
 
 Aqui está a representação visual da Figura 5.12 e os detalhes técnicos para o seu repositório:
 
-Hierarquia de Expansão de Opcode (16 bits)
+    Hierarquia de Expansão de Opcode (16 bits)
 
-Bits:  [15....12]  [11.....8]  [7......4]  [3......0]
-        +----------+----------+----------+----------+
- (3 End)| 0000-1110|  End. 1  |  End. 2  |  End. 3  | -> 15 Inst.
-        +----------+----------+----------+----------+
- (2 End)|   1111   | 0000-1101|  End. 2  |  End. 3  | -> 14 Inst.
-        +----------+----------+----------+----------+
- (1 End)|   1111   |   1110   | 0000-1110|  End. 3  | -> 31 Inst.
-        +----------+----------+----------+----------+
- (0 End)|   1111   |   1111   |   1111   | 0000-1111| -> 16 Inst.
-        +----------+----------+----------+----------+
+    Bits:  [15....12]  [11.....8]  [7......4]  [3......0]
+            +----------+----------+----------+----------+
+    (3 End)| 0000-1110|  End. 1  |  End. 2  |  End. 3  | -> 15 Inst.
+            +----------+----------+----------+----------+
+    (2 End)|   1111   | 0000-1101|  End. 2  |  End. 3  | -> 14 Inst.
+            +----------+----------+----------+----------+
+    (1 End)|   1111   |   1110   | 0000-1110|  End. 3  | -> 31 Inst.
+            +----------+----------+----------+----------+
+    (0 End)|   1111   |   1111   |   1111   | 0000-1111| -> 16 Inst.
+            +----------+----------+----------+----------+
 
-Tabela: Estrutura da Expansão
+    Tabela: Estrutura da Expansão
 
-+-------------------------------+---------------------------------+---------------------------------+------------------------------------------------------+
-| Tipo de Instrução             | Aridade                         | Prefixo de Escape (Binário)     | Faixa do Opcode             | Endereços (4 bits cada)|
-+-------------------------------+---------------------------------+---------------------------------+------------------------------------------------------+
-| 3 Endereços                   | 3                               | (Nenhum)                        | 0000 até 1110               | xxxx, yyyy, zzzz       |
-+-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
-| 2 Endereços                   | 2                               | 1111                            | 0000 até 1101               | yyyy, zzzz             |
-+-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
-| 1 Endereço                    | 1                               | 1111 1110                       | 0000 até 1110               | zzzz                   |
-+-------------------------------+---------------------------------+---------------------------------+-------------------------------+----------------------+
-| 0 Endereço                    | 0                               | 1111 1111 1111                  | 0000 até 1111               | (Nenhum)               |
-+-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
+    +-------------------------------+---------------------------------+---------------------------------+------------------------------------------------------+
+    | Tipo de Instrução             | Aridade                         | Prefixo de Escape (Binário)     | Faixa do Opcode             | Endereços (4 bits cada)|
+    +-------------------------------+---------------------------------+---------------------------------+------------------------------------------------------+
+    | 3 Endereços                   | 3                               | (Nenhum)                        | 0000 até 1110               | xxxx, yyyy, zzzz       |
+    +-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
+    | 2 Endereços                   | 2                               | 1111                            | 0000 até 1101               | yyyy, zzzz             |
+    +-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
+    | 1 Endereço                    | 1                               | 1111 1110                       | 0000 até 1110               | zzzz                   |
+    +-------------------------------+---------------------------------+---------------------------------+-------------------------------+----------------------+
+    | 0 Endereço                    | 0                               | 1111 1111 1111                  | 0000 até 1111               | (Nenhum)               |
+    +-------------------------------+---------------------------------+---------------------------------+-----------------------------+------------------------+
 
 
 ## Insight para seus projetos em estruturas_de_dados
@@ -1081,52 +1078,52 @@ O Core i7 segue a regra de instrução de dois operandos, mas com uma limitaçã
 
    Regra de Ouro: Se um operando estiver na memória, o outro obrigatoriamente deve estar em um registrador. O hardware não consegue somar "Memória + Memória" em uma única instrução.
 
-Representação do Formato de Instrução (Core i7)
+    Representação do Formato de Instrução (Core i7)
 
-Campos da Instrução            | Tamanho (Bytes) |  Opcional? 
-+-------------------------------------+------------------+------------+
-| PREFIXO (Modificadores)             |     0 a 4        |     SIM    |
-+-------------------------------------+------------------+------------+
-| OPCODE (Comando)                    |     1 a 3        |     NÃO    |
-+-------------------------------------+------------------+------------+
-| MOD R/M (Modo de Endereçamento)     |     0 a 1        |     SIM    |
-+-------------------------------------+------------------+------------+
-| SIB (Escala, Índice, Base)          |     0 a 1        |     SIM    |
-+-------------------------------------+------------------+------------+
-| DESLOCAMENTO (Endereço RAM)         |     0, 1, 2 ou 4 |     SIM    |
-+-------------------------------------+------------------+------------+
-| IMEDIATO (Constante)                |     0, 1, 2 ou 4 |     SIM    |
-+-------------------------------------+------------------+------------+
+    Campos da Instrução            | Tamanho (Bytes) |  Opcional? 
+    +-------------------------------------+------------------+------------+
+    | PREFIXO (Modificadores)             |     0 a 4        |     SIM    |
+    +-------------------------------------+------------------+------------+
+    | OPCODE (Comando)                    |     1 a 3        |     NÃO    |
+    +-------------------------------------+------------------+------------+
+    | MOD R/M (Modo de Endereçamento)     |     0 a 1        |     SIM    |
+    +-------------------------------------+------------------+------------+
+    | SIB (Escala, Índice, Base)          |     0 a 1        |     SIM    |
+    +-------------------------------------+------------------+------------+
+    | DESLOCAMENTO (Endereço RAM)         |     0, 1, 2 ou 4 |     SIM    |
+    +-------------------------------------+------------------+------------+
+    | IMEDIATO (Constante)                |     0, 1, 2 ou 4 |     SIM    |
+    +-------------------------------------+------------------+------------+
 
-Tabela: ModR/M e SIB
+    Tabela: ModR/M e SIB
 
-Byte ModR/M (8 bits)              Byte SIB (Opcional - 8 bits)
-+-------+-----------+-----------+     +--------+-----------+-----------+
-|  MOD  |    REG    |    R/M    |     | ESCALA |  ÍNDICE   |   BASE    |
-| (2b)  |   (3b)    |   (3b)    |     |  (2b)  |   (3b)    |   (3b)    |
-+-------+-----------+-----------+     +--------+-----------+-----------+
-    |         |           |               |          |           |
-    |         |           +---------------+----------+-----------+
-    |         |                           |
-    v         v                           v
- Determina  Destino ou            Cálculo de Array:
- Reg/Mem    Ext. Opcode       [Base] + ([Índice] * [Escala])
+    Byte ModR/M (8 bits)              Byte SIB (Opcional - 8 bits)
+    +-------+-----------+-----------+     +--------+-----------+-----------+
+    |  MOD  |    REG    |    R/M    |     | ESCALA |  ÍNDICE   |   BASE    |
+    | (2b)  |   (3b)    |   (3b)    |     |  (2b)  |   (3b)    |   (3b)    |
+    +-------+-----------+-----------+     +--------+-----------+-----------+
+        |         |           |               |          |           |
+        |         |           +---------------+----------+-----------+
+        |         |                           |
+        v         v                           v
+    Determina  Destino ou            Cálculo de Array:
+    Reg/Mem    Ext. Opcode       [Base] + ([Índice] * [Escala])
 
-+--------+------+--------------------------------------------------------------------------+
-| Campo  | Bits | Função                                                                   |
-+--------+------+--------------------------------------------------------------------------+
-| MOD    | 2    | Determina se o operando está em registrador ou memória (+ deslocamento). |
-+--------+------+--------------------------------------------------------------------------+
-| REG    | 3    | Especifica o registrador de destino ou estende o opcode.                 |
-+--------+------+--------------------------------------------------------------------------+
-| R/M    | 3    | Especifica o registrador de origem ou o uso do byte SIB.                 |
-+--------+------+--------------------------------------------------------------------------+
-| Escala | 2    | Fator de multiplicação (1, 2, 4 ou 8) para o Índice (útil para arrays).  |
-+--------+------+--------------------------------------------------------------------------+
-| Índice | 3    | Registrador que contém o índice do array.                                |
-+--------+------+--------------------------------------------------------------------------+
-| Base   | 3    | Registrador que contém o endereço inicial da estrutura.                  |
-+--------+------+--------------------------------------------------------------------------+
+    +--------+------+--------------------------------------------------------------------------+
+    | Campo  | Bits | Função                                                                   |
+    +--------+------+--------------------------------------------------------------------------+
+    | MOD    | 2    | Determina se o operando está em registrador ou memória (+ deslocamento). |
+    +--------+------+--------------------------------------------------------------------------+
+    | REG    | 3    | Especifica o registrador de destino ou estende o opcode.                 |
+    +--------+------+--------------------------------------------------------------------------+
+    | R/M    | 3    | Especifica o registrador de origem ou o uso do byte SIB.                 |
+    +--------+------+--------------------------------------------------------------------------+
+    | Escala | 2    | Fator de multiplicação (1, 2, 4 ou 8) para o Índice (útil para arrays).  |
+    +--------+------+--------------------------------------------------------------------------+
+    | Índice | 3    | Registrador que contém o índice do array.                                |
+    +--------+------+--------------------------------------------------------------------------+
+    | Base   | 3    | Registrador que contém o endereço inicial da estrutura.                  |
+    +--------+------+--------------------------------------------------------------------------+
 
 O byte SIB é o que torna o acesso a um struct ou array em C tão eficiente. Quando você faz A[i], a ULA não precisa de várias instruções de soma e multiplicação em software; o Decodificador configura o hardware para fazer isso em um único passo usando os campos de Escala, Índice e Base.
 
@@ -1148,35 +1145,34 @@ Este é o diferencial da ARM: os bits 28 a 31 (campo Cond) em quase todas as ins
 Representação dos Formatos ARM (32 bits)
 
 
-Bits: [31...28] [27.26] [25] [24...21] [20] [19...16] [15...12] [11......0]
-      +---------+-------+----+---------+----+---------+---------+-----------+
-      |  COND   | TIPO  | I  | OPCODE  | S  |   Rn    |   Rd    | OPERAND 2 |
-      +---------+-------+----+---------+----+---------+---------+-----------+
-          |         |     |      |      |      |         |          |
-      Condição   Define   |    Ação    |    Origem 1   Destino    Origem 2
-      (Sempre)   Formato  |  (ADD/SUB) |                          (Reg/Imm)
-                        Imediato?    Update
-                                     Flags?
+    Bits: [31...28] [27.26] [25] [24...21] [20] [19...16] [15...12] [11......0]
+        +---------+-------+----+---------+----+---------+---------+-----------+
+        |  COND   | TIPO  | I  | OPCODE  | S  |   Rn    |   Rd    | OPERAND 2 |
+        +---------+-------+----+---------+----+---------+---------+-----------+
+            |         |     |      |      |      |         |          |
+        Condição   Define   |    Ação    |    Origem 1   Destino    Origem 2
+        (Sempre)   Formato  |  (ADD/SUB) |                          (Reg/Imm)
+                            Imediato?    Update
+                                        Flags?
 
-Tabela: Campos da Instrução ARM
-
-+---------------+--------+---------------------------------------------------------------------------+
-| Campo         | Bits   | Função                                                                    |
-+---------------+--------+---------------------------------------------------------------------------+
-| Cond          | 4      | Condição de execução (Executa apenas se as flags do PSR baterem).         |
-+---------------+--------+---------------------------------------------------------------------------+
-| Tipo          | 2      | Primeira parada do decodificador para identificar o formato (bits 26-27). |
-+---------------+--------+---------------------------------------------------------------------------+
-| I (Immediate) | 1   n  | Se 0, o segundo operando é um registrador. Se 1, é uma constante.         |
-+---------------+--------+---------------------------------------------------------------------------+
-| Opcode        | 4      | Define a operação aritmética ou lógica (ADD, SUB, AND, OR, etc.).         |
-+---------------+--------+---------------------------------------------------------------------------+
-| S             | 1      | Define se a instrução deve atualizar as flags do PSR após a execução.     |
-+---------------+--------+---------------------------------------------------------------------------+
-| Rn / Rd       | 4 cada | Registrador de Origem (Rn) e Registrador de Destino (Rd).                 |
-+---------------+--------+---------------------------------------------------------------------------+
-| Operand2      | 12     | Pode conter um valor imediato ou um registrador com deslocamento (Shift). |
-+---------------+--------+---------------------------------------------------------------------------+
+    Tabela: Campos da Instrução ARM
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Campo         | Bits   | Função                                                                    |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Cond          | 4      | Condição de execução (Executa apenas se as flags do PSR baterem).         |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Tipo          | 2      | Primeira parada do decodificador para identificar o formato (bits 26-27). |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | I (Immediate) | 1   n  | Se 0, o segundo operando é um registrador. Se 1, é uma constante.         |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Opcode        | 4      | Define a operação aritmética ou lógica (ADD, SUB, AND, OR, etc.).         |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | S             | 1      | Define se a instrução deve atualizar as flags do PSR após a execução.     |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Rn / Rd       | 4 cada | Registrador de Origem (Rn) e Registrador de Destino (Rd).                 |
+    +---------------+--------+---------------------------------------------------------------------------+
+    | Operand2      | 12     | Pode conter um valor imediato ou um registrador com deslocamento (Shift). |
+    +---------------+--------+---------------------------------------------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, a predicação da ARM ajuda a evitar o "Branch Misprediction" (erro de previsão de salto):
@@ -1200,68 +1196,68 @@ Detalhamento dos Formatos:
  - Formato 4 (Load/Store com Deslocamento): Usa um endereço base implícito (X, Y ou Z) e soma um pequeno valor constante (6 bits).
  - Formato 5 e 6 (Saltos/Jumps): O formato 5 é relativo (pula para perto do PC atual), enquanto o 6 é absoluto (pode pular para qualquer lugar na Flash de 22 bits).
 
-Representação dos Formatos AVR
+    Representação dos Formatos AVR
 
-Tamanho | Formato | Estrutura Típica (Bits)          | Exemplo
-+--------+---------+----------------------------------+------------------+
-| 16 bits|    1    | [Opcode][Rd 5b][Rr 5b]           | ADD Rd, Rr       |
-+--------+---------+----------------------------------+------------------+
-| 16 bits|    2    | [Opcode     ][Rd 5b]             | INC Rd           |
-+--------+---------+----------------------------------+------------------+
-| 16 bits|    3    | [Op][K high][Rd 4b][K low]       | SUBI Rd, #K      |
-+--------+---------+----------------------------------+------------------+
-| 32 bits|    6    | [Opcode][K 22 bits............]  | JMP #K (Absoluto)|
-+--------+---------+----------------------------------+------------------+
- *Legenda: Rd = Registro Destino, Rr = Registro Origem, K = Constante/Imediato
+    Tamanho | Formato | Estrutura Típica (Bits)          | Exemplo
+    +--------+---------+----------------------------------+------------------+
+    | 16 bits|    1    | [Opcode][Rd 5b][Rr 5b]           | ADD Rd, Rr       |
+    +--------+---------+----------------------------------+------------------+
+    | 16 bits|    2    | [Opcode     ][Rd 5b]             | INC Rd           |
+    +--------+---------+----------------------------------+------------------+
+    | 16 bits|    3    | [Op][K high][Rd 4b][K low]       | SUBI Rd, #K      |
+    +--------+---------+----------------------------------+------------------+
+    | 32 bits|    6    | [Opcode][K 22 bits............]  | JMP #K (Absoluto)|
+    +--------+---------+----------------------------------+------------------+
+    *Legenda: Rd = Registro Destino, Rr = Registro Origem, K = Constante/Imediato
 
-Tabela: Comparativo de Formatos do ATmega168
+    Tabela: Comparativo de Formatos do ATmega168
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | Formato | Tamanho | Foco Principal                        | Limitação                                  |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 1       | 16 bits | Aritmética entre Registradores        | Exige que o destino seja um dos operandos. |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 2       | 16 bits | Operações Unárias (INC, NEG)          | Apenas um operando.                        |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 3       | 16 bits | Operações com Constantes (ANDI, SUBI) | Restrito aos registradores R16-R31.        |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 4       | 16 bits | Acesso à Memória (Load/Store)         | Deslocamento curto (6 bits).               |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 5       | 16 bits | Saltos Relativos                      | Alcance limitado ao redor do PC.           |
+    +---------+---------+---------------------------------------+--------------------------------------------+
+    | 6       | 32 bits | Chamadas de Função e Jumps Longos     | Ocupa o dobro de espaço na Flash.          |
+    +---------+---------+---------------------------------------+--------------------------------------------+
 
-+---------+---------+---------------------------------------+--------------------------------------------+
-| Formato | Tamanho | Foco Principal                        | Limitação                                  |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 1       | 16 bits | Aritmética entre Registradores        | Exige que o destino seja um dos operandos. |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 2       | 16 bits | Operações Unárias (INC, NEG)          | Apenas um operando.                        |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 3       | 16 bits | Operações com Constantes (ANDI, SUBI) | Restrito aos registradores R16-R31.        |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 4       | 16 bits | Acesso à Memória (Load/Store)         | Deslocamento curto (6 bits).               |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 5       | 16 bits | Saltos Relativos                      | Alcance limitado ao redor do PC.           |
-+---------+---------+---------------------------------------+--------------------------------------------+
-| 6       | 32 bits | Chamadas de Função e Jumps Longos     | Ocupa o dobro de espaço na Flash.          |
-+---------+---------+---------------------------------------+--------------------------------------------+
 Organização de Hardware: Visão AVR (Seu Padrão)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (8 bits)            |       |   REGISTRADORES (R0-R31)   |
-    | (Executa 1 ou 2 oper.)    | <---> | (Inclui X, Y, Z de 16 bits)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |                  BARRAMENTO INTERNO (8 bits)                   |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Identifica 2 ou 4 bytes) | <---> |   (16 ou 32 bits / Flash)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dados/Instrução)    |
-    | (Otimizado para 16 bits)  | <---> |   (Busca na Flash/SRAM)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço)           |
-    | (Avança +2 ou +4 bytes)   | ----> |   (Aponta p/ SRAM ou Flash)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA FLASH / SRAM     |
-    | (Cadencia o Ciclo)        |       |   (Código e Variáveis)     |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (8 bits)            |       |   REGISTRADORES (R0-R31)   |
+        | (Executa 1 ou 2 oper.)    | <---> | (Inclui X, Y, Z de 16 bits)|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |                  BARRAMENTO INTERNO (8 bits)                   |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Identifica 2 ou 4 bytes) | <---> |   (16 ou 32 bits / Flash)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dados/Instrução)    |
+        | (Otimizado para 16 bits)  | <---> |   (Busca na Flash/SRAM)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço)           |
+        | (Avança +2 ou +4 bytes)   | ----> |   (Aponta p/ SRAM ou Flash)|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA FLASH / SRAM     |
+        | (Cadencia o Ciclo)        |       |   (Código e Variáveis)     |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 
@@ -1291,28 +1287,28 @@ Diferente de buscar um valor em uma variável (que exige um endereço), o imedia
 2. Representação Visual (Figura 5.16)
 Aqui está o diagrama ASCII da instrução MOV R1, 4 conforme o seu padrão de blocos:
 
-Formato de Instrução com Endereçamento Imediato
-+----------------+----------------+--------------------------+
-|    OPCODE      |  REGISTRADOR   |    VALOR IMEDIATO        |
-|    (MOV)       |      (R1)      |         (4)              |
-+----------------+----------------+--------------------------+
-       |                |                    |
-       v                v                    v
-  "Mova para..."   "...este destino"    "...este valor fixo"
+    Formato de Instrução com Endereçamento Imediato
+    +----------------+----------------+--------------------------+
+    |    OPCODE      |  REGISTRADOR   |    VALOR IMEDIATO        |
+    |    (MOV)       |      (R1)      |         (4)              |
+    +----------------+----------------+--------------------------+
+        |                |                    |
+        v                v                    v
+    "Mova para..."   "...este destino"    "...este valor fixo"
 
-Tabela: Prós e Contras do Endereçamento Imediato 
+    Tabela: Prós e Contras do Endereçamento Imediato 
 
-+-----------------+--------------------------------------------------------------------+
-| Característica  | Descrição                                                          |
-+-----------------+--------------------------------------------------------------------+
-| Velocidade      | Muito alta (o operando é carregado junto com o opcode no RDM).     |
-+-----------------+--------------------------------------------------------------------+
-| Acessos à RAM   | Apenas 1 (busca da instrução).                                     |
-+-----------------+--------------------------------------------------------------------+
-| Flexibilidade   | Nula (o valor é "hardcoded" no binário).                           |
-+-----------------+--------------------------------------------------------------------+
-| Limitação       | O valor máximo depende da largura do campo (ex: 8 bits = máx 255). |
-+-----------------+--------------------------------------------------------------------+
+    +-----------------+--------------------------------------------------------------------+
+    | Característica  | Descrição                                                          |
+    +-----------------+--------------------------------------------------------------------+
+    | Velocidade      | Muito alta (o operando é carregado junto com o opcode no RDM).     |
+    +-----------------+--------------------------------------------------------------------+
+    | Acessos à RAM   | Apenas 1 (busca da instrução).                                     |
+    +-----------------+--------------------------------------------------------------------+
+    | Flexibilidade   | Nula (o valor é "hardcoded" no binário).                           |
+    +-----------------+--------------------------------------------------------------------+
+    | Limitação       | O valor máximo depende da largura do campo (ex: 8 bits = máx 255). |
+    +-----------------+--------------------------------------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Ao codificar em C no seu diretório estruturas_de_dados, o uso de #define ou constantes literais (x = 10;) costuma gerar endereçamento imediato:
@@ -1331,66 +1327,65 @@ Essas duas formas de endereçamento são os pilares da movimentação de dados. 
 
 2. Comparativo Visual 
 
-Endereçamento Direto              Endereçamento de Registrador
-   (Acesso à Memória Global)              (Acesso Interno à CPU)
-+----------+------------------+       +----------+------------------+
-|  OPCODE  |  ENDEREÇO RAM    |       |  OPCODE  |  Nº REGISTRADOR  |
-|  (LOAD)  |     (1024)       |       |  (ADD)   |       (R1)       |
-+----------+--------+---------+       +----------+--------+---------+
-                    |                                     |
-          +---------v----------+                +---------v----------+
-          |   MEMÓRIA (RAM)    |                |   REGISTRADORES    |
-          | Adr: 1024 [ Dado ] |                |   R1: [ Dado ]     |
-          +--------------------+                +--------------------+
+    Endereçamento Direto              Endereçamento de Registrador
+    (Acesso à Memória Global)              (Acesso Interno à CPU)
+    +----------+------------------+       +----------+------------------+
+    |  OPCODE  |  ENDEREÇO RAM    |       |  OPCODE  |  Nº REGISTRADOR  |
+    |  (LOAD)  |     (1024)       |       |  (ADD)   |       (R1)       |
+    +----------+--------+---------+       +----------+--------+---------+
+                        |                                     |
+            +---------v----------+                +---------v----------+
+            |   MEMÓRIA (RAM)    |                |   REGISTRADORES    |
+            | Adr: 1024 [ Dado ] |                |   R1: [ Dado ]     |
+            +--------------------+                +--------------------+
 
-Tabela: Prós e Contras
-
-+-----------------+-----------------------------------+--------------------------------------+
-| Característica  | Endereçamento Direto              | Endereçamento de Registrador         |
-+-----------------+-----------------------------------+--------------------------------------+
-| Localização     | Memória Principal (SRAM/DRAM)     | Dentro do Processador (GPRs)         |
-+-----------------+-----------------------------------+--------------------------------------+
-| Velocidade      | Lenta (Exige ciclo de barramento) | Altíssima (Ciclo único)              |
-+-----------------+-----------------------------------+--------------------------------------+
-| Tamanho do Campo| Grande (ex: 32 bits para 4GB)     | Curto (ex: 5 bits para 32 regs)      |
-+-----------------+-----------------------------------+--------------------------------------+
-| Uso em Código   | Variáveis Globais e Estáticas     | Variáveis Locais e Contadores (i, j) |
-+-----------------+-----------------------------------+--------------------------------------+
+    Tabela: Prós e Contras
+    +-----------------+-----------------------------------+--------------------------------------+
+    | Característica  | Endereçamento Direto              | Endereçamento de Registrador         |
+    +-----------------+-----------------------------------+--------------------------------------+
+    | Localização     | Memória Principal (SRAM/DRAM)     | Dentro do Processador (GPRs)         |
+    +-----------------+-----------------------------------+--------------------------------------+
+    | Velocidade      | Lenta (Exige ciclo de barramento) | Altíssima (Ciclo único)              |
+    +-----------------+-----------------------------------+--------------------------------------+
+    | Tamanho do Campo| Grande (ex: 32 bits para 4GB)     | Curto (ex: 5 bits para 32 regs)      |
+    +-----------------+-----------------------------------+--------------------------------------+
+    | Uso em Código   | Variáveis Globais e Estáticas     | Variáveis Locais e Contadores (i, j) |
+    +-----------------+-----------------------------------+--------------------------------------+
 
 3. Organização de Hardware (Seu Padrão)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculos)          |       |   REGISTRADORES            |
-    | (Opera dados de Reg/RAM)  | <---> | (Foco: Modo Registrador)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Endereços e Dados)                 |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Decide: RAM ou Reg?)     | <---> | (Guarda Endereço ou Reg#)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dados da RAM)       |
-    | (Identifica o Modo)       | <---> | (Entrada no Modo Direto)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço RAM)       |
-    | (Avança p/ próxima inst.) | ----> | (Saída no Modo Direto)     |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Cadencia os ciclos)      |       | (Onde reside o dado Direto)|
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculos)          |       |   REGISTRADORES            |
+        | (Opera dados de Reg/RAM)  | <---> | (Foco: Modo Registrador)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Endereços e Dados)                 |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Decide: RAM ou Reg?)     | <---> | (Guarda Endereço ou Reg#)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dados da RAM)       |
+        | (Identifica o Modo)       | <---> | (Entrada no Modo Direto)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço RAM)       |
+        | (Avança p/ próxima inst.) | ----> | (Saída no Modo Direto)     |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Cadencia os ciclos)      |       | (Onde reside o dado Direto)|
+        +---------------------------+       +----------------------------+
 
 
-## nsight para seus projetos em estruturas_de_dados
+## Insight para seus projetos em estruturas_de_dados
 No seu diretório estruturas_de_dados, entender isso ajuda a otimizar o uso da memória:
 
 Variáveis Globais (Direto): Elas têm endereços fixos. Se você usa muitas globais, seu código faz muitos acessos lentos à RAM.
@@ -1422,32 +1417,31 @@ Como o texto menciona, antigamente (na era de Von Neumann), para somar um vetor,
 
 Representação Visual: Soma de Vetor (Figura 5.17)
 
-LAÇO DE SOMA (Vetor A)            ESTADO DA MEMÓRIA / REGS
-+--------------------------------+      +--------------------------+
-|  MOV R1, #0   (Soma)           |      | Registro R2 (Ponteiro)   |
-|  MOV R2, #A   (Ponteiro)       |      | Contém: [ Endereço de A ]|
-|  MOV R3, #A+4096 (Limite)      |      +------------+-------------+
-+--------------------------------+                   |
-| LOOP:                          |                   v
-|  ADD R1, (R2) <--- INDIRETO    |      +--------------------------+
-|  ADD R2, #4   (Próximo Int)    |      | MEMÓRIA RAM (Vetor A)    |
-|  CMP R2, R3                    |      | [ A+0 ] -> Valor 1       |
-|  BLT LOOP                      |      | [ A+4 ] -> Valor 2       |
-+--------------------------------+      +--------------------------+
+    LAÇO DE SOMA (Vetor A)            ESTADO DA MEMÓRIA / REGS
+    +--------------------------------+      +--------------------------+
+    |  MOV R1, #0   (Soma)           |      | Registro R2 (Ponteiro)   |
+    |  MOV R2, #A   (Ponteiro)       |      | Contém: [ Endereço de A ]|
+    |  MOV R3, #A+4096 (Limite)      |      +------------+-------------+
+    +--------------------------------+                   |
+    | LOOP:                          |                   v
+    |  ADD R1, (R2) <--- INDIRETO    |      +--------------------------+
+    |  ADD R2, #4   (Próximo Int)    |      | MEMÓRIA RAM (Vetor A)    |
+    |  CMP R2, R3                    |      | [ A+0 ] -> Valor 1       |
+    |  BLT LOOP                      |      | [ A+4 ] -> Valor 2       |
+    +--------------------------------+      +--------------------------+
 
-Tabela: Comparativo de Indireção
-
-+--------------------+--------------------------------+------------------------------------L---+
-| Atributo           | Endereçamento Direto           | Indireto de Registrador (Ponteiro)     |
-+--------------------+--------------------------------+----------------------------------------+
-| Sintaxe Comum      | ADD R1, 1024                   | ADD R1, (R2) ou [R2]                   |
-+--------------------+--------------------------------+----------------------------------------+
-| Flexibilidade      | Fixa (Sempre a mesma variável) | Dinâmica (Pode percorrer estruturas)   |
-+--------------------+--------------------------------+----------------------------------------+
-| Uso Principal      | Variáveis Globais Simples      | Arrays, Listas Ligadas, Pilhas         |
-+--------------------+--------------------------------+----------------------------------------+
-| Custo de Instrução | Longa (Contém o endereço)      | Curta (Contém apenas o nº do registro) |
-+--------------------+--------------------------------+----------------------------------------+
+    Tabela: Comparativo de Indireção
+    +--------------------+--------------------------------+------------------------------------L---+
+    | Atributo           | Endereçamento Direto           | Indireto de Registrador (Ponteiro)     |
+    +--------------------+--------------------------------+----------------------------------------+
+    | Sintaxe Comum      | ADD R1, 1024                   | ADD R1, (R2) ou [R2]                   |
+    +--------------------+--------------------------------+----------------------------------------+
+    | Flexibilidade      | Fixa (Sempre a mesma variável) | Dinâmica (Pode percorrer estruturas)   |
+    +--------------------+--------------------------------+----------------------------------------+
+    | Uso Principal      | Variáveis Globais Simples      | Arrays, Listas Ligadas, Pilhas         |
+    +--------------------+--------------------------------+----------------------------------------+
+    | Custo de Instrução | Longa (Contém o endereço)      | Curta (Contém apenas o nº do registro) |
+    +--------------------+--------------------------------+----------------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Este modo é o que torna o C tão poderoso com ponteiros. Quando você faz sum += *ptr; em C:
@@ -1472,30 +1466,31 @@ O Endereçamento Indexado é uma evolução natural do endereçamento indireto, 
 No programa que calcula A[i] AND  B[i], a instrução MOV R4, A(R2) realiza a seguinte operação lógica:
  - Endereço Efetivo = Valor_de_A + Conteúdo_de_R2 
  - Se A = 124.300 e R2 = 4, a CPU busca no endereço 124.304.
-Cálculo do Endereço Indexado (Hardware)
-+-----------------------+           +-----------------------+
-|  OPCODE | REG | ADDR  |           |   REGISTRADOR (R2)    |
-|  (MOV)  |(R4) | (A)   |           |   Conteúdo: [ i ]     |
-+-----------+-----+-----+           +-----------+-----------+
-            |     |                             |
-            |     +------------( + )<-----------+
-            |                   |
-            |         +---------v----------+
-            |         |   MEMÓRIA (RAM)    |
-            +<--------|  Endereço: A + i   |
-                      +--------------------+
+
+    Cálculo do Endereço Indexado (Hardware)
+    +-----------------------+           +-----------------------+
+    |  OPCODE | REG | ADDR  |           |   REGISTRADOR (R2)    |
+    |  (MOV)  |(R4) | (A)   |           |   Conteúdo: [ i ]     |
+    +-----------+-----+-----+           +-----------+-----------+
+                |     |                             |
+                |     +------------( + )<-----------+
+                |                   |
+                |         +---------v----------+
+                |         |   MEMÓRIA (RAM)    |
+                +<--------|  Endereço: A + i   |
+                        +--------------------+
 
 ## Tabela: Comparativo de Endereçamento 
 
-+----------+---------------------------------+---------------------------------+---------------------------------+
-| Modo     | Origem do Endereço              | Vantagem                        | Uso Comum                       |
-+----------+---------------------------------+---------------------------------+---------------------------------+
-| Direto   | Apenas Instrução                | Simples                         | Variáveis Globais               |
-+----------+---------------------------------+---------------------------------+---------------------------------+
-| Indireto | Apenas Registrador              | Rápido/Curto                    | Ponteiros (*ptr)                |
-+----------+---------------------------------+---------------------------------+---------------------------------+
-| Indexado | Instrução + Reg                 | Flexível                        | Arrays (A[i]) e Structs         |
-+----------+---------------------------------+---------------------------------+---------------------------------+
+    +----------+---------------------------------+---------------------------------+---------------------------------+
+    | Modo     | Origem do Endereço              | Vantagem                        | Uso Comum                       |
+    +----------+---------------------------------+---------------------------------+---------------------------------+
+    | Direto   | Apenas Instrução                | Simples                         | Variáveis Globais               |
+    +----------+---------------------------------+---------------------------------+---------------------------------+
+    | Indireto | Apenas Registrador              | Rápido/Curto                    | Ponteiros (*ptr)                |
+    +----------+---------------------------------+---------------------------------+---------------------------------+
+    | Indexado | Instrução + Reg                 | Flexível                        | Arrays (A[i]) e Structs         |
+    +----------+---------------------------------+---------------------------------+---------------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Este modo explica por que acessar o primeiro campo de uma struct é tão rápido quanto uma variável comum, mas acessar o décimo campo exige esse cálculo:
@@ -1510,8 +1505,8 @@ Algumas máquinas têm um modo de endereçamento no qual o endereço de memória
 Esse modo às vezes é denominado endereçamento de base indexado. Um dos registradores é a base e o outro é o índice. Esse modo teria sido útil aqui. 
 Fora do laço poderíamos ter posto o endereço de A em R5 e o endereço de B em R6. Então, poderíamos ter substituído a instrução em LOOP e sua sucessora por
 
-LOOP:     MOV R4,(R2+R5)
-		      AND R4,(R2+R6)
+    LOOP:     MOV R4,(R2+R5)
+                AND R4,(R2+R6)
 
 O ideal seria que houvesse um modo de endereçamento para endereçar indiretamente a soma de dois regis-
 tradores sem nenhum deslocamento. Como alternativa, até mesmo uma instrução com um deslocamento de 8 bits
@@ -1540,35 +1535,35 @@ A analogia da Figura 5.20 descreve o funcionamento de um Compilador ou Interpret
 
 Máquina de Pilha (Zero Endereços)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculos)          |       |   REGISTRADORES            |
-    | (Retira 2, Devolve 1)     | <---> | (SP - STACK POINTER)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Dados do Topo da Pilha)            |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Gerencia PUSH e POP)     | <---> | (Apenas o Opcode)          |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dado do Topo)       |
-    | (Lógica Zero Endereço)    | <---> | (Lê/Escreve na Pilha)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço do SP)     |
-    | (Avança 1 ou 2 bytes)     | ----> | (Aponta p/ Topo da RAM)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Cadencia os PUSH/POP)    |       | (Área da Pilha / Stack)    |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculos)          |       |   REGISTRADORES            |
+        | (Retira 2, Devolve 1)     | <---> | (SP - STACK POINTER)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Dados do Topo da Pilha)            |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Gerencia PUSH e POP)     | <---> | (Apenas o Opcode)          |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dado do Topo)       |
+        | (Lógica Zero Endereço)    | <---> | (Lê/Escreve na Pilha)      |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço do SP)     |
+        | (Avança 1 ou 2 bytes)     | ----> | (Aponta p/ Topo da RAM)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Cadencia os PUSH/POP)    |       | (Área da Pilha / Stack)    |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Ao implementar uma Pilha em C, você está simulando este comportamento de hardware.
@@ -1595,38 +1590,38 @@ Quando um operador chega:
 - Se o operador tiver precedência menor ou igual, o operador do topo sai da pilha (vai para o Rio) e o novo operador entra na pilha.
 
 Figura 5.21   Tabela de decisão usada pelo algoritmo de notação infixa para notação polonesa invertida.
-+-----+-----+-----+-----+-----+-----+-----+-----+
-|     | +   | -   | x   | /   | (   | )   | ⊥   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| ⊥   | 1   | 1   | 1   | 1   | 1   | 1   | 5   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| +   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| -   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| x   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| /   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
-| (   | 5   | 5   | 5   | 5   | 1   | 1   | 3   |
-+-----+-----+-----+-----+-----+-----+-----+-----+
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    |     | +   | -   | x   | /   | (   | )   | ⊥   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | ⊥   | 1   | 1   | 1   | 1   | 1   | 1   | 5   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | +   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | -   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | x   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | /   | 2   | 2   | 2   | 2   | 1   | 1   | 2   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
+    | (   | 5   | 5   | 5   | 5   | 1   | 1   | 3   |
+    +-----+-----+-----+-----+-----+-----+-----+-----+
 
-Figura 5.22   Alguns exemplos de expressões infixas e seus equivalentes em notação polonesa invertida.
-+---------------------------------+-------------------------------+
-| Notação infixa                  | Notação polonesa invertida    |
-+---------------------------------+-------------------------------+
-| A+B×C                           | ABC×+                         |
-+---------------------------------+-------------------------------+
-| A×B+C                           | AB×C+                         |
-+---------------------------------+-------------------------------+
-| A×B+C×D                         | AB×CD×+                       |
-+---------------------------------+-------------------------------+
-| (A + B) / (C − D)               | AB+CD−/                       |
-+---------------------------------+-------------------------------+
-| A×B/C                           | AB×C/                         |
-+---------------------------------+-------------------------------+
-| ((A + B) × C + D) / (E + F + G) | AB+C×D+EF+G+/                 |
-+---------------------------------+-------------------------------+
+    Figura 5.22   Alguns exemplos de expressões infixas e seus equivalentes em notação polonesa invertida.
+    +---------------------------------+-------------------------------+
+    | Notação infixa                  | Notação polonesa invertida    |
+    +---------------------------------+-------------------------------+
+    | A+B×C                           | ABC×+                         |
+    +---------------------------------+-------------------------------+
+    | A×B+C                           | AB×C+                         |
+    +---------------------------------+-------------------------------+
+    | A×B+C×D                         | AB×CD×+                       |
+    +---------------------------------+-------------------------------+
+    | (A + B) / (C − D)               | AB+CD−/                       |
+    +---------------------------------+-------------------------------+
+    | A×B/C                           | AB×C/                         |
+    +---------------------------------+-------------------------------+
+    | ((A + B) × C + D) / (E + F + G) | AB+C×D+EF+G+/                 |
+    +---------------------------------+-------------------------------+
 
 A Figura 5.21 e os exemplos da Figura 5.22 consolidam o papel da Pilha como a estrutura de dados definitiva para o processamento de expressões. No seu diretório estruturas_de_dados, este processo demonstra como a teoria de algoritmos (Dijkstra) encontra a implementação física (Máquina de Pilha).
 
@@ -1649,12 +1644,12 @@ Observe como a Notação Polonesa Invertida (RPN) reorganiza os operadores para 
 3. Avaliação em Máquina de Pilha (Fig. 5.23)
 A avaliação é o inverso da conversão. Enquanto a conversão usa a pilha para operadores, a avaliação usa a pilha para operandos.
 
-Fluxo de Execução da Expressão: 8 2 5 * + ...
- 1. Push 8
- 2. Push 2
- 3. Push 5
- 4. Op *: Desempilha 5 e 2 -> Multiplica (10) -> Push 10
- 5. Op +: Desempilha 10 e 8 -> Soma (18) -> Push 18
+    Fluxo de Execução da Expressão: 8 2 5 * + ...
+    1. Push 8
+    2. Push 2
+    3. Push 5
+    4. Op *: Desempilha 5 e 2 -> Multiplica (10) -> Push 10
+    5. Op +: Desempilha 10 e 8 -> Soma (18) -> Push 18
 
 ## Insight para seus projetos em estruturas_de_dados
 O ponto mencionado sobre a ordem na divisão é crucial. Em 8 / 2 (RPN: 8 2 /):
@@ -1740,20 +1735,19 @@ O texto também descreve um modelo altamente flexível (semelhante ao PDP-11 e V
 
     - Vantagem: Extrema facilidade para o compilador, pois as operações podem ocorrer diretamente entre memórias ou registradores de forma simétrica.
 
-Resumo Comparativo
-
-+-----------------+-----------------------------+-----------------------------+
-| CARACTERÍSTICA  |   MÁQUINA DE 3 ENDEREÇOS    |   MÁQUINA DE 2 ENDEREÇOS    |
-+-----------------+-----------------------------+-----------------------------+
-|      FOCO       |  Velocidade e simplicidade  |  Facilidade de compilação   |
-|                 |         de hardware         |       e flexibilidade       |
-+-----------------+-----------------------------+-----------------------------+
-|    OPERANDOS    |    Geralmente baseada em    |   Registradores ou Memória  |
-|                 |        registradores        |       de forma mista        |
-+-----------------+-----------------------------+-----------------------------+
-| ORTOGONALIDADE  |          Moderada           |            Alta             |
-|                 |      (formatos fixos)       | (qualquer modo em qualquer) |
-+-----------------+-----------------------------+-----------------------------+
+    Resumo Comparativo
+    +-----------------+-----------------------------+-----------------------------+
+    | CARACTERÍSTICA  |   MÁQUINA DE 3 ENDEREÇOS    |   MÁQUINA DE 2 ENDEREÇOS    |
+    +-----------------+-----------------------------+-----------------------------+
+    |      FOCO       |  Velocidade e simplicidade  |  Facilidade de compilação   |
+    |                 |         de hardware         |       e flexibilidade       |
+    +-----------------+-----------------------------+-----------------------------+
+    |    OPERANDOS    |    Geralmente baseada em    |   Registradores ou Memória  |
+    |                 |        registradores        |       de forma mista        |
+    +-----------------+-----------------------------+-----------------------------+
+    | ORTOGONALIDADE  |          Moderada           |            Alta             |
+    |                 |      (formatos fixos)       | (qualquer modo em qualquer) |
+    +-----------------+-----------------------------+-----------------------------+
 
 Um toque de contexto:
 
@@ -1763,27 +1757,27 @@ Para representar a Figura 5.24 mencionada no texto (uma máquina de 32 bits com 
 
 Como o texto descreve 256 opcodes (28=8 bits) e registradores/offsets, a estrutura clássica de uma máquina ortogonal de 32 bits ficaria assim:
 
-FORMATO 1: Operações entre Registradores (Aritmética/Lógica)
- 0      7 8      12 13     17 18     22 23                    31
-+--------+---------+---------+---------+------------------------+
-| Opcode |  Dest   | Fonte 1 | Fonte 2 |        (Vazio)         |
-| (8 b)  |  (5 b)  |  (5 b)  |  (5 b)  |         (9 b)          |
-+--------+---------+---------+---------+------------------------+
+    FORMATO 1: Operações entre Registradores (Aritmética/Lógica)
+    0      7 8      12 13     17 18     22 23                    31
+    +--------+---------+---------+---------+------------------------+
+    | Opcode |  Dest   | Fonte 1 | Fonte 2 |        (Vazio)         |
+    | (8 b)  |  (5 b)  |  (5 b)  |  (5 b)  |         (9 b)          |
+    +--------+---------+---------+---------+------------------------+
 
-FORMATO 2: Operações com Imediato (ou LOAD/STORE Indexado)
- 0      7 8      12 13     17 18                              31
-+--------+---------+---------+---+----------------------------+
-| Opcode |  Dest   | Fonte 1 | 1 |     Imediato (Offset)      |
-| (8 b)  |  (5 b)  |  (5 b)  |bit|          (13 bits)         |
-+--------+---------+---------+---+----------------------------+
-                               ^ Bit 23 ligado (Formato 2)
+    FORMATO 2: Operações com Imediato (ou LOAD/STORE Indexado)
+    0      7 8      12 13     17 18                              31
+    +--------+---------+---------+---+----------------------------+
+    | Opcode |  Dest   | Fonte 1 | 1 |     Imediato (Offset)      |
+    | (8 b)  |  (5 b)  |  (5 b)  |bit|          (13 bits)         |
+    +--------+---------+---------+---+----------------------------+
+                                ^ Bit 23 ligado (Formato 2)
 
-FORMATO 3: Desvios e Saltos (Relativo ao PC)
- 0      7 8                                                   31
-+--------+------------------------------------------------------+
-| Opcode |             Deslocamento (Offset) do PC              |
-| (8 b)  |                      (24 bits)                       |
-+--------+------------------------------------------------------+
+    FORMATO 3: Desvios e Saltos (Relativo ao PC)
+    0      7 8                                                   31
+    +--------+------------------------------------------------------+
+    | Opcode |             Deslocamento (Offset) do PC              |
+    | (8 b)  |                      (24 bits)                       |
+    +--------+------------------------------------------------------+
 
 Destaques do Projeto:
 
@@ -1827,18 +1821,18 @@ O texto menciona que pequenos ajustes no formato da instrução (Figura 5.25) mu
 
 Resumo dos Desafios do Projetista
 
-+-----------------------+---------------------------+----------------------------+
-|        DESAFIO        | CONSEQUÊNCIA NO HARDWARE  |    IMPACTO NO SOFTWARE     |
-+-----------------------+---------------------------+----------------------------+
-|  INSTRUÇÕES CURTAS    |    Execução rápida e      |     Limita o alcance       |
-|       (32 bits)       |    cache eficiente.       |      dos endereços.        |
-+-----------------------+---------------------------+----------------------------+
-|  INSTRUÇÕES LONGAS    | Consome mais ciclos de    | Permite operações          |
-|       (96 bits)       |       barramento.         | complexas em uma linha.    |
-+-----------------------+---------------------------+----------------------------+
-|    ORTOGONALIDADE     |  Hardware mais complexo   |      Facilita a vida       |
-|                       |       de projetar.        |       do compilador.       |
-+-----------------------+---------------------------+----------------------------+
+    +-----------------------+---------------------------+----------------------------+
+    |        DESAFIO        | CONSEQUÊNCIA NO HARDWARE  |    IMPACTO NO SOFTWARE     |
+    +-----------------------+---------------------------+----------------------------+
+    |  INSTRUÇÕES CURTAS    |    Execução rápida e      |     Limita o alcance       |
+    |       (32 bits)       |    cache eficiente.       |      dos endereços.        |
+    +-----------------------+---------------------------+----------------------------+
+    |  INSTRUÇÕES LONGAS    | Consome mais ciclos de    | Permite operações          |
+    |       (96 bits)       |       barramento.         | complexas em uma linha.    |
+    +-----------------------+---------------------------+----------------------------+
+    |    ORTOGONALIDADE     |  Hardware mais complexo   |      Facilita a vida       |
+    |                       |       de projetar.        |       do compilador.       |
+    +-----------------------+---------------------------+----------------------------+
 
 O que isso significa na prática?
 
@@ -1898,36 +1892,35 @@ Imagine um vetor a[i] em Java/C. O compilador pode resolver o acesso em uma úni
 
     - Resultado: O processador faz todo o cálculo matemático do endereço internamente.
 
-Resumo dos Modos Core i7 (32 bits)
-
-+------------+------------------------------------------+----------------------+
-|    MODO    |              COMO FUNCIONA               |      USO COMUM       |
-+------------+------------------------------------------+----------------------+
-|  IMEDIATO  |    O valor está na própria instrução.    | Constantes numéricas |
-+------------+------------------------------------------+----------------------+
-| REGISTRADOR| O dado está em um registrador (ex: EAX). |  Operações rápidas   |
-+------------+------------------------------------------+----------------------+
-|  INDIRETO  | O registrador contém o endereço de mem.  |      Ponteiros       |
-+------------+------------------------------------------+----------------------+
-|    SIB     |    Base + (Índice * Escala) + Offset     |  Vetores e Matrizes  |
-+------------+------------------------------------------+----------------------+
+    Resumo dos Modos Core i7 (32 bits)
+    +------------+------------------------------------------+----------------------+
+    |    MODO    |              COMO FUNCIONA               |      USO COMUM       |
+    +------------+------------------------------------------+----------------------+
+    |  IMEDIATO  |    O valor está na própria instrução.    | Constantes numéricas |
+    +------------+------------------------------------------+----------------------+
+    | REGISTRADOR| O dado está em um registrador (ex: EAX). |  Operações rápidas   |
+    +------------+------------------------------------------+----------------------+
+    |  INDIRETO  | O registrador contém o endereço de mem.  |      Ponteiros       |
+    +------------+------------------------------------------+----------------------+
+    |    SIB     |    Base + (Índice * Escala) + Offset     |  Vetores e Matrizes  |
+    +------------+------------------------------------------+----------------------+
 
 Apesar de ser "feio" e irregular do ponto de vista de design, essa complexidade é o que permite que o x86 execute tarefas pesadas com poucas instruções.
 
-Formato de Instrução de 2 Endereços (32 bits)
+    Formato de Instrução de 2 Endereços (32 bits)
 
-0      7 8        10 11     15 16    19 20       22 23     27 28    31
-+--------+-----------+---------+--------+-----------+---------+--------+
-| OPCODE |    MODO   |   REG   |  DESL  |    MODO   |   REG   |  DESL  |
-| (8 b)  |   (3 b)   |  (5 b)  | (4 b)  |   (3 b)   |  (5 b)  | (4 b)  |
-+--------+-----------+---------+--------+-----------+---------+--------+
-|        (Endereço direto ou deslocamento opcional de 32 bites)        |
-+----------------------------------------------------------------------+
-|        (Endereço direto ou deslocamento opcional de 32 bites)        |
-+----------------------------------------------------------------------+
-         \____________________________/ \____________________________/
-                 OPERANDO ORIGEM                OPERANDO DESTINO
-                    (12 bits)                      (12 bits)
+    0      7 8        10 11     15 16    19 20       22 23     27 28    31
+    +--------+-----------+---------+--------+-----------+---------+--------+
+    | OPCODE |    MODO   |   REG   |  DESL  |    MODO   |   REG   |  DESL  |
+    | (8 b)  |   (3 b)   |  (5 b)  | (4 b)  |   (3 b)   |  (5 b)  | (4 b)  |
+    +--------+-----------+---------+--------+-----------+---------+--------+
+    |        (Endereço direto ou deslocamento opcional de 32 bites)        |
+    +----------------------------------------------------------------------+
+    |        (Endereço direto ou deslocamento opcional de 32 bites)        |
+    +----------------------------------------------------------------------+
+            \____________________________/ \____________________________/
+                    OPERANDO ORIGEM                OPERANDO DESTINO
+                        (12 bits)                      (12 bits)
 
 Análise do seu Diagrama
 
@@ -1989,46 +1982,45 @@ Resultado: O processador acessa M[EAX * 4 + EBP + 8] e grava o valor zero. Sem o
 A estrutura interna desse byte de controle é dividida em três campos:
 Diagrama ASCII do Byte SIB
 
-Plaintext
+    Plaintext
 
-  7   6   5       3   2       0  (Bits)
-+-------+-----------+-----------+
-| SCALE |   INDEX   |    BASE   |
-+-------+-----------+-----------+
-| (2 b) |   (3 b)   |   (3 b)   |
-+-------+-----------+-----------+
-    |         |           |
-    |         |           +---> Registrador Base (EAX, EBX, etc.)
-    |         +---------------> Registrador de Índice
-    +-------------------------> Fator (00=x1, 01=x2, 10=x4, 11=x8)
+    7   6   5       3   2       0  (Bits)
+    +-------+-----------+-----------+
+    | SCALE |   INDEX   |    BASE   |
+    +-------+-----------+-----------+
+    | (2 b) |   (3 b)   |   (3 b)   |
+    +-------+-----------+-----------+
+        |         |           |
+        |         |           +---> Registrador Base (EAX, EBX, etc.)
+        |         +---------------> Registrador de Índice
+        +-------------------------> Fator (00=x1, 01=x2, 10=x4, 11=x8)
 
 
 Curiosidade: O uso do EBP como base é o padrão para variáveis locais (quadro de pilha), enquanto o ESP (ponteiro de pilha) geralmente é evitado como índice devido a restrições de hardware da arquitetura x86.
 
 Aqui está o diagrama ASCII representando a tabela de modos de endereçamento de 32 bits do Core i7 (Intel x86), baseada na estrutura do byte ModR/M.
 
-Esta tabela mostra como a combinação dos campos MOD (2 bits) e R/M (3 bits) define onde o operando está localizado.
-
-+-----+-------------------+-------------------+-------------------+-------------------+
-| R/M |      MOD = 00     |      MOD = 01     |      MOD = 10     |      MOD = 11     |
-| bits|   (Sem Offset)    |   (Offset 8 bits) |  (Offset 32 bits) |   (Registrador)   |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 000 |      M[EAX]       |    M[EAX + d8]    |    M[EAX + d32]   |      EAX / AL     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 001 |      M[ECX]       |    M[ECX + d8]    |    M[ECX + d32]   |      ECX / CL     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 010 |      M[EDX]       |    M[EDX + d8]    |    M[EDX + d32]   |      EDX / DL     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 011 |      M[EBX]       |    M[EBX + d8]    |    M[EBX + d32]   |      EBX / BL     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 100 |    MODO SIB [*]   |  SIB com d8 [*]   |  SIB com d32 [*]  |      ESP / AH     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 101 |   END. DIRETO     |    M[EBP + d8]    |    M[EBP + d32]   |      EBP / CH     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 110 |      M[ESI]       |    M[ESI + d8]    |    M[ESI + d32]   |      ESI / DH     |
-+-----+-------------------+-------------------+-------------------+-------------------+
-| 111 |      M[EDI]       |    M[EDI + d8]    |    M[EDI + d32]   |      EDI / BH     |
-+-----+-------------------+-------------------+-------------------+-------------------+
+    Esta tabela mostra como a combinação dos campos MOD (2 bits) e R/M (3 bits) define onde o operando está localizado.
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | R/M |      MOD = 00     |      MOD = 01     |      MOD = 10     |      MOD = 11     |
+    | bits|   (Sem Offset)    |   (Offset 8 bits) |  (Offset 32 bits) |   (Registrador)   |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 000 |      M[EAX]       |    M[EAX + d8]    |    M[EAX + d32]   |      EAX / AL     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 001 |      M[ECX]       |    M[ECX + d8]    |    M[ECX + d32]   |      ECX / CL     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 010 |      M[EDX]       |    M[EDX + d8]    |    M[EDX + d32]   |      EDX / DL     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 011 |      M[EBX]       |    M[EBX + d8]    |    M[EBX + d32]   |      EBX / BL     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 100 |    MODO SIB [*]   |  SIB com d8 [*]   |  SIB com d32 [*]  |      ESP / AH     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 101 |   END. DIRETO     |    M[EBP + d8]    |    M[EBP + d32]   |      EBP / CH     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 110 |      M[ESI]       |    M[ESI + d8]    |    M[ESI + d32]   |      ESI / DH     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
+    | 111 |      M[EDI]       |    M[EDI + d8]    |    M[EDI + d32]   |      EDI / BH     |
+    +-----+-------------------+-------------------+-------------------+-------------------+
 
 Notas Importantes sobre a Tabela:
 
@@ -2075,46 +2067,46 @@ Instrução Complexa (Ex: SIB)	Menos linhas de código, menos ciclos por tarefa.
 Compatibilidade Total	Garante que o Windows/Linux antigo rode no chip novo.	Impede a limpeza e simplificação da arquitetura.
 Simulação de Carga	Otimiza o chip para o uso atual (ex: IA, Web).	Pode ficar obsoleta em 10 ou 20 anos.
 
-O Dilema do Espaço no Chip
-+-------------------------------------------------------+
-|                 ÁREA TOTAL DO CHIP                    |
-+---------------------------+---------------------------+
-|      OPÇÃO A: CISC        |      OPÇÃO B: RISC        |
-| (Foco em Instruções)      | (Foco em Memória/Veloc.)  |
-+---------------------------+---------------------------+
-| [ Instrução SIB ]         | [ Cache L1 Extra ]        |
-| [ Instrução AVX ]         | [ Cache L1 Extra ]        |
-| [ Decodificador Complexo ]| [ Unidade Lógica Simples ]|
-+---------------------------+---------------------------+
-| Resultado: Código denso,  | Resultado: Clock alto,    |
-| execução complexa.        | execução simples e rápida.|
-+---------------------------+---------------------------+
+    O Dilema do Espaço no Chip
+    +-------------------------------------------------------+
+    |                 ÁREA TOTAL DO CHIP                    |
+    +---------------------------+---------------------------+
+    |      OPÇÃO A: CISC        |      OPÇÃO B: RISC        |
+    | (Foco em Instruções)      | (Foco em Memória/Veloc.)  |
+    +---------------------------+---------------------------+
+    | [ Instrução SIB ]         | [ Cache L1 Extra ]        |
+    | [ Instrução AVX ]         | [ Cache L1 Extra ]        |
+    | [ Decodificador Complexo ]| [ Unidade Lógica Simples ]|
+    +---------------------------+---------------------------+
+    | Resultado: Código denso,  | Resultado: Clock alto,    |
+    | execução complexa.        | execução simples e rápida.|
+    +---------------------------+---------------------------+
 
 Diagrama ASCII: Quadro de Pilha e Acesso via SIB
 
-DIREÇÃO DO CRESCIMENTO DA PILHA (PARA ENDEREÇOS MENORES)
-          |                                       |
-          +---------------------------------------+
-          |         Parâmetros da Função          |
-          +---------------------------------------+
-          |    Endereço de Retorno (Pushed PC)    |
-          +---------------------------------------+
-EBP ----> |      EBP Antigo (Dynamic Link)        |  <-- Início do Quadro
-          +---------------------------------------+
-EBP + 4   |       Outras Variáveis Locais         |
-          +---------------------------------------+
-EBP + 8   |  a[0]  (Primeiro elemento do vetor)   |  <-- BASE do Vetor
-          +---------------------------------------+
-EBP + 12  |  a[1]                                 |
-          +---------------------------------------+
-EBP + 16  |  a[2]                                 |
-          +---------------------------------------+
-          |         ... outros dados ...          |
-          +---------------------------------------+
+    DIREÇÃO DO CRESCIMENTO DA PILHA (PARA ENDEREÇOS MENORES)
+            |                                       |
+            +---------------------------------------+
+            |         Parâmetros da Função          |
+            +---------------------------------------+
+            |    Endereço de Retorno (Pushed PC)    |
+            +---------------------------------------+
+    EBP ----> |      EBP Antigo (Dynamic Link)        |  <-- Início do Quadro
+            +---------------------------------------+
+    EBP + 4   |       Outras Variáveis Locais         |
+            +---------------------------------------+
+    EBP + 8   |  a[0]  (Primeiro elemento do vetor)   |  <-- BASE do Vetor
+            +---------------------------------------+
+    EBP + 12  |  a[1]                                 |
+            +---------------------------------------+
+    EBP + 16  |  a[2]                                 |
+            +---------------------------------------+
+            |         ... outros dados ...          |
+            +---------------------------------------+
 
-       CÁLCULO DO MODO DE ENDEREÇAMENTO SIB:
-       -------------------------------------
-       Instrução: MOV EDX, [EBP + EAX*4 + 8]
+        CÁLCULO DO MODO DE ENDEREÇAMENTO SIB:
+        -------------------------------------
+        Instrução: MOV EDX, [EBP + EAX*4 + 8]
        
        Onde:
        - BASE          = EBP (Aponta para o quadro atual)
@@ -2156,55 +2148,55 @@ Modo de Registrador: Operação direta entre os 32 registradores (R0-R31). É o 
 2. Os Registradores de Ponteiro (X, Y, Z)
 Como o ATmega168 tem registradores de apenas 8 bits, ele "funde" os últimos 6 registradores do banco para criar ponteiros de 16 bits capazes de apontar para qualquer lugar na SRAM.
 
-Nome do Ponteiro     Registradores Físicos      Composição (LSB / MSB)
+    Nome do Ponteiro     Registradores Físicos      Composição (LSB / MSB)
 
-X                    R26 e R27                  R26 (Baixo) / R27 (Alto) 
-Y                    R28 e R29                  R28 (Baixo) / R29 (Alto)
-Z                    R30 e R31                  R30 (Baixo) / R31 (Alto)
+    X                    R26 e R27                  R26 (Baixo) / R27 (Alto) 
+    Y                    R28 e R29                  R28 (Baixo) / R29 (Alto)
+    Z                    R30 e R31                  R30 (Baixo) / R31 (Alto)
 
 Nota Técnica: Para carregar o endereço de uma variável no ponteiro X, você precisa de duas instruções LDI (Load Immediate), uma para cada metade do registrador.
 
-Formação do Ponteiro de 16 bits
+    Formação do Ponteiro de 16 bits
 
-Registradores de 8 bits                Ponteiro Final (16 bits)
-    +------------------------+             +--------------------------+
-    |      R27 (High)        |             |          PONTEIRO X      |
-    | [ 1 0 1 0 1 0 1 0 ]    | <--- + ---> | [ 10101010 | 11110000 ]  |
-    +------------------------+      |      +------------+-------------+
-    |      R26 (Low)         |      |                   |
-    | [ 1 1 1 1 0 0 0 0 ]    | <--- +                   v
-    +------------------------+                 Endereço na RAM: 0xAAF0
+    Registradores de 8 bits                Ponteiro Final (16 bits)
+        +------------------------+             +--------------------------+
+        |      R27 (High)        |             |          PONTEIRO X      |
+        | [ 1 0 1 0 1 0 1 0 ]    | <--- + ---> | [ 10101010 | 11110000 ]  |
+        +------------------------+      |      +------------+-------------+
+        |      R26 (Low)         |      |                   |
+        | [ 1 1 1 1 0 0 0 0 ]    | <--- +                   v
+        +------------------------+                 Endereço na RAM: 0xAAF0
 
-Arquitetura de Endereçamento AVR (Pares X, Y, Z)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (8 bits)            |       |   REGISTRADORES (R0-R31)   |
-    | (Opera 8 bits por vez)    | <---> | (Inclui Pares X, Y e Z)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |      BARRAMENTO INTERNO (8b Dados / 16b Endereçamento)         |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Combina Pares p/ End.)   | <---> | (16 ou 32 bits / Flash)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dado da SRAM)       |
-    | (Direto vs. Indireto)     | <---> | (1 byte lido por ciclo)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço 16 bits)   |
-    | (Avança +2 ou +4 bytes)   | ----> | (Recebe de X, Y ou Z)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA SRAM / FLASH     |
-    | (1 ciclo p/ a maioria)    |       | (Dados / Código)           |
-    +---------------------------+       +----------------------------+
+    Arquitetura de Endereçamento AVR (Pares X, Y, Z)
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (8 bits)            |       |   REGISTRADORES (R0-R31)   |
+        | (Opera 8 bits por vez)    | <---> | (Inclui Pares X, Y e Z)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |      BARRAMENTO INTERNO (8b Dados / 16b Endereçamento)         |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Combina Pares p/ End.)   | <---> | (16 ou 32 bits / Flash)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dado da SRAM)       |
+        | (Direto vs. Indireto)     | <---> | (1 byte lido por ciclo)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço 16 bits)   |
+        | (Avança +2 ou +4 bytes)   | ----> | (Recebe de X, Y ou Z)      |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA SRAM / FLASH     |
+        | (1 ciclo p/ a maioria)    |       | (Dados / Código)           |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No AVR, os ponteiros (como o char *ptr em C) ocupam sempre 2 bytes.
@@ -2216,26 +2208,26 @@ Otimização: O ponteiro Z (R30/R31) é especial: ele é o único que pode ser u
 ## Insight para seus projetos em estruturas_de_dados
 No AVR, a eficiência no uso de Ponteiros depende de qual par você escolhe:Par Z (R30:R31): É o mais versátil, pois é o único que permite acessar a Memória Flash (onde ficam strings constantes) e também possui modos de "auto-incremento" e "deslocamento" (muito úteis para varrer vetores em C).Par X (R26:R27): É o par "puro", excelente para movimentação simples de dados na SRAM.Sempre que você cria uma struct no Arduino, o compilador usa esses pares para realizar o cálculo: $REM = Base(X, Y, Z) + Deslocamento(Instrução).
 
-Fusão de Registradores para o REM (16 bits)
-REGISTRADOR R27 (High)             REGISTRADOR R26 (Low)
-    +-----------------------+          +-----------------------+
-    | b15 b14 b13 ... b09 b08 |          | b07 b06 b05 ... b01 b00 |
-    +----------+------------+          +-----------+-----------+
-               |                                   |
-               | (8 bits superiores)               | (8 bits inferiores)
-               |                                   |
-    ===========v===================================v============
-    ||                   BARRAMENTO DE ENDEREÇOS              || (16 bits)
-    ===========+===================================+============
-               |                                   |
-               v                                   v
-    +----------------------------------------------------------+
-    |                 REM (Registrador de Endereço)            |
-    | [ b15 b14 ... b08 ]                   [ b07 b06 ... b00 ]|
-    +----------------------------+-----------------------------+
-                                 |
-                                 v
-                    APONTA PARA A MEMÓRIA (0 a 65535)
+    Fusão de Registradores para o REM (16 bits)
+    REGISTRADOR R27 (High)             REGISTRADOR R26 (Low)
+        +-----------------------+          +-----------------------+
+        | b15 b14 b13 ... b09 b08 |          | b07 b06 b05 ... b01 b00 |
+        +----------+------------+          +-----------+-----------+
+                |                                   |
+                | (8 bits superiores)               | (8 bits inferiores)
+                |                                   |
+        ===========v===================================v============
+        ||                   BARRAMENTO DE ENDEREÇOS              || (16 bits)
+        ===========+===================================+============
+                |                                   |
+                v                                   v
+        +----------------------------------------------------------+
+        |                 REM (Registrador de Endereço)            |
+        | [ b15 b14 ... b08 ]                   [ b07 b06 ... b00 ]|
+        +----------------------------+-----------------------------+
+                                    |
+                                    v
+                        APONTA PARA A MEMÓRIA (0 a 65535)
 
 O Fluxo de Carga (Passo a Passo)
 Para o seu diretório estruturas_de_dados, imagine que você tem um ponteiro char *p = 0x1234;. No AVR, o compilador gera este fluxo:
@@ -2266,32 +2258,32 @@ Essa discussão final do autor traz um insight valioso para o seu diretório est
 
 1. Comparação de Modos de Endereçamento (Figura 5.28)
 
-RECURSOS DE ENDEREÇAMENTO          ARQUITETURAS COMPARADAS
-    +---------------------------+       +-------+-------+-------+
-    |   MODO / CAPACIDADE       |       |  i7   |  ARM  |  AVR  |
-    +---------------------------+       +-------+-------+-------+
-    |   IMEDIATO (Constantes)   | <---> |  SIM  |  SIM  |  SIM  |
-    +-------------+-------------+       +-------+-------+-------+
-                   |                         |       |       |
-    +-------------v-------------+       +-------+-------+-------+
-    |   DIRETO (Variável Global)| <---> |  SIM  |  NÃO  |  SIM  |
-    +-------------+-------------+       +-------+-------+-------+
+    RECURSOS DE ENDEREÇAMENTO          ARQUITETURAS COMPARADAS
+        +---------------------------+       +-------+-------+-------+
+        |   MODO / CAPACIDADE       |       |  i7   |  ARM  |  AVR  |
+        +---------------------------+       +-------+-------+-------+
+        |   IMEDIATO (Constantes)   | <---> |  SIM  |  SIM  |  SIM  |
+        +-------------+-------------+       +-------+-------+-------+
                     |                         |       |       |
-    +-------------v-------------+       +-------+-------+-------+
-    |   REGISTRADOR (Local/i,j) | <---> |  SIM  |  SIM  |  SIM  |
-    +-------------+-------------+       +-------+-------+-------+
-                   |                         |       |       |
-    +-------------v-------------+       +-------+-------+-------+
-    |   INDIRETO (Ponteiros)    | <---> |  SIM  |  SIM  |  SIM  |
-    +-------------+-------------+       +-------+-------+-------+
-                   |                         |       |       |
-    +-------------v-------------+       +-------+-------+-------+
-    |   INDEXADO (A[i] / Struct)| <---> |  SIM  |  SIM  |  NÃO  |
-    +-------------+-------------+       +-------+-------+-------+
-                   |                         |       |       |
-    +-------------v-------------+       +-------+-------+-------+
-    |   BASE INDEXADO (Matriz)  | <---> |  SIM  |  SIM  |  NÃO  |
-    +---------------------------+       +-------+-------+-------+
+        +-------------v-------------+       +-------+-------+-------+
+        |   DIRETO (Variável Global)| <---> |  SIM  |  NÃO  |  SIM  |
+        +-------------+-------------+       +-------+-------+-------+
+                        |                         |       |       |
+        +-------------v-------------+       +-------+-------+-------+
+        |   REGISTRADOR (Local/i,j) | <---> |  SIM  |  SIM  |  SIM  |
+        +-------------+-------------+       +-------+-------+-------+
+                    |                         |       |       |
+        +-------------v-------------+       +-------+-------+-------+
+        |   INDIRETO (Ponteiros)    | <---> |  SIM  |  SIM  |  SIM  |
+        +-------------+-------------+       +-------+-------+-------+
+                    |                         |       |       |
+        +-------------v-------------+       +-------+-------+-------+
+        |   INDEXADO (A[i] / Struct)| <---> |  SIM  |  SIM  |  NÃO  |
+        +-------------+-------------+       +-------+-------+-------+
+                    |                         |       |       |
+        +-------------v-------------+       +-------+-------+-------+
+        |   BASE INDEXADO (Matriz)  | <---> |  SIM  |  SIM  |  NÃO  |
+        +---------------------------+       +-------+-------+-------+
 
 2. A Filosofia das Arquiteturas
  - Core i7 (Extremo Complexo): Tenta oferecer todas as combinações possíveis. Isso reduz o número de instruções no código, mas torna o Decodificador imenso e complexo.
@@ -2303,35 +2295,35 @@ RECURSOS DE ENDEREÇAMENTO          ARQUITETURAS COMPARADAS
 3. Organização de Hardware: Visão Geral (Seu Padrão)
 Esta tabela resume como a escolha dos modos de endereçamento impacta os componentes que você mapeou:
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculos/AGU)      |       |   REGISTRADORES            |
-    | (Complexa no i7 / Simples)| <---> | (Essenciais p/ o ARM/RISC) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Gargalo nos Modos Diretos)         |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Ortogonal vs Especializ.)| <---> | (Variável i7 / Fixo ARM)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dados Externos)     |
-    | (Diferencia os Modos)     | <---> | (Interface CPU <-> Mundo)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço Final)     |
-    | (Avança p/ Complexidade)  | ----> | (Calcula Indexados/Base)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Ciclos de Relógio)       |   MEMÓRIA PRINCIPAL        |
-    | (Complexos levam + ciclos)|       | (Residência das Variáveis) |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculos/AGU)      |       |   REGISTRADORES            |
+        | (Complexa no i7 / Simples)| <---> | (Essenciais p/ o ARM/RISC) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Gargalo nos Modos Diretos)         |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Ortogonal vs Especializ.)| <---> | (Variável i7 / Fixo ARM)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dados Externos)     |
+        | (Diferencia os Modos)     | <---> | (Interface CPU <-> Mundo)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço Final)     |
+        | (Avança p/ Complexidade)  | ----> | (Calcula Indexados/Base)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Ciclos de Relógio)       |   MEMÓRIA PRINCIPAL        |
+        | (Complexos levam + ciclos)|       | (Residência das Variáveis) |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 O autor menciona que os modos Imediato, Direto, Registrador e Indexado são suficientes. Veja como eles mapeiam para o seu código C:
@@ -2358,27 +2350,27 @@ Para o seu diretório estruturas_de_dados, entender esse fluxo é essencial para
 1. Os 4 Tipos de Movimentação
 Dependendo da arquitetura (CISC como o i7 ou RISC como o ARM), a CPU pode permitir diferentes caminhos para os dados.
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   REGISTRADORES (A)       | <---> |   REGISTRADORES (B)        |
-    |   (Destino: MOVE/MOV)     |       |   (Origem: MOVE/MOV)       |
-    +-------------+-------------+       +--------------+-------------+
-                  ^                                    |
-                  |          [ MOVE / MOV ]            |
-    +-------------+------------------------------------+-------------+
-    |         BARRAMENTO INTERNO (O "Trilho" de Cópia)               |
-    +-------------+------------------------------------+-------------+
-                  ^                                    |
-     [ LOAD ]     |                                    |    [ STORE ]
-    (Mem -> Reg)  |                                    v   (Reg -> Mem)
-    +-------------+-------------+       +--------------+-------------+
-    |   RDM (DADO TEMPORÁRIO)   | <---> |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Interface de Movimento)  |       |   (Origem ou Destino)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    ^
-                  |          [ MOVS (x86) ]            |
-                  +------------------------------------+
-                        (Cópia Memória -> Memória)
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   REGISTRADORES (A)       | <---> |   REGISTRADORES (B)        |
+        |   (Destino: MOVE/MOV)     |       |   (Origem: MOVE/MOV)       |
+        +-------------+-------------+       +--------------+-------------+
+                    ^                                    |
+                    |          [ MOVE / MOV ]            |
+        +-------------+------------------------------------+-------------+
+        |         BARRAMENTO INTERNO (O "Trilho" de Cópia)               |
+        +-------------+------------------------------------+-------------+
+                     ^                                    |
+        [ LOAD ]     |                                    |    [ STORE ]
+        (Mem -> Reg)  |                                    v   (Reg -> Mem)
+        +-------------+-------------+       +--------------+-------------+
+        |   RDM (DADO TEMPORÁRIO)   | <---> |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Interface de Movimento)  |       |   (Origem ou Destino)      |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    ^
+                    |          [ MOVS (x86) ]            |
+                    +------------------------------------+
+                            (Cópia Memória -> Memória)
 
 2. A Questão da Granularidade
 Nem todo "movimento" tem o mesmo tamanho. O hardware precisa saber quantos bits copiar:
@@ -2394,35 +2386,35 @@ Aqui está como os componentes que você mapeou trabalham durante uma instruçã
 
 Fluxo de Movimentação de Dados (LOAD/MOVE)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Repassa o dado)    |       |   REGISTRADORES            |
-    | (Geralmente ociosa aqui)  | <---> | (Destino final da cópia)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (O "Trilho" por onde o dado viaja)  |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Gera sinais de R/W)      | <---> | (Opcode e Endereços)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Dado Temporário)    |
-    | (Identifica o Tamanho)    | <---> | (Guarda o dado da RAM)     |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço de Leitura)|
-    | (Avança após a cópia)     | ----> | (Onde buscar na RAM)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Abre as portas lógicas)  |       | (Origem do dado original)  |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Repassa o dado)    |       |   REGISTRADORES            |
+        | (Geralmente ociosa aqui)  | <---> | (Destino final da cópia)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (O "Trilho" por onde o dado viaja)  |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Gera sinais de R/W)      | <---> | (Opcode e Endereços)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Dado Temporário)    |
+        | (Identifica o Tamanho)    | <---> | (Guarda o dado da RAM)     |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço de Leitura)|
+        | (Avança após a cópia)     | ----> | (Onde buscar na RAM)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Abre as portas lógicas)  |       | (Origem do dado original)  |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No seu diretório, quando você escreve struct A = struct B; em C, o que acontece por baixo dos panos é uma sequência massiva dessas instruções:
@@ -2460,35 +2452,35 @@ Nas operações diádicas, a ULA é a estrela principal. Ela recebe dois fluxos 
 
 Fluxo de Operação Diádica (Ex: A + B ou A & B)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (AND/OR/SUM)        | <---  |   REGISTRADORES (A e B)    |
-    | (Combina os 2 operandos)  |  ---  | (Guardam as entradas)      |
-    +-------------+-------------+    |  +--------------+-------------+
-                  |                  |                 |
-    +-------------v------------------v-----------------v-------------+
-    |         BARRAMENTO INTERNO (Transporta os 2 valores)           |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Configura a ULA: ex AND) | <---> | (Opcode e Índices de Regs) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   RDM (Resultado da ULA)   |
-    | (Ativa a porta lógica)    | <---> | (Pronto para salvar)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   REM (Endereço da RAM)    |
-    | (Próxima Instrução)       | ----> | (Inativo se for Reg-Reg)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Cadencia a chegada)      |       | (Onde os dados residem)    |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (AND/OR/SUM)        | <---  |   REGISTRADORES (A e B)    |
+        | (Combina os 2 operandos)  |  ---  | (Guardam as entradas)      |
+        +-------------+-------------+    |  +--------------+-------------+
+                    |                  |                 |
+        +-------------v------------------v-----------------v-------------+
+        |         BARRAMENTO INTERNO (Transporta os 2 valores)           |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Configura a ULA: ex AND) | <---> | (Opcode e Índices de Regs) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   RDM (Resultado da ULA)   |
+        | (Ativa a porta lógica)    | <---> | (Pronto para salvar)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   REM (Endereço da RAM)    |
+        | (Próxima Instrução)       | ----> | (Inativo se for Reg-Reg)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Cadencia a chegada)      |       | (Onde os dados residem)    |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, você usa operações diádicas o tempo todo, mesmo sem perceber:
@@ -2587,65 +2579,65 @@ Como o texto explica, a maioria das CPUs não testa a condição e pula ao mesmo
 2. O Truque do Hardware para o Zero
 O autor menciona um detalhe fascinante de microarquitetura: para saber se uma palavra de 32 bits é zero, o hardware não testa bit por bit sequencialmente. Ele passa todos os bits por uma imensa porta NOR (ou uma OR invertida). Se qualquer bit for 1, o resultado final é 0. Se todos forem 0, o resultado é 1.
 
-luxo de Desvio Condicional (Salto/Branch)
+Fluxo de Desvio Condicional (Salto/Branch)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Comparação/Sub)    |       |   REGISTRADOR DE STATUS    |
-    | (Define Flags: Z, N, V, C)| ----> | (Flags: Zero, Neg, etc.)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-                  | [ Avalia Flags ]                   |
-    +-------------v------------------------------------v-------------+
-    |         UNIDADE DE CONTROLE (UC) / DECODIFICADOR               |
-    | (Decide o salto: ex. BEQ se Z=1 ou BNE se Z=0)                 |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   RI (Instrução Atual)     |
-    | (Sobrescrito com o Salto) | <---  | (Opcode e Endereço Alvo)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |         BARRAMENTO INTERNO (Leva o Endereço Alvo p/ o CI)      |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereço do Salto) |       |   RDM (Instrução Alvo)     |
-    | (Aponta p/ o novo código) | <---  | (Lê o código do destino)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Sincroniza a transição)  | ----> | (Onde estão os Rótulos)    |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Comparação/Sub)    |       |   REGISTRADOR DE STATUS    |
+        | (Define Flags: Z, N, V, C)| ----> | (Flags: Zero, Neg, etc.)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+                    | [ Avalia Flags ]                   |
+        +-------------v------------------------------------v-------------+
+        |         UNIDADE DE CONTROLE (UC) / DECODIFICADOR               |
+        | (Decide o salto: ex. BEQ se Z=1 ou BNE se Z=0)                 |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   RI (Instrução Atual)     |
+        | (Sobrescrito com o Salto) | <---  | (Opcode e Endereço Alvo)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |         BARRAMENTO INTERNO (Leva o Endereço Alvo p/ o CI)      |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereço do Salto) |       |   RDM (Instrução Alvo)     |
+        | (Aponta p/ o novo código) | <---  | (Lê o código do destino)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Sincroniza a transição)  | ----> | (Onde estão os Rótulos)    |
+        +---------------------------+       +----------------------------+
 
 3. Organização de Hardware: Desvios Condicionais (Seu Padrão)
 Aqui está como os componentes que você mapeou trabalham para realizar um "salto" no código:
 
 4. Diagrama ASCII: O Fluxo do Desvio Condicional
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Comparação/Sub)    |       |   REGISTRADOR DE STATUS    |
-    | (Gera Z, N, C, V)         | ----> | [ Z | N | C | V ] (Flags)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-                  |          [ Se Condição OK ]        |
-    +-------------v------------------------------------v-------------+
-    |   UNIDADE DE CONTROLE (UC) <---------------------+             |
-    | (Analisa as Flags e decide o Salto)                            |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   RI (Instrução de Salto)  |
-    | (Recebe novo endereço)    | <---  | (Contém o Endereço Alvo)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereço Alvo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Aponta p/ o novo código) | ----> | (Código do Rótulo/Label)   |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Comparação/Sub)    |       |   REGISTRADOR DE STATUS    |
+        | (Gera Z, N, C, V)         | ----> | [ Z | N | C | V ] (Flags)  |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+                     |          [ Se Condição OK ]        |
+        +-------------v------------------------------------v-------------+
+        |   UNIDADE DE CONTROLE (UC) <---------------------+             |
+        | (Analisa as Flags e decide o Salto)                            |
+        +-------------+------------------------------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   RI (Instrução de Salto)  |
+        | (Recebe novo endereço)    | <---  | (Contém o Endereço Alvo)   |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereço Alvo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Aponta p/ o novo código) | ----> | (Código do Rótulo/Label)   |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 O autor alerta sobre um ponto sutil: Comparação não é apenas subtração.
@@ -2657,16 +2649,16 @@ Se você comparar um número positivo gigante com um negativo gigante, a subtra�
 
 Outro ponto sutil em relação à comparação de números é decidir se os números devem ser ou não considerados com sinal. Números binários de três bits podem ser ordenados conforme um de dois modos. Do menor para o maior:
 
-Sem sinal     Com sinal
+    Sem sinal     Com sinal
 
-000           100      (o menor)
-001           101
-010           110
-011           111
-100           000
-101           001
-110           010
-111           011      (o maior)
+    000           100      (o menor)
+    001           101
+    010           110
+    011           111
+    100           000
+    101           001
+    110           010
+    111           011      (o maior)
 
 A coluna da esquerda mostra os inteiros positivos de 0 a 7 em ordem crescente. A coluna da direita mostra os inteiros com sinal de –4 a +3 em complemento de dois. A resposta à pergunta “011 é maior do que 100?” depende de considerar ou não que os números têm sinal. A maioria das ISAs tem instruções para tratar ambas
 as ordenações.
@@ -2695,45 +2687,45 @@ Quando você executa um CALL, o hardware realiza uma micro-operação dupla:
 3. Organização de Hardware: Chamada de Procedimento (Seu Padrão)
 Abaixo, como os componentes que você mapeou gerenciam o "vai e vem" das funções:
 
-+-----------------------------------------------------------------+---------------------------------------------------------+
-| Processamento                                                   | Armazenamento                                           |
-+-----------------------------------------------------------------+---------------------------------------------------------+
-| ULA (Decrementa o SP para abrir espaço na Pilha)                | Registradores (SP - Stack Pointer gerencia o topo)      |
-+-----------------------------------------------------------------+---------------------------------------------------------+
-| BARRAMENTO INTERNO (Leva o CI para a RAM/Pilha)                 | MEMÓRIA PRINCIPAL (Onde reside a Stack/Pilha)           |
-+-----------------------------------------------------------------+---------------------------------------------------------+
-| UC (Coordena o PUSH do CI e o Salto simultâneo)                 | CI (Copia seu valor para a RAM e recebe o novo endereço)|
-| RI (Contém o Opcode CALL e o destino)                           | REM (Aponta para o topo da pilha na RAM)                |
-| Decodificador (Identifica se é CALL ou RET)                     | RDM (Escreve o endereço de retorno na Memória)          |
-| CLOCK (Sincroniza a escrita na pilha antes do salto)            |                                                         |
-+-----------------------------------------------------------------+---------------------------------------------------------+
+    +-----------------------------------------------------------------+---------------------------------------------------------+
+    | Processamento                                                   | Armazenamento                                           |
+    +-----------------------------------------------------------------+---------------------------------------------------------+
+    | ULA (Decrementa o SP para abrir espaço na Pilha)                | Registradores (SP - Stack Pointer gerencia o topo)      |
+    +-----------------------------------------------------------------+---------------------------------------------------------+
+    | BARRAMENTO INTERNO (Leva o CI para a RAM/Pilha)                 | MEMÓRIA PRINCIPAL (Onde reside a Stack/Pilha)           |
+    +-----------------------------------------------------------------+---------------------------------------------------------+
+    | UC (Coordena o PUSH do CI e o Salto simultâneo)                 | CI (Copia seu valor para a RAM e recebe o novo endereço)|
+    | RI (Contém o Opcode CALL e o destino)                           | REM (Aponta para o topo da pilha na RAM)                |
+    | Decodificador (Identifica se é CALL ou RET)                     | RDM (Escreve o endereço de retorno na Memória)          |
+    | CLOCK (Sincroniza a escrita na pilha antes do salto)            |                                                         |
+    +-----------------------------------------------------------------+---------------------------------------------------------+
 
-4. Diagrama ASCII: O Mecanismo de Chamada (Stack)
+4. O Mecanismo de Chamada (Stack)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Ajusta o SP)       |       |   REGISTRADORES            |
-    | (SP = SP - 4)             | <---> | (SP - Stack Pointer)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Leva o End. de Retorno p/ RAM)     |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL)      |
-    | (Gerencia o PUSH do CI)   | <---> | (Opcode e Endereço Alvo)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |   RDM (Dado de Retorno)    |
-    | (Envia p/ Pilha / Recebe) | <---> | (Guarda o CI antigo)       |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereço da Pilha) |       |   MEMÓRIA PRINCIPAL        |
-    | (Aponta p/ o Topo da Stack) ----> | (Área de Retornos/Stack)   |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Ajusta o SP)       |       |   REGISTRADORES            |
+        | (SP = SP - 4)             | <---> | (SP - Stack Pointer)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Leva o End. de Retorno p/ RAM)     |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL)      |
+        | (Gerencia o PUSH do CI)   | <---> | (Opcode e Endereço Alvo)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |   RDM (Dado de Retorno)    |
+        | (Envia p/ Pilha / Recebe) | <---> | (Guarda o CI antigo)       |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereço da Pilha) |       |   MEMÓRIA PRINCIPAL        |
+        | (Aponta p/ o Topo da Stack) ----> | (Área de Retornos/Stack)   |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 Toda vez que você tem um erro de Stack Overflow no seu código, é aqui que o problema acontece:
@@ -2771,51 +2763,49 @@ O autor menciona algo crucial para o hardware: Eficiência vs. Segurança.
 3. Organização de Hardware: Execução de Laços (Seu Padrão)
 Abaixo, como os componentes gerenciam a repetição e a contagem do índice i:
 
-+-----------------------------------------------------------------------+----------------------------------0-----------------------+
-| Processamento                                                         | Armazenamento                                            |
-+-----------------------------------------------------------------------+----------------------------------------------------------+
-| ULA (Incrementa i = i + 1 e compara i < n) | Registradores (Guardam o contador i e o limite n)                                   |
-+-----------------------------------------------------------------------+----------------------------------------------------------+
-| BARRAMENTO INTERNO (Transporta o valor de i p/ a ULA)                 | MEMÓRIA PRINCIPAL (Onde o código do laço reside)         |
-+-----------------------------------------------------------------------+----------------------------------------------------------+
-| UC (Avalia a flag de comparação e decide o salto p/ L1)               | CI (Reiniciado com o endereço de L1 para repetir o laço) |
-| RI (Contém as instruções de ADD e GOTO/BRANCH)                        | REM (Aponta para o endereço da instrução em L1)          |
-| Decodificador (Identifica se é um salto condicional ou incondicional) | RDM (Lê a próxima instrução do corpo do laço)            |
-| CLOCK (Sincroniza cada iteração do laço)                              |                                                          |
-+-----------------------------------------------------------------------+----------------------------------------------------------+
+    +-----------------------------------------------------------------------+----------------------------------0-----------------------+
+    | Processamento                                                         | Armazenamento                                            |
+    +-----------------------------------------------------------------------+----------------------------------------------------------+
+    | ULA (Incrementa i = i + 1 e compara i < n) | Registradores (Guardam o contador i e o limite n)                                   |
+    +-----------------------------------------------------------------------+----------------------------------------------------------+
+    | BARRAMENTO INTERNO (Transporta o valor de i p/ a ULA)                 | MEMÓRIA PRINCIPAL (Onde o código do laço reside)         |
+    +-----------------------------------------------------------------------+----------------------------------------------------------+
+    | UC (Avalia a flag de comparação e decide o salto p/ L1)               | CI (Reiniciado com o endereço de L1 para repetir o laço) |
+    | RI (Contém as instruções de ADD e GOTO/BRANCH)                        | REM (Aponta para o endereço da instrução em L1)          |
+    | Decodificador (Identifica se é um salto condicional ou incondicional) | RDM (Lê a próxima instrução do corpo do laço)            |
+    | CLOCK (Sincroniza cada iteração do laço)                              |                                                          |
+    +-----------------------------------------------------------------------+----------------------------------------------------------+
 
 
 4. Diagrama ASCII: Fluxo do Laço (Teste no Início - Seguro)
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Compara i > n)     |       |   REGISTRADORES (i, n)     |
-    | (Define Flag Z ou N)      | <---> | (Controle do Laço)         |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         UNIDADE DE CONTROLE (UC) / DECODIFICADOR               |
-    | (Se i > n, pula para o FIM; caso contrário, CONTINUA)          |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CORPO DO LAÇO           |       |   RI (Instrução Atual)     |
-    | (Primeira à última decl.) | <---> | (Código dentro do laço)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   ULA (Incremento i++)    |       |   CI (Program Counter)     |
-    | (Prepara próxima volta)   | ----> | (Volta p/ o teste no topo) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereço do Topo)  |       |   MEMÓRIA PRINCIPAL        |
-    | (Reinicia o ciclo)        | ----> | (Código e Dados do Loop)   |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Compara i > n)     |       |   REGISTRADORES (i, n)     |
+        | (Define Flag Z ou N)      | <---> | (Controle do Laço)         |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         UNIDADE DE CONTROLE (UC) / DECODIFICADOR               |
+        | (Se i > n, pula para o FIM; caso contrário, CONTINUA)          |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CORPO DO LAÇO           |       |   RI (Instrução Atual)     |
+        | (Primeira à última decl.) | <---> | (Código dentro do laço)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   ULA (Incremento i++)    |       |   CI (Program Counter)     |
+        | (Prepara próxima volta)   | ----> | (Volta p/ o teste no topo) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereço do Topo)  |       |   MEMÓRIA PRINCIPAL        |
+        | (Reinicia o ciclo)        | ----> | (Código e Dados do Loop)   |
+        +---------------------------+       +----------------------------+
 
 Figura 5.29   (a) Laço do tipo “teste no final”. (b) Laço do tipo “teste no início”.
-
-
 
 ## Insight para seus projetos em estruturas_de_dados
 Quando você implementa algoritmos de busca (como uma Busca Binária) ou percorre uma Lista Ligada:
@@ -2863,41 +2853,41 @@ O ciclo funciona assim:
 
 3. Organização de Hardware: E/S Programada (Seu Padrão)Abaixo, veja como os componentes que você mapeou são usados nesse processo:
 
-+------------------------------------------------------------------+----------------------------------------------------------+
-| Processamento                                                    | Armazenamento                                            |
-+------------------------------------------------------------------+----------------------------------------------------------+
-| ULA (Compara o bit de Estado para ver se é 1)                    | Registradores (Guardam o caractere lido do Buffer)       |
-+------------------------------------------------------------------+----------------------------------------------------------+
-| BARRAMENTO INTERNO (Transporta o Status do dispositivo p/ a CPU) | MEMÓRIA PRINCIPAL (Onde o vetor de caracteres será salvo)|
-+------------------------------------------------------------------+----------------------------------------------------------+
-| UC (Controla o laço de espera infinita)                          | CI (Preso no laço de Polling até o bit mudar)            |
-| RI (Contém as instruções IN ou OUT)                              | REM (Endereço do Registrador de Estado do Teclado)       |
-| Decodificador (Ativa a linha de leitura do dispositivo externo)  | RDM (Recebe o byte vindo do teclado)                     |
-| CLOCK (Sincroniza as milhares de leituras inúteis do Status)     |                                                          |
-+------------------------------------------------------------------+----------------------------------------------------------+
+    +------------------------------------------------------------------+----------------------------------------------------------+
+    | Processamento                                                    | Armazenamento                                            |
+    +------------------------------------------------------------------+----------------------------------------------------------+
+    | ULA (Compara o bit de Estado para ver se é 1)                    | Registradores (Guardam o caractere lido do Buffer)       |
+    +------------------------------------------------------------------+----------------------------------------------------------+
+    | BARRAMENTO INTERNO (Transporta o Status do dispositivo p/ a CPU) | MEMÓRIA PRINCIPAL (Onde o vetor de caracteres será salvo)|
+    +------------------------------------------------------------------+----------------------------------------------------------+
+    | UC (Controla o laço de espera infinita)                          | CI (Preso no laço de Polling até o bit mudar)            |
+    | RI (Contém as instruções IN ou OUT)                              | REM (Endereço do Registrador de Estado do Teclado)       |
+    | Decodificador (Ativa a linha de leitura do dispositivo externo)  | RDM (Recebe o byte vindo do teclado)                     |
+    | CLOCK (Sincroniza as milhares de leituras inúteis do Status)     |                                                          |
+    +------------------------------------------------------------------+----------------------------------------------------------+
 
 O Ciclo de Polling (Teclado)
 
-SEÇÃO DE PROCESSAMENTO             DISPOSITIVO EXTERNO (TECLADO)
-    +---------------------------+       +----------------------------+
-    |   ULA (Teste: Status == 1)| <---  |   REGISTRADOR DE ESTADO    |
-    | (Resultado 0: Volta p/ CI)|       | [ 1 | 0 | 0 ... 0 | 0 ]    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   REGISTRADOR DE BUFFER    |
-    | (Mantém o laço de espera) | <---  | [ 'A' (01000001) ]         |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI (Program Counter)    |       |      BARRAMENTO DE E/S     |
-    | (L1: if bit=0 goto L1)    | <---- | (Dados e Sinais de Status) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (End. do Teclado)   |       |    CONTROLADOR DE E/S      |
-    | (Seleciona o Dispositivo) | ----> | (Interface de Hardware)    |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             DISPOSITIVO EXTERNO (TECLADO)
+        +---------------------------+       +----------------------------+
+        |   ULA (Teste: Status == 1)| <---  |   REGISTRADOR DE ESTADO    |
+        | (Resultado 0: Volta p/ CI)|       | [ 1 | 0 | 0 ... 0 | 0 ]    |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   REGISTRADOR DE BUFFER    |
+        | (Mantém o laço de espera) | <---  | [ 'A' (01000001) ]         |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI (Program Counter)    |       |      BARRAMENTO DE E/S     |
+        | (L1: if bit=0 goto L1)    | <---- | (Dados e Sinais de Status) |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (End. do Teclado)   |       |    CONTROLADOR DE E/S      |
+        | (Seleciona o Dispositivo) | ----> | (Interface de Hardware)    |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No diretório estruturas_de_dados, quando você implementa uma Fila (Queue) para gerenciar dados vindos do teclado:
@@ -2908,20 +2898,20 @@ No diretório estruturas_de_dados, quando você implementa uma Fila (Queue) para
 
 Figura 5.31   Exemplo de E/S programada.
 
-public static void output_buffer(char buf[ ], int count) {
-// Produza um bloco de dados para o dispositivo
-int status, i, ready;
-for (i = 0; i < count; i++) {
-		
-do {
-			 status = in(display_status_reg);		// obtenha estado
-			 ready = (status >> 7) & 0x01;		  // isole o bit de pronto
-		
-} while (ready != 1);
-		
-out(display_buffer_reg, buf[i]);
-}
-}
+    public static void output_buffer(char buf[ ], int count) {
+    // Produza um bloco de dados para o dispositivo
+    int status, i, ready;
+    for (i = 0; i < count; i++) {
+            
+    do {
+                status = in(display_status_reg);		// obtenha estado
+                ready = (status >> 7) & 0x01;		  // isole o bit de pronto
+            
+    } while (ready != 1);
+            
+    out(display_buffer_reg, buf[i]);
+    }
+    }
 
 O modo de se livrar da espera ocupada é fazer com que a CPU inicie o dispositivo de E/S e diga a ele para gerar uma interrupção quando concluir. A Figura 5.30 nos mostra como isso é feito. Ajustando o bit INTERRUPT ENABLE (interrupção habilitada) em um registrador de dispositivo, o software pode requisitar que o hardware lhe dê um sinal quando a E/S for concluída. Estudaremos em detalhes interrupções mais adiante neste capítulo, quando chegarmos ao fluxo de controle.
 
@@ -2955,40 +2945,40 @@ Embora a CPU esteja "livre" para processar, existe um detalhe físico: só há u
 3. Organização de Hardware: O Fluxo com DMA (Seu Padrão)
 Aqui está como os componentes que você mapeou se comportam quando o DMA assume o controle:
 
-+--------------------------------------------------------------------+--------------------------------------------------------+
-| Processamento                                                      | Armazenamento                                          |
-+--------------------------------------------------------------------+--------------------------------------------------------+
-| ULA (Livre para outros cálculos enquanto o DMA trabalha)           | Registradores (Apenas inicializam o chip DMA)          |
-+--------------------------------------------------------------------+--------------------------------------------------------+
-| BARRAMENTO INTERNO (Saturado pelo DMA durante a transferência)     | MEMÓRIA PRINCIPAL (Origem/Destino do bloco de dados)   |
-+--------------------------------------------------------------------+--------------------------------------------------------+
-| UC (Fica em "standby" ou processa dados já no Cache)               | CI (Avança o programa principal ignorando a E/S)       |
-| RI (Contém as instruções do programa principal)                    | REM (Usado pelo controlador DMA, não pela CPU)         |
-| Decodificador (Inativo para a E/S após o início do DMA)            | RDM (Circuita o dado direto da RAM para o Dispositivo) |
-| CLOCK (Sincroniza as batidas de transferência do DMA)              |                                                        |
-+--------------------------------------------------------------------+--------------------------------------------------------+
+    +--------------------------------------------------------------------+--------------------------------------------------------+
+    | Processamento                                                      | Armazenamento                                          |
+    +--------------------------------------------------------------------+--------------------------------------------------------+
+    | ULA (Livre para outros cálculos enquanto o DMA trabalha)           | Registradores (Apenas inicializam o chip DMA)          |
+    +--------------------------------------------------------------------+--------------------------------------------------------+
+    | BARRAMENTO INTERNO (Saturado pelo DMA durante a transferência)     | MEMÓRIA PRINCIPAL (Origem/Destino do bloco de dados)   |
+    +--------------------------------------------------------------------+--------------------------------------------------------+
+    | UC (Fica em "standby" ou processa dados já no Cache)               | CI (Avança o programa principal ignorando a E/S)       |
+    | RI (Contém as instruções do programa principal)                    | REM (Usado pelo controlador DMA, não pela CPU)         |
+    | Decodificador (Inativo para a E/S após o início do DMA)            | RDM (Circuita o dado direto da RAM para o Dispositivo) |
+    | CLOCK (Sincroniza as batidas de transferência do DMA)              |                                                        |
+    +--------------------------------------------------------------------+--------------------------------------------------------+
 
-4. Diagrama ASCII: O Sistema com DMA
+4. O Sistema com DMA
 
-SEÇÃO DE PROCESSAMENTO                 SISTEMA DE E/S (DMA)
-    +---------------------------+       +----------------------------+
-    |       CPU (LIVRE)         |       |   CONTROLADOR DMA          |
-    | (Faz outros cálculos)     |       | [End][Cont][Disp][Dir]     |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |   BARRAMENTO DE SISTEMA (MEMÓRIA <-> DMA <-> DISPOSITIVO)      |
-    |   (O DMA "rouba" ciclos aqui para mover os dados)              |
-    +-------------+-----------------------+------------+-------------+
-                  |                       |            |
-    +-------------v-------------+       +-v------------v-------------+
-    |     MEMÓRIA RAM           |       |      DISPOSITIVO           |
-    | (Endereço 100...132)      | <---> | (Terminal / Disco)         |
-    +---------------------------+       +----------------------------+
-                  ^                                    |
-                  |          [ INTERRUPÇÃO ]           |
-                  +------------------------------------+
-                   (Avisa a CPU quando a contagem = 0)
+    SEÇÃO DE PROCESSAMENTO                 SISTEMA DE E/S (DMA)
+        +---------------------------+       +----------------------------+
+        |       CPU (LIVRE)         |       |   CONTROLADOR DMA          |
+        | (Faz outros cálculos)     |       | [End][Cont][Disp][Dir]     |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |   BARRAMENTO DE SISTEMA (MEMÓRIA <-> DMA <-> DISPOSITIVO)      |
+        |   (O DMA "rouba" ciclos aqui para mover os dados)              |
+        +-------------+-----------------------+------------+-------------+
+                    |                       |            |
+        +-------------v-------------+       +-v------------v-------------+
+        |     MEMÓRIA RAM           |       |      DISPOSITIVO           |
+        | (Endereço 100...132)      | <---> | (Terminal / Disco)         |
+        +---------------------------+       +----------------------------+
+                    ^                                    |
+                    |          [ INTERRUPÇÃO ]           |
+                    +------------------------------------+
+                    (Avisa a CPU quando a contagem = 0)
 
 ## Insight para seus projetos em estruturas_de_dados
 Pense em uma operação de memcpy() ou fwrite() em um arquivo grande no seu diretório estruturas_de_dados:
@@ -2999,34 +2989,34 @@ Pense em uma operação de memcpy() ou fwrite() em um arquivo grande no seu dire
 
 Isso permite o paralelismo real entre processamento e entrada/saída. Sem o DMA, os computadores modernos pareceriam extremamente lentos ao abrir qualquer arquivo.
 
-Sistema com Controlador DMA (Figura 5.32)
+    Sistema com Controlador DMA (Figura 5.32)
 
-+-----------------------+              +-----------------------+
-       |          CPU          |              |   MEMÓRIA PRINCIPAL   |
-       | (Inicializa o DMA)    |              |                       |
-       +----------+------------+              +-----------+-----------+
-                  |                                       |
-                  |          BARRAMENTO DE SISTEMA        |
-    ==============v=======================================v==============
-          ^                  ^                  ^                  ^
-          |                  |                  |                  |
-    +-----+------------------+------------------+------------------+----+
-    |                      CONTROLADOR DMA                              |
-    |  +----------------+  +----------------+  +----------------+       |
-    |  | ENDEREÇO: 100  |  | CONTAGEM: 32   |  | DISPOSITIVO: 4 |       |
-    |  +----------------+  +----------------+  +----------------+       |
-    |  | DIREÇÃO: 1 (W) |  | [ LÓGICA DE    |  | [ INTERRUPÇÃO ] |----->|--+
-    |  +----------------+  |   CONTROLE ]   |  +----------------+       |  |
-    +----------------------+--------+-------+---------------------------+  |
-                                    |                                      |
-                                    | [ Conexão RS232C ]                   |
-                                    v                                      |
-                         +-----------------------+                         |
-                         |  DISPOSITIVO 4        |                         |
-                         |  (TERMINAL / MONITOR) |                         |
-                         +-----------------------+                         |
-                                                                           |
-    (Aviso de Fim de Tarefa) <---------------------------------------------+
+        +-----------------------+              +-----------------------+
+        |          CPU          |              |   MEMÓRIA PRINCIPAL   |
+        | (Inicializa o DMA)    |              |                       |
+        +----------+------------+              +-----------+-----------+
+                   |                                       |
+                   |          BARRAMENTO DE SISTEMA        |
+        ==============v=======================================v==============
+            ^                  ^                  ^                  ^
+            |                  |                  |                  |
+        +-----+------------------+------------------+------------------+----+
+        |                      CONTROLADOR DMA                              |
+        |  +----------------+  +----------------+  +----------------+       |
+        |  | ENDEREÇO: 100  |  | CONTAGEM: 32   |  | DISPOSITIVO: 4 |       |
+        |  +----------------+  +----------------+  +----------------+       |
+        |  | DIREÇÃO: 1 (W) |  | [ LÓGICA DE    |  | [ INTERRUPÇÃO ] |----->|--+
+        |  +----------------+  |   CONTROLE ]   |  +----------------+       |  |
+        +----------------------+--------+-------+---------------------------+  |
+                                        |                                      |
+                                        | [ Conexão RS232C ]                   |
+                                        v                                      |
+                            +-----------------------+                         |
+                            |  DISPOSITIVO 4        |                         |
+                            |  (TERMINAL / MONITOR) |                         |
+                            +-----------------------+                         |
+                                                                            |
+        (Aviso de Fim de Tarefa) <---------------------------------------------+
 
 Detalhamento dos Fluxos no Diagrama
 Para o seu repositório estruturas_de_dados, entenda que o DMA funciona como um "gerenciador de memória secundário" temporário:
@@ -3055,34 +3045,35 @@ Abaixo, os grupos de instruções que mais impactam a lógica de baixo nível:
 2. Organização de Hardware: O "Gigante" Core i7 (Seu Padrão)
 Devido à sua natureza CISC, os componentes que você mapeou precisam lidar com instruções de tamanhos variáveis e múltiplos operandos:
 
-+--------------------------------------------------------------------------+------------------------------------------------------------------+
-| Processamento                                                            | Armazenamento                                                    |
-+--------------------------------------------------------------------------+------------------------------------------------------------------+
-| ULA (Capaz de processar BCD, inteiros e ponto flutuante)                 | Registradores (Complexos: EAX, EBX, EFLAGS, etc.)                |
-+--------------------------------------------------------------------------+------------------------------------------------------------------+
-| BARRAMENTO INTERNO (Larga escala para suportar 64 bits)                  | MEMÓRIA PRINCIPAL (Organizada em segmentos de código/dados/pilha)|
-+--------------------------------------------------------------------------+------------------------------------------------------------------+
-| UC (Extremamente complexa; usa microcódigo para instruções REP)          | CI (Avança em saltos de 1 a 15 bytes por instrução)              |
-| RI (Tamanho variável; pode ter prefixos como LOCK/REP)                   | REM (Lida com segmentação complexa de memória)                   |
-| Decodificador (O mais complexo; precisa identificar centenas de opcodes) | RDM (Interface com Cache L1/L2/L3 de alta velocidade)            |
-| CLOCK (Altíssima frequência; instruções complexas levam vários ciclos)   |                                                                  |
-+--------------------------------------------------------------------------+------------------------------------------------------------------+
+    +--------------------------------------------------------------------------+------------------------------------------------------------------+
+    | Processamento                                                            | Armazenamento                                                    |
+    +--------------------------------------------------------------------------+------------------------------------------------------------------+
+    | ULA (Capaz de processar BCD, inteiros e ponto flutuante)                 | Registradores (Complexos: EAX, EBX, EFLAGS, etc.)                |
+    +--------------------------------------------------------------------------+------------------------------------------------------------------+
+    | BARRAMENTO INTERNO (Larga escala para suportar 64 bits)                  | MEMÓRIA PRINCIPAL (Organizada em segmentos de código/dados/pilha)|
+    +--------------------------------------------------------------------------+------------------------------------------------------------------+
+    | UC (Extremamente complexa; usa microcódigo para instruções REP)          | CI (Avança em saltos de 1 a 15 bytes por instrução)              |
+    | RI (Tamanho variável; pode ter prefixos como LOCK/REP)                   | REM (Lida com segmentação complexa de memória)                   |
+    | Decodificador (O mais complexo; precisa identificar centenas de opcodes) | RDM (Interface com Cache L1/L2/L3 de alta velocidade)            |
+    | CLOCK (Altíssima frequência; instruções complexas levam vários ciclos)   |                                                                  |
+    +--------------------------------------------------------------------------+------------------------------------------------------------------+
 
 3. Tabela de Instruções de Inteiros (Resumo Figura 5.3.3
-)Para facilitar sua consulta no repositório, organizei as instruções mais comuns citadas:
-+------------+---------------------------------+--------------------------------------------------+
-| Grupo      | Exemplos (Opcode)               | Função Principal                                 |
-+------------+---------------------------------+--------------------------------------------------+
-| Movimentos | MOV, PUSH, POP, LEA             | Transferência de dados e endereços.              |
-+------------+---------------------------------+--------------------------------------------------+
-| Aritmética | ADD, SUB, IMUL, IDIV            | Cálculos com e sem sinal (8, 16, 32 bits).       |
-+------------+---------------------------------+--------------------------------------------------+
-| Lógica     | AND, OR, XOR, NOT               | Operações booleanas bit a bit.                   |
-+------------+---------------------------------+--------------------------------------------------+
-| Controle   | JMP, CALL, RET, LOOP            | Alteração do fluxo (CI) e funções.               |
-+------------+---------------------------------+--------------------------------------------------+
-| Cadeias    | MOVS, CMPS, SCAS                | Operações em blocos de memória (com prefixo REP).|
-+------------+---------------------------------+--------------------------------------------------+
+
+    Para facilitar sua consulta no repositório, organizei as instruções mais comuns citadas:
+    +------------+---------------------------------+--------------------------------------------------+
+    | Grupo      | Exemplos (Opcode)               | Função Principal                                 |
+    +------------+---------------------------------+--------------------------------------------------+
+    | Movimentos | MOV, PUSH, POP, LEA             | Transferência de dados e endereços.              |
+    +------------+---------------------------------+--------------------------------------------------+
+    | Aritmética | ADD, SUB, IMUL, IDIV            | Cálculos com e sem sinal (8, 16, 32 bits).       |
+    +------------+---------------------------------+--------------------------------------------------+
+    | Lógica     | AND, OR, XOR, NOT               | Operações booleanas bit a bit.                   |
+    +------------+---------------------------------+--------------------------------------------------+
+    | Controle   | JMP, CALL, RET, LOOP            | Alteração do fluxo (CI) e funções.               |
+    +------------+---------------------------------+--------------------------------------------------+
+    | Cadeias    | MOVS, CMPS, SCAS                | Operações em blocos de memória (com prefixo REP).|
+    +------------+---------------------------------+--------------------------------------------------+
 
 ##  Insight para seus projetos em estruturas_de_dados
 O Core i7 possui o registrador EFLAGS. Instruções de Teste/Comparação (CMP, TEST) não mudam os valores dos dados, apenas "sujam" as flags (Z, N, V, C).
@@ -3094,33 +3085,33 @@ No seu código C, quando você faz if (ptr == NULL), o compilador i7 provavelmen
 
 Isso é muito eficiente porque a instrução TEST é mais rápida que uma comparação explícita com o valor zero na memória.
 
-Figura 5.3.3   Seleção de instruções de inteiros do Core i7.
-+---------------+---------------------------------+---------------------------------+
-| Grupo         | Instruções                      | Função Principal                |
-+---------------+---------------------------------+---------------------------------+
-| Transferência | MOV, PUSH, POP, XCHG, LEA,      | Movimentação de dados e         |
-| de Controle   | CMOVcc, JMP, Jxx, CALL, RET,    | endereços, saltos e chamadas    |
-|               | IRET, LOOPxx, INT, INTO         | de procedimentos                |
-+---------------+---------------------------------+---------------------------------+
-| Aritmética    | ADD, SUB, MUL, IMUL, DIV, IDIV, | Operações aritméticas com e     |
-|               | ADC, SBB, INC, DEC, NEG,        | sem sinal                       |
-|               | DAA, DAS, AAA, AAS, AAM, AAD    |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Lógica        | AND, OR, XOR, NOT, SAL/SAR,     | Operações lógicas e             |
-|               | SHL/SHR, ROL/ROR, RCL/RCR       | deslocamentos                   |
-+---------------+---------------------------------+---------------------------------+
-| Cadeias       | LODS, STOS, MOVS, CMPS, SCAS    | Operações em blocos de          |
-|               |                                 | memória                         |
-+---------------+---------------------------------+---------------------------------+
-| Decimais de   | DAA, DAS, AAA, AAS, AAM, AAD    | Ajustes decimais e ASCII        |
-| Código Binário|                                 |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Códigos de    | STC, CLC, CMC, STD, CLD, STI,   | Manipulação de flags            |
-| Condição      | CLI, PUSHFD, POPFD, LAHF, SAHF  |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Diversas      | SWAP, CWQ, CWDE, ENTER, LEAVE,  | Instruções diversas             |
-|               | NOP, HLT, IN, OUT, WAIT         |                                 |
-+---------------+---------------------------------+---------------------------------+
+    Figura 5.3.3   Seleção de instruções de inteiros do Core i7.
+    +---------------+---------------------------------+---------------------------------+
+    | Grupo         | Instruções                      | Função Principal                |
+    +---------------+---------------------------------+---------------------------------+
+    | Transferência | MOV, PUSH, POP, XCHG, LEA,      | Movimentação de dados e         |
+    | de Controle   | CMOVcc, JMP, Jxx, CALL, RET,    | endereços, saltos e chamadas    |
+    |               | IRET, LOOPxx, INT, INTO         | de procedimentos                |
+    +---------------+---------------------------------+---------------------------------+
+    | Aritmética    | ADD, SUB, MUL, IMUL, DIV, IDIV, | Operações aritméticas com e     |
+    |               | ADC, SBB, INC, DEC, NEG,        | sem sinal                       |
+    |               | DAA, DAS, AAA, AAS, AAM, AAD    |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Lógica        | AND, OR, XOR, NOT, SAL/SAR,     | Operações lógicas e             |
+    |               | SHL/SHR, ROL/ROR, RCL/RCR       | deslocamentos                   |
+    +---------------+---------------------------------+---------------------------------+
+    | Cadeias       | LODS, STOS, MOVS, CMPS, SCAS    | Operações em blocos de          |
+    |               |                                 | memória                         |
+    +---------------+---------------------------------+---------------------------------+
+    | Decimais de   | DAA, DAS, AAA, AAS, AAM, AAD    | Ajustes decimais e ASCII        |
+    | Código Binário|                                 |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Códigos de    | STC, CLC, CMC, STD, CLD, STI,   | Manipulação de flags            |
+    | Condição      | CLI, PUSHFD, POPFD, LAHF, SAHF  |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Diversas      | SWAP, CWQ, CWDE, ENTER, LEAVE,  | Instruções diversas             |
+    |               | NOP, HLT, IN, OUT, WAIT         |                                 |
+    +---------------+---------------------------------+---------------------------------+
 
 
 ## 5.5.9 Instruções da CPU ARM do OMAP4430
@@ -3131,31 +3122,31 @@ gerenciamento de cache, inicialização de sistema), instruções que envolvem e
 usuário, nem extensões de instrução, como Thumb. O conjunto é surpreendentemente pequeno: a ISA ARM
 do OMAP4430 é de fato um computador com conjunto reduzido de instruções.
 
-Figura 5.3.4   As principais instruções de inteiros da CPU ARM do OMAP4430.
-+---------------+---------------------------------+---------------------------------+
-| Grupo         | Instruções                      | Função Principal                |
-+---------------+---------------------------------+---------------------------------+
-| Carregamento  | LDRSB, LDRB, LDRSH, LDRH, LDR   | Carregamento de dados           |
-|               | LDM                             |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Armazenamento | STRB, STRH, STR, STM            | Armazenamento de dados          |
-+---------------+---------------------------------+---------------------------------+
-| Aritmética    | ADD, ADC, SUB, SBC, RSB, RSC,   | Operações aritméticas           |
-|               | MUL, MLA, UMULL, SMULL, UMLAL,  |                                 |
-|               | SMLAL                           |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Lógica        | AND, EOR, ORR, BIC, MOV, MVN,   | Operações lógicas               |
-|               | TST, TEQ                        |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Deslocamento  | LSL, LSR, ASR, ROR              | Deslocamento de bits            |
-+---------------+---------------------------------+---------------------------------+
-| Transferência | SWP, SWPB                       | Troca de dados                  |
-| de Controle   |                                 |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Controle      | Bcc, BLcc, CMP, SWI             | Controle de fluxo e interrupção |
-+---------------+---------------------------------+---------------------------------+
-| Diversas      | MRS, MSR                        | Manipulação de PSR              |
-+---------------+---------------------------------+---------------------------------+
+    Figura 5.3.4   As principais instruções de inteiros da CPU ARM do OMAP4430.
+    +---------------+---------------------------------+---------------------------------+
+    | Grupo         | Instruções                      | Função Principal                |
+    +---------------+---------------------------------+---------------------------------+
+    | Carregamento  | LDRSB, LDRB, LDRSH, LDRH, LDR   | Carregamento de dados           |
+    |               | LDM                             |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Armazenamento | STRB, STRH, STR, STM            | Armazenamento de dados          |
+    +---------------+---------------------------------+---------------------------------+
+    | Aritmética    | ADD, ADC, SUB, SBC, RSB, RSC,   | Operações aritméticas           |
+    |               | MUL, MLA, UMULL, SMULL, UMLAL,  |                                 |
+    |               | SMLAL                           |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Lógica        | AND, EOR, ORR, BIC, MOV, MVN,   | Operações lógicas               |
+    |               | TST, TEQ                        |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Deslocamento  | LSL, LSR, ASR, ROR              | Deslocamento de bits            |
+    +---------------+---------------------------------+---------------------------------+
+    | Transferência | SWP, SWPB                       | Troca de dados                  |
+    | de Controle   |                                 |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Controle      | Bcc, BLcc, CMP, SWI             | Controle de fluxo e interrupção |
+    +---------------+---------------------------------+---------------------------------+
+    | Diversas      | MRS, MSR                        | Manipulação de PSR              |
+    +---------------+---------------------------------+---------------------------------+
 
 Diferente do Core i7 (CISC), a arquitetura ARM (RISC) do OMAP4430 foca na eficiência e na previsibilidade. Para o seu diretório estruturas_de_dados, o ARM é uma aula de como o software (compilador) assume responsabilidades que antes eram do hardware para ganhar velocidade.
 
@@ -3174,47 +3165,49 @@ Em máquinas CISC, toda instrução "suja" as flags. No RISC, se o compilador qu
 
 3. Organização de Hardware: Arquitetura ARM (Seu Padrão)
 No ARM, a simplicidade do hardware permite que ele rode em frequências altas com baixo consumo, ideal para os dispositivos OMAP.
--------------------------------------------------------------+----------------------------------------------------------+
-| Processamento                                              | Armazenamento                                            |
-+------------------------------------------------------------+----------------------------------------------------------+
-| ULA (Executa Barrel Shifter: desloca e opera em 1 ciclo)   | Registradores (16 registradores de 32 bits, R0 a R15)    |
-+------------------------------------------------------------+----------------------------------------------------------+
-| BARRAMENTO INTERNO (Otimizado para transferências Reg-Reg) | MEMÓRIA PRINCIPAL (Acessada apenas via Load/Store)       |
-+------------------------------------------------------------+----------------------------------------------------------+
-| UC (Simples: decodifica instruções de tamanho fixo)        | CI (R15) (Pode ser alvo de instruções lógicas/movimento) |
-| RI (Sempre 32 bits, facilitando a busca)                   | REM (Usado apenas em instruções explícitas LDR/STR)      |
-| Decodificador (Rápido, pois não há opcodes variáveis)      | RDM (Lida com extensões de sinal/zero para 8/16 bits)    |
-| CLOCK (Cada instrução busca ser executada em 1 ciclo)      |                                                          |
-+------------------------------------------------------------+----------------------------------------------------------+
 
-4. Diagrama ASCII: Otimização de Chamada de Função (Link Register)
+    +------------------------------------------------------------+----------------------------------------------------------+
+    | Processamento                                              | Armazenamento                                            |
+    +------------------------------------------------------------+----------------------------------------------------------+
+    | ULA (Executa Barrel Shifter: desloca e opera em 1 ciclo)   | Registradores (16 registradores de 32 bits, R0 a R15)    |
+    +------------------------------------------------------------+----------------------------------------------------------+
+    | BARRAMENTO INTERNO (Otimizado para transferências Reg-Reg) | MEMÓRIA PRINCIPAL (Acessada apenas via Load/Store)       |
+    +------------------------------------------------------------+----------------------------------------------------------+
+    | UC (Simples: decodifica instruções de tamanho fixo)        | CI (R15) (Pode ser alvo de instruções lógicas/movimento) |
+    | RI (Sempre 32 bits, facilitando a busca)                   | REM (Usado apenas em instruções explícitas LDR/STR)      |
+    | Decodificador (Rápido, pois não há opcodes variáveis)      | RDM (Lida com extensões de sinal/zero para 8/16 bits)    |
+    | CLOCK (Cada instrução busca ser executada em 1 ciclo)      |                                                          |
+    +------------------------------------------------------------+----------------------------------------------------------+
+
+Otimização de Chamada de Função (Link Register)
+
 Diferente do diagrama de pilha que vimos antes, o ARM usa o R14 para evitar acessos desnecessários à RAM:
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculos Gerais)   |       |   REGISTRADORES (R0-R12)   |
-    | (Livre de flags s/ o "S") | <---> | (Uso Geral / Variáveis)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   R14 (LINK REGISTER)      |
-    | (Executa BL - Branch Link)| ----> | (Guarda retorno s/ Pilha)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CI / R15 (Prog. Counter)|       |   R13 (STACK POINTER)      |
-    | (Salta p/ o Procedimento) | <---  | (Só usado se houver PUSH)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   DECODIFICADOR           |       |   MEMÓRIA PRINCIPAL        |
-    | (Instruções de 32 bits)   | ----> | (Código e Dados)           |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculos Gerais)   |       |   REGISTRADORES (R0-R12)   |
+        | (Livre de flags s/ o "S") | <---> | (Uso Geral / Variáveis)    |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   R14 (LINK REGISTER)      |
+        | (Executa BL - Branch Link)| ----> | (Guarda retorno s/ Pilha)  |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CI / R15 (Prog. Counter)|       |   R13 (STACK POINTER)      |
+        | (Salta p/ o Procedimento) | <---  | (Só usado se houver PUSH)  |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   DECODIFICADOR           |       |   MEMÓRIA PRINCIPAL        |
+        | (Instruções de 32 bits)   | ----> | (Código e Dados)           |
+        +---------------------------+       +----------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 No ARM, a instrução BIC (Bit Clear) é excelente para gerenciar máscaras em estruturas de dados de baixo nível. Se você tem um campo de bits e quer zerar os bits de status sem afetar o resto, o BIC faz isso em um único ciclo, enquanto no i7 você talvez precisasse de um NOT seguido de um AND.
 
 Além disso, a extensão de sinal automática no LDR (carregar um char assinado em um int) evita que você tenha que fazer a conversão manualmente no seu código C, economizando instruções.
-
 
 ## 5.5.10 Instruções da CPU AVR do ATmega168
 O ATmega168 tem um conjunto de instruções simples, mostrado na Figura 5.35. Cada linha dá o mnemôni-
@@ -3226,87 +3219,87 @@ Para permitir 64 KB de endereçamento, a carga com um endereço imediato é uma 
 de endereçamento indireto utiliza pares de registradores X, Y e Z, que combinam os dois registradores de 8 bits
 para formar um único ponteiro de 16 bits.
 
-Figura 5.35   Conjunto de instruções ISA da CPU AVR do ATmega168.
-+-----------------+---------------------------------+----------------------------------+
-|   INSTRUÇÃO     |            OPERAÇÃO             |           DESCRIÇÃO              |
-+-----------------+---------------------------------+----------------------------------+
-| ADD DST,SRC     | DST <- DST + SRC                | Some                             |
-| ADC DST,SRC     | DST <- DST + SRC + C            | Some com vai-um                  |
-| ADIW DST,IMM    | DST+1:DST <- DST+1:DST + IMM    | Some imediato com palavra        |
-| SUB DST,SRC     | DST <- DST - SRC                | Subtraia                         |
-| SUBI DST,IMM    | DST <- DST - IMM                | Subtraia imediato                |
-| SBC DST,SRC     | DST <- DST - SRC - C            | Subtraia com vai-um              |
-| SBCI DST,IMM    | DST <- DST - IMM - C            | Subtraia imediato com vai-um     |
-| SBIW DST,IMM    | DST+1:DST <- DST+1:DST - IMM    | Subtraia imediato da palavra     |
-| AND DST,SRC     | DST <- DST AND SRC              | AND lógico                       |
-| ANDI DST,IMM    | DST <- DST AND IMM              | AND lógico com imediato          |
-| OR DST,SRC      | DST <- DST OR SRC               | OR lógico                        |
-| ORI DST,IMM      | DST <- DST OR IMM               | OR lógico com imediato           |
-| EOR DST,SRC     | DST <- DST XOR SRC              | EXCLUSIVE OR                     |
-| COM DST         | DST <- 0xFF - DST               | Complemento de um                |
-| NEG DST         | DST <- 0x00 - DST               | Complemento de dois              |
-| SBR DST,IMM     | DST <- DST OR IMM               | Marque bit(s) no registrador     |
-| CBR DST,IMM     | DST <- DST AND (0xFF - IMM)     | Limpe bit(s) no registrador      |
-| INC DST         | DST <- DST + 1                  | Incremente                       |
-| DEC DST         | DST <- DST - 1                  | Decremente                       |
-| TST DST         | DST <- DST AND DST              | Teste se é zero ou negativo      |
-| CLR DST         | DST <- DST XOR DST              | Limpe registrador                |
-| SER DST         | DST <- 0xFF                     | Marque registrador               |
-| MUL DST,SRC     | R1:R0 <- DST * SRC              | Multiplique sem sinal            |
-| MULS DST,SRC    | R1:R0 <- DST * SRC              | Multiplique com sinal            |
-| MULSU DST,SRC   | R1:R0 <- DST * SRC              | Mult. com sinal e sem sinal      |
-| RJMP IMM        | PC <- PC + IMM + 1              | Salte em relação ao PC           |
-| IJMP            | PC <- Z (R30:R31)               | Salte indireto para Z            |
-| JMP IMM         | PC <- IMM                       | Salte                            |
-| RCALL IMM       | STACK <- PC+2, PC <- PC+IMM+1   | Chamada relativa                 |
-| ICALL           | STACK <- PC+2, PC <- Z (R30:R31)| Chamada indireta para (Z)        |
-| CALL IMM        | STACK <- PC+2, PC <- IMM        | Chamada                          |
-| RET             | PC <- STACK                     | Retorne                          |
-| CP DST,SRC      | DST - SRC                       | Compare                          |
-| CPC DST,SRC     | DST - SRC - C                   | Compare com vai-um               |
-| CPI DST,IMM     | DST - IMM                       | Compare com imediato             |
-| BRcc IMM        | if cc(true) PC <- PC + IMM + 1  | Desvie em condição               |
-| MOV DST,SRC     | DST <- SRC                      | Copie registrador                |
-| MOVW DST,SRC    | DST+1:DST <- SRC+1:SRC          | Copie par de registradores       |
-| LDI DST,IMM     | DST <- IMM                      | Carregue imediato                |
-| LDS DST,IMM     | DST <- MEM[IMM]                 | Carregue direto                  |
-| LD DST,XYZ      | DST <- MEM[XYZ]                 | Carregue indireto                |
-| LDD DST,XYZ+IMM | DST <- MEM[XYZ+IMM]             | Carr. indireto c/ deslocamento   |
-| STS IMM,SRC     | MEM[IMM] <- SRC                 | Armazene direto                  |
-| ST XYZ,SRC      | MEM[XYZ] <- SRC                 | Armazene indireto                |
-| STD XYZ+IMM,SRC | MEM[XYZ+IMM] <- SRC             | Arm. indireto c/ deslocamento   |
-| PUSH REGLIST    | STACK <- REGLIST                | Coloque registrador na pilha     |
-| POP REGLIST     | REGLIST <- STACK                | Retire registrador da pilha      |
-| LSL DST         | DST <- DST LSL 1                | Desloc. lógico à esquerda        |
-| LSR DST         | DST <- DST LSR 1                | Desloc. lógico à direita         |
-| ROL DST         | DST <- DST ROL 1                | Rotação à esquerda               |
-| ROR DST         | DST <- DST ROR 1                | Rotação à direita                |
-| ASR DST         | DST <- DST ASR 1                | Desloc. aritmético à direita     |
-+-----------------+---------------------------------+----------------------------------+
+    Figura 5.35   Conjunto de instruções ISA da CPU AVR do ATmega168.
+    +-----------------+---------------------------------+----------------------------------+
+    |   INSTRUÇÃO     |            OPERAÇÃO             |           DESCRIÇÃO              |
+    +-----------------+---------------------------------+----------------------------------+
+    | ADD DST,SRC     | DST <- DST + SRC                | Some                             |
+    | ADC DST,SRC     | DST <- DST + SRC + C            | Some com vai-um                  |
+    | ADIW DST,IMM    | DST+1:DST <- DST+1:DST + IMM    | Some imediato com palavra        |
+    | SUB DST,SRC     | DST <- DST - SRC                | Subtraia                         |
+    | SUBI DST,IMM    | DST <- DST - IMM                | Subtraia imediato                |
+    | SBC DST,SRC     | DST <- DST - SRC - C            | Subtraia com vai-um              |
+    | SBCI DST,IMM    | DST <- DST - IMM - C            | Subtraia imediato com vai-um     |
+    | SBIW DST,IMM    | DST+1:DST <- DST+1:DST - IMM    | Subtraia imediato da palavra     |
+    | AND DST,SRC     | DST <- DST AND SRC              | AND lógico                       |
+    | ANDI DST,IMM    | DST <- DST AND IMM              | AND lógico com imediato          |
+    | OR DST,SRC      | DST <- DST OR SRC               | OR lógico                        |
+    | ORI DST,IMM     | DST <- DST OR IMM               | OR lógico com imediato           |
+    | EOR DST,SRC     | DST <- DST XOR SRC              | EXCLUSIVE OR                     |
+    | COM DST         | DST <- 0xFF - DST               | Complemento de um                |
+    | NEG DST         | DST <- 0x00 - DST               | Complemento de dois              |
+    | SBR DST,IMM     | DST <- DST OR IMM               | Marque bit(s) no registrador     |
+    | CBR DST,IMM     | DST <- DST AND (0xFF - IMM)     | Limpe bit(s) no registrador      |
+    | INC DST         | DST <- DST + 1                  | Incremente                       |
+    | DEC DST         | DST <- DST - 1                  | Decremente                       |
+    | TST DST         | DST <- DST AND DST              | Teste se é zero ou negativo      |
+    | CLR DST         | DST <- DST XOR DST              | Limpe registrador                |
+    | SER DST         | DST <- 0xFF                     | Marque registrador               |
+    | MUL DST,SRC     | R1:R0 <- DST * SRC              | Multiplique sem sinal            |
+    | MULS DST,SRC    | R1:R0 <- DST * SRC              | Multiplique com sinal            |
+    | MULSU DST,SRC   | R1:R0 <- DST * SRC              | Mult. com sinal e sem sinal      |
+    | RJMP IMM        | PC <- PC + IMM + 1              | Salte em relação ao PC           |
+    | IJMP            | PC <- Z (R30:R31)               | Salte indireto para Z            |
+    | JMP IMM         | PC <- IMM                       | Salte                            |
+    | RCALL IMM       | STACK <- PC+2, PC <- PC+IMM+1   | Chamada relativa                 |
+    | ICALL           | STACK <- PC+2, PC <- Z (R30:R31)| Chamada indireta para (Z)        |
+    | CALL IMM        | STACK <- PC+2, PC <- IMM        | Chamada                          |
+    | RET             | PC <- STACK                     | Retorne                          |
+    | CP DST,SRC      | DST - SRC                       | Compare                          |
+    | CPC DST,SRC     | DST - SRC - C                   | Compare com vai-um               |
+    | CPI DST,IMM     | DST - IMM                       | Compare com imediato             |
+    | BRcc IMM        | if cc(true) PC <- PC + IMM + 1  | Desvie em condição               |
+    | MOV DST,SRC     | DST <- SRC                      | Copie registrador                |
+    | MOVW DST,SRC    | DST+1:DST <- SRC+1:SRC          | Copie par de registradores       |
+    | LDI DST,IMM     | DST <- IMM                      | Carregue imediato                |
+    | LDS DST,IMM     | DST <- MEM[IMM]                 | Carregue direto                  |
+    | LD DST,XYZ      | DST <- MEM[XYZ]                 | Carregue indireto                |
+    | LDD DST,XYZ+IMM | DST <- MEM[XYZ+IMM]             | Carr. indireto c/ deslocamento   |
+    | STS IMM,SRC     | MEM[IMM] <- SRC                 | Armazene direto                  |
+    | ST XYZ,SRC      | MEM[XYZ] <- SRC                 | Armazene indireto                |
+    | STD XYZ+IMM,SRC | MEM[XYZ+IMM] <- SRC             | Arm. indireto c/ deslocamento   |
+    | PUSH REGLIST    | STACK <- REGLIST                | Coloque registrador na pilha     |
+    | POP REGLIST     | REGLIST <- STACK                | Retire registrador da pilha      |
+    | LSL DST         | DST <- DST LSL 1                | Desloc. lógico à esquerda        |
+    | LSR DST         | DST <- DST LSR 1                | Desloc. lógico à direita         |
+    | ROL DST         | DST <- DST ROL 1                | Rotação à esquerda               |
+    | ROR DST         | DST <- DST ROR 1                | Rotação à direita                |
+    | ASR DST         | DST <- DST ASR 1                | Desloc. aritmético à direita     |
+    +-----------------+---------------------------------+----------------------------------+
 
-Figura 5.35   Conjunto de instruções da CPU AVR do ATmega168.
-+---------------+---------------------------------+---------------------------------+
-| Grupo         | Instruções                      | Função Principal                |
-+---------------+---------------------------------+---------------------------------+
-| Aritmética    | ADD, ADC, SUB, SUBI, SBC,       | Operações aritméticas           |
-|               | SBCI, SBIW, AND, ANDI, OR, ORI, |                                 |
-|               | EOR, COM, NEG, INC, DEC, TST,   |                                 |
-|               | CLR, SER, MUL, MULS, MULSU      |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Controle      | RJMP, IJMP, JMP, RCALL, ICALL,  | Controle de fluxo               |
-|               | CALL, RET, BRcc, CP, CPC, CPI   |                                 |
-+---------------+---------------------------------+---------------------------------+
-| Movimentação  | MOV, MOVW, LDI, LDS, LD, LDD,   | Movimentação de dados           |
-|               | STS, ST, STD, PUSH, POP         |                                 |
-+---------------+---------------------------------+---------------------------------+
-+---------------+---------------------------------+---------------------------------+
-| Lógica        | AND, ANDI, OR, ORI, EOR, COM,  | Operações lógicas                |
-|               | NEG, TST, CLR, SER             |                                  |
-+---------------+---------------------------------+---------------------------------+
-| Deslocamento  | LSL, LSR, ROL, ROR, ASR        | Deslocamento de bits             |
-+---------------+---------------------------------+---------------------------------+
-| Pilha         | PUSH, POP                      | Manipulação da pilha             |
-+---------------+---------------------------------+---------------------------------+
+    Figura 5.35   Conjunto de instruções da CPU AVR do ATmega168.
+    +---------------+---------------------------------+---------------------------------+
+    | Grupo         | Instruções                      | Função Principal                |
+    +---------------+---------------------------------+---------------------------------+
+    | Aritmética    | ADD, ADC, SUB, SUBI, SBC,       | Operações aritméticas           |
+    |               | SBCI, SBIW, AND, ANDI, OR, ORI, |                                 |
+    |               | EOR, COM, NEG, INC, DEC, TST,   |                                 |
+    |               | CLR, SER, MUL, MULS, MULSU      |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Controle      | RJMP, IJMP, JMP, RCALL, ICALL,  | Controle de fluxo               |
+    |               | CALL, RET, BRcc, CP, CPC, CPI   |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    | Movimentação  | MOV, MOVW, LDI, LDS, LD, LDD,   | Movimentação de dados           |
+    |               | STS, ST, STD, PUSH, POP         |                                 |
+    +---------------+---------------------------------+---------------------------------+
+    +---------------+---------------------------------+---------------------------------+
+    | Lógica        | AND, ANDI, OR, ORI, EOR, COM,  | Operações lógicas                |
+    |               | NEG, TST, CLR, SER             |                                  |
+    +---------------+---------------------------------+---------------------------------+
+    | Deslocamento  | LSL, LSR, ROL, ROR, ASR        | Deslocamento de bits             |
+    +---------------+---------------------------------+---------------------------------+
+    | Pilha         | PUSH, POP                      | Manipulação da pilha             |
+    +---------------+---------------------------------+---------------------------------+
 
 O ATmega168 tem instruções aritméticas simples para somar, subtrair e multiplicar, sendo que esta última
 usa dois registradores. Incrementar e decrementar também são operações possíveis e muito usadas. Instruções
@@ -3354,48 +3347,49 @@ A Figura 5.36 mostra o comportamento do Contador de Programa (CI/PC) ao longo do
 2. Organização de Hardware: O Impacto do GOTO (Seu Padrão)
 Quando um GOTO (ou um desvio de alto nível como break ou continue) é executado, quase todos os componentes que você mapeou sofrem um impacto:
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Calcula o Salto)   |       |   REGISTRADORES (FLAGS)    |
-    | (Endereço Relativo/Alvo)  | <---> | (Decidem se o salto ocorre)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Leva o endereço "repentino")       |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução GOTO)      |
-    | (Interrompe a sequência)  | <---> | (Contém o destino do salto)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Identifica o tipo de JMP)| <---  | (Abandona sequência +1)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Salto Brusco)      |       |   RDM (Instrução Alvo)     |
-    | (Aponta p/ o novo rótulo) | <---  | (Lê a instrução "surpresa")|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
-    | (Limpa o Pipeline)        | ----> | (Código espalhado)         |
-    +---------------------------+       +----------------------------+
-3. Diagrama ASCII: CI como Função do Tempo (Figura 5.36)
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Calcula o Salto)   |       |   REGISTRADORES (FLAGS)    |
+        | (Endereço Relativo/Alvo)  | <---> | (Decidem se o salto ocorre)|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Leva o endereço "repentino")       |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução GOTO)      |
+        | (Interrompe a sequência)  | <---> | (Contém o destino do salto)|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Identifica o tipo de JMP)| <---  | (Abandona sequência +1)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Salto Brusco)      |       |   RDM (Instrução Alvo)     |
+        | (Aponta p/ o novo rótulo) | <---  | (Lê a instrução "surpresa")|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL        |
+        | (Limpa o Pipeline)        | ----> | (Código espalhado)         |
+        +---------------------------+       +----------------------------+
+
+CI como Função do Tempo (Figura 5.36)
 Aqui está a representação visual de como o Contador de Programa se comporta nos dois cenários:
 
-(a) FLUXO LINEAR (Sem GOTO)           (b) FLUXO COM SALTOS (Com GOTO)
-CI ^                                  CI ^
-   |          /                          |          /|
-   |         /                           |         / | (Salto p/ trás)
-   |        /                            |      --/  |
-   |       /                             |     /     |    /
-   |      /                              |  --/      | --/ (Salto p/ frente)
-   |     /                               | /         |/
-   +-------------------> Tempo           +-------------------> Tempo
-     (Previsível/Rápido)                   (Caótico/Complexo)
+    (a) FLUXO LINEAR (Sem GOTO)           (b) FLUXO COM SALTOS (Com GOTO)
+    CI ^                                  CI ^
+    |          /                          |          /|
+    |         /                           |         / | (Salto p/ trás)
+    |        /                            |      --/  |
+    |       /                             |     /     |    /
+    |      /                              |  --/      | --/ (Salto p/ frente)
+    |     /                               | /         |/
+    +-------------------> Tempo           +-------------------> Tempo
+        (Previsível/Rápido)                   (Caótico/Complexo)
 
 Quando os programadores têm problemas para monitorar a sequência na qual o processador executará as instruções, tendem a cometer erros. Essa observação levou Dijkstra (1968a) a escrever a carta, controvertida na ocasião, intitulada “GOTO Statement Considered Harmful” (“Comando GOTO considerado perigoso”), na qual
 sugeria evitar comandos goto. Essa carta deu origem à revolução da programação estruturada, da qual um dos dogmas é a substituição de declarações goto por formas de controle de fluxo mais estruturadas, como laços while. É claro que esses programas compilam até programas de nível 2 que contêm muitos desvios, porque a implementação de if, while e outras estruturas de controle de alto nível requer desvios para todos os lados.
@@ -3432,16 +3426,16 @@ A solução recursiva divide o problema em três passos:
 2. O Impacto no Hardware: A Explosão da Pilha
 Cada vez que o procedimento torres(n, i, j) chama a si mesmo, o hardware precisa salvar o "estado" da chamada anterior. Como vimos no texto anterior sobre Instruções de Chamada, o ARM usaria o Link Register (R14) para a primeira chamada, mas como Hanói é recursão profunda, ele será obrigado a usar a Memória Principal (Pilha).
 
-Figura 5.37   Configuração inicial para o problema Torres de Hanói para cinco discos
+        Figura 5.37   Configuração inicial para o problema Torres de Hanói para cinco discos
 
-ESTACA 1                                 ESTACA 2                        ESTACA 3
-             |                              |                               |
-           - = -                            |                               |
-         -  ===  -                          |                               |
-       -   =====   -                        |                               |
-     -    =======    -                      |                               |
-   -     =========     -                    |                               |
-  +---------A-----------+         +---------B-----------+         +---------C-----------+
+        ESTACA 1                                 ESTACA 2                        ESTACA 3
+                     |                              |                               |
+                 -   = -                            |                               |
+                -   ===  -                          |                               |
+               -   =====   -                        |                               |
+              -   =======    -                      |                               |
+            -    =========     -                    |                               |
+            +---------A-----------+        +---------B-----------+         +---------C-----------+
 
 
 Para n=5 discos, o número de movimentos é 2^n - 1 = 31. No entanto, o número de chamadas de função empilhadas cresce rapidamente, exigindo que a Unidade de Controle gerencie o Stack Pointer (SP) constantemente.
@@ -3449,65 +3443,65 @@ Para n=5 discos, o número de movimentos é 2^n - 1 = 31. No entanto, o número 
 3. Organização de Hardware: Recursão de Hanói (Seu Padrão)
 Aqui está como os componentes interagem para sustentar a árvore de chamadas de Hanói:
 
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Controle de n)     |       |   REGISTRADORES (n, i, j)  |
-    | (Calcula n-1 e n=1?)      | <---> | (Estado atual do disco)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Move Retornos e Parâmetros)        |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL)      |
-    | (Gera o PUSH recursivo)   | <---> | (Chamada de torres(n-1))   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Identifica CALL vs RET)  | <---  | (Salta p/ início da func)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Topo da Pilha)     |       |   RDM (Dados da Pilha)     |
-    | (Endereço p/ salvar)      | <---  | (Escreve Retorno e Dados)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Cadência da Recursão)    | ----> | (PILHA / STACK FRAME)      |
-    +---------------------------+       +----------------------------+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Controle de n)     |       |   REGISTRADORES (n, i, j)  |
+        | (Calcula n-1 e n=1?)      | <---> | (Estado atual do disco)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Move Retornos e Parâmetros)        |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL)      |
+        | (Gera o PUSH recursivo)   | <---> | (Chamada de torres(n-1))   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Identifica CALL vs RET)  | <---  | (Salta p/ início da func)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Topo da Pilha)     |       |   RDM (Dados da Pilha)     |
+        | (Endereço p/ salvar)      | <---  | (Escreve Retorno e Dados)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Cadência da Recursão)    | ----> | (PILHA / STACK FRAME)      |
+        +---------------------------+       +----------------------------+
 
-A Estaca de Hanói (Hardware View)
-Podemos visualizar as estacas como locais de memória e o movimento dos discos como operações de LOAD e STORE:
-ESTACA 1 (RAM)             CPU (PROCESSAMENTO)            ESTACA 3 (RAM)
-    +-----------------+        +-----------------------+       +-----------------+
-    |     [Disco 1]   |        |   REGISTRADORES       |       |                 |
-    |     [Disco 2]   | <----> | [Carrega p/ mover]    | <---->|                 |
-    |     [Disco 3]   |        |                       |       |     [Disco 4]   |
-    +-----------------+        +-----------+-----------+       +-----------------+
-             |                             |                            |
-             |                   BARRAMENTO INTERNO                     |
-    =========v=============================v============================v=========
-                                           |
-                                 +---------v---------+
-                                 |  PILHA (STACK)    |
-                                 | [torres(3,1,3)]   | <-- Endereços de retorno
-                                 | [torres(2,1,2)]   |     e parâmetros salvos
-                                 | [torres(1,1,3)]   |     pelo hardware.
-                                 +-------------------+
+    A Estaca de Hanói (Hardware View)
+    Podemos visualizar as estacas como locais de memória e o movimento dos discos como operações de LOAD e STORE:
+    ESTACA 1 (RAM)             CPU (PROCESSAMENTO)            ESTACA 3 (RAM)
+        +-----------------+        +-----------------------+       +-----------------+
+        |     [Disco 1]   |        |   REGISTRADORES       |       |                 |
+        |     [Disco 2]   | <----> | [Carrega p/ mover]    | <---->|                 |
+        |     [Disco 3]   |        |                       |       |     [Disco 4]   |
+        +-----------------+        +-----------+-----------+       +-----------------+
+                |                             |                            |
+                |                   BARRAMENTO INTERNO                     |
+        =========v=============================v============================v=========
+                                            |
+                                    +---------v---------+
+                                    |  PILHA (STACK)    |
+                                    | [torres(3,1,3)]   | <-- Endereços de retorno
+                                    | [torres(2,1,2)]   |     e parâmetros salvos
+                                    | [torres(1,1,3)]   |     pelo hardware.
+                                    +-------------------+
 
 Figura 5.38   Etapas requeridas para resolver o problema das Torres de Hanói para três discos.
-ESTADO INICIAL        ETAPA 1: Mover n-1      ETAPA 2: Mover n       ETAPA 3: Mover n-1
-    (3 Discos na E1)     (E1 -> E2 via E3)       (E1 -> E3 direto)       (E2 -> E3 via E1)
-  
-       |     |     |        |     |     |           |     |     |           |     |     |
-      (1)    |     |        |     |     |           |     |     |           |     |    (1)
-     (222)   |     |        |   (1)     |           |     |     |           |     |   (222)
-    (33333)  |     |     (33333)(222)   |           |   (222)(33333)        |     |  (33333)
-    -------+---+----     -------+---+----        -------+---+----        -------+---+----
-      E1    E2    E3       E1    E2    E3          E1    E2    E3          E1    E2    E3
+    ESTADO INICIAL        ETAPA 1: Mover n-1      ETAPA 2: Mover n       ETAPA 3: Mover n-1
+        (3 Discos na E1)     (E1 -> E2 via E3)       (E1 -> E3 direto)       (E2 -> E3 via E1)
+    
+           |     |     |        |     |     |           |     |     |           |     |     |
+        (1)      |     |        |     |     |           |     |     |           |     |    (1)
+        (222)    |     |        |   (1)     |           |     |     |           |     |   (222)
+        (33333)  |     |     (33333)(222)   |           |   (222)(33333)        |     |  (33333)
+        -------+---+----     -------+---+----        -------+---+----        -------+---+----
+        E1    E2    E3       E1    E2    E3          E1    E2    E3          E1    E2    E3
 
 
 ## Insight para seus projetos em estruturas_de_dados
@@ -3540,49 +3534,50 @@ Para as Torres de Hanói, cada chamada precisa de seu próprio espaço para não
 Abaixo, como os componentes que você mapeou gerenciam essa estrutura de dados dinâmica:
 
 Gestão de Quadro de Pilha (Stack Frame)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculo de Offset) |       |   REGISTRADORES (SP / FP)  |
-    | (Acha k via FP + desloc.) | <---> | (Ponteiros de Topo e Base) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Transporta FP e CI p/ RAM)         |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL/ENTER)|
-    | (Automatiza o Quadro)     | <---> | (Define tamanho do frame)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Traduz acesso indireto)  | <---  | (Salva retorno em 1.012)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereçamento)     |       |   RDM (Dados do Quadro)    |
-    | (Aponta p/ 1.012...1.020) | <---  | (Escreve o "Antigo FP")    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Sincroniza a alocação)   | ----> | (Quadros de Pilha ativos)  |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculo de Offset) |       |   REGISTRADORES (SP / FP)  |
+        | (Acha k via FP + desloc.) | <---> | (Ponteiros de Topo e Base) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Transporta FP e CI p/ RAM)         |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução CALL/ENTER)|
+        | (Automatiza o Quadro)     | <---> | (Define tamanho do frame)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Traduz acesso indireto)  | <---  | (Salva retorno em 1.012)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereçamento)     |       |   RDM (Dados do Quadro)    |
+        | (Aponta p/ 1.012...1.020) | <---  | (Escreve o "Antigo FP")    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Sincroniza a alocação)   | ----> | (Quadros de Pilha ativos)  |
+        +---------------------------+       +----------------------------+
 
 O Quadro de Pilha (Baseado na Figura 5.40a)
 Imagine que a função torres foi chamada. O hardware organizou a memória RAM (Memória Principal) desta forma:
 
-Endereço | Conteúdo               | Ponteiro
-----------|------------------------|----------
-  1.020   | Variável Local (k)     | <-- SP (Topo da Pilha)
-  1.016   | Antigo FP (Link)       | <-- FP (Âncora do Quadro)
-  1.012   | Endereço de Retorno    |
-  1.008   | Parâmetro j            |
-  1.004   | Parâmetro i            |
-  1.000   | Parâmetro n            |
-----------|------------------------|----------
-          | (Quadro Anterior)      |
+    Endereço | Conteúdo               | Ponteiro
+    ----------|------------------------|----------
+    1.020   | Variável Local (k)     | <-- SP (Topo da Pilha)
+    1.016   | Antigo FP (Link)       | <-- FP (Âncora do Quadro)
+    1.012   | Endereço de Retorno    |
+    1.008   | Parâmetro j            |
+    1.004   | Parâmetro i            |
+    1.000   | Parâmetro n            |
+    ----------|------------------------|----------
+            | (Quadro Anterior)      |
 
 ## Insight para seus projetos em estruturas_de_dados
 O uso do FP (Frame Pointer) é o que permite que linguagens como C e Java acessem variáveis locais de forma rápida. Sem o FP, se você colocasse algo novo na pilha, a distância até a variável n mudaria, e a CPU se perderia.
@@ -3596,17 +3591,17 @@ Nas Torres de Hanói, quando a recursão "volta", o hardware simplesmente faz:
     3. RET (Carrega o endereço de retorno no CI).
 
 ## Figura 5.39   Procedimento para resolver o problema das Torres de Hanói.
-public void torres(int n, int i, int j) {
-int k;
-if (n == 1)
-		 System.out.println("Mova um disco de" + i + "para" + j);
-else {
-		 k = 6 − i − j;
-		 torres(n − 1, i, k);
-		 torres(1, i, j);
-		 torres(n − 1, k, j);
-}
-}
+    public void torres(int n, int i, int j) {
+    int k;
+    if (n == 1)
+            System.out.println("Mova um disco de" + i + "para" + j);
+    else {
+            k = 6 − i − j;
+            torres(n − 1, i, k);
+            torres(1, i, j);
+            torres(n − 1, k, j);
+    }
+    }
 
 1. A Dinâmica da Memória (RAM) na Figura 5.40
 O Tanenbaum ilustra cinco estados da pilha:
@@ -3627,45 +3622,47 @@ Aqui está como os componentes que você mapeou trabalham para manter essa estru
 
 3. Evolução dos Quadros (Baseado na Figura 5.40)
 Este diagrama representa a memória RAM no estado (c), o ponto de maior ocupação:
-Endereço | Conteúdo (ESTADO C)    | Significado
-----------|------------------------|---------------------------
-  1.068   | k (local)              | <-- SP (Topo atual)
-  1.064   | Antigo FP (1044)       | <-- FP (Quadro de n=1)
-  1.060   | End. Retorno           | [TERCEIRO QUADRO]
-  1.056   | j=3, i=1, n=1          |
-----------|------------------------|---------------------------
-  1.044   | k (local)              |
-  1.040   | Antigo FP (1024)       | <-- FP (Quadro de n=2)
-  1.036   | End. Retorno           | [SEGUNDO QUADRO]
-  1.032   | j=2, i=1, n=2          |
-----------|------------------------|---------------------------
-  1.020   | k (local)              |
-  1.016   | Antigo FP (Original)   | <-- FP (Quadro de n=3)
-  1.012   | End. Retorno           | [PRIMEIRO QUADRO]
-  1.008   | j=3, i=1, n=3          |
-----------|------------------------|---------------------------
+
+    Endereço | Conteúdo (ESTADO C)    | Significado
+    ----------|------------------------|---------------------------
+    1.068   | k (local)              | <-- SP (Topo atual)
+    1.064   | Antigo FP (1044)       | <-- FP (Quadro de n=1)
+    1.060   | End. Retorno           | [TERCEIRO QUADRO]
+    1.056   | j=3, i=1, n=1          |
+    ----------|------------------------|---------------------------
+    1.044   | k (local)              |
+    1.040   | Antigo FP (1024)       | <-- FP (Quadro de n=2)
+    1.036   | End. Retorno           | [SEGUNDO QUADRO]
+    1.032   | j=2, i=1, n=2          |
+    ----------|------------------------|---------------------------
+    1.020   | k (local)              |
+    1.016   | Antigo FP (Original)   | <-- FP (Quadro de n=3)
+    1.012   | End. Retorno           | [PRIMEIRO QUADRO]
+    1.008   | j=3, i=1, n=3          |
+    ----------|------------------------|---------------------------
 
 Evolução da Pilha (Baseado na Figura 5.40)
-Este diagrama mostra como os quadros se sobrepõem na Memória Principal.
-End. | (a) Chamada n=3  | (b) Chamada n=2  | (c) Chamada n=1  | (d) Retorno p/ n=2
-======|==================|==================|==================|==================
-1068  |                  |                  | [ k ] <--- SP    |                  
-1064  |                  |                  | [ Ant.FP 1040 ]  | (Espaço Liberado)
-1060  |                  |                  | [ Retorno ]      |                  
-1056  |                  |                  | [ j=3, i=2, n=1] |                  
-------|------------------|------------------|------------------|------------------
-1044  |                  | [ k ] <--- SP    | [ k ]            | [ k ] <--- SP    
-1040  |                  | [ Ant.FP 1016 ]  | [ Ant.FP 1016 ]  | [ Ant.FP 1016 ]  
-1036  |                  | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      
-1032  |                  | [ j=2, i=1, n=2] | [ j=2, i=1, n=2] | [ j=2, i=1, n=2] 
-------|------------------|------------------|------------------|------------------
-1020  | [ k ] <--- SP    | [ k ]            | [ k ]            | [ k ]            
-1016  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  
-1012  | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      
-1008  | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] 
-1000  | [ n=3 ]          | [ n=3 ]          | [ n=3 ]          | [ n=3 ]          
-======|==================|==================|==================|==================
-Ponte | SP=1020, FP=1016 | SP=1044, FP=1040 | SP=1068, FP=1064 | SP=1044, FP=1040
+
+    Este diagrama mostra como os quadros se sobrepõem na Memória Principal.
+    End. | (a) Chamada n=3  | (b) Chamada n=2  | (c) Chamada n=1  | (d) Retorno p/ n=2
+    ======|==================|==================|==================|==================
+    1068  |                  |                  | [ k ] <--- SP    |                  
+    1064  |                  |                  | [ Ant.FP 1040 ]  | (Espaço Liberado)
+    1060  |                  |                  | [ Retorno ]      |                  
+    1056  |                  |                  | [ j=3, i=2, n=1] |                  
+    ------|------------------|------------------|------------------|------------------
+    1044  |                  | [ k ] <--- SP    | [ k ]            | [ k ] <--- SP    
+    1040  |                  | [ Ant.FP 1016 ]  | [ Ant.FP 1016 ]  | [ Ant.FP 1016 ]  
+    1036  |                  | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      
+    1032  |                  | [ j=2, i=1, n=2] | [ j=2, i=1, n=2] | [ j=2, i=1, n=2] 
+    ------|------------------|------------------|------------------|------------------
+    1020  | [ k ] <--- SP    | [ k ]            | [ k ]            | [ k ]            
+    1016  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  | [ Ant.FP XXXX ]  
+    1012  | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      | [ Retorno ]      
+    1008  | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] | [ j=3, i=1, n=3] 
+    1000  | [ n=3 ]          | [ n=3 ]          | [ n=3 ]          | [ n=3 ]          
+    ======|==================|==================|==================|==================
+    Ponte | SP=1020, FP=1016 | SP=1044, FP=1040 | SP=1068, FP=1064 | SP=1044, FP=1040
 
 - O código que salva o ponteiro de quadro antigo, ajusta o novo e adianta o ponteiro de pilha para reservar espaço para variáveis locais é denominado prólogo de procedimento.
 - O código que limpa a pilha após a saída do procedimento é chamado epílogo de procedimento.
@@ -3724,101 +3721,104 @@ Diferente dos procedimentos, as corrotinas agem como "parceiros de dança":
 Veja como os componentes que você mapeou lidam com essa "troca de contexto" constante:
 
 Mecanismo de Troca de Contexto (Corrotinas)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Cálculo de Retorno)|       |   REGISTRADORES (A / B)    |
-    | (Calcula endereço p/ troca)| <---> | (Salvos/Restaurados aqui)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Transporta novo CI de retomada)    |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução YIELD/CALL)|
-    | (Gerencia troca de fluxo) | <---> | (Opcode de Retomada/Salto) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Identifica CALL vs RESUME)| <---  | (Ponto exato da interrupção)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Múltiplas Pilhas)  |       |   RDM (Dados de Contexto)  |
-    | (Aponta p/ Pilha A ou B)  | <---  | (Lê end. de retomada)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Evita perda de dados)    | ----> | (Pilha A e Pilha B Ativas) |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Cálculo de Retorno)|       |   REGISTRADORES (A / B)    |
+        | (Calcula endereço p/ troca)| <---> | (Salvos/Restaurados aqui)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Transporta novo CI de retomada)    |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução YIELD/CALL)|
+        | (Gerencia troca de fluxo) | <---> | (Opcode de Retomada/Salto) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Identifica CALL vs RESUME)| <---  | (Ponto exato da interrupção)|
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Múltiplas Pilhas)  |       |   RDM (Dados de Contexto)  |
+        | (Aponta p/ Pilha A ou B)  | <---  | (Lê end. de retomada)      |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Evita perda de dados)    | ----> | (Pilha A e Pilha B Ativas) |
+        +---------------------------+       +----------------------------+
 
 Fluxo de Corrotinas (Figura 5.42)
 Ao contrário da recursão, onde um quadro fica "em cima" do outro, nas corrotinas eles coexistem.
-PROCEDIMENTO A                     PROCEDIMENTO B
-    +-------------------+              +-------------------+
-    | Instrução 1       |              | Instrução 1       |
-    | Instrução 2       |              | Instrução 2       |
-    | CHAMAR B (1ª vez) | ---------->  | Instrução 3       |
-    | Instrução 4   <---|--------------| CEDER A (Retorno) |
-    | CEDER B (2ª vez)  | ---------->  | Instrução 5 (Retoma)
-    | Instrução 6   <---|--------------| Instrução 6       |
-    +-------------------+              +-------------------+
-             ^                                  ^
-             |                                  |
-    [ Quadro de Pilha A ]              [ Quadro de Pilha B ]
-    (Mantido na RAM)                   (Mantido na RAM)
 
-Fluxo de Chamada de Procedimento (Figura 5.41)
-PROGRAMA PRINCIPAL          PROCEDIMENTO A              PROCEDIMENTO B
-          |                           |                           |
-          | (1) Chamada inicial       |                           |
-          |-------------------------->|                           |
-          |                           |                           |
-          |                           | (2) CHAMA B (1ª vez)      |
-          |                           |-------------------------->| (3) INÍCIO
-          |                           |                           |      |
-          |                           |       (4) RETORNO         |      |
-          |                           |<--------------------------| <----+
-          |                           |                           |
-          |                           | (5) CONTINUA...           |
-          |                           |                           |
-          |                           | (6) CHAMA B (2ª vez)      |
-          |                           |-------------------------->| (7) REINICIA
-          |                           |                           |      |
-          |                           |       (8) RETORNO         |      |
-          |                           |<--------------------------| <----+
-          |                           |                           |
-          |    (9) RETORNO FINAL      |                           |
-          |<--------------------------|                           |
-          v                           v                           v
+    PROCEDIMENTO A                     PROCEDIMENTO B
+        +-------------------+              +-------------------+
+        | Instrução 1       |              | Instrução 1       |
+        | Instrução 2       |              | Instrução 2       |
+        | CHAMAR B (1ª vez) | ---------->  | Instrução 3       |
+        | Instrução 4   <---|--------------| CEDER A (Retorno) |
+        | CEDER B (2ª vez)  | ---------->  | Instrução 5 (Retoma)
+        | Instrução 6   <---|--------------| Instrução 6       |
+        +-------------------+              +-------------------+
+                ^                                  ^
+                |                                  |
+        [ Quadro de Pilha A ]              [ Quadro de Pilha B ]
+        (Mantido na RAM)                   (Mantido na RAM)
+
+    Fluxo de Chamada de Procedimento (Figura 5.41)
+    PROGRAMA PRINCIPAL          PROCEDIMENTO A              PROCEDIMENTO B
+            |                           |                           |
+            | (1) Chamada inicial       |                           |
+            |-------------------------->|                           |
+            |                           |                           |
+            |                           | (2) CHAMA B (1ª vez)      |
+            |                           |-------------------------->| (3) INÍCIO
+            |                           |                           |      |
+            |                           |       (4) RETORNO         |      |
+            |                           |<--------------------------| <----+
+            |                           |                           |
+            |                           | (5) CONTINUA...           |
+            |                           |                           |
+            |                           | (6) CHAMA B (2ª vez)      |
+            |                           |-------------------------->| (7) REINICIA
+            |                           |                           |      |
+            |                           |       (8) RETORNO         |      |
+            |                           |<--------------------------| <----+
+            |                           |                           |
+            |    (9) RETORNO FINAL      |                           |
+            |<--------------------------|                           |
+            v                           v                           v
 
 Fluxo de Corrotinas (Figura 5.42)
-PROGRAMA PRINCIPAL          CORROTINA A                 CORROTINA B
-          |                           |                           |
-          | (1) Chamada inicial       |                           |
-          |-------------------------->|                           |
-          |                           |                           |
-          |                           | (2) RESUME B (1ª vez)     |
-          |                           |-------------------------->| (3) INÍCIO
-          |                           |                           |      |
-          |                           | (5) RESUME A (Retoma)     |      |
-          |                           |<--------------------------| (4) YIELD
-          |                           |      ^                    |
-          |                           |      |                    |
-          | (6) CONTINUA...           |------+                    |
-          |                           |                           |
-          | (7) RESUME B (2ª vez)     |                           |
-          |-------------------------->| (8) CONTINUA...           |
-          |                           |      |                    |
-          |                           |      v                    |
-          |                           | (10) RESUME A (Retoma)    |      |
-          |                           |<--------------------------| (9) YIELD
-          |                           |      ^                    |
-          |    (11) RETORNO FINAL     |      |                    |
-          |<--------------------------|------+                    |
-          v                           v                           v
+
+    PROGRAMA PRINCIPAL          CORROTINA A                 CORROTINA B
+            |                           |                           |
+            | (1) Chamada inicial       |                           |
+            |-------------------------->|                           |
+            |                           |                           |
+            |                           | (2) RESUME B (1ª vez)     |
+            |                           |-------------------------->| (3) INÍCIO
+            |                           |                           |      |
+            |                           | (5) RESUME A (Retoma)     |      |
+            |                           |<--------------------------| (4) YIELD
+            |                           |      ^                    |
+            |                           |      |                    |
+            | (6) CONTINUA...           |------+                    |
+            |                           |                           |
+            | (7) RESUME B (2ª vez)     |                           |
+            |-------------------------->| (8) CONTINUA...           |
+            |                           |      |                    |
+            |                           |      v                    |
+            |                           | (10) RESUME A (Retoma)    |      |
+            |                           |<--------------------------| (9) YIELD
+            |                           |      ^                    |
+            |    (11) RETORNO FINAL     |      |                    |
+            |<--------------------------|------+                    |
+            v                           v                           v
 
 Uma utilização comum de corrotinas é simular o processamento paralelo em uma única CPU. Cada corrotina executa em pseudoparalelismo com as outras, como se ela tivesse sua própria CPU. Esse estilo de programação facilita a programação de algumas aplicações. Também é útil para testar software que mais tarde executará em
 um multiprocessador.
@@ -3915,53 +3915,55 @@ O exemplo mostra uma "escada" de execução baseada na importância do dispositi
 Para que essa troca de contexto seja "transparente", os componentes que você mapeou operam em conjunto com o Controlador de Interrupção (8259A):
 
 Gestão de Interrupções de Hardware
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Interrompida)      |       |   REGISTRADORES (Salvos)   |
-    | (Preserva estado p/ ISR)  | <---> | (Empilhados a cada INT)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Transporta Vetor p/ o CI)          |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução da ISR)    |
-    | (Consulta Ctrl. Externo)  | <---> | (Código de serviço atual)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Identifica comando EOI)  | <---  | (Salta p/ endereço da ISR) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Tabela de Vetores) |       |   RDM (Descritor 8 bytes)  |
-    | (Aponta p/ 256 entradas)  | <---  | (Lê end. da rotina na RAM) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Sincroniza a latência)   | ----> | (Pilha e Tabela Vetores)   |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Interrompida)      |       |   REGISTRADORES (Salvos)   |
+        | (Preserva estado p/ ISR)  | <---> | (Empilhados a cada INT)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Transporta Vetor p/ o CI)          |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução da ISR)    |
+        | (Consulta Ctrl. Externo)  | <---> | (Código de serviço atual)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Identifica comando EOI)  | <---  | (Salta p/ endereço da ISR) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Tabela de Vetores) |       |   RDM (Descritor 8 bytes)  |
+        | (Aponta p/ 256 entradas)  | <---  | (Lê end. da rotina na RAM) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Sincroniza a latência)   | ----> | (Pilha e Tabela Vetores)   |
+        +---------------------------+       +----------------------------+
 
 3. Sequência Temporal (Figura 5.43)
 Este diagrama visualiza como a CPU alterna entre o programa do usuário e as diversas rotinas de serviço (ISR):
-Prioridade |  Fluxo de Execução (Tempo --->)
------------|---------------------------------------------------------
- 5 (Alta)  |                [ ISR RS232 ]
-           |                t=15 a t=25
-           |
- 4 (Média) |                             [ ISR DISCO ]
-           |                             t=25 a t=35
-           |
- 2 (Baixa) |      [ ISR IMPRESSORA ]                  [ ISR IMP. ]
-           |      t=10 a t=15                         t=35 a t=40
-           |
- 0 (User)  | [ USUÁRIO ]                                         [ USUÁRIO ]
-           | t=0 a t=10                                          t=40...
------------|---------------------------------------------------------
- Eventos:    t=10(Int)      t=20(Disco Pendente)      t=40(Fim de tudo)
+
+    Prioridade |  Fluxo de Execução (Tempo --->)
+    -----------|---------------------------------------------------------
+    5 (Alta)  |                [ ISR RS232 ]
+            |                t=15 a t=25
+            |
+    4 (Média) |                             [ ISR DISCO ]
+            |                             t=25 a t=35
+            |
+    2 (Baixa) |      [ ISR IMPRESSORA ]                  [ ISR IMP. ]
+            |      t=10 a t=15                         t=35 a t=40
+            |
+    0 (User)  | [ USUÁRIO ]                                         [ USUÁRIO ]
+            | t=0 a t=10                                          t=40...
+    -----------|---------------------------------------------------------
+    Eventos:    t=10(Int)      t=20(Disco Pendente)      t=40(Fim de tudo)
 
 ## 4. O Vetor de Interrupção e a Transparência
 Quando ocorre uma interrupção, a CPU não sabe "mágicamente" para onde ir. Ela usa um Vetor de Interrupção (um número):
@@ -3978,31 +3980,32 @@ Quando ocorre uma interrupção, a CPU não sabe "mágicamente" para onde ir. El
 
 Linha do Tempo de Interrupções Múltiplas (Figura 5.43)
 Este diagrama representa o que está sendo processado na ULA em cada intervalo de tempo:
-Prioridade |  ATIVIDADE DA CPU (Linha do Tempo)
------------|-------------------------------------------------------------------
-           |
- 5 (Alta)  |                     [ ISR RS232 ]
-           |                     (t=15 a t=25)
-           |                          |
- 4 (Média) |                          |           [ ISR DISCO ]
-           |                          |           (t=25 a t=35)
-           |                          |                |
- 2 (Baixa) |           [ ISR IMP. ]   |                |           [ ISR IMP. ]
-           |           (t=10 a t=15)  |                |           (t=35 a t=40)
-           |                |         |                |                |
- 0 (User)  | [ USUÁRIO ]    |         |                |                |    [ USUÁRIO ]
-           | (0 a 10)       |         |                |                |    (t=40...)
------------|----------------|---------|----------------|----------------|----------
-           |                |         |                |                |
- EVENTOS   | t=10: Int.     | t=15:   | t=25: RS232    | t=35: Disco    | t=40: Fim
- DE HARDWARE  Impressora    | Int.    | termina.       | termina.       | das ISRs.
-           | (Pri 2)        | RS232   | Disco(4) entra | Impressora(2)  | Volta ao
-           |                | (Pri 5) | antes da Imp.  | retoma.        | Usuário.
-           |                |         |                |                |
-           |                | t=20:   |                |                |
-           |                | Disco(4)|                |                |
-           |                | fica    |                |                |
-           |                | PENDENTE|                |                |
+
+    Prioridade |  ATIVIDADE DA CPU (Linha do Tempo)
+    -----------|-------------------------------------------------------------------
+            |
+    5 (Alta)  |                     [ ISR RS232 ]
+            |                     (t=15 a t=25)
+            |                          |
+    4 (Média) |                          |           [ ISR DISCO ]
+            |                          |           (t=25 a t=35)
+            |                          |                |
+    2 (Baixa) |           [ ISR IMP. ]   |                |           [ ISR IMP. ]
+            |           (t=10 a t=15)  |                |           (t=35 a t=40)
+            |                |         |                |                |
+    0 (User)  | [ USUÁRIO ]    |         |                |                |    [ USUÁRIO ]
+            | (0 a 10)       |         |                |                |    (t=40...)
+    -----------|----------------|---------|----------------|----------------|----------
+            |                |         |                |                |
+    EVENTOS   | t=10: Int.     | t=15:   | t=25: RS232    | t=35: Disco    | t=40: Fim
+    DE HARDWARE  Impressora    | Int.    | termina.       | termina.       | das ISRs.
+            | (Pri 2)        | RS232   | Disco(4) entra | Impressora(2)  | Volta ao
+            |                | (Pri 5) | antes da Imp.  | retoma.        | Usuário.
+            |                |         |                |                |
+            |                | t=20:   |                |                |
+            |                | Disco(4)|                |                |
+            |                | fica    |                |                |
+            |                | PENDENTE|                |                |
 
 ## Insight para seus projetos
 Observe o que acontece em t=20: o Disco (prioridade 4) pede atenção, mas a CPU está ocupada com a RS232 (prioridade 5).
@@ -4035,73 +4038,73 @@ quadro, EBP. Então ele compara n com 1, desviando para a cláusula else se n > 
 
 Figura 5.44   Torres de Hanói para o Core i7.
 
-assembly
-.686                                ; compile para processador da classe Core i7
-.MODEL FLAT                         ; modelo de memória flat
-PUBLIC _torres                      ; exporte 'torres'
-EXTERN _printf:NEAR                 ; importe printf
+    assembly
+    .686                                ; compile para processador da classe Core i7
+    .MODEL FLAT                         ; modelo de memória flat
+    PUBLIC _torres                      ; exporte 'torres'
+    EXTERN _printf:NEAR                 ; importe printf
 
-.CODE
-_torres:
-    PUSH EBP                        ; salve EBP (ponteiro de quadro) e decremente ESP
-    MOV EBP, ESP                    ; ajuste novo ponteiro de quadro acima de ESP
-    CMP [EBP+8], 1                  ; se (n == 1)
-    JNE L1                          ; desvie se n não for 1
+    .CODE
+    _torres:
+        PUSH EBP                        ; salve EBP (ponteiro de quadro) e decremente ESP
+        MOV EBP, ESP                    ; ajuste novo ponteiro de quadro acima de ESP
+        CMP [EBP+8], 1                  ; se (n == 1)
+        JNE L1                          ; desvie se n não for 1
 
-    ; printf("Mova disco de %d para %d\n", i, j);
-    MOV EAX, [EBP+16]               ; passe j
-    PUSH EAX
-    MOV EAX, [EBP+12]               ; passe i
-    PUSH EAX
-    PUSH OFFSET FLAT:format         ; passe a cadeia de formato
-    CALL _printf
-    ADD ESP, 12                     ; retire parâmetros da pilha
-    JMP Fim                         ; terminamos
+        ; printf("Mova disco de %d para %d\n", i, j);
+        MOV EAX, [EBP+16]               ; passe j
+        PUSH EAX
+        MOV EAX, [EBP+12]               ; passe i
+        PUSH EAX
+        PUSH OFFSET FLAT:format         ; passe a cadeia de formato
+        CALL _printf
+        ADD ESP, 12                     ; retire parâmetros da pilha
+        JMP Fim                         ; terminamos
 
-L1:
-    ; k = 6 - i - j
-    MOV EAX, 6                      ; EAX = 6
-    SUB EAX, [EBP+12]               ; EAX = 6 - i
-    SUB EAX, [EBP+16]               ; EAX = 6 - i - j
-    MOV [EBP+20], EAX               ; k = EAX
+    L1:
+        ; k = 6 - i - j
+        MOV EAX, 6                      ; EAX = 6
+        SUB EAX, [EBP+12]               ; EAX = 6 - i
+        SUB EAX, [EBP+16]               ; EAX = 6 - i - j
+        MOV [EBP+20], EAX               ; k = EAX
 
-    ; torres(n - 1, i, k)
-    PUSH EAX                        ; passe k
-    MOV EAX, [EBP+12]               ; passe i
-    PUSH EAX
-    MOV EAX, [EBP+8]                ; EAX = n
-    DEC EAX                         ; EAX = n - 1
-    PUSH EAX
-    CALL _torres
-    ADD ESP, 12                     ; retire parâmetros da pilha
+        ; torres(n - 1, i, k)
+        PUSH EAX                        ; passe k
+        MOV EAX, [EBP+12]               ; passe i
+        PUSH EAX
+        MOV EAX, [EBP+8]                ; EAX = n
+        DEC EAX                         ; EAX = n - 1
+        PUSH EAX
+        CALL _torres
+        ADD ESP, 12                     ; retire parâmetros da pilha
 
-    ; torres(1, i, j)
-    MOV EAX, [EBP+16]               ; passe j
-    PUSH EAX
-    MOV EAX, [EBP+12]               ; passe i
-    PUSH EAX
-    PUSH 1                          ; passe 1
-    CALL _torres
-    ADD ESP, 12                     ; retire parâmetros da pilha
+        ; torres(1, i, j)
+        MOV EAX, [EBP+16]               ; passe j
+        PUSH EAX
+        MOV EAX, [EBP+12]               ; passe i
+        PUSH EAX
+        PUSH 1                          ; passe 1
+        CALL _torres
+        ADD ESP, 12                     ; retire parâmetros da pilha
 
-    ; torres(n - 1, k, i)
-    MOV EAX, [EBP+12]               ; passe i
-    PUSH EAX
-    MOV EAX, [EBP+20]               ; passe k
-    PUSH EAX
-    MOV EAX, [EBP+8]                ; EAX = n
-    DEC EAX                         ; EAX = n - 1
-    PUSH EAX
-    CALL _torres
-    ADD ESP, 12                     ; retire parâmetros da pilha
+        ; torres(n - 1, k, i)
+        MOV EAX, [EBP+12]               ; passe i
+        PUSH EAX
+        MOV EAX, [EBP+20]               ; passe k
+        PUSH EAX
+        MOV EAX, [EBP+8]                ; EAX = n
+        DEC EAX                         ; EAX = n - 1
+        PUSH EAX
+        CALL _torres
+        ADD ESP, 12                     ; retire parâmetros da pilha
 
-Fim:
-    LEAVE                           ; ajuste ponteiro de pilha
-    RET 0                           ; retorne ao chamador
+    Fim:
+        LEAVE                           ; ajuste ponteiro de pilha
+        RET 0                           ; retorne ao chamador
 
-.DATA
-format DB "Mova disco de %d para %d", 10, 0
-END
+    .DATA
+    format DB "Mova disco de %d para %d", 10, 0
+    END
 
 1. Anatomia do Código no Core i7 (Figura 5.44)
 
@@ -4114,50 +4117,51 @@ END
 Abaixo, veja como os componentes que você mapeou processam esse código Assembly específico:
 
 Hardware do Core i7 (Execução de Torres de Hanói)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (DEC / SUB)         |       |   REGISTRADORES (EAX)      |
-    | (Calcula n-1 e estaca k)  | <---> | (Operário e Pont. ESP/EBP) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Movimenta EAX e Offsets)           |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
-    | (Gere JNE, CALL e RET)    | <---> | (Ex: MOV [EBP+20], EAX)    |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI / EIP (Instruction P.)|
-    | (Opcode i7 -> Micro-op)   | <---  | (Salta p/ L1 ou Retorno)   |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereçamento)     |       |   RDM (Dados da Pilha)     |
-    | (Aponta p/ [EBP + 8/20])  | <---  | (Lê/Escreve parâmetros)     |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Ciclos de PUSH e POP)    | ----> | (Stack Frames Recursivos)  |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (DEC / SUB)         |       |   REGISTRADORES (EAX)      |
+        | (Calcula n-1 e estaca k)  | <---> | (Operário e Pont. ESP/EBP) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Movimenta EAX e Offsets)           |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução Atual)     |
+        | (Gere JNE, CALL e RET)    | <---> | (Ex: MOV [EBP+20], EAX)    |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI / EIP (Instruction P.)|
+        | (Opcode i7 -> Micro-op)   | <---  | (Salta p/ L1 ou Retorno)   |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereçamento)     |       |   RDM (Dados da Pilha)     |
+        | (Aponta p/ [EBP + 8/20])  | <---  | (Lê/Escreve parâmetros)     |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo)     |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Ciclos de PUSH e POP)    | ----> | (Stack Frames Recursivos)  |
+        +---------------------------+       +----------------------------+
 
 3. O Mapa de Memória do Core i7
 Baseado no código fornecido, veja como a Memória Principal organiza os dados durante a execução:
 
-Endereço (Relativo)  | Conteúdo (Stack Frame)    | Instrução Assembly Associada
----------------------|---------------------------|------------------------------
- [EBP + 20]          | Variável Local (k)        | MOV [EBP+20], EAX
- [EBP + 16]          | Parâmetro j               | MOV EAX, [EBP+16]
- [EBP + 12]          | Parâmetro i               | MOV EAX, [EBP+12]
- [EBP + 8]           | Parâmetro n               | CMP [EBP+8], 1
----------------------|---------------------------|------------------------------
- [EBP + 4]           | Endereço de Retorno       | CALL _torres (empilha)
- [EBP + 0]           | Antigo EBP                | PUSH EBP (salva base anterior)
----------------------|---------------------------|------------------------------
- [ESP]               | Topo Atual da Pilha       | PUSH EAX (prepara nova chamada)
+    Endereço (Relativo)  | Conteúdo (Stack Frame)    | Instrução Assembly Associada
+    ---------------------|---------------------------|------------------------------
+    [EBP + 20]          | Variável Local (k)        | MOV [EBP+20], EAX
+    [EBP + 16]          | Parâmetro j               | MOV EAX, [EBP+16]
+    [EBP + 12]          | Parâmetro i               | MOV EAX, [EBP+12]
+    [EBP + 8]           | Parâmetro n               | CMP [EBP+8], 1
+    ---------------------|---------------------------|------------------------------
+    [EBP + 4]           | Endereço de Retorno       | CALL _torres (empilha)
+    [EBP + 0]           | Antigo EBP                | PUSH EBP (salva base anterior)
+    ---------------------|---------------------------|------------------------------
+    [ESP]               | Topo Atual da Pilha       | PUSH EAX (prepara nova chamada)
 
 ## Insight para seus projetos em estruturas_de_dados
 O uso da instrução LEAVE no final do código é um atalho de hardware brilhante do i7. Ela faz o equivalente a:
@@ -4184,50 +4188,50 @@ Agora, vamos tentar novamente, só que, desta vez, para a ARM do OMAP4430. O có
 
 Figura 5.45   Torres de Hanói para a ARM do OMAP4430.
 
-assembly
-.text
-torres:
-    push {r3, r4, r5, r6, r7, lr}   | @ salve endereço de retorno e registradores mexidos
-    mov r4, Param1                  | @ r4 = i
-    mov r6, Param2                  | @ r6 = j
-    cmp Param0, #1                  | @ (n == 1)?
-    bne else                        | @ se não, salte para sequência de código else
+    assembly
+    .text
+    torres:
+        push {r3, r4, r5, r6, r7, lr}   | @ salve endereço de retorno e registradores mexidos
+        mov r4, Param1                  | @ r4 = i
+        mov r6, Param2                  | @ r6 = j
+        cmp Param0, #1                  | @ (n == 1)?
+        bne else                        | @ se não, salte para sequência de código else
 
-    movw FormatPtr, #:lower16:format | @ carregue ponteiro da cadeia de formato
-    movt FormatPtr, #:upper16:format |
-    bl printf                       | @ mova para imprimir
-    pop {r3, r4, r5, r6, r7, pc}    | @ restaure registradores mexidos e retorne ao chamador
+        movw FormatPtr, #:lower16:format | @ carregue ponteiro da cadeia de formato
+        movt FormatPtr, #:upper16:format |
+        bl printf                       | @ mova para imprimir
+        pop {r3, r4, r5, r6, r7, pc}    | @ restaure registradores mexidos e retorne ao chamador
 
-else:
-    rsb k, r1, #6                   | @ k = 6 - i
-    subs k, k, r2                   | @ k = 6 - i - j
-    add n_minus_1, r0, #–1          | @ calcule (n – 1) para chamada recursiva
-    mov r0, n_minus_1               | @ chame torres(n – 1, i, k)
-    mov r2, k                       |
-    bl torres                       |
-    mov r0, #1                      | @ chame torres(1, k, j)
-    mov r1, r4                      |
-    mov r2, r6                      |
-    bl torres                       |
-    mov r0, n_minus_1               | @ chame torres(n – 1, k, j)
-    mov r1, k                       |
-    mov r2, r6                      |
-    bl torres                       |
-    pop {r3, r4, r5, r6, r7, pc}    | @ restaure registradores mexidos e retorne ao chamador
+    else:
+        rsb k, r1, #6                   | @ k = 6 - i
+        subs k, k, r2                   | @ k = 6 - i - j
+        add n_minus_1, r0, #–1          | @ calcule (n – 1) para chamada recursiva
+        mov r0, n_minus_1               | @ chame torres(n – 1, i, k)
+        mov r2, k                       |
+        bl torres                       |
+        mov r0, #1                      | @ chame torres(1, k, j)
+        mov r1, r4                      |
+        mov r2, r6                      |
+        bl torres                       |
+        mov r0, n_minus_1               | @ chame torres(n – 1, k, j)
+        mov r1, k                       |
+        mov r2, r6                      |
+        bl torres                       |
+        pop {r3, r4, r5, r6, r7, pc}    | @ restaure registradores mexidos e retorne ao chamador
 
-.global main
-main:
-    push {lr}                       | @ salve endereço de retorno do chamador
-    mov Param0, #3                  | @ chame torres(3, 1, 3)
-    mov Param1, #1                  |
-    mov Param2, Param0               |
-    bl torres                       |
-    pop {pc}                        | @ retire endereço de retorno, retorne ao chamador
+        .global main
+        main:
+        push {lr}                       | @ salve endereço de retorno do chamador
+        mov Param0, #3                  | @ chame torres(3, 1, 3)
+        mov Param1, #1                  |
+        mov Param2, Param0               |
+        bl torres                       |
+        pop {pc}                        | @ retire endereço de retorno, retorne ao chamador
 
-format:
-    .ascii "Mova um disco de %d para %d\n\0"
+    format:
+        .ascii "Mova um disco de %d para %d\n\0"
 
-Figura 5.45   Torres de Hanói para a ARM do OMAP4430.
+#### Figura 5.45   Torres de Hanói para a ARM do OMAP4430.
 
 Esta versão das Torres de Hanói para a arquitetura ARM (OMAP4430) mostra uma filosofia diferente da Intel. Enquanto o Core i7 foca muito na memória (Pilha), o ARM tenta resolver tudo o que pode dentro dos Registradores, recorrendo à memória apenas quando necessário.
 
@@ -4240,50 +4244,52 @@ Esta versão das Torres de Hanói para a arquitetura ARM (OMAP4430) mostra uma f
 Veja como os componentes que você mapeou se comportam nesta arquitetura de 32 bits:
 
 Hardware ARM (Arquitetura RISC no OMAP4430)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (rsb / subs)        |       |   REGISTRADORES (r0-r7)    |
-    | (Subtração Inversa p/ k)  | <---> | (Uso intensivo / LR e PC)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (Push/Pop Multi-Registrador)        |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução 32 bits)   |
-    | (Gere bne e bl [Link])    | <---> | (Tamanho fixo p/ Pipeline) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI / PC (Prog. Counter)  |
-    | (Traduz Carga/Store RISC) | <---  | (Recebe LR via POP p/ RET) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereçamento)     |       |   RDM (Leitura .ascii)     |
-    | (Aponta p/ else / format) | <---  | (Carrega dados da RAM)     |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Pipeline)        |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Sincronia Multiestágio)  | ----> | (Pilha de Contexto e LR)   |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (rsb / subs)        |       |   REGISTRADORES (r0-r7)    |
+        | (Subtração Inversa p/ k)  | <---> | (Uso intensivo / LR e PC)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (Push/Pop Multi-Registrador)        |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução 32 bits)   |
+        | (Gere bne e bl [Link])    | <---> | (Tamanho fixo p/ Pipeline) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI / PC (Prog. Counter)  |
+        | (Traduz Carga/Store RISC) | <---  | (Recebe LR via POP p/ RET) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereçamento)     |       |   RDM (Leitura .ascii)     |
+        | (Aponta p/ else / format) | <---  | (Carrega dados da RAM)     |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Pipeline)        |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Sincronia Multiestágio)  | ----> | (Pilha de Contexto e LR)   |
+        +---------------------------+       +----------------------------+
 
 3. Fluxo de Registradores no ARM
 Diferente do x86, o ARM "estaciona" os dados nos registradores antes de chamar a função novamente:
-REGISTRADORES ARM              PROCESSO DE CHAMADA (BL)
-    +-----------------------+        +--------------------------+
-    | R0: n (Param0)        |        | 1. Copia CI atual p/ LR  |
-    | R1: i (Param1)        | -----> | 2. Muda CI p/ 'torres'   |
-    | R2: j (Param2)        |        | 3. Executa a função      |
-    +-----------+-----------+        +------------+-------------+
-                |                                 |
-    +-----------v-----------+        +------------v-------------+
-    | LR (Link Register)    |        | PILHA (STACK)            |
-    | [Guarda Retorno]      | -----> | [Salva LR se houver      |
-    +-----------------------+        |  nova chamada interna]   |
-                                     +--------------------------+
+
+    REGISTRADORES ARM              PROCESSO DE CHAMADA (BL)
+        +-----------------------+        +--------------------------+
+        | R0: n (Param0)        |        | 1. Copia CI atual p/ LR  |
+        | R1: i (Param1)        | -----> | 2. Muda CI p/ 'torres'   |
+        | R2: j (Param2)        |        | 3. Executa a função      |
+        +-----------+-----------+        +------------+-------------+
+                    |                                 |
+        +-----------v-----------+        +------------v-------------+
+        | LR (Link Register)    |        | PILHA (STACK)            |
+        | [Guarda Retorno]      | -----> | [Salva LR se houver      |
+        +-----------------------+        |  nova chamada interna]   |
+                                        +--------------------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 O ARM usa uma técnica chamada Reverse Subtract (rsb). No seu código:rsb k, r1, #6 significa $k = 6 - r1$.Isso é muito eficiente para a ULA, pois ela consegue subtrair um registrador de uma constante em um único ciclo. Em termos de estrutura de dados, o ARM é excelente para percorrer Listas Ligadas e Árvores, pois a passagem de ponteiros via registradores elimina muitos acessos lentos à RAM que o x86 precisaria fazer.                                  
@@ -4360,52 +4366,54 @@ Veja como os componentes que você mapeou mudam de papel nesta arquitetura "limp
 
 Arquitetura IA-64 (Itanium 2 - Modelo EPIC)
 O foco aqui é o modelo EPIC, onde o hardware é simplificado porque o compilador já fez o trabalho pesado de organizar o paralelismo em "pacotes".
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Múltiplas Unidades)|       |   REGISTRADORES (128 GPRs) |
-    | (Executa Bundles em Paral)| <---> | (Evita acessos à Memória)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (64 bits nativos / Fluxo Paralelo)  |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instrução / Bundles) |
-    | (Simples: Segue o Compil.)| <---> | (128 bits: 3 inst. + Temp) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Instruction Pointer) |
-    | (Quase inexistente / Direto)| <---  | (Avança por Bundles fixos) |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereçamento 64b) |       |   RDM (Grandes Blocos)     |
-    | (Fim do limite de 4 GB)   | <---  | (Cache <--> 128 Registr.)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Alta Velocidade) |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Sem malabarismos de HW)  | ----> | (Acessada raramente / Load) |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Múltiplas Unidades)|       |   REGISTRADORES (128 GPRs) |
+        | (Executa Bundles em Paral)| <---> | (Evita acessos à Memória)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (64 bits nativos / Fluxo Paralelo)  |
+        +-------------+------------------------------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instrução / Bundles) |
+        | (Simples: Segue o Compil.)| <---> | (128 bits: 3 inst. + Temp) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Instruction Pointer) |
+        | (Quase inexistente / Direto)| <---  | (Avança por Bundles fixos) |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereçamento 64b) |       |   RDM (Grandes Blocos)     |
+        | (Fim do limite de 4 GB)   | <---  | (Cache <--> 128 Registr.)  |
+        +-------------+-------------+       +--------------+-------------+
+                    |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Alta Velocidade) |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Sem malabarismos de HW)  | ----> | (Acessada raramente / Load) |
+        +---------------------------+       +----------------------------+
 
 4. O "Bundle" de Instruções IA-64
 Diferente do x86, onde as instruções têm tamanhos variados, no IA-64 elas vêm em pacotes fixos (Bundles).
-BUNDLE IA-64 (128 bits)
-+---------------------------------------+
-| Instrução 1 (41 bits) | Tipo: Memória |
-+-----------------------+---------------|
-| Instrução 2 (41 bits) | Tipo: Inteiro |
-+-----------------------+---------------|
-| Instrução 3 (41 bits) | Tipo: Float   |
-+-----------------------+---------------|
-| Template (5 bits)     | Guia p/ a UC  |
-+---------------------------------------+
-        |
-        v
- [ UNIDADES FUNCIONAIS PARALELAS ]
-    [ULA 1] [ULA 2] [FPU 1]
+
+    BUNDLE IA-64 (128 bits)
+    +---------------------------------------+
+    | Instrução 1 (41 bits) | Tipo: Memória |
+    +-----------------------+---------------|
+    | Instrução 2 (41 bits) | Tipo: Inteiro |
+    +-----------------------+---------------|
+    | Instrução 3 (41 bits) | Tipo: Float   |
+    +-----------------------+---------------|
+    | Template (5 bits)     | Guia p/ a UC  |
+    +---------------------------------------+
+            |
+            v
+    [ UNIDADES FUNCIONAIS PARALELAS ]
+        [ULA 1] [ULA 2] [FPU 1]
 
 ## Insight para seus projetos em estruturas_de_dados
 O Itanium 2 resolve o problema da falta de registradores com 128 registradores de uso geral.
@@ -4438,97 +4446,102 @@ Diferente do x86, onde você luta para espremer dados em 8 ou 16 registradores, 
 Veja como os componentes que você mapeou lidam com essa abundância de recursos:
 
 Arquitetura de Registradores do Itanium 2 (IA-64)
-SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
-    +---------------------------+       +----------------------------+
-    |   ULA (Inteiros e FP)     |       |   ESTRUTURA DE REGIST.     |
-    | (Opera sobre 128 GPRs e   | <---> | (128 GPR, 128 FP, 64 Pred, |
-    |  128 FP de 80 bits)       |       |  8 Desvio, 128 Aplicação)  |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v------------------------------------v-------------+
-    |         BARRAMENTO INTERNO (64 bits / Gestão de Janelas)       |
-    +-------------+------------------------------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   UNIDADE DE CONTROLE     |       |   RI (Instruções Alocação) |
-    | (Deslizamento da Pilha de | <---> | (Define tamanho variável   |
-    |  Registradores Dinâmicos) |       |  do quadro de registradores)|
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |       DECODIFICADOR       |       |   CI (Program Counter)     |
-    | (Distingue Reg. Estático  | <---  | (Fluxo contínuo via        |
-    |  de Reg. Dinâmico)        |       |  Predicação de 1 bit)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   REM (Endereçamento 64b) |       |   RDM (Dados de Overflow)  |
-    | (Acesso linear a Exabytes)| <---  | (Ativado apenas no         |
-    |                           |       |  transbordo da pilha)      |
-    +-------------+-------------+       +--------------+-------------+
-                  |                                    |
-    +-------------v-------------+       +--------------v-------------+
-    |   CLOCK (Sincronismo FP)  |       |   MEMÓRIA PRINCIPAL (RAM)  |
-    | (Paralelismo de 80 bits)  | ----> | (Depósito de Longo Prazo / |
-    |                           |       |  Acessada raramente)       |
-    +---------------------------+       +----------------------------+
+
+    SEÇÃO DE PROCESSAMENTO             SEÇÃO DE ARMAZENAMENTO
+        +---------------------------+       +----------------------------+
+        |   ULA (Inteiros e FP)     |       |   ESTRUTURA DE REGIST.     |
+        | (Opera sobre 128 GPRs e   | <---> | (128 GPR, 128 FP, 64 Pred, |
+        |  128 FP de 80 bits)       |       |  8 Desvio, 128 Aplicação)  |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v------------------------------------v-------------+
+        |         BARRAMENTO INTERNO (64 bits / Gestão de Janelas)       |
+        +-------------+------------------------------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   UNIDADE DE CONTROLE     |       |   RI (Instruções Alocação) |
+        | (Deslizamento da Pilha de | <---> | (Define tamanho variável   |
+        |  Registradores Dinâmicos) |       |  do quadro de registradores)|
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |       DECODIFICADOR       |       |   CI (Program Counter)     |
+        | (Distingue Reg. Estático  | <---  | (Fluxo contínuo via        |
+        |  de Reg. Dinâmico)        |       |  Predicação de 1 bit)      |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   REM (Endereçamento 64b) |       |   RDM (Dados de Overflow)  |
+        | (Acesso linear a Exabytes)| <---  | (Ativado apenas no         |
+        |                           |       |  transbordo da pilha)      |
+        +-------------+-------------+       +--------------+-------------+
+                      |                                    |
+        +-------------v-------------+       +--------------v-------------+
+        |   CLOCK (Sincronismo FP)  |       |   MEMÓRIA PRINCIPAL (RAM)  |
+        | (Paralelismo de 80 bits)  | ----> | (Depósito de Longo Prazo / |
+        |                           |       |  Acessada raramente)       |
+        +---------------------------+       +----------------------------+
 
 3. Comparativo de Performance: Registrador vs. RAM
 Para entender por que o Itanium investe tanto em registradores, veja a diferença de custo (latência típica em ciclos de clock):
 
-Recurso                    Localização           Ciclos de Clock (Latência)
-Registradores              Dentro da CPU         0 a 1 ciclo
-Cache L1                   No chip               2 a 4 ciclos
-Cache L2                   Próximo ao núcleo     10 a 20 ciclos
-Memória Principal (RAM)    Placa-mãe             200 a 500+ ciclos
+    Recurso                    Localização           Ciclos de Clock (Latência)
+
+    Registradores              Dentro da CPU         0 a 1 ciclo
+    Cache L1                   No chip               2 a 4 ciclos
+    Cache L2                   Próximo ao núcleo     10 a 20 ciclos
+    Memória Principal (RAM)    Placa-mãe             200 a 500+ ciclos
 
 4. Diagrama ASCII: A Pilha de Registradores (Janela)
 Diferente da Figura 5.40 (Pilha na RAM), aqui a pilha acontece dentro dos registradores:
-REGISTRADORES GERAIS (G0 - G127)
-+---------------------------------------+
-| G0 - G31: ESTÁTICOS (Sempre visíveis) |
-+---------------------------------------+
-| G32 - G127: DINÂMICOS (Pilha Interna) |
-|   +-------------------------------+   |
-|   | Procedimento A (Aloca 10)     |   |
-|   +-------------------------------+   |
-|   | Procedimento B (Aloca 20)     |   | <-- Janela desliza aqui
-|   +-------------------------------+   |
-|   | Procedimento C (Aloca 5)      |   |
-|   +-------------------------------+   |
-+---------------------------------------+
-      (O transbordo vai para a RAM 
-       apenas se os 96 acabarem)
+
+    REGISTRADORES GERAIS (G0 - G127)
+    +---------------------------------------+
+    | G0 - G31: ESTÁTICOS (Sempre visíveis) |
+    +---------------------------------------+
+    | G32 - G127: DINÂMICOS (Pilha Interna) |
+    |   +-------------------------------+   |
+    |   | Procedimento A (Aloca 10)     |   |
+    |   +-------------------------------+   |
+    |   | Procedimento B (Aloca 20)     |   | <-- Janela desliza aqui
+    |   +-------------------------------+   |
+    |   | Procedimento C (Aloca 5)      |   |
+    |   +-------------------------------+   |
+    +--------------------
+    -------------------+
+        (O transbordo vai para a RAM 
+        apenas se os 96 acabarem)
 
 Conjunto de Registradores do Itanium 2 (IA-64) / Figura 5.46   Registradores do Itanium 2.
-CONJUNTO DE REGISTRADORES IA-64
-      ================================
 
-   +----------------------------------------+
-   |      128 REGISTRADORES GERAIS (GR)     |
-   |           (64 bits cada)               |
-   |  +----------------------------------+  |
-   |  | GR0 - GR31: Estáticos            |  |
-   |  +----------------------------------+  |
-   |  | GR32 - GR127: Pilha Dinâmica     |  |
-   |  | (96 registradores p/ Janelamento)|  |
-   |  +----------------------------------+  |
-   +----------------------------------------+
+    CONJUNTO DE REGISTRADORES IA-64
+        ================================
 
-   +----------------------------------------+
-   |   128 REGISTRADORES PONTO FLUTUANTE    |
-   |           (80 bits - IEEE)             |
-   +----------------------------------------+
+    +----------------------------------------+
+    |      128 REGISTRADORES GERAIS (GR)     |
+    |           (64 bits cada)               |
+    |  +----------------------------------+  |
+    |  | GR0 - GR31: Estáticos            |  |
+    |  +----------------------------------+  |
+    |  | GR32 - GR127: Pilha Dinâmica     |  |
+    |  | (96 registradores p/ Janelamento)|  |
+    |  +----------------------------------+  |
+    +----------------------------------------+
 
-   +----------------------------------------+
-   |     128 REGISTRADORES DE APLICAÇÃO     |
-   |           (Uso Especial)               |
-   +----------------------------------------+
+    +----------------------------------------+
+    |   128 REGISTRADORES PONTO FLUTUANTE    |
+    |           (80 bits - IEEE)             |
+    +----------------------------------------+
 
-   +-----------------------+  +-------------+
-   |   64 REG. PREDICADO   |  | 8 REGIST.   |
-   |       (1 bit)         |  | DE DESVIO   |
-   +-----------------------+  +-------------+
+    +----------------------------------------+
+    |     128 REGISTRADORES DE APLICAÇÃO     |
+    |           (Uso Especial)               |
+    +----------------------------------------+
+
+    +-----------------------+  +-------------+
+    |   64 REG. PREDICADO   |  | 8 REGIST.   |
+    |       (1 bit)         |  | DE DESVIO   |
+    +-----------------------+  +-------------+
 
 ## Insight para seus projetos em estruturas_de_dados
 O uso dos 64 registradores de predicados de 1 bit é o que permite ao Itanium "matar" os desvios condicionais.
@@ -4558,46 +4571,48 @@ O pacote de 128 bits é dividido de forma muito rígida para facilitar a decodif
   - Predicado (6 bits): Indica qual dos 64 registradores de predicado controla se essa instrução deve ou não ser efetivada.
 
 Estrutura do Pacote e Instrução (Figura 5.47)
-BUNDLE IA-64 (128 BITS)
-+-------------------------------------------------------+
-| Instrução 2 (41) | Instrução 1 (41) | Instrução 0 (41) | Gabarito (5) |
-+-------------------------------------------------------+
 
-       DETALHE DE UMA INSTRUÇÃO (41 BITS)
-+---------+---------+---------+---------+---------+---------+
-|  Tipo   |  Grupo  |  Reg 3  |  Reg 2  |  Reg 1  |  Pred.  |
-| (4 bits)| (10 b)  | (7 bits)| (7 bits)| (7 bits)| (6 bits)|
-+---------+---------+---------+---------+---------+---------+
-    |                  |         |         |         |
-    v                  v         v         v         v
- Opcode            Destino    Op. 1     Op. 2    Controle
+    BUNDLE IA-64 (128 BITS)
+    +-------------------------------------------------------+
+    | Instrução 2 (41) | Instrução 1 (41) | Instrução 0 (41) | Gabarito (5) |
+    +-------------------------------------------------------+
+
+        DETALHE DE UMA INSTRUÇÃO (41 BITS)
+    +---------+---------+---------+---------+---------+---------+
+    |  Tipo   |  Grupo  |  Reg 3  |  Reg 2  |  Reg 1  |  Pred.  |
+    | (4 bits)| (10 b)  | (7 bits)| (7 bits)| (7 bits)| (6 bits)|
+    +---------+---------+---------+---------+---------+---------+
+        |                  |         |         |         |
+        v                  v         v         v         v
+    Opcode            Destino    Op. 1     Op. 2    Controle
 
 
 Estrutura do Bundle e Instrução IA-64 / Figura 5.47   O pacote IA-64 contém três instruções.
-ESTRUTURA DO BUNDLE (128 BITS)
-+-------------------------------------------------------+
-| INSTRUÇÃO 2 (41b) | INSTRUÇÃO 1 (41b) | INSTRUÇÃO 0 (41b) | GABARITO (5b)|
-+-------------------------------------------------------+
-        |                   |                   |               |
-        +-------------------+-------------------+               |
-                            |                                   |
-                            v                                   v
-             +------------------------------+        +----------------------+
-             |   ANATOMIA DA INSTRUÇÃO      |        |   GABARITO (TEMPLATE)|
-             |         (41 BITS)            |        |   Define Unidades e  |
-             +------------------------------+        |   Fronteiras (Stops) |
-             | TIPO DE OPERAÇÃO (4 bits)    |        +----------------------+
-             +------------------------------+
-             | GRUPO DE OPERAÇÃO (10 bits)  |
-             +------------------------------+
-             | REGISTRADOR 3 (7 bits)       | --> Destino (2^7 = 128 regs)
-             +------------------------------+
-             | REGISTRADOR 2 (7 bits)       | --> Operando 1
-             +------------------------------+
-             | REGISTRADOR 1 (7 bits)       | --> Operando 2
-             +------------------------------+
-             | REG. DE PREDICADO (6 bits)   | --> Controle de Execução
-             +------------------------------+
+
+    ESTRUTURA DO BUNDLE (128 BITS)
+    +-------------------------------------------------------+
+    | INSTRUÇÃO 2 (41b) | INSTRUÇÃO 1 (41b) | INSTRUÇÃO 0 (41b) | GABARITO (5b)|
+    +-------------------------------------------------------+
+            |                   |                   |               |
+            +-------------------+-------------------+               |
+                                |                                   |
+                                v                                   v
+                +------------------------------+        +----------------------+
+                |   ANATOMIA DA INSTRUÇÃO      |        |   GABARITO (TEMPLATE)|
+                |         (41 BITS)            |        |   Define Unidades e  |
+                +------------------------------+        |   Fronteiras (Stops) |
+                | TIPO DE OPERAÇÃO (4 bits)    |        +----------------------+
+                +------------------------------+
+                | GRUPO DE OPERAÇÃO (10 bits)  |
+                +------------------------------+
+                | REGISTRADOR 3 (7 bits)       | --> Destino (2^7 = 128 regs)
+                +------------------------------+
+                | REGISTRADOR 2 (7 bits)       | --> Operando 1
+                +------------------------------+
+                | REGISTRADOR 1 (7 bits)       | --> Operando 2
+                +------------------------------+
+                | REG. DE PREDICADO (6 bits)   | --> Controle de Execução
+                +------------------------------+
 
 O gabarito do pacote informa quais unidades funcionais o pacote necessita e também a posição da fronteira de um grupo de instrução presente, se houver. As principais unidades funcionais são a ULA de inteiros, as instruções não ULA de inteiros, operações de memória, operações de ponto flutuante, desvios e outras. É claro que, com seis unidades e três instruções, a ortogonalidade completa exigiria 216 combinações, mais outras 216 para
 indicar um marcador de grupo de instrução após a instrução 0, mais outras 216 para indicar um marcador de grupo de instrução após a instrução 1, e ainda mais outras 216 para indicar um marcador de grupo de instrução após a instrução 2. Com só 5 bits disponíveis, apenas um número muito limitado dessas combinações é permitido. Por outro lado, permitir três instruções de ponto flutuante em um pacote não funcionaria, nem mesmo se houvesse um modo de especificar isso, já que a CPU não pode iniciar três instruções de ponto flutuante em simultâneo. Combinações permitidas são as que, na verdade, são viáveis.
@@ -4611,13 +4626,13 @@ instruções predicadas é o que possibilita que nos livremos de (muitos) desvio
 Para ver como funciona a predicação, vamos começar com o exemplo simples da Figura 5.48, que mostra a execução condicional, uma precursora da predicação. Na Figura 5.48(a), vemos uma declaração if. Na Figura 5.48(b), vemos sua tradução para três instruções: uma instrução de comparação, uma de desvio condicional e
 uma de movimentação.
 
-Figura 5.48   (a) Declaração if. (b) Código genérico de montagem para (a). (c) Instrução condicional.
-               if (R1 == 0)		  CMP R1,0		
-                   R2 = R3;		  BNE L1                                          CMOVZ R2,R3,R1
-                                  MOV R2,R3
-				
-		                     L1:
-   (a)			   (b)				                                                     (c)
+    Figura 5.48   (a) Declaração if. (b) Código genérico de montagem para (a). (c) Instrução condicional.
+                if (R1 == 0)		  CMP R1,0		
+                    R2 = R3;		  BNE L1                                          CMOVZ R2,R3,R1
+                                    MOV R2,R3
+                    
+                                L1:
+    (a)			   (b)				                                                     (c)
 
 Na Figura 5.48(c), nos livram do desvio condicional usando uma nova instrução, CMOVZ, que é uma movimentação condicional. Sua função é verificar se o terceiro registrador, R1, é 0. Se for, ele copia R3 para R2. Se não for, nada faz.
 
@@ -4627,25 +4642,25 @@ Imagine uma declaração if com várias atribuições na parte then e várias ou
 Todas essas instruções, a definição do registrador, as CMOVN e as CMOVZ formam um único bloco básico sem nenhum desvio condicional. As instruções podem até mesmo ser reordenadas, seja pelo compilador (incluindo elevar as atribuições para antes do teste), seja durante a execução. O único senão é que a condição tem de
 ser conhecida na hora em que as instruções devem ser retiradas (próximo ao final do paralelismo). Um exemplo simples que mostra a parte then e a parte else é dado na Figura 5.49.
 
-Figura 5.49   (a) Declaração if. (b) Código genérico de montagem para (a). (c) Execução condicional.
+### Figura 5.49   (a) Declaração if. (b) Código genérico de montagem para (a). (c) Execução condicional.
 
-Comparativo de Implementação: If-Else vs. Execução Condicional:
-(a) Declaração C          (b) Assembly Genérico        (c) Execução Condicional
-    +-------------------+      +----------------------+     +-------------------------+
-    |  if (R1 == 0) {   |      |   CMP R1, 0          |     |   CMP R1, 0             |
-    |    R2 = R3;       |      |   BNE L1  -----------|--+  |   CMOVZ R2, R3, R1      |
-    |    R4 = R5;       |      |   MOV R2, R3         |  |  |   CMOVZ R4, R5, R1      |
-    |  } else {         |      |   MOV R4, R5         |  |  |   CMOVN R6, R7, R1      |
-    |    R6 = R7;       |      |   BR L2   -------+   |  |  |   CMOVN R8, R9, R1      |
-    |    R8 = R9;       |      | L1:   <----------|---+  |                         |
-    |  }                |      |   MOV R6, R7     |     |    (Fluxo Linear)       |
-    +-------------------+      |   MOV R8, R9     |     |   (Sem saltos/labels)   |
-                               | L2:   <----------+     |                         |
-                               +----------------------+     +-------------------------+
-                                  ^                            ^
-                                  |                            |
-                           Fluxo com saltos             Fluxo Sequencial
-                           (Risco de Stall)             (Alta Performance)
+    Comparativo de Implementação: If-Else vs. Execução Condicional:
+    (a) Declaração C          (b) Assembly Genérico        (c) Execução Condicional
+        +-------------------+      +----------------------+     +-------------------------+
+        |  if (R1 == 0) {   |      |   CMP R1, 0          |     |   CMP R1, 0             |
+        |    R2 = R3;       |      |   BNE L1  -----------|--+  |   CMOVZ R2, R3, R1      |
+        |    R4 = R5;       |      |   MOV R2, R3         |  |  |   CMOVZ R4, R5, R1      |
+        |  } else {         |      |   MOV R4, R5         |  |  |   CMOVN R6, R7, R1      |
+        |    R6 = R7;       |      |   BR L2   -------+   |  |  |   CMOVN R8, R9, R1      |
+        |    R8 = R9;       |      | L1:   <----------|---+  |                         |
+        |  }                |      |   MOV R6, R7     |     |    (Fluxo Linear)       |
+        +-------------------+      |   MOV R8, R9     |     |   (Sem saltos/labels)   |
+                                | L2:   <----------+     |                         |
+                                +----------------------+     +-------------------------+
+                                    ^                            ^
+                                    |                            |
+                            Fluxo com saltos             Fluxo Sequencial
+                            (Risco de Stall)             (Alta Performance)
 
 Embora tenhamos mostrado instruções condicionais muito simples aqui (na verdade, tiradas da ISA IA-32), na IA-64 todas elas são predicadas. Isso significa que a execução de toda instrução pode ser transformada em condicional. O campo extra de 6 bits a que nos referimos antes seleciona um dos 64 registradores de predicado de 1 bit. Assim, uma declaração if será compilada para código que marca um dos registradores de predicado como 1 se a condição for verdadeira e como 0 se ela for falsa. De maneira simultânea e automática, ela marca outro registrador de predicado como o valor inverso. Usando predicação, as instruções de máquina que formam as cláusulas then e else serão fundidas em uma única cadeia de instruções, as primeiras usando o predicado e as últimas seu inverso. Quando o controle passa por lá, apenas um conjunto de instruções será executado.
 
@@ -4653,23 +4668,24 @@ Embora simples, o exemplo da Figura 5.50 mostra a ideia básica de como a predic
 uma condicionada conforme algum registrador de predicado (mostrado entre sinais < e >). Nesse caso, pode ser colocado um código arbitrário, contanto que cada instrução seja adequadamente predicada.
 
 Figura 5.50   (a) Declaração if. (b) Código genérico de montagem para (a). (c) Execução predicada.
-Este diagrama destaca como o IA-64 elimina os "saltos" (labels L1/L2) para manter a ULA sempre trabalhando.
-(a) Declaração C          (b) Assembly Genérico        (c) Execução Predicada
-    +-------------------+      +----------------------+     +-------------------------+
-    |  if (R1 == R2)    |      |   CMP R1, R2         |     |   CMPEQ R1, R2, P4      |
-    |    R3 = R4 + R5;  |      |   BNE L1  -----------|--+  |                         |
-    |  else             |      |   MOV R3, R4         |  |  |   <P4> ADD R3, R4, R5   |
-    |    R6 = R4 - R5;  |      |   ADD R3, R5         |  |  |   <P5> SUB R6, R4, R5   |
-    +-------------------+      |   BR L2   -------+   |  |                         |
-                               | L1:   <----------|---+  |    (Fluxo Paralelo)    |
-                               |   MOV R6, R4     |     |   (Sem quebra de CI)    |
-                               |   SUB R6, R5     |     |                         |
-                               | L2:   <----------+     |                         |
-                               +----------------------+     +-------------------------+
-                                  ^                            ^
-                                  |                            |
-                           Fluxo Fragmentado            Fluxo "Branchless"
-                           (Lento / Desvios)            (Rápido / Paralelo)
+
+    Este diagrama destaca como o IA-64 elimina os "saltos" (labels L1/L2) para manter a ULA sempre trabalhando.
+    (a) Declaração C          (b) Assembly Genérico        (c) Execução Predicada
+        +-------------------+      +----------------------+     +-------------------------+
+        |  if (R1 == R2)    |      |   CMP R1, R2         |     |   CMPEQ R1, R2, P4      |
+        |    R3 = R4 + R5;  |      |   BNE L1  -----------|--+  |                         |
+        |  else             |      |   MOV R3, R4         |  |  |   <P4> ADD R3, R4, R5   |
+        |    R6 = R4 - R5;  |      |   ADD R3, R5         |  |  |   <P5> SUB R6, R4, R5   |
+        +-------------------+      |   BR L2   -------+   |  |                         |
+                                | L1:   <----------|---+  |    (Fluxo Paralelo)    |
+                                |   MOV R6, R4     |     |   (Sem quebra de CI)    |
+                                |   SUB R6, R5     |     |                         |
+                                | L2:   <----------+     |                         |
+                                +----------------------+     +-------------------------+
+                                    ^                            ^
+                                    |                            |
+                            Fluxo Fragmentado            Fluxo "Branchless"
+                            (Lento / Desvios)            (Rápido / Paralelo)
 
 Esta é a evolução final do conceito de execução condicional que vimos no Itanium 2. Enquanto o CMOV (do exemplo anterior) apenas move dados, a Execução Predicada completa (coluna c) permite que instruções aritméticas inteiras (como ADD e SUB) sejam executadas em paralelo, dependendo de bits de predicado (P4 e P5).
 
