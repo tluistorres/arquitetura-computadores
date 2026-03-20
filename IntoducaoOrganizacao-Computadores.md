@@ -1,6 +1,6 @@
-![alt text](image-31.png)
+![alt text](image-62.png)
 
-![alt text](image-36.png)
+![alt text](image-63.png)
 
 ## Introdução
 
@@ -58,7 +58,7 @@ A Escala da Máquina Multinível (Figura 1.1)Aqui está a representação de com
         NÍVEL 0  |   Computador Real M0 (Linguagem L0)
                     |   [ EXECUÇÃO DIRETA PELOS CIRCUITOS ]
                     
-![alt text](image-34.png)
+![alt text](image-64.png)
 
 ### Insight para seus Projetos: O "Filtro" da Abstração
     Essa estrutura multinível é idêntica ao que discutimos sobre a pedagogia e o TEA:
@@ -100,6 +100,8 @@ que o suporta).
     NÍVEL 1 | Microarquitetura (Caminho de Dados, ALU)
             |   [ HARDWARE ]
     NÍVEL 0 | Nível Lógico Digital (Portas AND, OR, NAND)
+
+![alt text](image-65.png)
 
 ### Insight para o seu repositório estruturas_de_dados
     Este modelo explica por que você consegue programar em C ou JS sem precisar desenhar portas lógicas a cada linha de código:
@@ -206,6 +208,8 @@ lização, o FMS (FORTRAN Monitor System), no IBM 709.
     |   $END                     <-- Fim do Job                 |
     |                                                           |
     +-----------------------------------------------------------+
+
+![alt text](image-66.png)
 
     Processamento                                                         Armazenamento
 
@@ -377,9 +381,7 @@ Um esboço da arquitetura é dado na Figura 1.5.
 
 ### Figura 1.5 Máquina original de von Neumann.
 
-![alt text](image-37.png)
-
-![alt text](image-38.png)
+![alt text](image-67.png)
 
 ### Figura 1.5: Máquina Original de von Neumann
 
@@ -438,7 +440,7 @@ Alguns anos mais tarde, a DEC lançou o PDP-8, que era uma máquina de 12 bits, 
                                     BARRAMENTO OMNIBUS
     =================================================================================
 
-![alt text](image-39.png)
+![alt text](image-68.png)
 
 ### Insight para o seu eBook "Olá, mundo digital!"
     O Omnibus do PDP-8 é o ancestral direto dos barramentos que você estuda hoje, como o PCI Express da Figura 3.57.
@@ -567,7 +569,7 @@ Os dados pontuais informados nesta figura são tamanhos de memórias em bits.
          +---------------------------------------------------> Ano
           1965   1975    1985    1995    2005    2015
 
-![alt text](image-40.png)
+![alt text](image-69.png)
 
 ### Insight para o seu eBook "Olá, mundo digital!"
     A Lei de Moore é o que permitiu sairmos do PDP-8 (Figura 1.6), que ocupava uma sala e tinha memória medida em Kilo-palavras, para o seu sistema com Ubuntu 24.04 que gerencia Gigabytes de RAM.
@@ -723,7 +725,7 @@ Essa é a visualização real de onde toda a teoria que estudamos se encontra. A
 
     Trilhas de Cobre                                 O ""Barramento Omnibus"" (Figura 1.6) moderno que conecta todos os chips.
 
-### Insight para o seu eBook "Olá, mundo digital!"
+### Insight 
     A placa-mãe é o que unifica os Níveis 0 e 1 da arquitetura multinível.
 
     - No Hardware: Cada componente que você vê na foto é uma coleção de bilhões de transistores (Lei de Moore - Figura 1.8).
@@ -930,9 +932,9 @@ Essa é a visão complementar da Lei de Moore. Enquanto a Figura 1.8 focava em b
          +-------------------------------------------------------------> Ano
         1970   1975   1980   1985   1990   1995   2000   2005   2010
 
-![alt text](image-13.png)
+![alt text](image-70.png)
 
-### Insight para o seu eBook "Olá, mundo digital!"
+### Insight
     Esta figura explica por que o software evoluiu tanto: o hardware deu o espaço.
 
     - Era 8086: O programador precisava economizar cada bit, pois tinha apenas 29 mil transistores para gerenciar tudo.
@@ -992,7 +994,7 @@ Figura 1.14: Sistema Nvidia Tegra 2
     | HDMI  | NAND  |  USB      |           | [ Proc. Gráfico ]     |
     +-------+-------+-----------+-----------+-----------------------+
 
-![alt text](image-14.png)
+![alt text](image-71.png)
 
 ### Insight para seus Estudos
 A integração vista na Figura 1.14 explica por que o seu "Projeto IDS" roda com tanta eficiência. Ferramentas como o iwatch e tcpdump dependem de um subsistema de E/S de baixa latência e de núcleos de processamento que consigam gerenciar dados em tempo real. Em um SoC, a distância física entre a CPU, a RAM e a interface de rede é mínima, acelerando todo o processo de análise de integridade.
