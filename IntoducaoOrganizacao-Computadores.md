@@ -207,7 +207,8 @@ A Figura 1.3 apresenta uma amostra de serviço (job) para um dos primeiros siste
     |   $END                     <-- Fim do Job                 |
     |                                                           |
     +-----------------------------------------------------------+
-![alt text](image-15.png)
+
+![alt text](image-76.png)
 
 ### Conexão com sua Realidade (Nível 3)
     Embora pareça arcaico, esse conceito de "Job" ainda existe no seu dia a dia:
