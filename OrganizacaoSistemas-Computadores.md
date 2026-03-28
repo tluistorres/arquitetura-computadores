@@ -1,6 +1,5 @@
 ![alt text](image-61.png)
 
-
 ## Organização de sistemas de computadores
 
 Um computador digital consiste em um sistema interconectado de processadores, memória e dispositi-
@@ -19,8 +18,62 @@ controle. Barramentos podem ser externos à CPU, conectando-a à memória e aos 
 podem ser internos, como veremos em breve. Os computadores modernos possuem vários barramentos.
 
 ### Figura 2.1 A organização de um computador simples com uma CPU e dois dispositivos de E/S.
-Unidade central de processamento (CPU)
 
+A Figura 2.1 é fundamental, pois ela resume a Organização de um Computador Simples baseada no modelo de Von Neumann, conectando a CPU, a Memória e os Periféricos através de um Barramento compartilhado.
+
+    UNIDADE CENTRAL DE PROCESSAMENTO (CPU)
+        +-----------------------------------------+
+        |                                         |
+        |   [ UNIDADE DE CONTROLE ]               |
+        |                                         |
+        |-----------------------------------------|
+        |                                         |
+        |   [ UNIDADE DE LÓGICA E ARITMÉTICA ]    |
+        |               (ULA)                     |
+        |                                         |
+        |-----------------------------------------|
+        |                                         |
+        |   [ REGISTRADORES ]                     |
+        |    +---+  +---+  +---+  +---+           |
+        |    | R0|  | R1|  | R2|  | R3|           |
+        |    +---+  +---+  +---+  +---+           |
+        |                                         |
+        +----+------------------------------------+
+             |
+     ========+=======+=======+=======+=======+=======  <-- BARRAMENTO DE DADOS/ENDEREÇOS
+                     |       |       |
+                +----+----+  |  +----+----+
+                |         |  |  |         |
+                | MEMÓRIA |  |  | DISCO   |
+                | PRINCIP.|  |  | (E/S)   |
+                |         |  |  |         |
+                +---------+  |  +---------+
+                             |
+                        +----+----+
+                        |         |
+                        |IMPRESSO.|
+                        | (E/S)   |
+                        |         |
+                        +---------+
+![alt text](image-77.png)
+
+    Processamento	                                    Armazenamento
+
+    CPU (Unidade de Controle e ULA)             	    Registradores e Memória Principal
+
+    A Unidade de Controle decodifica as instruções      Registradores: Armazenamento interno ultrarrápido na CPU (Nível 1). Memória 
+    ULA (Figura 1.5) executa os cálculos aritméticos    Principal: Onde o Mapa de Memória reside (Figura 3.60).
+    e lógicos.
+
+                                                        BARRAMENTO DE DADOS/ENDEREÇOS
+
+    Dispositivos de E/S (Periféricos)	                Ciclo de Execução
+
+    O Disco e a Impressora se comunicam com a CPU       As instruções e dados viajam pelo Barramento da Memória para a CPU para através do barramento, usando interfaces como a     serem processados.
+    PIO (Figura 3.59).
+
+### Insight para seus Estudos
+A organização vista na Figura 2.1 explica por que o seu "Projeto IDS" roda com tanta eficiência. Ferramentas como o iwatch e tcpdump dependem de um subsistema de E/S de baixa latência e de núcleos de processamento que consigam gerenciar dados em tempo real. No seu Lenovo IdeaPad, o barramento compartilhado foi substituído por conexões ponto-a-ponto rápidas (como o PCIe na Figura 3.57), mas a lógica de comunicação entre a CPU, Memória e Periféricos permanece a mesma.
 
 A CPU é composta por várias partes distintas. A unidade de controle é responsável por buscar instruções na
 memória principal e determinar seu tipo. A unidade de aritmética e lógica efetua operações como adição e AND (E)
@@ -49,6 +102,59 @@ minuciosamente em todo este livro.
 
 ### Figura 2.2 0 caminho de dados de uma típica máquina de von Neumann.
 
+A Figura 2.2 detalha o Caminho de Dados interno da CPU, mostrando como uma operação aritmética simples ( A + B) acontece fisicamente entre os registradores e a ULA.
+
+        +---------------------------------------+
+        |             REGISTRADORES             |
+        |  +---------------------------------+  |
+        |  |              A + B              |  | <---+
+        |  +---------------------------------+  |     |
+        |  |                A                |  |     | (Feedback)
+        |  +---------------------------------+  |     |
+        |  |                B                |  |     |
+        |  +---------------------------------+  |     |
+        +-------+-----------------------+-------+     |
+                |                       |             |
+                v                       v             |
+        +---------------+       +---------------+     |
+        | REG. ENTRADA  |       | REG. ENTRADA  |     |
+        |  DA ULA (A)   |       |  DA ULA (B)   |     |
+        +-------+-------+       +-------+-------+     |
+                |                       |             |
+                v                       v             |
+        +---------------------------------------+     |
+        |      UNIDADE DE LÓGICA E ARITMÉTICA   |     |
+        |                 (ULA)                 |     |
+        +-------------------+-------------------+     |
+                            |                         |
+                            v                         |
+                +-----------------------+             |
+                |  REG. SAÍDA DA ULA    |             |
+                |        (A + B)        |-------------+
+                +-----------------------+
+
+![alt text](image-78.png)
+
+    Processamento	                                               Armazenamento
+
+    Ciclo da ULA	                                               Hierarquia de Registradores
+
+    A ULA recebe os operandos dos registradores de entrada,        Os registradores (Nível 1) são a memória mais rápida do sistema, realiza a soma e coloca o resultado no registrador             servindo de fonte e destino imediato para a ULA.
+    de saída.
+
+                                                                   BARRAMENTO INTERNO
+
+    Feedback de Dados	                                           Execução em Hardware
+
+    O resultado (A+B) volta para o banco de registradores          Este processo é o que acontece bilhões de vezes por segundo 
+    para ser usado em instruções futuras.                          dentro do seu Core i7.
+
+### Insight 
+Este diagrama é o "coração" do que você estuda em Assembly e C:
+
+ - No seu Projeto IDS: Quando você faz uma comparação de endereços IP no seu código, a CPU move os valores para os Registradores de Entrada, a ULA subtrai um do outro para verificar a igualdade e o resultado define o próximo passo do seu firewall.
+
+ - Eficiência: Como vimos na Figura 1.12, chips modernos têm múltiplos núcleos, cada um com seu próprio caminho de dados como este, permitindo processar milhões de pacotes simultaneamente no seu Ubuntu 24.04.
 
 A ULA efetua adição, subtração e outras operações simples sobre suas entradas, produzindo assim um resultado no
 registrador de saída, o qual pode ser armazenado em um registrador. Mais tarde, ele pode ser escrito (isto é, armazenado)
@@ -181,6 +287,7 @@ importantes eram:
 
 1.A capacidade de corrigir em campo instruções executadas incorretamente ou até compensar deficiências de
 projeto no hardware básico.
+
 2.A oportunidade de acrescentar novas instruções a um custo mínimo, mesmo após a entrega da máquina.
 
 3.Projeto estruturado que permitia desenvolvimento, teste e documentação eficientes de instruções complexas.
@@ -377,7 +484,39 @@ quais operandos ela necessita. O estágio 3 localiza e busca os operandos, seja 
 4 é que realiza o trabalho de executar a instrução, normalmente fazendo os operandos passarem pelo caminho de dados
 da Figura 2.2. Por fim, o estágio 5 escreve o resultado de volta no registrador adequado.
 
-### figura 2.4 (a) Pipeline de cinco estágios, (b) Estado de cada estágio como uma função do tempo. São ilustrados nove ciclos de clock.
+### Figura 2.4 (a) Pipeline de cinco estágios, (b) Estado de cada estágio como uma função do tempo. São ilustrados nove ciclos de clock.
+
+Essa é uma das ilustrações mais clássicas para entender como a CPU consegue processar tantas informações ao mesmo tempo. A Figura 2.4 explica o conceito de Pipeline, que é basicamente a "linha de montagem" do processador.
+
+Em vez de esperar uma instrução terminar completamente para começar a próxima, a CPU divide o trabalho em estágios. Assim que o estágio 1 termina para a "Instrução A", ele já começa a trabalhar na "Instrução B", enquanto a "A" segue para o estágio 2.
+
+### Figura 2.4: Pipeline de Cinco Estágios
+
+    (a) Os Estágios do Pipeline
+
+       S1             S2             S3             S4             S5
+    +---------+      +---------+      +---------+      +---------+      +---------+
+    | Unidade |      | Unidade |      | Unidade |      | Unidade |      | Unidade |
+    |  Busca  |----->|  Decod. |----->|  Busca  |----->|  Exec.  |----->|  Grav.  |
+    |  Instr. |      |  Instr. |      |  Oper.  |      |  Instr. |      |  Resul. |
+    +---------+      +---------+      +---------+      +---------+      +---------+
+
+    (b) Fluxo de Instruções no Tempo
+
+    ESTÁGIO | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  <-- Ciclos de Clock
+    --------+---+---+---+---+---+---+---+---+---+
+    S1    | I1| I2| I3| I4| I5| I6| I7| I8| I9|
+    S2    |   | I1| I2| I3| I4| I5| I6| I7| I8|
+    S3    |   |   | I1| I2| I3| I4| I5| I6| I7|
+    S4    |   |   |   | I1| I2| I3| I4| I5| I6|
+    S5    |   |   |   |   | I1| I2| I3| I4| I5|
+
+### Insight 
+O Pipeline é o segredo da velocidade do seu Lenovo IdeaPad:
+
+ - Eficiência no C: Quando você compila seu "Projeto IDS", o compilador tenta organizar as instruções para evitar "bolhas" (pausas) no pipeline. Se uma instrução depende do resultado da anterior, o pipeline pode travar por um ciclo.
+
+ - No seu Ubuntu 24.04: O kernel gerencia o contexto de execução, mas é o hardware (Figura 1.12) que mantém esse fluxo constante para garantir que a análise de pacotes do seu IDS ocorra sem atrasos.
 
 
 Na Figura 2.4(b), vemos como o pipeline funciona em função do tempo. Durante o ciclo de clock 1, o estágio SI está
@@ -423,3 +562,158 @@ se as instruções não forem compatíveis), ou os conflitos deverão ser detect
 hardware extra.
 
 #### Figura 2.5 Pipelines duplos de cinco estágios com uma unidade de busca de instrução em comum.
+
+A Figura 2.5 leva o conceito de pipeline um passo adiante, introduzindo os Pipelines Duplos. Enquanto o pipeline simples (Figura 2.4) foca em processar uma instrução por estágio, esta arquitetura permite que a CPU execute duas instruções simultaneamente usando uma única unidade de busca em comum.
+
+                     S2              S3              S4              S5
+               +---------------+---------------+---------------+---------------+
+               | Unid. Decodif.| Unid. Busca   | Unid. Execução| Unid. de      |
+          +--->| de Instrução  | de Operando   | de Instrução  | Gravação      |
+          |    +---------------+---------------+---------------+---------------+
+    +-----+-----+
+    | Unidade de|
+    | Busca de  |   S1
+    | Instrução |
+    +-----+-----+
+          |    +---------------+---------------+---------------+---------------+
+          +--->| Unid. Decodif.| Unid. Busca   | Unid. Execução| Unid. de      |
+               | de Instrução  | de Operando   | de Instrução  | Gravação      |
+               +---------------+---------------+---------------+---------------+
+                     S2              S3              S4              S5
+
+    Processamento	                                               Armazenamento
+
+    Arquitetura Superescalar	                                   Vazão Duplicada (Throughput)
+
+    A CPU pode iniciar e concluir duas instruções por ciclo        Exige um banco de registradores (Figura 2.2) com mais portas de de clock, desde que não haja dependências entre elas.          leitura/escrita para suportar o acesso simultâneo dos dois 
+                                                                   caminhos.
+
+                                                                   BARRAMENTO INTERNO
+
+    Unidade de Busca Comum (S1)	                                   Lógica de Conflito
+
+    Uma única unidade busca as instruções na Memória (Figura 2.1)  Se a segunda instrução depender da primeira, o hardware deve   as distribui para os dois pipelines paralelos.                 detectar o conflito e pausar o segundo pipeline.
+
+### Insight 
+Esta arquitetura é o que transformou CPUs simples em processadores de alto desempenho:
+
+ - No seu Lenovo IdeaPad: Processadores modernos (como o seu Core i7) são muito mais complexos que isso, possuindo pipelines que podem ter 14 estágios ou mais e emitir até 6 instruções por ciclo.
+
+ - Impacto no seu Código: Quando você escreve em C/C++, o compilador tenta "desenrolar" loops (loop unrolling) para que as instruções possam preencher ambos os pipelines da Figura 2.5, dobrando a velocidade de execução do seu Projeto IDS sem aumentar o clock.
+
+Embora pipelines, simples ou duplos, sejam usados em sua maioria em máquinas RISC (o 386 e seus
+antecessores não tinham nenhum), a partir do 486 a Intel começou a acrescentar pipelines de dados em
+suas CPUs. O 486 tinha um pipeline e o Pentium original tinha pipelines de cinco estágios mais ou menos
+como os da Figura 2.5, embora a exata divisão do trabalho entre os estágios 2 e 3 (denominados decode-1 e
+decode-2) era ligeiramente diferente do que em nosso exemplo. O pipeline principal, denominado pipeline u,
+podia executar uma instrução Pentium qualquer. O segundo, denominado pipeline v, podia executar apenas
+instruções com números inteiros (e também uma instrução simples de ponto flutuante – FXCH).
+
+Regras fixas determinavam se um par de instruções era compatível e, portanto, se elas podiam ser exe-
+cutadas em paralelo. Se as instruções em um par não fossem simples o suficiente ou se fossem incompatíveis,
+somente a primeira era executada (no pipeline u). A segunda era retida para fazer par com a instrução seguin-
+te. Instruções eram sempre executadas em ordem. Assim, os compiladores específicos para Pentium que
+produziam pares compatíveis podiam produzir programas de execução mais rápidos do que compiladores
+mais antigos. Medições mostraram que um código de execução Pentium otimizado para ele era exatamente
+duas vezes mais rápido para programas de inteiros do que um 486 que executava à mesma velocidade de
+clock (Pountain, 1993). Esse ganho podia ser atribuído inteiramente ao segundo pipeline.
+
+Passar para quatro pipelines era concebível, mas exigiria duplicar muito hardware (cientistas da compu-
+tação, ao contrário de especialistas em folclore, não acreditam no número três). Em vez disso, uma aborda-
+gem diferente é utilizada em CPUs de topo de linha. A ideia básica é ter apenas um único pipeline, mas lhe
+dar várias unidades funcionais, conforme mostra a Figura 2.6. Por exemplo, a arquitetura Intel Core tem uma
+estrutura semelhante à dessa figura, que será discutida no Capítulo 4. O termo arquitetura superescalar foi
+cunhado para essa técnica em 1987 (Agerwala e Cocke, 1987). Entretanto, suas raízes remontam a mais de
+40 anos, ao computador CDC 6600. O 6600 buscava uma instrução a cada 100 ns e a passava para uma das
+10 unidades funcionais para execução paralela enquanto a CPU saía em busca da próxima instrução.
+
+### Figura 2.6 Processador superescalar com cinco unidades funcionais.
+
+A Figura 1.12 e a 1.14 mostram a implementação física dessas arquiteturas, enquanto a Figura 2.5 detalha a lógica de processamento paralelo.
+
+Figura 1.12: Anatomia do Intel Core i7-3960X 
+Este chip de 2011 é um exemplo clássico de processador de alto desempenho com múltiplos núcleos e cache compartilhada.
+
+    +-----------------------------------------------------------+
+    |          Fila, Uncore & Entrada/Saída (E/S)               |
+    +-----------+-----------------------------------+-----------+
+    |  NÚCLEO   |                                   |  NÚCLEO   |
+    +-----------+       CACHE L3 COMPARTILHADO      +-----------+
+    |  NÚCLEO   |                                   |  NÚCLEO   |
+    +-----------+     (Onde os dados ficam prontos  +-----------+
+    |  NÚCLEO   |      para acesso ultra-rápido)    |  NÚCLEO   |
+    +-----------+                                   +-----------+
+    |                 CONTROLADOR DE MEMÓRIA                    |
+    +-----------------------------------------------------------+
+
+Figura 1.14: Sistema Nvidia Tegra 2 (SoC)
+Diferente do i7, o Tegra 2 é um System on a Chip, integrando funções multimídia e de rede no mesmo silício.
+
+    +-----------------------------------------------------------+
+    | [ Proc. Sinal Imagem ]  [ Proc. Codificação Vídeo ] [CACHE]|
+    |                         [ Proc. Decodif. Vídeo    ] [CPU A7]|
+    +-----------------------+---------------------------+-------+
+    |                       |                           |  CPU  |
+    | [ Proc. Áudio ]       |          E / S            | CORTEX|
+    |                       |        (Entrada           |  A9   |
+    +-----------------------+           e               +-------+
+    | [ Video Dual ]        |         Saída)            |  CPU  |
+    |                       |                           | CORTEX|
+    +-------+-------+-------+-----------+---------------+  A9   |
+    | HDMI  | NAND  |  USB  |           | [ Proc. Gráfico ]     |
+    +-------+-------+-------+-----------+-----------------------+
+
+Figura 2.6: Processador Superescalar
+Este diagrama ilustra a lógica interna (estágios S1 a S5) que permite que o seu processador execute múltiplas operações simultaneamente através de unidades funcionais dedicadas.
+
+    [S1]         [S2]         [S3]           [S4]           [S5]
+    +--------+   +--------+   +--------+   +-------------+  +--------+
+    | Unid.  |   | Unid.  |   | Unid.  |   |    ULA 1    |  |        |
+    | busca  |-->| decod. |-->| busca  |-->+-------------+  | Unid.  |
+    | instr. |   | instr. |   | oper.  |   |    ULA 2    |  | gravação|
+    +--------+   +--------+   +--------+   +-------------+  |        |
+                                    |        |    LOAD     |  | (Resul.)|
+                                    |        +-------------+  |        |
+                                    |        |    STORE    |  |        |
+                                    |        +-------------+  |        |
+                                    |        |  Pto. Flut. |  |        |
+                                    |        +-------------+  +--------+
+
+![alt text](image-79.png)
+
+    Mapeamento Técnico para o seu Repositório
+
+    Arquitetura              Vantagem para o seu IDS                    Camada de Hardware
+
+    Multi-core (1.12)        Permite que o motor do seu IDS e           Nível 1: Microarquitetura.
+                             o log de rede rodem em núcleos isolados.
+
+    SoC (1.14)	             Baixa latência no acesso a periféricos 	Nível 0: Lógico Digital.
+                             (NAND/USB) para backups automatizados.
+
+    Superescalar (2.6)       Executa múltiplas comparações de pacotes  Nível 1: Pipeline de Execução.                        
+                             por ciclo de clock.
+
+A definição de “superescalar” evoluiu um pouco ao longo do tempo. Agora, ela é usada para descrever
+processadores que emitem múltiplas instruções – frequentemente, quatro ou seis – em um único ciclo de
+clock. Claro que uma CPU superescalar deve ter várias unidades funcionais para passar todas essas instru-
+ções. Uma vez que, em geral, os processadores superescalares têm um só pipeline, tendem a ser parecidos
+com os da Figura 2.6.
+
+Usando essa definição, o 6600 não era tecnicamente um computador superescalar, pois emitia apenas uma
+instrução por ciclo. Todavia, o efeito era quase o mesmo: instruções eram terminadas em uma taxa muito mais alta
+do que podiam ser executadas. A diferença conceitual entre uma CPU com um clock de 100 ns que executa uma
+instrução a cada ciclo para um grupo de unidades funcionais e uma CPU com um clock de 400 ns que executa
+quatro instruções por ciclo para o mesmo grupo de unidades funcionais é muito pequena. Em ambos os casos,
+a ideia fundamental é que a taxa final é muito mais alta do que a taxa de execução, sendo a carga de trabalho
+distribuída entre um conjunto de unidades funcionais.
+
+Implícito à ideia de um processador superescalar é que o estágio S3 pode emitir instruções com rapidez
+muito maior do que o estágio S4 é capaz de executá-las. Se o estágio S3 executasse uma instrução a cada 10 ns
+e todas as unidades funcionais pudessem realizar seu trabalho em 10 ns, nunca mais do que uma unidade
+estaria ocupada ao mesmo tempo, o que negaria todo o raciocínio. Na verdade, grande parte das unidades fun-
+cionais no estágio 4 leva um tempo bem maior do que um ciclo de clock para executar, decerto as que acessam
+memória ou efetuam aritmética de ponto flutuante. Como pode ser visto na figura, é possível ter várias ULAs
+no estágio S4.
+
+## 2.1.6 Paralelismo no nível do processador
