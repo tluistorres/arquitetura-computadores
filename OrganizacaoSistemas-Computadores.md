@@ -717,3 +717,428 @@ memória ou efetuam aritmética de ponto flutuante. Como pode ser visto na figur
 no estágio S4.
 
 ## 2.1.6 Paralelismo no nível do processador
+A demanda por computadores cada vez mais rápidos parece ser insaciável. Astrônomos querem simular o
+que aconteceu no primeiro microssegundo após o Big Bang, economistas querem modelar a economia mundial e
+adolescentes querem se divertir com jogos multimídia em 3D com seus amigos virtuais pela Internet. Embora as
+CPUs estejam cada vez mais rápidas, haverá um momento em que elas terão problemas com a velocidade da luz,
+que provavelmente permanecerá a 20 cm/nanossegundo em fio de cobre ou fibra ótica, não importando o grau
+de inteligência dos engenheiros da Intel. Chips mais velozes também produzem mais calor, cuja dissipação é um
+problema. De fato, a dificuldade para se livrar do calor produzido é o principal motivo pelo qual as velocidades
+de clock da CPU se estagnaram na última década.
+
+Paralelismo no nível de instrução ajuda um pouco, mas pipelining e operação superescalar raramente rendem
+mais do que um fator de cinco ou dez. Para obter ganhos de 50, 100 ou mais, a única maneira é projetar compu-
+tadores com várias CPUs; portanto, agora vamos ver como alguns deles são organizados.
+
+**• Computadores paralelos**
+
+Um número substancial de problemas em domínios de cálculo como ciências físicas, engenharia e gráficos de
+computador envolve laços e matrizes, ou então tem estrutura de alta regularidade. Muitas vezes, os mesmos cálcu-
+los são efetuados em muitos conjuntos diferentes de dados ao mesmo tempo. A regularidade e a estrutura desses
+programas os tornam alvos especialmente fáceis para aceleração por meio de execução paralela. Há dois métodos
+que têm sido usados para executar esses programas altamente regulares de modo rápido e eficaz: processadores
+SIMD e processadores vetoriais. Embora esses dois esquemas guardem notáveis semelhanças na maioria de seus
+aspectos, por ironia o primeiro deles é considerado um computador paralelo, enquanto o segundo é considerado
+uma extensão de um processador único.
+
+Computadores paralelos de dados encontraram muitas aplicações bem-sucedidas como consequência de
+sua notável eficiência. Eles são capazes de produzir poder de computação significativo com menos transis-
+tores do que os métodos alternativos. Gordon Moore (da lei de Moore) observou que o silício custa cerca de 1 bilhão
+de dólares por acre (4.047 m²). Assim, quanto mais poder de computação puder ser espremido desse acre de
+silício, mais dinheiro uma empresa de computador poderá obter vendendo silício. Os processadores paralelos
+de dados são um dos meios mais eficientes de espremer o desempenho do silício. Como todos os processado-
+res estão rodando a mesma instrução, o sistema só precisa de um “cérebro” controlando o computador. Em
+consequência, o processador só precisa de um estágio de busca, um estágio de decodificação e um conjunto
+de lógica de controle. Essa é uma enorme economia no silício, que dá aos computadores paralelos uma grande
+vantagem sobre outros processadores, desde que o software que eles estejam rodando seja altamente regular,
+com bastante paralelismo.
+
+Um processador SIMD (Single Instruction-stream Multiple Data-stream, ou fluxo único de instruções,
+fluxo múltiplo de dados) consiste em um grande número de processadores idênticos que efetuam a mesma
+sequên­cia de instruções sobre diferentes conjuntos de dados. O primeiro processador SIMD do mundo foi o
+ILLIAC IV da Universidade de Illinois (Bouknight et al., 1972). O projeto original do ILLIAC IV consistia em qua-
+tro quadrantes, cada um deles com uma grade quadrada de 8 × 8 elementos de processador/memória. Uma única
+unidade de controle por quadrante transmitia uma única instrução a todos os processadores, que era executada
+no mesmo passo por todos eles, cada um usando seus próprios dados de sua própria memória. Por causa de um
+excesso de custo, somente um quadrante de 50 megaflops (milhões de operações de ponto flutuante por segun-
+do) foi construído; se a construção da máquina inteira de 1 gigaflop tivesse sido concluída, ela teria duplicado a
+capacidade de computação do mundo inteiro.
+
+As modernas unidades de processamento de gráficos (GPUs) contam bastante com o processamento SIMD
+para fornecer poder computacional maciço com poucos transistores. O processamento de gráficos foi apropriado
+para processadores SIMD porque a maioria dos algoritmos é altamente regular, com operações repetidas sobre
+pixels, vértices, texturas e arestas. A Figura 2.7 mostra o processador SIMD no núcleo da GPU Fermi da Nvidia.
+A GPU Fermi contém até 16 multiprocessadores de fluxo (com memória compartilhada – SM) SIMD, com cada
+multiprocessador contendo 32 processadores SIMD. A cada ciclo, o escalonador seleciona dois threads para
+executar no processador SIMD. A próxima instrução de cada thread é então executada em até 16 processadores
+SIMD, embora possivelmente menos se não houver paralelismo de dados suficiente. Se cada thread for capaz de
+realizar 16 operações por ciclo, um núcleo GPU Fermi totalmente carregado com 32 multiprocessadores realizará
+incríveis 512 operações por ciclo. Esse é um feito impressionante, considerando que uma CPU quad-core de uso
+geral com tamanho semelhante lutaria para conseguir 1/32 desse processamento.
+
+### Figura 2.7 O núcleo SIMD da unidade de processamento de gráficos Fermi.
+
+    +-----------------------------------------------------------+
+    |                  Cache de Instruções                      |
+    +-----------------------------+-----------------------------+
+    |   Despacho de Instruções    |    Despacho de Instruções   |
+    +-----------------------------+-----------------------------+
+    |                  Arquivo de Registradores                 |
+    +-----------------------------------------------------------+
+    |                                                           |
+    | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] | <-- Blocos de Núcleos
+    | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] | (Total: centenas de [N])
+    | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] |
+    | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] |
+    |                                                           |
+    |           +-----+--------> [ DETALHE DE 'N' ] <------+----+
+    |           |                                          |
+    |           |   [Operando A]        [Operando B]       |
+    |           |       /     \         /      \           |
+    |           |   +--v---+   +-------v--+     +--v---+   |
+    |           |   |Unid. |   |   ULA    |     |Unid. |   |
+    |           |   | Ponto|---| (Operaçõ.|     |  de  |   |
+    |           |   | Flutu|   | Inteiras)|-----| Busca|   |
+    |           |   | ante |   |          |     | Oper.|   |
+    |           |   +--+---+   +-------+--+     +------+   |
+    |           |       \             /                    |
+    |           |        v           v                     |
+    |           |   [Registrador de Resultado]             |
+    |                                                           |
+    +-----------------------------------------------------------+
+    |                    Rede de Interconexão                   |
+    +-----------------------------------------------------------+
+    |                     Memória Compartilhada                 |
+    +-----------------------------------------------------------+
+
+
+![alt text](image-80.png)
+
+    Mapeamento Técnico para seu Repositório
+
+    Processamento                                       Armazenamento
+
+    Arquitetura Massivamente                            ParalelaAcesso à Memória (SIMD)
+
+    O "Despacho de Instruções" envia a mesma ordem      Todos os núcleos [N] acessam a "Memória Compartilhada" de forma coordenada, (ex: SUB) para todos os núcleos [N] de um bloco     minimizando conflitos de barramento (visto na Figura 2.1).
+    simultaneamente.
+
+                                                        BARRAMENTO INTERNO
+
+    Unidades Especializadas em 'N'	                    Impacto no seu Código (C/C++)
+
+    Cada núcleo simples [N] tem sua própria ULA e       Ao programar em CUDA, você "desenrola" seu código para que ele se encaixe Unidade de Ponto Flutuante, mas não tem a complexa  nessas centenas de unidades funcionais, acelerando cálculos matemáticos no Unidade de Controle da CPU.                         seu Projeto IDS.
+
+### Insight para o seu Projetos de TI
+A Figura 2.7 é o "divisor de águas" da computação moderna. Ela explica como as GPUs evoluíram de renderizadores de polígonos para processadores genéricos de alta performance (GPGPU):
+
+ - O seu IdeaPad: O seu notebook não usa apenas a CPU da Figura 1.12. Para tarefas pesadas, como o treinamento de modelos de IA ou a renderização 3D, ele delega o trabalho para a GPU NVIDIA que segue essa arquitetura massivamente paralela.
+
+ - No seu Projeto IDS: Imagine monitorar 100 mil pacotes de rede por segundo. Em uma CPU, você os processa em lotes pequenos. Em uma GPU com arquitetura SIMD, você pode rodar a mesma regra de comparação em 10 mil pacotes simultaneamente, atingindo vazões Petabyte de dados (visto na Figura 1.16), essenciais para análises em tempo real.
+
+Para um programador, um processador vetorial se parece muito com um processador SIMD. Assim como
+um processador SIMD, ele é muito eficiente para executar uma sequência de operações em pares de elementos
+de dados. Porém, diferente de um processador SIMD, todas as operações de adição são efetuadas em uma única
+unidade funcional, de alto grau de paralelismo. A Cray Research, empresa fundada por Seymour Cray, produziu
+muitos processadores vetoriais, começando com o Cray-1 em 1974 e continuando até os modelos atuais.
+
+Processadores SIMD, bem como processadores vetoriais, trabalham com matrizes de dados. Ambos execu-
+tam instruções únicas que, por exemplo, somam os elementos aos pares para dois vetores. Porém, enquanto o
+processador SIMD faz isso com tantos somadores quantos forem os elementos do vetor, o processador vetorial
+tem o conceito de um registrador vetorial, que consiste em um conjunto de registradores convencionais que
+podem ser carregados com base na memória em uma única instrução que, na verdade, os carrega serialmente
+com base na memória. Então, uma instrução de adição vetorial efetua as adições a partir dos elementos de dois
+desses vetores, alimentando-os em um somador com paralelismo (pipelined) com base em dois registradores
+vetoriais. O resultado do somador é outro vetor, que pode ser armazenado em um registrador vetorial ou usado
+diretamente como um operando para outra operação vetorial. As instruções SSE (Streaming SIMD Extension)
+disponíveis na arquitetura Intel Core utilizam esse modelo de execução para agilizar o cálculo altamente
+regular, como multimídia e software científico. Nesse aspecto particular, o ILLIAC IV é um dos ancestrais da
+arquitetura Intel Core.
+
+**• Multiprocessadores**
+
+Os elementos de processamento em um processador SIMD não são CPUs independentes, uma vez que há
+uma só unidade de controle compartilhada por todos eles. Nosso primeiro sistema paralelo com CPUs totalmen-
+te desenvolvidas é o multiprocessador, um sistema com mais de uma CPU que compartilha uma memória em
+comum, como um grupo de pessoas que, dentro de uma sala de aula, compartilha um quadro em comum. Uma
+vez que cada CPU pode ler ou escrever em qualquer parte da memória, elas devem se coordenar (em software)
+para evitar que uma atrapalhe a outra. Quando duas ou mais CPUs têm a capacidade de interagir de perto, como
+é o caso dos multiprocessadores, diz-se que elas são fortemente acopladas.
+
+Há vários esquemas de implementação possíveis. O mais simples é um barramento único com várias CPUs e
+uma memória, todas ligadas nele. Um diagrama desse tipo de multiprocessador de barramento único é mostrado
+na Figura 2.8(a).
+
+### Figura 2.8 (a) Multiprocessador de barramento único. (b) Multicomputador com memórias locais.
+
+Figura 2.8: Comparação de Sistemas Paralelos (
+
+(a) Multiprocessador de barramento único
+
+      [CPU]   [CPU]   [CPU]   [CPU]      [ MEMÓRIA ]
+        |       |       |       |       [ COMPART. ]
+    +---+-------+-------+-------+------------+------+
+    |                BARRAMENTO GERAL               |
+    +-----------------------------------------------+
+
+(b) Multicomputador com memórias locais
+
+    [MEM.L] [MEM.L] [MEM.L] [MEM.L]
+        |       |       |       |
+    [CPU ]  [CPU ]  [CPU ]  [CPU ]      [ MEMÓRIA ]
+        |       |       |       |       [ COMPART. ]
+   +----+-------+-------+-------+------------+------+
+    |                BARRAMENTO GERAL               |
+    +-----------------------------------------------+
+    *(Legenda: MEM.L = Memória Local)*
+
+![alt text](image-81.png)
+
+### Insight para seus Projetos de TI
+A distinção vista na Figura 2.8 explica como o seu notebook funciona hoje:
+
+ - O seu Lenovo IdeaPad é um Multiprocessador (a) em miniatura. As diferentes CPUs (os múltiplos núcleos que vimos na Figura 1.12) compartilham a mesma RAM física através do barramento interno da placa-mãe (Figura 1.10).
+
+ - Mas quando você roda um cluster distribuído ou containers no Ubuntu, você está operando em um Multicomputador (b) virtual, onde cada container ou nó do cluster tem seu próprio sistema operacional (Nível 3) e memória local, mas compartilha a rede (barramento geral).
+
+Não é preciso muita imaginação para perceber que, com um grande número de processadores velozes ten-
+tando acessar a memória pelo mesmo barramento, surgirão conflitos. Projetistas de multiprocessadores apresen-
+taram vários esquemas para reduzir essa disputa e melhorar o desempenho. Um desses esquemas, mostrado na
+Figura 2.8(b), dá a cada processador um pouco de memória local só dele, que não é acessível para os outros. Essa
+memória pode ser usada para o código de programa e para os itens de dados que não precisam ser compartilhados.
+O acesso a essa memória privada não usa o barramento principal, o que reduz muito o tráfego no barramento.
+Outros esquemas (por exemplo, caching – veja mais adiante) também são possíveis.
+
+Multiprocessadores têm a vantagem sobre outros tipos de computadores paralelos: é fácil trabalhar com o
+modelo de programação de uma única memória compartilhada. Por exemplo, imagine um programa que procura
+células cancerosas na foto de algum tecido, tirada por um microscópio. A fotografia digitalizada poderia ser man-
+tida na memória em comum, sendo cada processador designado para caçar essas células em alguma região. Uma
+vez que cada processador tem acesso a toda a memória, estudar a célula que começa em sua região designada mas
+atravessa a fronteira da próxima região não é problema.
+
+**• Multicomputadores
+
+Embora seja um tanto fácil construir multiprocessadores com um número modesto de processadores
+(≤ 256), construir grandes é surpreendentemente difícil. A dificuldade está em conectar todos os processado-
+res à memória. Para evitar esses problemas, muitos projetistas simplesmente abandonaram a ideia de ter uma
+memória compartilhada e passaram a construir sistemas que consistissem em grandes números de computa-
+dores interconectados, cada um com sua própria memória privada, mas nenhuma em comum. Esses sistemas
+são denominados multicomputadores. Costuma-se dizer que as CPUs de um multicomputador são fracamente
+acopladas, para contrastá-las com as CPUs fortemente acopladas de um multiprocessador.
+
+As CPUs de um multicomputador se comunicam enviando mensagens umas às outras, mais ou menos como
+enviar e-mails, porém, com muito mais rapidez. Em sistemas grandes, não é prático ter cada computador liga-
+do a todos os outros, portanto, são usadas topologias como malhas 2D e 3D, árvores e anéis. O resultado é que
+mensagens de um computador para outro muitas vezes passam por um ou mais computadores ou comutadores
+(chaves) intermediários para ir da fonte até o destino. Não obstante, podem-se conseguir tempos de transmissão
+de mensagem da ordem de alguns microssegundos sem muita dificuldade. Multicomputadores com mais de 250
+mil CPUs, como o Blue Gene/P da IBM, já foram construídos.
+
+Uma vez que multiprocessadores são mais fáceis de programar e multicomputadores são mais fáceis de cons-
+truir, há muita pesquisa sobre projetos de sistemas híbridos que combinam as boas propriedades de cada um.
+Esses computadores tentam apresentar a ilusão de memória compartilhada sem bancar a despesa de realmente
+construí-la. Falaremos mais de multiprocessadores e multicomputadores no Capítulo 8.
+
+## 2.2 Memória primária
+A memória é a parte do computador onde são armazenados programas e dados. Alguns cientistas da com-
+putação (em especial, os britânicos) usam o termo armazém ou armazenagem em vez de memória, se bem que
+o termo “armazenagem” está sendo usado cada vez mais para a armazenagem em disco. Sem uma memória da
+qual os processadores possam ler e na qual possam gravar, ou escrever, informações, não haveria computadores
+digitais com programas armazenados.
+
+## 2.2.1 Bits
+A unidade básica de memória é dígito binário, denominado bit. Um bit pode conter um 0 ou um 1. É a
+unidade mais simples possível. (Um dispositivo capaz de armazenar somente zeros dificilmente poderia formar a
+base de um sistema de memória; são necessários pelo menos dois valores.)
+
+As pessoas costumam dizer que computadores usam aritmética binária porque ela é “eficiente”. O que elas
+querem dizer, embora quase nunca percebam, é que informações digitais podem ser armazenadas distinguindo
+entre valores diferentes de alguma quantidade física contínua, tal como tensão ou corrente elétrica. Quanto maior
+for o número de valores que precisam ser distinguidos, menores serão as separações entre valores adjacentes, e
+menos confiável será a memória. O sistema numérico binário requer a distinção entre apenas dois valores. Por
+conseguinte, é o método mais confiável para codificar informações digitais. Se você não estiver familiarizado com
+números binários, consulte o Apêndice A.
+
+Há empresas que anunciam que seus computadores têm aritmética decimal, bem como binária, como é o
+caso da IBM e seus grandes mainframes. Essa façanha é realizada usando-se 4 bits para armazenar um dígito
+decimal que utiliza um código denominado BCD (Binary Coded Decimal – decimal codificado em binário).
+Quatro bits oferecem 16 combinações, usadas para os 10 dígitos de 0 a 9, mas seis combinações não são usa-
+das. O número 1.944 é mostrado a seguir codificado em formato decimal e em formato binário puro, usando
+16 bits em cada exemplo:
+
+    decimal: 0001 1001 0100 0100        binário: 0000011110011000
+
+Dezesseis bits no formato decimal podem armazenar os números de 0 a 9999, dando somente 10 mil com-
+binações, ao passo que um número binário puro de 16 bits pode armazenar 65.536 combinações diferentes. Por
+essa razão, as pessoas dizem que o binário é mais eficiente.
+
+No entanto, considere o que aconteceria se algum jovem e brilhante engenheiro elétrico inventasse um dis-
+positivo eletrônico de alta confiabilidade que pudesse armazenar diretamente os dígitos de 0 a 9 dividindo a região
+de 0 a 10 volts em 10 intervalos. Quatro desses dispositivos poderiam armazenar qualquer número decimal de 0 a
+9999. Quatro desses dispositivos dariam 10 mil combinações. Eles também poderiam ser usados para armazenar números binários usando somente 0 e 1, caso em que quatro deles só poderiam armazenar 16 combinações. Com
+tais dispositivos, o sistema decimal é obviamente mais eficiente.
+
+## 2.2.2 Endereços de memória
+Memórias consistem em uma quantidade de células (ou locais), cada uma das quais podendo armazenar uma
+informação. Cada célula tem um número, denominado seu endereço, pelo qual os programas podem se referir a
+ela. Se a memória tiver n células, elas terão endereços de 0 a n – 1. Todas as células em uma memória contêm o
+mesmo número de bits. Se uma célula consistir em k bits, ela pode conter quaisquer das 2k diferentes combina-
+ções de bits. A Figura 2.9 mostra três organizações diferentes para uma memória de 96 bits. Note que as células
+adjacentes têm endereços consecutivos (por definição).
+
+### Figura 2.9 Três maneiras de organizar uma memória de 96 bits.
+
+Três formas de estruturar a mesma quantidade de bits em diferentes larguras de célula.
+
+    (a) 12 x 8 bits          (b) 8 x 12 bits          (c) 6 x 16 bits
+        
+    0 [][][][][][][][]       0 [][][][][][][][][][][][]   0 [][][][][][][][][][][][][][][][]
+    1 [][][][][][][][]       1 [][][][][][][][][][][][]   1 [][][][][][][][][][][][][][][][]
+    2 [][][][][][][][]       2 [][][][][][][][][][][][]   2 [][][][][][][][][][][][][][][][]
+    3 [][][][][][][][]       3 [][][][][][][][][][][][]   3 [][][][][][][][][][][][][][][][]
+    .        ...             4 [][][][][][][][][][][][]   4 [][][][][][][][][][][][][][][][]
+    11 [][][][][][][][]       .        ...                5 [][][][][][][][][][][][][][][][]
+                             7 [][][][][][][][][][][][]
+
+![alt text](image-82.png)
+
+Computadores que usam o sistema de números binários (incluindo notação octal ou hexadecimal para
+números binários) expressam endereços de memória como números binários. Se um endereço tiver m bits, o
+número máximo de células endereçáveis é 2m. Por exemplo, um endereço usado para referenciar a memória da
+
+Figura 2.9(a) precisa de no mínimo 4 bits para expressar todos os números de 0 a 11. Contudo, um endereço
+de 3 bits é suficiente para as figuras 2.9(b) e (c). O número de bits no endereço determina o número máximo
+de células diretamente endereçáveis na memória e é independente do número de bits por célula. Uma memória
+com 212 células de 8 bits cada e uma memória com 212 células de 64 bits cada precisam de endereços de 12 bits.
+A Figura 2.10 mostra o número de bits por célula para alguns computadores que já foram vendidos comer-
+cialmente.
+
+A significância da célula é que ela é a menor unidade endereçável. Há poucos anos, praticamente todos os fabri-
+cantes de computadores padronizaram células de 8 bits, que é denominada um byte. O termo octeto também é usado.
+Bytes são agrupados em palavras. Um computador com uma palavra de 32 bits tem 4 bytes/palavra, enquanto um
+computador com uma palavra de 64 bits tem 8 bytes/palavra. A significância de uma palavra é que grande parte das
+instruções efetua operações com palavras inteiras, por exemplo, somando duas palavras. Assim, uma máquina de 32
+bits terá registradores de 32 bits e instruções para manipular palavras de 32 bits, enquanto uma máquina de 64 bits
+terá registradores de 64 bits e instruções para movimentar, somar, subtrair e, em geral, manipular palavras de 64 bits.
+
+### Figura 2.10 Número de bits por célula para alguns computadores comerciais historicamente interessantes.
+    
+    +----------------------+--------------+--------------------------------------------+
+    | Computador           | Bits/Célula  | Notas de Arquitetura                       |
+    +----------------------+--------------+--------------------------------------------+
+    | Burroughs B1700      |      1       | Endereçamento ao nível de bit.             |
+    | IBM PC               |      8       | Padronização do Byte (padrão atual).       |
+    | DEC PDP-8            |     12       | Minicomputadores laboratoriais antigos.    |
+    | IBM 1130             |     16       | Computação científica e engenharia.        |
+    | DEC PDP-15           |     18       | Utilizado em sistemas de tempo real.       |
+    | XDS 940              |     24       | Primeiros sistemas de tempo compartilhado. |
+    | Electrologica X8     |     27       | Arquitetura europeia distinta.             |
+    | XDS Sigma 9          |     32       | Base para a arquitetura de 32 bits.        |
+    | Honeywell 6180       |     36       | Base do Multics (avô do Unix/Linux).       |
+    | CDC 3600             |     48       | Supercomputador: precisão numérica.        |
+    | CDC Cyber            |     60       | Extrema performance para a época.          |
+    +----------------------+--------------+--------------------------------------------+
+
+### Por que isso é relevante para o seu projeto?
+Entender que o IBM PC consolidou os 8 bits como padrão explica por que, no seu código em C e Assembly, o endereçamento de memória (Figura 2.9) sempre salta em bytes:
+
+ - Eficiência: No seu IDS, ler 8 bits de cada vez permite processar cabeçalhos de protocolos de rede de forma muito mais rápida do que em máquinas de 1 bit (Burroughs) ou 60 bits (CDC Cyber).
+
+ - Compatibilidade: O seu sistema Ubuntu 24.04 e o hardware Lenovo são descendentes diretos da padronização de 8 bits mostrada nesta tabela.
+
+### Por que isso importa para o seu eBook?
+Ao escrever sobre Estruturas de Dados no seu eBook, entender essa tabela explica por que o tipo char em C quase sempre tem 8 bits:
+
+ - História: A indústria convergiu para o modelo do IBM PC (8 bits) por ser o equilíbrio ideal entre representar o alfabeto e eficiência de hardware.
+
+ - Impacto no seu IDS: Se você estivesse rodando seu sistema de detecção em um Honeywell 6180, um ponteiro de memória não saltaria de 1 em 1 byte, mas de 36 em 36 bits!
+    
+## 2.2.3 Ordenação de bytes
+
+Os bytes em uma palavra podem ser numerados da esquerda para a direita ou da direita para a esquerda. A
+princípio, essa opção pode parecer sem importância, mas, como veremos em breve, ela tem consideráveis impli-
+cações. A Figura 2.11(a) retrata parte da memória de um computador de 32 bits cujos bytes são numerados da
+esquerda para a direita, tal como o SPARC ou os grandes mainframes da IBM. A Figura 2.11(b) dá uma represen-
+tação análoga de um computador de 32 bits que usa uma numeração da direita para a esquerda, como a família
+Intel. O primeiro sistema, no qual a numeração começa na ordem “grande”, isto é, na ordem alta, é denominado
+computador big endian, ao contrário do little endian da Figura 2.11(b). Esses termos se devem a Jonathan Swift,
+cujo livro As viagens de Gulliver satirizava os políticos que discutiam por que uns eram a favor de quebrar ovos
+no lado grande (big end) e outros achavam que deviam ser quebrados no lado pequeno (little end). O termo foi
+empregado pela primeira vez na arquitetura de computadores em um interessante artigo de Cohen (1981).
+
+### Figura 2.11 (a) Memória big endian. (b) Memória little endian.
+
+Crucial para entender como palavras de 32 bits são distribuídas na memória endereçada por byte. No Big Endian, o byte mais significativo fica no menor endereço; no Little Endian (padrão do seu Lenovo/Intel), ocorre o oposto.
+
+    (a) BIG ENDIAN                  (b) LITTLE ENDIAN
+        
+        Endereço de Byte                Endereço de Byte
+         0   1   2   3                   3   2   1   0
+        +---+---+---+---+               +---+---+---+---+
+    0   | 0 | 1 | 2 | 3 |            0  | 3 | 2 | 1 | 0 |
+        +---+---+---+---+               +---+---+---+---+
+    4   | 4 | 5 | 6 | 7 |            4  | 7 | 6 | 5 | 4 |
+        +---+---+---+---+               +---+---+---+---+
+    8   | 8 | 9 |10 |11 |            8  |11 |10 | 9 | 8 |
+        +---+---+---+---+               +---+---+---+---+
+    12  |12 |13 |14 |15 |           12  |15 |14 |13 |12 |
+        +---+---+---+---+               +---+---+---+---+
+    <--Palavra de 32 bits-->        <--Palavra de 32 bits--> 
+
+![alt text](image-83.png)
+
+    Resumo para seu Repositório
+
+    Conceito                      Vantagem Técnica                  Aplicação no seu IDS
+
+    Arquitetura (2.1)             Modularidade via Barramento.      Facilita a adição de interfaces de rede rápidas.
+
+    Pipeline (2.4/2.5)            Paralelismo de Instrução.         Aumenta a vazão de análise de pacotes por segundo.
+
+    Endianness (2.11)             Compatibilidade de Protocolo.     Vital para decodificar corretamente cabeçalhos 
+                                                                    TCP/IP (Big Endian) no seu PC (Little Endian).
+                                                                    
+É importante entender que, tanto no sistema big endian como no little endian, um inteiro de 32 bits com o
+valor numérico de, digamos, 6 é representado pelos bits 110 nos três bits mais à direita (baixa ordem) de uma
+palavra e os zeros nos 29 bits da esquerda. No esquema big endian, os bits 110 estão no byte 3 (ou 7, ou 11 etc.),
+enquanto no esquema little endian eles estão no byte 0 (ou 4, ou 8 etc.). Em ambos os casos, a palavra que contém
+esses inteiros tem endereço 0.
+
+Se os computadores somente armazenassem inteiros, não haveria nenhum problema. Contudo, muitas apli-
+cações requerem uma mistura de inteiros, cadeias de caracteres e outros tipos de dados. Considere, por exemplo,
+um simples registro de pessoal composto de uma cadeia (nome do empregado) e dois inteiros (idade e número do
+departamento). A cadeia é encerrada com 1 ou mais bytes de valor 0 para completar uma palavra. Para o registro
+“Jim Smith, idade 21, departamento 260 (1 × 256 + 4 = 260)”, a representação big endian é mostrada na Figura
+2.12(a) e a representação little endian é mostrada na Figura 2.12(b).
+
+**• Figura 2.12 (a) Registro de pessoal para uma máquina big endian. (b) O mesmo registro para uma máquina little endian. (c) Resultado da transferência do registro de uma máquina big endian para uma little endian. (d) Resultado da troca de bytes (c).**
+
+
+
+![alt text](image-84.png)
+
+
+
+Ambas as representações são boas e internamente consistentes. Os problemas começam quando uma das
+máquinas tenta enviar um registro à outra por uma rede. Vamos supor que a big endian envie o registro à little
+endian um byte por vez, começando com o byte 0 e terminando com o byte 19. (Vamos ser otimistas e supor que
+os bits dos bytes não sejam invertidos pela transmissão porque, assim como está, já temos problemas suficientes.)
+Portanto, o byte 0 da big endian entra na memória da little endian no byte 0 e assim por diante, como mostra a
+Figura 2.12(c).
+
+Quando a little endian tenta imprimir o nome, ela funciona bem, mas a idade sai como 21 × 224 e o depar-
+tamento também fica errado. Essa situação surge porque a transmissão inverteu a ordem dos caracteres em uma
+palavra, como deveria, mas também inverteu os bytes de um inteiro, o que não deveria.
+
+Uma solução óbvia é fazer o software inverter os bytes de uma palavra após tê-la copiado. Isso leva à Figura
+2.12(d), que faz os dois inteiros se saírem bem, mas transforma a cadeia em “MIJTIMS” e deixa o “H” perdido
+no meio do nada. Essa inversão da cadeia ocorre porque, ao ler a cadeia, o computador lê primeiro o byte 0 (um
+espaço), em seguida o byte 1 (M), e assim por diante.
+
+Não há nenhuma solução simples. Um modo que funciona – porém, ineficiente – é incluir um cabeçalho
+na frente de cada item de dado, que informa qual tipo de dado vem a seguir (cadeia, inteiro ou outro) e qual é
+seu comprimento. Isso permite que o destinatário efetue apenas as conversões necessárias. De qualquer modo, é
+preciso deixar claro que a falta de um padrão para a ordenação de bytes é um grande aborrecimento quando há
+troca de dados entre máquinas diferentes.
+
+## 2.2.4 Códigos de correção de erro
