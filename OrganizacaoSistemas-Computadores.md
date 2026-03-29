@@ -1671,7 +1671,26 @@ geometria de uma trilha de disco é mostrada na Figura 2.19.
 
 ### Figura 2.19 Porção de uma trilha de disco. Dois setores são ilustrados.
 
+Figura 2.19: Anatomia de uma Trilha de Disco
+Mesmo em sistemas modernos, entender a geometria de um disco magnético é fundamental para otimizar sistemas de arquivos e bancos de dados.
 
+
+    Direção da Rotação
+                <-----------------
+         /-------------------------------\
+        /   SETOR 1      GAP      SETOR 2 \
+        |  +---------+   +---+   +---------+ |
+        |  |Preâmbulo|   |   |   |Preâmbulo| |
+        |  |---------|   | I |   |---------| |
+        |  |  Dados  |   | N |   |  Dados  | | <-- Braço do Disco
+        |  | (4096)  |   | T |   | (4096)  | |      posicionado
+        |  |---------|   | E |   |---------| |      na trilha
+        |  |   ECC   |   | R |   |   ECC   | |
+        |  +---------+   +---+   +---------+ |
+          \------------------------------/---/
+                        |            |
+                    Lacuna de      Largura da
+                Intersecção      Trilha
 
 ![alt text](image-90.png)
 
@@ -1707,8 +1726,845 @@ ridículo 30 anos depois.
 
 A maioria dos discos é composta de vários pratos empilhados na vertical, como ilustrado na Figura 2.20.
 Cada superfície tem seu próprio braço e cabeçote. Os braços são agrupados de modo que todos se movimentem
-para diferentes posições radiais ao mesmo tempo. O conjunto de trilhas em uma dada posição radial é denomi-
+para diferentes posições radiais ao mesmo tempo. O conjunto de trilhas em uma dada posição radial é denominado cilindro. Os discos usados hoje em PCs costumam ter de 1 a 12 pratos por drive, o que resulta em 2 a 24
+superfícies de gravação. Discos de última geração podem armazenar 1 TB em um único prato, e esse limite cer-
+tamente crescerá com o tempo.
 
 ### Figura 2.20 - Disco com quatro pratos.
 
+Diferente da Figura 2.19, que foca em uma trilha, aqui vemos o empilhamento físico que permite maior densidade de armazenamento.
+
+    Eixo Central
+                     |
+            /--------|--------\  <-- Superfície 7 (Topo)
+           |=========|=========| <-- Superfície 6
+            \--------|--------/        |
+                     |                 |---- Cabeçote de Leitura/Escrita
+            /--------|--------\        |      (1 por superfície)
+           |=========|=========| <-- Superfície 5
+            \--------|--------/        |
+                     |                 |---- Braço do Disco
+            /--------|--------\        |     (Move-se p/ dentro/fora)
+           |=========|=========| <-- Superfície 4
+            \--------|--------/        |
+                     |                 |
+            /--------|--------\        |
+           |=========|=========| <-- Superfície 0 (Base)
+            \--------|--------/
+
 ![alt text](image-89.png)
+
+O desempenho do disco depende de vários fatores. Para ler ou escrever um setor, primeiro o braço deve se
+deslocar até a posição radial correta. Essa ação é denominada busca (seek). Tempos médios de busca (entre trilhas
+aleatórias) estão na faixa de 5 a 10 ms, embora buscas entre trilhas consecutivas agora já estejam abaixo de 1 ms.
+Logo que o cabeçote estiver posicionado radialmente, há um atraso, denominado latência rotacional, até que o
+setor desejado gire sob o cabeçote. A maioria dos discos gira a 5.400 RPM, 7.200 RPM ou 10.800 RPM, portanto, o
+atraso médio (meia rotação) é de 3 a 6 ms. O tempo de transferência depende da densidade linear e da velocidade
+de rotação. Com taxas de transferência típicas de 150 MB/s, um setor de 512 bytes demora cerca de 3,5 µs. Por
+conseguinte, o tempo de busca e a latência rotacional dominam o tempo de transferência. Ler setores aleatórios
+por todo o disco é claramente um modo ineficiente de operar.
+
+Vale a pena mencionar que, por conta de preâmbulos, ECCs, lacunas intersetores, tempos de busca e latên-
+cias rotacionais, há uma grande diferença entre taxa de rajada (burst rate) máxima de um drive e sua taxa máxima
+sustentada. A taxa máxima de rajada é a taxa de dados, uma vez que o cabeçote está sobre o primeiro bit de dados.
+O computador deve ser capaz de manipular os dados que estão chegando com essa mesma rapidez. Contudo, o
+drive só pode manter essa taxa para um único setor. Para algumas aplicações, como multimídia, o que importa
+é a taxa sustentada média durante um período de segundos, que também tem de levar em conta as necessárias
+buscas e atrasos rotacionais.
+
+Um pouco de raciocínio e a utilização daquela velha fórmula de matemática do colegial para a circunferên-
+cia de um círculo, c = 2πr, revelarão que a distância linear ao redor das trilhas mais externas é maior do que a
+das trilhas mais internas. Uma vez que todos os discos magnéticos giram com velocidade angular constante, não
+importando onde estão os cabeçotes, essa observação cria um problema. Nos drives antigos, os fabricantes usavam
+a máxima densidade linear possível na trilha mais interna e densidades lineares de bits sucessivamente menores
+nas trilhas mais externas. Se um disco tivesse 18 setores por trilha, por exemplo, cada uma ocupava 20 graus de
+arco, não importando em qual cilindro se encontrava.
+
+Hoje, usa-se uma estratégia diferente. Os cilindros são divididos em zonas (normalmente, 10 a 30 por drive)
+e o número de setores por trilha aumenta de zona em zona partindo da trilha mais interna para a mais externa.
+Essa mudança dificulta o rastreamento de informações mas aumenta a capacidade do drive, que é considerada
+mais importante. Todos os setores são do mesmo tamanho. A Figura 2.21 mostra um disco com cinco zonas.
+
+### Figura 2.21 - Disco com cinco zonas. Cada zona tem muitas trilhas.
+
+Mostra como os discos modernos dividem a superfície em zonas concêntricas para aproveitar melhor o espaço físico, colocando mais setores nas trilhas externas.
+
+                 ______
+              /          \
+             /     /--\   \
+             |    |    |   |  <-- Zonas Externas (Mais Setores)
+             |    |    |   |  <-- Zonas Internas (Menos Setores)
+             \     \--/   /
+              \__________/
+
+![alt text](image-91.png)
+
+Associado a cada drive há um controlador de disco, um chip que controla o drive. Alguns controladores
+contêm uma CPU completa. Entre as tarefas do controlador estão: aceitar comandos do software, como READ,
+WRITE e FORMAT (escrevendo todos os preâmbulos), controlar o movimento do braço, detectar e corrigir erros
+e converter bytes de 8 bits lidos na memória em uma corrente serial de bits e vice-versa. Alguns controladores
+também manipulam o buffer de múltiplos setores, fazendo cache de setores lidos para potencial uso futuro e rema-
+peando setores ruins. Essa última função é causada pela existência de setores que têm um ponto ruim, ou seja,
+permanentemente magnetizado. Quando descobre um setor ruim, o controlador o substitui por um dos setores
+sobressalentes reservados para esse fim dentro de cada cilindro ou zona.
+
+## 2.3.3 Discos IDE
+Os discos dos modernos computadores pessoais evoluíram daquele usado no IBM PC XT, que era um disco
+Seagate de 10 MB controlado por um controlador de disco Xebec em um cartão de encaixe (plug-in). O disco
+Seagate tinha 4 cabeçotes, 306 cilindros e 17 setores por trilha. O controlador conseguia manipular dois drives. O
+sistema operacional lia e escrevia em um disco colocando parâmetros em registradores da CPU e então chamando
+o BIOS (Basic Input Output System – sistema básico de entrada e saída) localizado na memória somente de
+leitura do PC. O BIOS emitia as instruções de máquina para carregar os registradores do controlador de disco que
+iniciava as transferências.
+
+A tecnologia evoluiu rapidamente e passou do controlador em uma placa separada para o controlador inte-
+grado com os drives, começando com drives IDE (Integrated Drive Electronics – eletrônica integrada ao drive)
+em meados da década de 1980. Contudo, as convenções de chamada do BIOS não foram alteradas por causa da
+compatibilidade. Essas convenções de chamada endereçavam setores dando seus números de cabeçote, cilindro e
+setor, sendo que a numeração de cabeçotes e cilindros começava em 0, e de setores, em 1. Essa escolha provavel-
+mente se deveu a um erro da parte do programador original do BIOS, que escreveu sua obra-prima em assembler
+8088. Com 4 bits para o cabeçote, 6 bits para o setor e 10 bits para o cilindro, o drive máximo podia ter 16 cabe-
+çotes, 63 setores e 1.024 cilindros, para um total de 1.032.192 setores. Esse drive máximo tinha uma capacidade
+de 504 MB, o que devia parecer uma infinidade naquela época, porém, agora, decerto não. (Hoje você criticaria
+uma nova máquina que não pudesse manipular drives maiores do que 1.000 TB?)
+
+Infelizmente, não passou muito tempo e apareceram drives acima de 504 MB, mas com a geometria errada
+(por exemplo, 4 cabeçotes, 32 setores e 2.000 cilindros totalizam 256.000 setores). O sistema operacional não
+conseguia endereçá-los de modo algum, por causa das convenções de chamada do BIOS há muito cristalizadas. O
+resultado é que os controladores de disco começaram a mentir, fingindo que a geometria estava dentro dos limites
+do BIOS embora, na verdade, estivesse remapeando a geometria virtual para a geometria real. Embora essa técnica
+funcionasse, causava grandes estragos nos sistemas operacionais que posicionavam dados cuidadosamente para
+minimizar tempos de busca.
+
+Com o tempo, os drives IDE evoluíram para drives EIDE (Extended IDE – IDE estendido), que também
+suportavam um segundo esquema de endereçamento denominado LBA (Logical Block Addressing – endereça-
+mento de blocos lógicos), que numera os setores começando em 0 até um máximo de 228 – 1. Esse esquema
+requer que o controlador converta endereços LBA para endereços de cabeçote, setor e cilindro, mas ultrapassa
+o limite de 504 MB. Infelizmente, ele criava um novo gargalo a 228 × 29 bytes (128 GB). Em 1994, quando foi
+adotado o padrão EIDE, ninguém poderia imaginar discos de 128 GB. Comitês de padronização, assim como os
+políticos, têm tendência de empurrar problemas para que o próximo comitê os resolva.
+
+Drives e controladores EIDE também tinham outras melhorias. Por exemplo, controladores EIDE podiam
+ter dois canais, cada um com um drive primário e um secundário. Esse arranjo permitia um máximo de quatro
+drives por controlador. Drives de CD-ROM e DVD também eram suportados, e a taxa de transferência aumentou
+de 4 MB/s para 16,67 MB/s.
+
+Enquanto a tecnologia de disco continuava a melhorar, o padrão EIDE continuava a evoluir, mas, por alguma
+razão, o sucessor do EIDE foi denominado ATA-3 (AT Attachment), uma referência ao IBM PC/AT (onde AT se
+referia à então “tecnologia avançada” – Advanced Technology – de uma CPU de 16 bits executando em 8 MHz).
+
+Na edição seguinte, o padrão recebeu o nome de ATAPI-4 (ATA Packet Interface – interface de pacotes ATA) e
+a velocidade aumentou para 33 MB/s. Com o ATAPI-5, ela alcançou 66 MB/s.
+
+Nessa época, o limite de 128 GB imposto pelos endereços LBA de 28 bits estava ficando cada vez mais
+ameaçador, portanto, o ATAPI-6 alterou o tamanho do LBA para 48 bits. O novo padrão entrará em dificuldade
+quando os discos chegarem a 248 × 29 bytes (128 PB). Com um aumento de capacidade de 50% ao ano, o limite
+de 48 bits deverá durar até mais ou menos 2035. Para saber como o problema foi resolvido, favor consultar a
+décima primeira edição deste livro. A melhor aposta é que o tamanho do LBA alcance 64 bits. O padrão ATAPI-6
+também aumentou a taxa de transferência para 100 MB/s e atacou a questão do ruído do disco pela primeira vez.
+
+O padrão ATAPI-7 é uma ruptura radical com o passado. Em vez de aumentar o tamanho do conector do
+drive (para aumentar a taxa de dados), esse padrão usa o que é chamado ATA serial para transferir 1 bit por vez
+por um conector de 7 pinos a velocidades que começam em 150 MB/s e que, com o tempo, espera-se que alcancem
+1,5 GB/s. Substituir o atual cabo plano de 80 fios por um cabo redondo com apenas alguns milímetros a mais de
+espessura melhora o fluxo de ar dentro do computador. Além disso, o ATA serial usa 0,5 volt para sinalização
+(em comparação com os 5 volts dos drives ATAPI-6), o que reduz o consumo de energia. É provável que, dentro
+de alguns anos, todos os computadores usarão ATA serial. A questão do consumo de energia pelos discos é cada
+vez mais importante, tanto na extremidade mais alta do mercado, onde centrais de dados têm vastas coleções de
+discos, como na mais baixa, onde os notebooks são limitados em questão de energia (Gurumurthi et al., 2003).
+
+## 2.3.4 Discos SCSI
+Discos SCSI não são diferentes de discos IDE em relação ao modo como seus cilindros, trilhas e setores são
+organizados, mas têm uma interface diferente e taxas de transferência muito mais elevadas. A história dos SCSI
+remonta a Howard Shugart, o inventor do disco flexível, cuja empresa lançou o disco SASI (Shugart Associates
+System Interface – interface de sistema da Shugart Associates) em 1979. Após algumas modificações e muita dis-
+cussão, a ANSI o padronizou em 1986 e mudou o nome para SCSI (Small Computer System Interface – interface
+para sistemas computacionais pequenos). A pronúncia de SCSI em inglês é “scâzi”, de scuzzy. Desde então,
+foram padronizadas versões cada vez mais rápidas sob os nomes de Fast SCSI (10 MHz), Ultra SCSI (20 MHz),
+Ultra2 SCSI (40 MHz), Ultra3 SCSI (80 MHz) e Ultra4 SCSI (160 MHz). Cada uma dessas versões também tem
+uma versão larga (16 bits). As principais combinações são mostradas na Figura 2.22.
+
+### Figura 2.22 - Alguns dos possíveis parâmetros SCSI.
+
+    PADRÃO SCSI         BITS     FREQ. (MHz)    TAXA (MB/s)
+    -----------        ------   -------------   -----------
+    SCSI-1              [ 8]  x  (  5 MHz )  =      5
+    Fast SCSI           [ 8]  x  ( 10 MHz )  =     10
+    Wide Fast SCSI      [16]  x  ( 10 MHz )  =     20 <--- Dobro de bits
+    Ultra SCSI          [ 8]  x  ( 20 MHz )  =     20
+    Wide Ultra SCSI     [16]  x  ( 20 MHz )  =     40
+    Ultra2 SCSI         [ 8]  x  ( 40 MHz )  =     40
+    Wide Ultra2 SCSI    [16]  x  ( 40 MHz )  =     80
+    Wide Ultra3 SCSI    [16]  x  ( 80 MHz )  =    160
+    Wide Ultra4 SCSI    [16]  x  (160 MHz )  =    320
+    Wide Ultra5 SCSI    [16]  x  (320 MHz )  =    640 <--- Limite Paralelo
+
+### Insight para o eBook: "A Corrida pela Largura de Banda"
+Ao incluir esta tabela, você pode destacar um conceito importante para os leitores do seu eBook:
+
+ - Paralelismo de Barramento: O termo "Wide" indica que estamos dobrando a "estrada" (de 8 para 16 bits), o que permite dobrar a  - velocidade mesmo mantendo o mesmo "limite de velocidade" (MHz).
+
+Limites Físicos: Note que a evolução do SCSI parou no Ultra5 devido a problemas de interferência eletromagnética em barramentos paralelos de alta frequência, o que abriu caminho para as interfaces seriais modernas como o SATA e o SAS.
+
+Como têm altas taxas de transferência, os discos SCSI são o disco padrão de grande parte das estações de
+trabalho e servidores, em especial aqueles que trabalham na configuração RAID (ver adiante).
+
+O SCSI é mais do que apenas uma interface de disco rígido. É um barramento ao qual podem ser conectados
+um controlador SCSI e até sete dispositivos. Entre eles, podem estar um ou mais discos rígidos SCSI, CD-ROMs,
+gravadores de CD, scanners, unidades de fita e outros periféricos SCSI. Cada dispositivo SCSI tem um único ID,
+de 0 a 7 (15 para o SCSI largo – wide SCSI). Cada dispositivo tem dois conectores: um para entrada e um para
+saída. Cabos conectam a saída de um dispositivo à entrada do seguinte, em série, como se fosse um cordão de
+lâmpadas baratas de árvore de Natal. O último dispositivo do cordão deve ser terminado para evitar que reflexões
+das extremidades do barramento SCSI interfiram com outros dados no barramento. Em geral, o controlador está
+em um cartão de encaixe (plug-in) no início da cadeia de cabos, embora essa configuração não seja uma exigência
+estrita do padrão.
+
+O cabo mais comum para SCSI de 8 bits tem 50 fios, 25 dos quais são terras que fazem par com os outros
+25 fios para dar excelente imunidade contra ruído, necessária para operação em alta velocidade. Dos 25 fios, 8
+são para dados, 1 é para paridade, 9 são para controle e os restantes são para energia elétrica ou reservados para
+utilização futura. Os dispositivos de 16 bits (e 32 bits) precisam de um segundo cabo para os sinais adicionais.
+Os cabos podem ter muitos metros de comprimento, o que permite drives externos, scanners etc.
+
+Controladores e periféricos SCSI podem funcionar como iniciadores ou como alvos. Em geral, o controlador,
+agindo como iniciador, emite comandos para discos e outros periféricos que agem como alvos. Esses comandos
+são blocos de até 16 bytes, que dizem ao alvo o que ele tem de fazer. Comandos e respostas ocorrem em fases,
+usando vários sinais de controle para delinear as fases e arbitrar o acesso ao barramento quando vários dispositi-
+vos tentam usá-lo ao mesmo tempo. Essa arbitragem é importante porque o SCSI permite que todos os disposi-
+tivos funcionem simultaneamente, o que de modo potencial resulta em grande aumento do desempenho em um
+ambiente em que há múltiplos processos ativos ao mesmo tempo. IDE e EIDE permitem apenas um dispositivo
+ativo por vez.
+
+## 2.3.5 RAID
+O desempenho da CPU vem tendo aumento exponencial na última década e dobra a cada 18 meses mais ou
+menos. O mesmo não acontece com o desempenho do disco. Na década de 1970, os tempos médios de busca em
+discos de minicomputadores eram de 50 a 100 ms. Agora, são de 10 ms. Na maioria das indústrias técnicas (por
+exemplo, automóveis ou aviação), um fator de 5 a 10 de melhoria de desempenho em duas décadas seria uma
+grande notícia, mas na indústria de computadores isso é constrangedor. Assim, a lacuna entre o desempenho da
+CPU e o do disco ficou cada vez maior com o passar do tempo.
+
+Como vimos, muitas vezes é usado processamento paralelo para acelerar o desempenho da CPU. Ao longo
+dos anos, ocorreu a várias pessoas que a E/S paralela também poderia ser uma boa ideia. Em seu artigo de
+1988, Patterson et al. sugeriram seis organizações específicas de disco que poderiam ser usadas para melhorar o
+desempenho, a confiabilidade do disco, ou ambos (Patterson et al., 1988). Essas ideias logo foram adotadas pela
+indústria e deram origem a uma nova classe de dispositivos de E/S, denominados RAID. Patterson et al. definiram
+RAID como Redundant Array of Inexpensive Disks (arranjo redundante de discos baratos), mas a indústria
+redefiniu o I como “independente” em vez de barato (inexpensive) – talvez para que pudessem usar discos caros?
+Já que também era preciso ter um vilão (como no caso RISC versus CISC, também devido a Patterson), nesse caso
+o bandido era o SLED (Single Large Expensive Disk – disco único grande e caro).
+
+A ideia fundamental de um RAID é instalar uma caixa cheia de discos próxima ao computador, em geral um
+grande servidor, substituir a placa do controlador de disco por um controlador RAID, copiar os dados para o RAID
+e então continuar a execução normal. Em outras palavras, um RAID deveria parecer um SLED para o sistema ope-
+racional, mas ter melhor desempenho e melhor confiabilidade. Uma vez que discos SCSI têm bom desempenho, baixo preço e a capacidade de ter até 7 drives em um único controlador (15 para o wide SCSI), é natural que a
+maioria dos RAIDs consista em um controlador RAID SCSI mais uma caixa de discos SCSI que parecem para o
+sistema operacional como um único disco grande. Portanto, não é preciso alterar software para usar o RAID, um
+ótimo argumento de venda para muitos administradores de sistemas.
+
+Além de parecerem um disco único para o software, há uma propriedade comum a todos os RAIDs,
+que é a distribuição dos dados pelos drives para permitir operação paralela. Patterson et al. definiram vários
+esquemas diferentes para fazer isso e, agora, eles são conhecidos como RAID nível 0 até RAID nível 5. Além
+disso, há alguns outros níveis menos importantes que não discutiremos. O termo “nível” é, de certa manei-
+ra, uma denominação imprópria, uma vez que não há nenhuma hierarquia envolvida; há simplesmente seis
+diferentes organizações possíveis, cada qual com uma mistura diferente de características de confiabilidade
+e desempenho.
+
+O RAID nível 0 é ilustrado na Figura 2.23(a). Consiste em ver o disco virtual simulado pelo RAID como
+se fosse dividido em tiras de k setores cada: os setores 0 a k – 1 são a tira 0, os setores k a 2k – 1 são a tira 1 e
+assim por diante. Para k = 1, cada tira é um setor; para k = 2, uma tira são dois setores etc. A organização RAID
+nível 0 escreve tiras consecutivas nos drives por alternância circular, como demonstrado na Figura 2.23(a) para
+um RAID com quatro drives de disco. Essa distribuição de dados por múltiplos drives é denominada striping
+(ou segmentação). Por exemplo, se o software emitir um comando para ler um bloco de dados que consiste
+em quatro tiras consecutivas e começa na borda da tira, o controlador RAID o subdividirá em quatro comandos
+separados, um para cada disco, e fará com que eles funcionem em paralelo. Assim, temos E/S paralela sem que
+o software saiba disso.
+
+O RAID nível 0 funciona melhor com requisições grandes; quanto maiores, melhor. Se uma requisição for
+maior do que o número de drives vezes o tamanho da tira, alguns drives receberão múltiplas requisições, de modo
+que, quando terminam a primeira, iniciam a segunda. Cabe ao controlador dividir a requisição e alimentar os
+comandos adequados aos discos adequados na sequência certa e então agrupar os resultados na memória corre-
+tamente. O desempenho é excelente e a execução é direta.
+
+O RAID nível 0 funciona pior com sistemas operacionais que costumam requisitar dados a um setor por vez.
+Os resultados serão corretos, mas não há paralelismo e, por conseguinte, nenhum ganho de desempenho. Outra
+desvantagem dessa organização é que a confiabilidade é potencialmente pior do que ter um SLED. Se um RAID
+consistir em quatro discos, cada um com um tempo médio de falha de 20 mil horas, mais ou menos uma vez
+a cada 5 mil horas um drive falhará e haverá perda total de dados. Um SLED com um tempo médio de falha de
+20 mil horas seria quatro vezes mais confiável. Como não há nenhuma redundância presente nesse projeto, na
+realidade ele não é um RAID verdadeiro.
+
+A próxima opção, RAID nível 1, mostrada na Figura 2.23(b), é um RAID verdadeiro. Ele duplica todos os
+discos, portanto, há quatro discos primários e quatro de backup. Para uma escrita, cada tira é escrita duas vezes.
+Para uma leitura, qualquer das duas cópias pode ser usada, distribuindo a carga por mais drives. Por conseguinte,
+o desempenho da escrita não é melhor do que o de um único drive, mas o de leitura pode ser duas vezes melhor.
+A tolerância a falhas é excelente: se um drive falhar, basta usar a outra cópia em seu lugar. A recuperação consiste
+na simples instalação de um novo drive e em copiar todo o drive de backup para ele.
+
+Ao contrário dos níveis 0 e 1, que trabalham com tiras de setores, o RAID nível 2 trabalha por palavra, pos-
+sivelmente até por byte. Imagine dividir cada byte do disco virtual único em um par de nibbles de 4 bits e então
+acrescentar um código de Hamming a cada um para formar uma palavra de 7 bits, dos quais os bits 1, 2 e 4 fos-
+sem de paridade. Imagine ainda que a posição do braço e a posição rotacional dos sete drives da Figura 2.23(c)
+fossem sincronizadas. Então, seria possível escrever a palavra de 7 bits codificada por Hamming nos sete drives,
+um bit por drive.
+
+### Figura 2.23 - RAIDs níveis 0 a 5. Os drives de backup e paridade estão sombreados.
+
+A Figura 2.23 é essencial. Ela consolida os conceitos de redundância e integridade que discutimos (como o Código de Hamming e Paridade) aplicando-os ao armazenamento em massa através dos níveis de RAID.a Figura 2.23 é essencial. Ela consolida os conceitos de redundância e integridade que discutimos (como o Código de Hamming e Paridade) aplicando-os ao armazenamento em massa através dos níveis de RAID.
+
+    (a) RAID 0 (Striping)        (b) RAID 1 (Mirroring)
+        Sem Paridade                 Cópia Idêntica
+        [D0][D1][D2][D3]             [D0][D1][D2][D3]
+        [D4][D5][D6][D7]             [D0][D1][D2][D3] < (Backup)
+
+    (c) RAID 2 (Hamming)         (d) RAID 3 (Paridade Bit)
+        Erro de Bit                  Disco de Paridade Dedicado
+        [B1][B2][B3][ P ]            [B1][B2][B3][B4] [Paridade]
+        [B4][B5][B6][ P ]             ^   ^   ^   ^      ^
+        (Usa Hamming)               +---+---+---+------+
+
+    (e) RAID 4 (Paridade Bloco)  (f) RAID 5 (Paridade Distribuída)
+        Disco Dedicado               Alta Disponibilidade
+        [T0][T1][T2][ P ]            [T0][T1][T2][ P ]
+        [T3][T4][T5][ P ]            [T3][T4][ P ][T5]
+        [T6][T7][T8][ P ]            [T6][ P ][T7][T8]
+
+![alt text](image-92.png)
+
+    Mapeamento Técnico para o eBook
+
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Tecnologia             | Aplicação de Integridade      | Impacto no Desempenho                       |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | RAID 2 (2.23c)         | Aplica o Código de Hamming    | Raramente usado hoje devido ao custo de     |
+    |                        | (Figura 2.15) diretamente no  | sincronização dos eixos.                    |
+    |                        | nível do disco.               |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | RAID 5 (2.23f)         | Distribui a paridade (Figura  | O padrão ouro para servidores, equilibrando |
+    |                        | 2.14) por todos os discos,    | custo e segurança.                          |
+    |                        | evitando o gargalo de um      |                                             |
+    |                        | único disco de paridade.      |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+### Resumo do Capítulo: Da CPU ao Armazenamento Seguro
+Agora você tem a jornada completa mapeada:
+
+    1. Processamento: Começamos com a Figura 2.7 (SIMD/Fermi) mostrando como processar dados em massa.
+
+    2. Organização: Vimos na Figura 2.9 e 2.11 como esses dados são endereçados e ordenados (Endianness).
+
+    3. Velocidade: A Figura 2.16 e a pirâmide 2.18 explicaram a necessidade da Cache para alimentar a CPU.
+
+    4. Confiabilidade: Fechamos com RAID (2.23) para garantir que, mesmo se o hardware falhar, os dados do seu IDS e do seu eBook permaneçam intactos.
+
+O computador Thinking Machine CM-2 usava esse esquema, pegando palavras de 32 bits de dados e adicio-
+nando 6 bits de paridade para formar uma palavra de Hamming de 38 bits, mais um bit extra para paridade de
+palavra, e distribuindo cada palavra em 39 drives de disco. O rendimento total era imenso porque em um tempo
+de setor ele podia escrever o equivalente a 32 setores de dados. Além disso, perder um drive não causava problemas, porque essa perda equivaleria a perder 1 bit em cada palavra de 39 bits lida, algo que o código de Hamming
+poderia manipular facilmente.
+
+Uma desvantagem é que esse esquema requer que as rotações de todos os drives sejam sincronizadas, e isso
+só faz sentido com um número substancial de drives (mesmo com 32 drives de dados e 6 drives de paridade, a
+sobrecarga seria de 19%). O esquema também exige muito do controlador, uma vez que ele deve efetuar uma soma
+de verificação (checksum) de Hamming a cada tempo de bit.
+
+O RAID nível 3, ilustrado na Figura 2.23(d), é uma versão simplificada do RAID nível 2. Nesse arranjo, um
+único bit de paridade é computado para cada palavra de dados e escrito em um drive de paridade. Como no RAID
+nível 2, os drives devem estar em exata sincronia, uma vez que palavras de dados individuais estão distribuídas
+por múltiplos drives.
+
+À primeira vista, pode parecer que um único bit de paridade dá somente detecção de erro, e não correção de
+erro. Para o caso de erros aleatórios não detectados, essa observação é verdadeira. Todavia, para o caso de uma
+falha de drive, ela provê correção total de erros de 1 bit, uma vez que a posição do bit defeituoso é conhecida. Se
+um drive falhar, o controlador apenas finge que todos os seus bits são 0s. Se uma palavra tiver um erro de parida-
+de, o bit que vem de um drive extinto deve ter sido um 1, portanto, é corrigido. Embora ambos os RAIDs níveis 2
+e 3 ofereçam taxas de dados muito altas, o número de requisições separadas de E/S por segundo que eles podem
+manipular não é melhor do que o de um único drive.
+
+RAIDs níveis 4 e 5 de novo trabalham com tiras, e não com palavras individuais com paridade, e não reque-
+rem drives sincronizados. O RAID nível 4 [veja a Figura 2.23(e)] é como o RAID nível 0, com paridade tira por tira
+escrita em um drive extra. Por exemplo, se cada tira tiver k bytes de comprimento, todas as tiras passam por uma
+operação de EXCLUSIVE OR, resultando em uma tira de paridade de k bytes de comprimento. Se um drive falhar,
+os bytes perdidos podem ser recalculados com base no drive de paridade.
+
+Esse projeto protege contra a perda de um drive, mas seu desempenho é medíocre para pequenas atualiza-
+ções. Se um setor for alterado, é necessário ler todos os drives para recalcular a paridade que, então, precisará ser
+reescrita. Como alternativa, ele pode ler os velhos dados de usuário e os velhos dados de paridade e recalcular
+nova paridade, e partir deles. Mesmo com essa otimização, uma pequena atualização requer duas leituras e duas
+escritas, o que é, claramente, um mau arranjo.
+
+Como consequência da carga pesada sobre o drive de paridade, ele pode se tornar um gargalo. Esse gargalo
+é eliminado no RAID nível 5 distribuindo os bits de paridade uniformemente por todos os drives, por alternância
+circular, conforme mostra a Figura 2.23(f). Contudo, no evento de uma falha de drive, a reconstrução do drive
+danificado é um processo complexo.
+
+## 2.3.6 Discos em estado sólido
+Discos feitos de memória flash não volátil, geralmente denominados discos em estado sólido (SSDs – Solid­
+‑State Disks), estão ganhando mais popularidade como uma alternativa de alta velocidade às tecnologias tradicio-
+nais em disco magnético. A invenção do SSD é uma história clássica de “Quando lhe oferecem limões, faça uma
+limonada”. Embora a eletrônica moderna possa parecer totalmente confiável, a realidade é que os transistores
+se desgastam lentamente à medida que são usados. Toda vez que eles comutam, se desgastam um pouco e ficam
+mais perto de não funcionarem mais. Um modo provável de falha de um transistor é pela “injeção de portadora
+quente”, um mecanismo de falha em que uma carga elétrica é embutida dentro de um transistor que funcionava,
+deixando-o em um estado onde fica permanentemente ligado ou desligado. Embora em geral considerado senten-
+ça de morte para um transistor (provavelmente) inocente, Fujio Masuoka, enquanto trabalhava para a Toshiba,
+descobriu um modo de aproveitar esse mecanismo de falha para criar uma nova memória não volátil. No início
+da década de 1980, ele inventou a primeira memória flash.
+
+Os discos flash são compostos de muitas células de memória flash em estado sólido. As células da memó-
+ria flash são feitas de um único transistor flash especial. Uma célula de memória flash aparece na Figura 2.24.
+Embutido no transistor há uma porta flutuante que pode ser carregada e descarregada usando altas voltagens.
+Antes de ser programada, a porta flutuante não afeta a operação do transistor, atuando como um isolador extra
+entre a porta de controle e o canal do transistor. Se a célula flash for testada, ela atuará como um transistor
+simples.
+
+Figura 2.24 - Uma célula de memória flash.
+
+Esta figura é fascinante porque explica como o seu SSD retém dados mesmo sem energia, usando uma "porta flutuante" para interceptar carga negativa.
+
+    Tensão (12V)
+                     |
+            +-------------------+
+            | Porta de Controle |
+            +-------------------+
+            |     Isolador      |
+            +-------------------+
+            |  Porta Flutuante  | <-- Carga interceptada (Dado)
+            +-------------------+
+            |     Isolador      |
+    +--------+    Canal    +-------+
+    | Origem |             | Dreno |
+    +--------+-------------+-------+
+            Semicondutor           |
+                                   | Terra
+
+![alt text](image-93.png)
+
+Mapeamento Técnico
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Componente             | Função Crítica                | Aplicação Prática                           |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Endianness (2.11)      | Ordenação de bytes na RAM.    | Evita que seu analisador de pacotes leia    |
+    |                        |                               | um IP "ao contrário".                       |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Hamming (2.15)         | Autocorreção de erros (ECC).  | Garante a integridade dos arquivos salvos   |
+    |                        |                               | no seu servidor OCI.                        |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Flash (2.24)           | Retenção de carga persistente.| Tecnologia base do seu notebook e dos       |
+    |                        |                               | backups criptografados que você faz.        |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+Para programar uma célula de bit flash, uma alta tensão (no mundo dos computadores, 12 V é uma alta
+tensão) é aplicada à porta de controle, que acelera o processo de injeção de portadora quente na porta flutuante.
+Os elétrons são embutidos na porta flutuante, que coloca uma carga negativa interna no transistor flash. A carga
+negativa embutida aumenta a tensão necessária para ligar o transistor flash e, testando se o canal liga ou não com
+uma tensão alta ou baixa, é possível determinar se a porta flutuante está carregada ou não, resultando em um valor
+0 ou 1 para a célula flash. A carga embutida permanece no transistor, mesmo que o sistema perca a alimentação,
+tornando a célula de memória flash não volátil.
+
+Visto que os SSDs são basicamente memória, eles possuem desempenho superior aos discos giratórios, com
+tempo de busca zero. Enquanto um disco magnético típico pode acessar dados em até 100 MB/s, um SSD pode
+operar duas a três vezes mais rápido. E como o dispositivo não possui partes móveis, ele é muito adequado para
+uso em notebooks, onde trepidações e movimentos não afetarão sua capacidade de acessar dados. A desvantagem
+dos SSDs, em comparação com discos magnéticos, é o seu custo. Enquanto os discos magnéticos custam centa-
+vos de dólar por gigabyte, um SSD típico custará de um a três dólares por gigabyte, tornando seu uso apropriado
+apenas para aplicações com drive menor ou em situações em que o custo não é um problema. O custo dos SSDs
+está caindo, mas ainda há um longo caminho até que alcancem os discos magnéticos baratos. Assim, embora os
+SSDs estejam substituindo os discos magnéticos em muitos computadores, talvez ainda leve um bom tempo antes
+que o disco magnético siga o caminho dos dinossauros (a menos que outro grande meteoro atinja a Terra, mas
+nesse caso nem os SSDs sobreviveriam).
+
+Outra desvantagem dos SSDs em comparação com os discos magnéticos é sua taxa de falha. Uma célula flash
+típica pode ser escrita somente por cerca de 100 mil vezes antes que não funcione mais. O processo de injetar elé-
+trons na porta flutuante a danifica aos poucos, bem como seus isoladores ao redor, até que não funcione mais. Para
+aumentar o tempo de vida dos SSDs, é usada uma técnica denominada nivelamento de desgaste, para espalhar as
+escritas por todas as células flash no disco. Toda vez que um novo bloco de disco é escrito, o bloco de destino é rea-
+tribuído a um novo bloco do SSD, que não foi escrito recentemente. Isso exige o uso de um mapa de blocos lógicos
+dentro do drive flash, que é um dos motivos pelos quais os drives flash possuem altos overheads de armazenamento
+interno. Usando o nivelamento de desgaste, um drive flash pode dar suporte a uma quantidade de escritas igual ao
+número de escritas que uma célula pode sustentar multiplicado pelo número de blocos no disco.
+
+Alguns SSDs são capazes de codificar vários bits por byte, usando células flash multiníveis. A tecnologia
+controla cuidadosamente a quantidade de carga colocada na porta flutuante. Uma sequência cada vez maior de
+voltagens é então aplicada à porta de controle para determinar quanta carga é armazenada na flutuante. As células
+multiníveis típicas admitem quatro níveis de carga, resultando em dois bits por célula flash.
+
+## 2.3.7 CD-ROMs
+Discos ópticos foram desenvolvidos na origem para gravar programas e televisão, mas podem ser utilizados
+para uma função mais estética como dispositivos de armazenagem de computadores. Por sua grande capacidade
+e baixo preço, discos óticos são muito usados para distribuir software, livros, filmes e dados de todos os tipos,
+bem como para fazer backup de discos rígidos.
+
+A primeira geração de discos óticos foi inventada pela Philips, conglomerado holandês de eletrônica, para
+conter filmes. Tinham 30 cm de diâmetro e eram comercializados com a marca LaserVision, mas não se estabe-
+leceram, exceto no Japão.
+
+Em 1980, a Philips, junto com a Sony, desenvolveu o CD (Compact Disc), que logo substituiu os discos
+de vinil de 33 1/3 RPM usados para gravar música. Os dados técnicos exatos do CD foram publicados em um
+Padrão Internacional (IS 10149), popularmente conhecido como Red Book (livro vermelho) por causa da cor
+de sua capa. (Padrões Internacionais são emitidos pela International Organization for Standardization, que é a
+contraparte internacional de grupos de padronização nacionais como ABNT, ANSI etc. Cada um tem um número
+IS.) O motivo da publicação das especificações do disco e do drive como um Padrão Internacional é permitir que
+CDs de diferentes gravadoras e aparelhos de reprodução de diferentes fabricantes funcionem em conjunto. Todos
+os CDs têm 120 mm de diâmetro 1,2 mm de espessura, com um orifício de 15 mm no meio. O CD de áudio foi o
+primeiro meio de armazenagem digital a ter sucesso no mercado de massa. Supõe-se que devam durar cem anos.
+Favor verificar em 2080 um relatório sobre como se saiu o primeiro lote.
+
+Um CD é preparado com a utilização de um laser infravermelho de alta potência para queimar orifícios de
+0,8 mícron de diâmetro em um disco mestre revestido de vidro. Com base nesse mestre é fabricado um molde,
+com saliências onde estavam os orifícios de laser. Então, injeta-se policarbonato fundido nesse molde para for-
+mar um CD com o mesmo padrão de orifícios do disco mestre revestido de vidro. Em seguida, é depositada uma
+fina camada de alumínio refletivo sobre o policarbonato, coberta por um verniz de proteção e, por fim, vem uma
+etiqueta. As marcas no substrato de policarbonato são denominadas depressões (pits) e as áreas entre elas são
+denominadas planos (lands).
+
+Quando o disco é tocado, um diodo a laser de baixa potência emite luz infravermelha de comprimento de
+onda de 0,78 mícron sobre as depressões e planos quando estes passam pela luz. O laser está no lado do policarbo-
+nato, portanto, as depressões estão invertidas na direção do laser e aparecem como saliências sobre uma superfície
+que, caso contrário, seria plana. Como as depressões têm uma altura de um quarto do comprimento de onda da
+luz de laser, a luz que se reflete de uma depressão tem uma defasagem de meio comprimento de onda em relação
+à que se reflete das superfícies que a circundam. O resultado é que as duas partes interferem uma com a outra
+de modo destrutivo e devolvem menos luz ao fotodetector do aparelho de reprodução do que a luz que se reflete
+de um plano. É assim que o aparelho distingue uma depressão de um plano. Embora talvez pareça mais simples usar uma depressão para gravar um 0 e um plano para gravar um 1, é mais confiável usar uma transição depressão/
+plano ou plano/depressão para um 1 e sua ausência para um 0; portanto, esse é o esquema usado.
+
+As depressões e os planos são escritos em uma única espiral contínua que começa perto do orifício central e
+continua por uma distância de 32 mm em direção à borda. A espiral faz 22.188 rotações ao redor do disco (cerca
+de 600 por mm). Se fosse desenrolada, teria 5,6 km de comprimento. A espiral é ilustrada na Figura 2.25.
+
+### Figura 2.25 Estrutura de gravação de um disco compacto ou CD-ROM.
+
+![alt text](image-94.png)
+
+Para fazer a música ser tocada a uma taxa uniforme, é preciso que as depressões e os planos passem sob a
+luz a uma velocidade linear constante. Em consequência, a taxa de rotação deve ser continuamente reduzida
+à medida que o cabeçote de leitura se move da parte interna para a externa do CD. Na parte interna, a taxa
+de rotação é de 530 RPM para conseguir a taxa de reprodução regular de 120 cm/s; na parte mais externa,
+tem de cair para 200 RPM para dar a mesma velocidade linear no cabeçote. Um drive de velocidade linear
+constante é bem diferente de um drive de disco magnético, que funciona a uma velocidade angular constan-
+te, independente de onde o cabeçote esteja posicionado naquele momento. Além disso, 530 RPM estão bem
+longe das 3.600 a 7.200 RPM com as quais gira a maioria dos discos magnéticos.
+
+Em 1984, a Philips e a Sony perceberam o potencial para usar CDs como meio de armazenagem de dados
+de computadores, então, publicaram o Yellow Book (livro amarelo) definindo um padrão exato para o que agora
+conhecemos como CD-ROMs (Compact Disc-Read Only Memory – disco compacto com memória somente de
+leitura). Para pegar carona no mercado de CDs de áudio, que já era substancial na época, os CD-ROMs tinham o
+mesmo tamanho físico dos CDs de áudio, guardavam compatibilidade mecânica e ótica com eles e eram produzi-
+dos usando as mesmas máquinas de moldagem por injeção. As consequências dessa decisão foram a necessidade
+de motores lentos de velocidade variável mas também que o custo de manufatura de um CD-ROM estivesse bem
+abaixo de um dólar para um volume moderado.
+
+O Yellow Book definiu a formatação dos dados de computador. Também melhorou as capacidades de cor-
+reção de erro do sistema, um passo essencial porque, embora os apreciadores de música não se importassem em
+perder um bit aqui, outro ali, os apreciadores de computadores tendiam a ser muito exigentes com isso. O formato
+básico de um CD-ROM consiste em codificar cada byte em um símbolo de 14 bits. Como já vimos, 14 bits são
+suficientes para codificar com Hamming um byte de 8 bits e ainda sobram 2. Na verdade, é usado um sistema de
+codificação mais poderoso. O mapeamento 14 para 8 para leitura é realizado em hardware por consulta de tabela.
+
+Do nível seguinte para cima, um grupo de 42 símbolos consecutivos forma um quadro de 588 bits. Cada
+quadro contém 192 bits de dados (24 bytes). Os 396 bits restantes são usados para correção e controle de erro.
+Até aqui, esse esquema é idêntico para CDs e CD-ROMs.
+
+O que o Yellow Book acrescenta é o agrupamento de 98 quadros em um setor de CD-ROM, conforme
+mostra a Figura 2.26. Cada setor de CD-ROM começa com um preâmbulo de 16 bytes, sendo os 12 primeiros
+00FFFFFFFFFFFFFFFFFFFF00 (hexadecimal), para permitir que o aparelho de reprodução reconheça o início
+de um setor de CD-ROM. Os 3 bytes seguintes contêm o número do setor, necessário porque fazer busca em um
+CD-ROM com sua única espiral de dados é muito mais difícil do que em um disco magnético com suas trilhas
+concêntricas uniformes. Para buscar, o software no drive calcula mais ou menos aonde ir, leva o cabeçote até lá e
+então começa a procurar um preâmbulo para verificar a precisão do cálculo. O último bit do preâmbulo é o modo.
+
+### Figura 2.26 Layout lógico de dados em um CD-ROM.
+
+Diferente dos setores magnéticos, o CD organiza os dados em símbolos de 14 bits que formam quadros e setores de 2.352 bytes no Modo 1.
+
+    +-----------+---------------------------+-------+
+    | Preâmbulo |           DADOS           |  ECC  |
+    | (12 bytes)|       (2.048 bytes)       | (288) |
+    +-----------+---------------------------+-------+
+    |<------------------ 2.352 bytes ---------------->|
+
+![alt text](image-95.png)
+
+O CD-ROM utiliza uma hierarquia de encapsulamento: símbolos formam quadros, e quadros formam setores.
+
+    HIERARQUIA DE DADOS (CD-ROM MODO 1)
+    ===================================
+
+    [SÍMBOLO] --> 14 bits (Codificação EFM)
+        |
+        | (42 símbolos)
+        v
+    [ QUADRO  ] --> 588 bits (contém 24 bytes de dados úteis)
+        |
+        | (98 quadros)
+        v
+    [  SETOR  ] --> 2.352 bytes totais
+
+Estrutura de um Setor (2.352 bytes):
+
+    +-----------+---------------------------+-----------+
+    | PREÂMBULO |           DADOS           |    ECC    |
+    | (12 bytes)|       (2.048 bytes)       | (288 bytes|
+    +-----------+---------------------------+-----------+
+    |  Sync/Id  |    Conteúdo Principal     | Correção  |
+    +-----------+---------------------------+-----------+
+
+Figura 2.26: Fluxo Lógico e Estrutura do CD-ROM (Modo 1)
+
+    ===========================================================================
+                        CAMADA DE PROCESSAMENTO (LÓGICA)
+    ===========================================================================
+
+    [ DADOS BRUTOS ] --> [ ENCODER EFM ] --> [ SINAL DO LASER ]
+            |                  |                    |
+            |          (8 bits -> 14 bits)      (Sincronismo)
+            v                  v                    v
+    Garante que não haja sequências longas de "0" ou "1".
+
+    ===========================================================================
+                        CAMADA DE ARMAZENAMENTO (FÍSICA)
+    ===========================================================================
+
+    ESTRUTURA DO SETOR (2.352 BYTES TOTAIS)
+    +-----------+---------------------------------------+-----------+
+    | PREÂMBULO |           DADOS DO USUÁRIO            |  ECC/EDC  |
+    | (12 bytes)|           (2.048 bytes)               | (288 bytes|
+    +-----------+---------------------------------------+-----------+
+    | Sinc/ID   |     Conteúdo Real (Arquivos/Logs)     | Proteção  |
+    +-----------+---------------------------------------+-----------+
+            ^                                                 ^
+            |                                                 |
+    [ 16 Bytes Iniciais ]                     [ 13% de Sacrifício ]
+                                                Contra riscos e sujeira.
+
+    ===========================================================================
+                        BARRAMENTO E TAXA DE TRANSFERÊNCIA
+    ===========================================================================
+
+    VELOCIDADE 1X:
+    (75 setores/s)  x  (2.048 bytes úteis)  =  153.600 bytes/s (150 KB/s).
+
+    CONEXÃO PROJETO IDS:
+    Integridade de Pacotes <---------- Similar ----------> Integridade de Bits
+    (Rede/C)                                              (Mídia Óptica).
+
+
+O Yellow Book define dois modos. O modo 1 usa o layout da Figura 2.26, com um preâmbulo de 16 bytes,
+2.048 bytes de dados e um código de correção de erro de 288 bytes (um código de Reed-Solomon de intercalação
+cruzada). O modo 2 combina os dados e campos ECC em um campo de dados de 2.336 bytes para as aplicações
+que não precisam de correção de erro (ou não dispõem de tempo para executá-la), como áudio e vídeo. Note que,
+para oferecer excelente confiabilidade, são usados três esquemas separados de correção de erros: dentro de um
+símbolo, dentro de um quadro e dentro de um setor de CD-ROM. Erros de único bit são corrigidos no nível mais
+baixo, erros em rajada curtos são corrigidos no nível de quadro e quaisquer erros residuais são apanhados no nível
+de setor. O preço pago por essa confiabilidade é que são necessários 98 quadros de 588 bits (7.203 bytes) para
+transportar uma única carga útil de 2.048 bytes, uma eficiência de apenas 28%.
+
+Drives de CD-ROM de uma velocidade operam a 75 setores/s, o que dá uma taxa de dados de 153.600 bytes/s
+em modo 1 e 175.200 bytes/s em modo 2. Drives de dupla velocidade são duas vezes mais rápidos e assim por
+diante, até a velocidade mais alta. Um CD padrão de áudio tem espaço para 74 minutos de música que, se usado
+para dados do modo 1, dá uma capacidade de 681.984.000 bytes. Esse número costuma ser informado como 650
+MB, pois 1 MB é igual a 220 bytes (1.048.576 bytes), e não 1 milhão de bytes.
+
+Como é muito comum, sempre que surge uma nova tecnologia, algumas pessoas tentam desafiar os limites.
+Ao projetar o CD-ROM, a Philips e a Sony foram cuidadosas e fizeram o processo de escrita parar bem antes que
+a borda externa do disco fosse alcançada. Não levou muito tempo para que alguns fabricantes permitissem que
+seus drives fossem além do limite oficial e chegassem perigosamente perto da borda física da mídia, gerando cerca
+de 700 MB em vez de 650 MB. Porém, quando a tecnologia foi aperfeiçoada e os discos vazios foram fabricados
+com um padrão mais alto, 703,12 MB (360 mil setores de 2.048 bytes, em vez de 333 mil setores) se tornaram a
+nova norma.
+
+Note que mesmo um drive de CD-ROM 32x (4.915.200 bytes/s) não é páreo para o drive de disco magnético
+Fast SCSI-2 a 10 MB/s. Quando você se der conta de que o tempo de busca muitas vezes é de várias centenas
+de milissegundos, deve ficar claro que os drives de CD-ROM não estão de forma alguma na mesma categoria de
+desempenho dos drives de disco magnético, a despeito de sua grande capacidade.
+
+Em 1986, a Philips atacou mais uma vez com o Green Book (livro verde), acrescentando recursos gráficos
+e a capacidade de intercalar áudio, vídeo e dados no mesmo setor, uma característica essencial para CD-ROMs
+multimídia.
+
+A última peça do quebra-cabeça do CD-ROM é o sistema de arquivos. Para possibilitar a utilização
+do mesmo CD-ROM em diferentes computadores, era preciso chegar a um acordo quanto aos sistemas de
+arquivos em CD-ROM. Para conseguir esse acordo, representantes de muitas empresas fabricantes de com-
+putadores se reuniram em Lake Tahoe, nas High Sierras, na fronteira Califórnia-Nevada, e arquitetaram um
+sistema de arquivos que denominaram High Sierra. Mais tarde, ele evoluiu para um Padrão Internacional (IS
+9660). O sistema tem três níveis. O nível 1 usa nomes de arquivo de até 8 caracteres e podem ser seguidos
+de uma extensão de até 3 caracteres (a convenção de nomeação de arquivos do MS-DOS). Nomes de arquivos
+só podem conter letras maiúsculas, dígitos e o caractere de sublinhado. Diretórios podem ser aninhados até
+oito, mas nomes de diretórios não podem conter extensões. O nível 1 requer que todos os arquivos sejam
+contíguos, o que não é problema para um meio que é escrito apenas uma vez. Qualquer CD-ROM que obe-
+deça ao IS 9660 nível 1 pode ser lido usando MS-DOS, um computador Apple, um computador UNIX ou
+praticamente qualquer outro computador. Os fabricantes de CD-ROMs consideram essa propriedade uma
+grande vantagem.
+
+O IS 9660 nível 2 permite nomes de até 32 caracteres e o nível 3 permite arquivos não contíguos. As exten-
+sões Rock Ridge (o nome extravagante se deve à cidade em que Mel Brooks filmou Blazing Saddles [Banzé no
+Oeste]) permitem nomes muito longos (para UNIX), UIDs, GIDs, e enlaces simbólicos, mas os CD-ROMs que
+não obedecem ao nível 1 não poderão ser lidos em todos os computadores.
+
+## 2.3.8 CDs graváveis
+De início, o equipamento necessário para produzir um CD-ROM mestre (ou CD de áudio, por falar nisso)
+era muito dispendioso. Mas, como sempre acontece na indústria de computadores, nada permanece caro por
+muito tempo. Em meados da década de 1990, gravadores de CD não maiores do que um reprodutor de CD eram
+um periférico comum disponível na maioria das lojas de computadores. Esses dispositivos ainda eram diferentes
+dos discos magnéticos porque, uma vez gravados, os CD-ROMs não podiam ser apagados. Ainda assim, eles logo
+encontraram um nicho como um meio de backup para grandes discos rígidos magnéticos e também permitiram
+que indivíduos ou novas empresas fabricassem seus próprios CD-ROMs em pequena escala ou produzissem mes-
+tres para fornecer a empresas comerciais de reprodução de grandes volumes de CDs. Esses drives são conhecidos
+como CD-Rs (CD-Recordables – CDs graváveis).
+
+Os CD-Rs começaram com discos em branco de policarbonato de 120 mm de diâmetro que são como
+CD-ROMs, exceto por conterem um sulco de 0,6 mm de largura para guiar o laser durante a escrita (gravação). O
+sulco tem um desvio senoidal de 0,3 mm a uma frequência de exatos 22,05 kHz para prover realimentação contí-
+nua, de modo que a rotação possa ser monitorada e ajustada com precisão, caso necessário. Os primeiros CD-Rs
+pareciam CD-ROMs normais, exceto por terem a superfície superior dourada, e não prateada. Essa cor vinha da
+utilização de ouro verdadeiro em vez de alumínio na camada refletiva. Diferente dos CDs prateados que conti-
+nham depressões físicas, nos CD-Rs as diferentes refletividades das depressões e dos planos têm de ser simuladas.
+Isso é feito com a adição de uma camada de corante entre o policarbonato e a superfície refletiva, como mostra a
+Figura 2.27. São usadas duas espécies de corantes: cianina, que é verde, e ftalocianina, que é amarelo-alaranjada.
+Os químicos podem discutir eternamente sobre qual das duas é melhor. Com o tempo, a camada refletiva dourada
+foi substituída por uma camada de alumínio.
+
+### Figura 2.27 - Seção transversal de um disco CD-R e laser (não está em escala). Um CD-ROM tem estrutura semelhante, exceto por não ter a camada de corante e por ter uma camada de alumínio cheia de depressões em vez de uma camada refletiva.
+
+Figura 2.27: Seção Transversal e Leitura de um CD-R
+Diferente do CD-ROM prensado em fábrica, o CD-R usa uma camada de corante que é "queimada" pelo laser para representar os dados.
+
+    ESTRUTURA FÍSICA (CAMADAS)
+    ====================================
+    [      Etiqueta Impressa       ]
+    ------------------------------------
+    [       Verniz Protetor        ]
+    ------------------------------------
+    [       Camada Refletiva       ]
+    ------------------------------------
+    [  Camada de Corante (Dye)     ] <--- Onde o laser "queima" o dado
+    ------------------------------------
+    [        Policarbonato         ] (1,2 mm de espessura)
+    ====================================
+            ^              |
+            | [FEIXE]      | [REFLEXO]
+            |              v
+        +---------+    +--------------+
+        |  Lente  |    | Fotodetector | <--- Lê 0 ou 1 pela luz refletida
+        +---------+    +--------------+
+            ^              |
+            |    [PRISMA]--+
+            |       |
+        [ DIODO DE LASER ]
+
+![alt text](image-96.png)
+
+### Resumo para o Material de Estudos
+ - CD-ROM vs. CD-R: No CD-ROM, as depressões são físicas (buracos no alumínio). No CD-R, são químicas (corante queimado).
+
+ - Espessura: A camada de policarbonato de 1,2 mm serve como substrato e proteção, mantendo o laser focado apesar de pequenos arranhões na superfície.
+
+Em seu estágio inicial, a camada de corante é transparente e permite que a luz do laser que a atravessa seja
+refletida pela camada refletiva. Para gravar (escrever), o laser CD-R é ligado em alta potência (8–16 mW). Quando
+o feixe atinge uma porção do corante, ele o aquece e rompe a ligação química. Essa alteração da estrutura mole-
+cular cria um ponto escuro. Quando o CD-R é lido (a 0,5 mW), o fotodetector vê uma diferença entre os pontos
+escuros onde o corante foi atingido e as áreas transparentes onde o disco está intacto. Essa diferença é interpretada
+como a diferença entre depressões e planos, mesmo quando lidas por um leitor de CD-ROM normal ou até mesmo
+por um reprodutor de CD de áudio.
+
+Nenhum tipo novo de CD poderia se firmar com orgulho sem ter um livro colorido, portanto, o CD-R tem
+o Orange Book (livro laranja), publicado em 1989. Esse documento define o CD-R e também um novo formato,
+o CD-ROM XA, que permite que os CD-Rs sejam gravados por incrementos, alguns setores hoje, outros amanhã
+e mais alguns no próximo mês. Um grupo de setores consecutivos escritos de uma só vez é denominado trilha
+de CD-ROM.
+
+Um dos primeiros usos do CD-R foi no PhotoCD da Kodak. Nesse sistema, o cliente leva ao processador
+de fotos um rolo de filme exposto e seu velho PhotoCD, e recebe de volta o mesmo PhotoCD com novas fotos
+acrescentadas às antigas. O novo lote, que é criado por digitalização dos negativos, é gravado no PhotoCD como
+uma trilha de CD-ROM separada. A gravação incremental é necessária porque os CD-Rs virgens são muito caros
+para se ter um novo para cada rolo de filme.
+
+Contudo, a gravação incremental cria um novo problema. Antes do Orange Book, todos os CD-ROMs
+tinham, no início, uma única VTOC (Volume Table of Contents – sumário de conteúdo de volumes). Esse
+esquema não funciona com escritas incrementais (isto é, multitrilhas). A solução do Orange Book é dar a cada
+trilha de CD-ROM sua própria VTOC. Os arquivos listados na VTOC podem incluir alguns ou todos os arquivos
+de trilhas anteriores. Após a inserção do CD-R no drive, o sistema operacional faz uma busca em todas as trilhas
+do CD-ROM para localizar a VTOC mais recente, que dá o estado atual do disco. Por incluir alguns, mas não
+todos os arquivos de trilhas anteriores na VTOC corrente, é possível dar uma ilusão de que os arquivos foram
+apagados. As trilhas podem ser agrupadas em sessões, o que resulta em CD-ROMs multissessões. Reprodutores
+de CD de áudio padrão não podem manipular CDs multissessões, já que esperam uma única VTOC no início.
+
+O CD-R possibilita que indivíduos e empresas copiem CD-ROMs (e CDs de áudio) com facilidade, em geral com
+a violação dos direitos autorais do editor. Vários esquemas já foram inventados para dificultar esse tipo de pirataria e
+também a leitura de um CD-ROM usando qualquer outra coisa que não seja o software do editor. Um deles envolve
+gravar todos os comprimentos de arquivos do CD-ROM como multigigabyte, frustrando quaisquer tentativas de
+copiar os arquivos para disco rígido com a utilização de software de cópia padrão. Os verdadeiros comprimentos estão
+embutidos no software do editor ou ocultos (possivelmente criptografados) no CD-ROM em um lugar não esperado.
+Outro esquema usa intencionalmente ECCs incorretos em setores selecionados, na esperança de que o software de
+cópia de CDs “corrija” os erros. O software de aplicação verifica os ECCs e se recusa a funcionar se estiverem “corri-
+gidos”. Usar lacunas não padronizadas entre trilhas e outros “defeitos” físicos também são possibilidades.
+
+## 2.3.9 CDs regraváveis
+Embora todos estejam acostumados com outras mídias que aceitam apenas uma escrita, como papel
+fotográfico, existe uma demanda por CD-ROMs regraváveis. Uma tecnologia disponível agora é o CD-RW
+(CD-ReWritable – CDs regraváveis), que usa um meio do mesmo tamanho do CD-R. Contudo, em vez dos
+corantes cianina ou ftalocianina, o CD-RW usa uma liga de prata, índio, antimônio e telúrio para a camada de
+gravação. Essa liga tem dois estados estáveis: cristalino e amorfo, com diferentes refletividades.
+
+Os drives de CD-RW usam lasers com três potências diferentes. Em alta potência, o laser funde a liga fazendo-
+-a passar do estado cristalino de alta refletividade para o estado amorfo de baixa refletividade, para representar
+uma depressão. Em potência média, a liga se funde e volta a seu estado natural cristalino para se tornar novamente
+um plano. Em baixa potência, o estado do material é sondado (para leitura), mas não ocorre qualquer transição
+de fase.
+
+A razão por que o CD-RW não substituiu completamente o CD-R é que os CD-RWs em branco são mais
+caros do que os CD-Rs em branco. Além disso, para aplicações de backup de discos rígidos, o fato de que, uma
+vez escrito, o CD não possa ser apagado acidentalmente, é uma grande vantagem, e não um bug.
+
+## 2.3.10 DVD
+O formato básico do CD/CD-ROM está na praça desde 1980. Em meados da década de 1990, a tecnologia
+melhorou bastante, de modo que discos ópticos de capacidade mais alta se tornaram economicamente viáveis. Ao
+mesmo tempo, Hollywood estava procurando um meio de substituir as fitas analógicas de videoteipe por discos
+digitais, pois estes têm qualidade mais alta, são mais baratos de fabricar, duram mais, ocupam menos espaço nas
+prateleiras das locadoras de vídeo e não precisam ser rebobinados. Estava parecendo que a roda do progresso para
+os discos óticos estava para girar mais uma vez.
+
+Essa combinação de tecnologia e demanda por três indústrias imensamente ricas e poderosas resultou no
+DVD, na origem um acrônimo para Digital Video Disk (disco de vídeo digital), mas agora oficialmente Digital
+Versatile Disk (disco versátil digital). DVDs usam o mesmo desenho geral dos CDs, com discos de policarbonato
+de 120 mm moldados por injeção que contêm depressões e planos iluminados por um diodo de laser e lidos por
+um fotodetector. A novidade é o uso de
+
+    1. Depressões menores (0,4 mícron versus 0,8 mícron para CDs).
+    2. Uma espiral mais apertada (0,74 mícron entre trilhas versus 1,6 mícron para CDs).
+    3. Um laser vermelho (a 0,65 mícron versus 0,78 mícron para CDs).
+
+Juntas, essas melhorias aumentam sete vezes a capacidade, passando para 4,7 GB. Um drive de DVD 1x
+funciona a 1,4 MB/s (versus 150 KB/s para CDs). Infelizmente, a troca para lasers vermelhos usados em supermer-
+cados significa que os reprodutores de DVD precisarão de um segundo laser para poder ler os CDs e CD-ROMs
+existentes, aumentando um pouco de complexidade e custo.
+
+Uma capacidade de 4,7 GB é suficiente? Talvez. Usando compressão MPEG-2 (padronizada no IS 13346),
+um disco DVD de 4,7 GB pode conter 133 minutos de vídeo de tela cheia com imagens em movimento em alta
+resolução (720 × 480), bem como trilhas sonoras em até oito idiomas e legendas em mais 32. Cerca de 92% de
+todos os filmes que Hollywood já produziu têm menos de 133 minutos. Não obstante, algumas aplicações, como
+jogos multimídia ou obras de referência, talvez precisem mais, e Hollywood gostaria de gravar vários filmes em
+um mesmo disco, portanto, quatro formatos foram definidos:
+
+    1. Uma face, uma camada (4,7 GB).
+   
+    2. Uma face, duas camadas (8,5 GB).
+   
+    3. Duas faces, uma camada (9,4 GB).
+   
+    4. Duas faces, duas camadas (17 GB).
+
+Por que tantos formatos? Em uma palavra: política. A Philips e a Sony queriam discos de uma única face
+com duas camadas para a versão de alta capacidade, mas a Toshiba e a Time Warner queriam discos de duas faces,
+com uma camada. A Philips e a Sony não imaginaram que as pessoas estariam dispostas a virar os discos, e a
+Time Warner não acreditava que colocar duas camadas em uma face poderia funcionar. A solução de conciliação:
+todas as combinações, mas o mercado determinará quais sobreviverão. Bem, o mercado falou. A Philips e a Sony
+estavam certas. Nunca aposte contra a tecnologia.
+
+A tecnologia da camada dupla tem uma camada refletiva embaixo, coberta por uma semirrefletiva. Dependendo
+de onde o laser for focalizado, ele se reflete de uma camada ou da outra. A camada inferior precisa de depressões e
+planos um pouco maiores, para leitura confiável, portanto, sua capacidade é um pouco menor do que a da superior.
+Discos de dupla face são fabricados colando dois discos de uma face de 0,6 mm. Para que todas as versões
+tenham a mesma espessura, um disco de uma face consiste em um disco de 0,6 mm colado a um substrato em
+branco (ou, talvez, no futuro, contendo 133 minutos de propaganda, na esperança de que as pessoas ficarão curio-
+sas de saber o que existe lá dentro). A estrutura do disco de dupla face, dupla camada, é ilustrada na Figura 2.28.
+
+### Figura 2.28 - Disco de DVD de dupla face, dupla camada.
