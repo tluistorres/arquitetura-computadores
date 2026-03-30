@@ -2568,3 +2568,903 @@ branco (ou, talvez, no futuro, contendo 133 minutos de propaganda, na esperança
 sas de saber o que existe lá dentro). A estrutura do disco de dupla face, dupla camada, é ilustrada na Figura 2.28.
 
 ### Figura 2.28 - Disco de DVD de dupla face, dupla camada.
+
+Diferente do CD-ROM (Figura 2.26), o DVD aumenta a densidade usando duas camadas de dados em cada face do disco, separadas por uma camada semirreflexiva.
+
+    ESTRUTURA DO DVD (DUPLA CAMADA)
+    ==========================================
+    [ Substrato de Policarbonato 1 (0,6 mm)  ]
+    ------------------------------------------
+    [ Camada Semirreflexiva (Dados Camada 1) ]
+    ------------------------------------------
+    [ Refletor de Alumínio (Dados Camada 0)  ]
+    ------------------------------------------
+    <<<<<<<< CAMADA ADESIVA (CENTRO) >>>>>>>>>>
+    ------------------------------------------
+    [ Refletor de Alumínio (Dados Camada 0)  ]
+    ------------------------------------------
+    [ Camada Semirreflexiva (Dados Camada 1) ]
+    ------------------------------------------
+    [ Substrato de Policarbonato 2 (0,6 mm)  ]
+    ==========================================
+
+![alt text](image-97.png)
+
+O DVD foi arquitetado por um consórcio de dez fabricantes de eletrônicos de consumo, sete deles japone-
+ses, em estreita colaboração com os principais estúdios de Hollywood (alguns dos quais são de propriedade dos
+fabricantes de eletrônicos japoneses pertencentes ao consórcio). As empresas de computadores e telecomunica-
+ções não foram convidadas para o piquenique e o foco resultante foi o uso do DVD para locação de filmes. Por
+exemplo, entre as características padrão está a capacidade de saltar cenas impróprias em tempo real (o que per-
+mite que os pais transformem um filme proibido para menores de 18 anos em um filme que possa ser visto por
+criancinhas), seis canais de som e suporte para Pan-and-Scan. Essa última característica permite que o tocador
+de DVD decida dinamicamente como recortar as extremidades direita e esquerda dos filmes (cuja relação largura/
+altura é 3:2) para que se ajustem aos tamanhos das telas de aparelhos de televisão atuais (cuja relação é 4:3).
+
+Outro item em que a indústria de computadores provavelmente não teria pensado é uma incompatibilidade
+intencional entre discos destinados aos Estados Unidos e discos destinados à Europa, e ainda outros padrões para outros
+continentes. Hollywood exigiu essa “característica” porque filmes novos são sempre lançados antes nos
+Estados Unidos e então despachados para a Europa quando os vídeos começam a sair do circuito comercial nos
+Estados Unidos. A ideia era garantir que as locadoras de vídeo não pudessem comprar vídeos nos Estados Unidos
+muito cedo, o que reduziria as receitas de filmes novos nos cinemas da Europa. Se Hollywood estivesse no con-
+trole na indústria de computadores, teríamos disquetes de 3,5 polegadas nos Estados Unidos e disquetes de 9 cm
+na Europa.
+
+## 2.3.11 Blu-ray
+Nada fica parado no negócio de computadores, certamente não na tecnologia de armazenagem. O DVD mal
+acabara de ser lançado e seu sucessor já ameaçava torná-lo obsoleto. O sucessor do DVD é o Blu-ray (raio azul),
+assim chamado porque usa um laser azul, em vez do vermelho usado por DVDs. Um laser azul tem comprimento
+de onda mais curto do que o laser vermelho, o que permite um foco mais preciso e, portanto, depressões e pla-
+nos menores. Discos Blu-ray de uma face contêm cerca de 25 GB de dados; os de dupla face contêm cerca de 50
+GB. A taxa de dados é mais ou menos 4,5 MB/s, o que é bom para um disco óptico, mas ainda insignificante em
+comparação com discos magnéticos (cf. ATAPI-6 a 100 MB/s e wide Ultra5 SCSI a 640 MB/s). Espera-se que, com
+o tempo, o Blu-ray substitua CD-ROMs e DVDs, mas essa transição ainda levará alguns anos.
+
+## 2.4 Entrada/Saída
+Como mencionamos no início deste capítulo, um sistema de computador tem três componentes principais:
+a CPU, as memórias (primária e secundária) e os equipamentos de E/S (entrada/saída), ou I/O (Input/Output),
+como impressoras, scanners e modems. Até aqui, só examinamos CPU e as memórias. Agora, é hora de examinar
+os equipamentos de E/S e como eles estão conectados ao restante do sistema.
+
+## 2.4.1 Barramentos
+A maioria dos computadores pessoais e estações de trabalho tem uma estrutura semelhante à mostrada
+na Figura 2.29. O arranjo comum é um gabinete de metal que contém uma grande placa de circuito impresso na
+parte inferior, denominada placa-mãe (ou placa-pai, para os que preferirem). A placa-mãe contém o chip da CPU,
+alguns encaixes para os módulos DIMM e vários chips de suporte. Contém também um barramento ao longo do
+comprimento e soquetes nos quais os conectores de borda das placas de E/S podem ser inseridos.
+
+### Figura 2.29 Estrutura física de um computador pessoal.
+
+    VISTA INTERNA DO GABINETE (Slots de Expansão)
+    =======================================================
+    |                                                       |
+    |   [ PLACA DE SOM ]----------------+                   |
+    |                                   |                   |
+    |   [    MODEM     ]--------------+ |  (Conectores      |
+    |                                 | |   de Borda)       |
+    |   [ CONTROLADOR  ]------------+ | |                   |
+    |   [    SCSI      ]            | | |                   |
+    |                               v v v                   |
+    |   _________________________________________________   |
+    |  | [S] [L] [O] [T] [S]    D  E    B  A  R  R  A  | |  |
+    |  |_______________________________________________|_|  |
+    |                                                       |
+    |                    PLACA-MÃE (Motherboard)            |
+    =======================================================
+
+![alt text](image-98.png)
+
+A estrutura lógica de um computador pessoal simples pode ser vista na Figura 2.30. Esse computador tem um
+único barramento para conectar a CPU, a memória e os equipamentos de E/S; a maioria dos sistemas tem dois ou
+mais barramentos. Cada dispositivo de E/S consiste em duas partes: uma que contém grande parte da eletrônica,
+denominada controlador, outra que contém o dispositivo de E/S em si, tal como um drive de disco. O controlador
+está em geral contido em uma placa que é ligada a um encaixe livre. Mesmo o monitor não sendo opcional, o con-
+trolador de vídeo às vezes está localizado em uma placa de encaixe (plug-in) para permitir que o usuário escolha
+entre placas com ou sem aceleradores gráficos, memória extra e assim por diante. O controlador se conecta com
+seu dispositivo por um cabo ligado ao conector na parte de trás do gabinete.
+
+### Figura 2.30 Estrutura lógica de um computador pessoal simples.
+
+A Figura 2.30 é a peça final ideal. Ela integra a CPU e a memória com os controladores de periféricos (vídeo, teclado, CD-ROM e disco rígido) que discutimos nas figuras anteriores.
+
+    [ MONITOR ]  [ TECLADO ]  [ DRIVE CD ]  [ DRIVE HDD ]
+         |            |            |             |
+    +----+----+  +----+----+  +----+----+   +----+----+
+    | CTRL    |  | CTRL    |  | CTRL    |   | CTRL    |
+    | VÍDEO   |  | TECLADO |  | CD-ROM  |   | DISCO   |
+    +----+----+  +----+----+  +----+----+   +----+----+
+         |            |            |             |
+    [ CPU ]      [ MEMÓRIA ]       |             |
+    |            |                 |             |
+    ==+============+================+=============+====== [ BARRAMENTO ]
+
+![alt text](image-99.png)
+
+A função de um controlador é controlar seu dispositivo de E/S e manipular para ele o acesso ao barramento.
+Quando um programa quer dados do disco, por exemplo, ele envia um comando ao controlador de disco, que
+então emite comandos de busca e outros comandos para o drive. Quando a trilha e o setor adequados forem loca-
+lizados, o drive começa a entregar dados ao controlador como um fluxo serial de bits. É função do controlador
+dividir o fluxo de bits em unidades e escrever cada uma delas na memória, à medida que seja montada. Uma
+unidade típica é composta de uma ou mais palavras. Quando um controlador lê ou escreve dados de ou para
+a memória sem intervenção da CPU, diz-se que ele está executando acesso direto à memória (Direct Memory
+Access), mais conhecido por seu acrônimo DMA. Concluída a transferência, o controlador normalmente causa
+uma interrupção, forçando a CPU a suspender de imediato o programa em execução e começar a rodar um proce-
+dimento especial, denominado rotina de interrupção, para verificar erros, executar qualquer ação especial neces-
+sária e informar ao sistema operacional que a E/S agora está concluída. Quando a rotina de interrupção conclui
+sua tarefa, a CPU continua com o programa que foi suspenso quando ocorreu a interrupção.
+
+O barramento não é usado apenas pelos controladores de E/S, mas também pela CPU para buscar instruções
+e dados. O que acontece se a CPU e um controlador de E/S quiserem usar barramento ao mesmo tempo? A res-
+posta é que um chip, denominado árbitro de barramento, decide o que acontece em seguida. Em geral, é dada a
+preferência aos dispositivos de E/S sobre a CPU, porque discos e outros dispositivos que estão em movimento não
+podem ser interrompidos, e obrigá-los a esperar resultaria em perda de dados. Quando não há nenhuma E/S em
+curso, a CPU pode ficar com todos os ciclos do barramento para si própria, para referenciar a memória. Contudo,
+quando algum dispositivo de E/S também estiver executando, ele requisitará e terá acesso ao barramento sempre
+que precisar. Esse processo é denominado roubo de ciclo, e reduz a velocidade do computador.
+
+Esse projeto funcionou bem para os primeiros computadores pessoais, já que todos os componentes estavam
+em certo equilíbrio. Contudo, à medida que CPUs, memórias e dispositivos de E/S ficavam mais rápidos, surgiu
+um problema: o barramento não dava mais conta da carga apresentada. Em um sistema fechado, tal como uma
+estação de trabalho de engenharia, a solução foi projetar um novo barramento mais rápido para o próximo modelo.
+
+Como ninguém nunca passava dispositivos de E/S de um modelo antigo para um novo, essa abordagem
+funcionou bem.
+
+Todavia, no mundo do PC, quem passava para uma CPU mais potente muitas vezes queria levar sua impres-
+sora, scanner e modem para o novo sistema. Além disso, tinha-se desenvolvido uma imensa indústria destinada a
+fornecer uma ampla gama de dispositivos de E/S para o barramento do IBM PC, e essa indústria não estava nem
+um pouco interessada em perder todo seu investimento e começar de novo. A IBM aprendeu isso do modo mais
+difícil quando lançou o sucessor do IBM PC, a linha PS/2. O PS/2 tinha um barramento novo e mais rápido, mas
+a maioria dos fabricantes de clones continuava a usar o antigo barramento do PC, agora denominado barramento
+ISA (Industry Standard Architecture). A maioria dos fabricantes de discos e dispositivos de E/S continuou a
+fabricar controladores para ele, e a IBM se viu enfrentando a peculiar situação de ser a única fabricante de PCs
+que não eram mais compatíveis com o PC da IBM. Com o tempo, a empresa foi forçada a dar suporte ao barra-
+mento ISA. Hoje, o barramento ISA é usado em sistemas legados e em museus de computador, pois foi substitu-
+ído por arquiteturas de barramento padrão mais novas e mais rápidas. Como um comentário à parte, favor notar
+que ISA quer dizer Instruction Set Architecture (arquitetura do conjunto de instruções) no contexto de níveis
+de máquina, ao passo que no contexto de barramentos quer dizer Industry Standard Architecture (arquitetura
+padrão da indústria).
+
+### Os barramentos PCI e PCIe
+Não obstante, a despeito da pressão do mercado para que nada mudasse, o antigo barramento era mesmo
+muito lento, portanto, era preciso fazer algo. Essa situação levou outras empresas a desenvolver máquinas com
+múltiplos barramentos, um dos quais era o antigo barramento ISA, ou seu sucessor compatível, o EISA (Extended
+ISA – ISA estendido). Agora, o mais popular deles é o barramento PCI (Peripheral Component Interconnect
+– interconexão de componentes periféricos). Esse barramento foi projetado pela Intel, mas a empresa decidiu
+passar todas as patentes para domínio público, a fim de incentivar toda a indústria (incluindo seus concorrentes)
+a adotá-lo.
+
+O barramento PCI pode ser usado em muitas configurações, mas a Figura 2.31 ilustra uma configuração
+típica. Nesse caso, a CPU se comunica com um controlador de memória por meio de uma conexão dedicada, de
+alta velocidade. O controlador se comunica diretamente com a memória e com o barramento PCI, de modo que
+o tráfego CPU-memória não passa pelo barramento PCI. Outros periféricos podem ser conectados diretamente
+ao barramento PCI. Uma máquina com esse projeto teria dois ou três conectores PCI vazios, permitindo que os
+clientes conectem placas de E/S PCI para novos periféricos.
+
+Qualquer que seja a velocidade de algo no mundo da computação, muita gente acha que ela é baixa. Esse
+destino também caiu sobre o barramento PCI, que está sendo substituído pelo PCI Express, abreviado como
+PCIe. A maior parte dos computadores modernos tem suporte para ele, de modo que os usuários podem conectar
+dispositivos novos e velozes ao barramento PCIe e os mais antigos e mais lentos ao barramento PCI.
+
+### Figura 2.31 PC típico montado em torno do barramento PCI. O controlador SCSI é um dispositivo PCI.
+
+Figura 2.31: PC Típico e o Barramento PCI
+Esta figura ilustra uma arquitetura mais avançada que a anterior, introduzindo o conceito de Ponte (Bridge) para separar o tráfego da CPU/Memória do tráfego de periféricos no barramento PCI.
+
+    ARQUITETURA DE BARRAMENTO PCI
+    =======================================
+    [ CPU + Cache ] <--- Barramento de Memória ---> [ MEMÓRIA PRINCIPAL ]
+            |                                               |
+            +--------------[ PONTE PARA PCI ]---------------+
+                                    |
+            _______________________|________________________
+            |          |            |           |            |
+    [ CTRL VÍDEO ] [ CTRL REDE ]  |    [ CTRL SCSI ]-------+
+                                    |           |            |
+                                    |     [ DISCO SCSI ] [ SCANNER ]
+    ================================================================
+                            BARRAMENTO PCI
+
+![alt text](image-100.png)
+
+    ------------------------+--------------------------------+---------------------------------------------+
+    | Componente            | Função Estrutural              | Relevância                                  |
+    +-----------------------+--------------------------------+---------------------------------------------+
+    | Ponte para PCI (2.31) | Coordena a comunicação entre   | Garante que o processamento do seu IDS não  |
+    |                       | o barramento de alta velocidade| seja interrompido por periféricos lentos.   |
+    |                       | da CPU e o barramento PCI.     |                                             |
+    +-----------------------+--------------------------------+---------------------------------------------+
+    | Barramento SCSI (2.31)| Um barramento secundário       | Demonstra a hierarquia de comunicação que   |
+    |                       | dedicado a dispositivos de     | você estuda em Sistemas Operacionais.       |
+    |                       | armazenamento e scanners.      |                                             |
+    +-----------------------+--------------------------------+---------------------------------------------+
+    | RAID Nível 5 (2.23)   | Utiliza paridade distribuída   | Melhor custo-benefício para os backups dos  |
+    |                       | (sombreada na imagem) para     | seus projetos de C e Java.                  |
+    |                       | segurança de dados.            |                                             |
+    +-----------------------+--------------------------------+---------------------------------------------+
+
+### Resumo de Armazenamento Consolidado
+ - HDD (2.20 e 2.21): Organizam dados em superfícies múltiplas (0 a 7) e utilizam gravação em zonas para otimizar o espaço físico.
+
+ - Flash (2.24): Baseia-se na captura de carga negativa na Porta Flutuante através de isoladores para manter o bit gravado.
+
+ - CD-R (2.27): Utiliza um laser infravermelho para queimar pontos escuros na Camada de Corante, alterando a reflexão captada pelo fotodetector.
+
+Enquanto o barramento PCI foi apenas uma atualização para o ISA mais antigo, com velocidades mais altas
+e mais bits transferidos em paralelo, o PCIe representa uma mudança radical do PCI. Na verdade, ele sequer é
+um barramento. É uma rede ponto a ponto usando linhas de bits seriais e troca de pacotes, mais parecido com a
+Internet do que com um barramento tradicional. Sua arquitetura aparece na Figura 2.32.
+
+### Figura 2.32 Exemplo de arquitetura de um sistema PCIe com três portas PCIe.
+
+A Figura 2.32 detalha a arquitetura PCIe (PCI Express), que é o padrão atual de comunicação de alta velocidade no seu Lenovo IdeaPad Gaming 3. Diferente do barramento PCI compartilhado (Fig. 2.31), o PCIe utiliza conexões ponto a ponto e um Complexo Raiz para gerenciar o tráfego.
+
+    +-----------------------------------------------------------------------+
+    |                   ARQUITETURA MODERNA (PCI EXPRESS)                   |
+    |=======================================================================|
+    |                                                                       |
+    |   [   CPU    ]                                      [  MEMÓRIA  ]     |
+    |   [  Cache   ]                                      [           ]     |
+    |       |                                                   |           |
+    |  +----+---------------------------------------------------+----+      |
+    |  |                        COMPLEXO RAIZ                        |      |
+    |  +---------+--------------------+--------------------+---------+      |
+    |            |                    |                    |                |
+    |        (Porta 1)            (Porta 2)            (Porta 3)            |
+    |            |                    |                    |                |
+    |       [ SWITCH ]           [ DISPOSITIVO]      [ PONTE PARA ]         |
+    |      /     |    \          [    PCIe    ]      [     PCI    ]         |
+    |     /      |     \                                   |                |
+    | [PCIe]  [PCIe]  [PCIe]                      ========+========         |
+    |                                              BARRAMENTO PCI           |
+    |                                             [PCIe]   [PCIe]           |
+    |                                                                       |
+    |=======================================================================|
+    |                COMUNICAÇÃO SERIAL PONTO A PONTO                       |
+    +-----------------------------------------------------------------------+
+
+![alt text](image-101.png)
+
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Processamento          | Armazenamento                 |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Complexo Raiz (Root    | Célula Flash (2.24)           |                                             |
+    | Complex)               |                               |                                             |
+    | Interface que conecta  | Estrutura de porta flutuante  |                                             |
+    | a CPU e a memória ao   | que retém dados no seu SSD    |                                             |
+    | restante do sistema de | através de isoladores         |                                             |
+    | entrada/saída (I/O).   | semicondutores.               |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | BARRAMENTO INTERNO     |                               | Conexão com seu Projeto                     |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Switch PCIe (2.31)     |                               | "Permite a expansão de uma única porta      |
+    |                        |                               | PCIe para múltiplos dispositivos,           |
+    |                        |                               | gerenciando as rotas de dados."             |
+    |                        |                               | Esta arquitetura permite que sua GPU        |
+    |                        |                               | (Gaming 3) e sua placa de rede trabalhem    |
+    |                        |                               | em paralelo sem gargalos no IDS.            |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Ponte para PCI         |                               | Retrocompatibilidade                        |
+    |                        |                               | Conector lógico que permite que             |
+    |                        |                               | dispositivos PCI antigos funcionem em       |
+    |                        |                               | placas-mãe modernas com PCIe.               |
+    |                        |                               | "Assim como no seu estudo de Sociologia,    |
+    |                        |                               | a evolução mantém estruturas antigas        |
+    |                        |                               | integradas a novos contextos."              |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+### Notas de Revisão de Hardware
+ - Diferencial PCIe: Enquanto o barramento antigo (Fig. 2.30) era paralelo e compartilhado, o PCIe é serial e utiliza "lanes" (vias) dedicadas, o que elimina a colisão de dados entre periféricos.
+
+ - Integridade Óptica: Lembre-se que dispositivos conectados via PCIe podem ser drivers de CD-ROM (Fig. 2.26) ou CD-R (Fig. 2.27), onde o laser lê dados organizados em quadros de 588 bits com proteção ECC.
+
+Várias coisas se destacam de imediato sobre o PCIe. Primeiro, as conexões entre os dispositivos são seriais,
+ou seja, 1 bit de largura em vez de 8, 16, 32 ou 64 bits. Embora se possa pensar que uma conexão de 64 bits teria
+uma largura de banda mais alta do que uma conexão de 1 bit, na prática, as diferenças no tempo de propagação
+dos 64 bits, chamadas de skew (distorção), significa que precisam ser usadas velocidades relativamente baixas.
+Com uma conexão serial, velocidades muito mais altas podem ser usadas, e isso compensa bastante a perda de
+paralelismo. Os barramentos PCI trabalham com uma taxa de clock máxima de 66 MHz. Com 64 bits transferidos
+por ciclo, a taxa de dados é de 528 MB/s. Com uma taxa de clock de 8 GHz, até mesmo com transferência serial, a
+taxa de dados do PCIe é de 1 GB/s. Além do mais, os dispositivos não estão limitados a um único par de fios para
+se comunicarem com o complexo raiz ou com um switch. Um dispositivo pode ter até 32 pares de fios, chamados
+de lanes (pistas). Essas pistas não são síncronas, de modo que a distorção não é importante aqui. A maioria das
+placas-mãe tem um encaixe de 16 pistas para a placa gráfica, que no PCIe 3.0 dará à placa gráfica uma largura
+de banda de 16 GB/s, cerca de 30 vezes mais rápida do que uma placa gráfica PCI pode oferecer. Essa largura de
+banda é necessária para aplicações cada vez mais exigentes, como gráficos em 3D.
+
+Segundo, toda a comunicação é ponto a ponto. Quando a CPU quer falar com um dispositivo, ela lhe envia
+um pacote e, em geral, recebe uma resposta depois. O pacote passa pelo complexo raiz, que está na placa-mãe,
+e depois para o dispositivo, possivelmente por um switch (ou, se o dispositivo for um PCI, por uma ponte para
+PCI). Essa evolução de um sistema em que todos os dispositivos escutavam o mesmo barramento para um que
+utiliza comunicações ponto a ponto é semelhante ao desenvolvimento das redes Ethernet (uma rede local muito
+popular), que também começou com um canal de broadcast, mas agora utiliza switches para permitir a comuni-
+cação ponto a ponto.
+
+## 2.4.2 Terminais
+Há muitos tipos de dispositivos de E/S disponíveis. Alguns dos mais comuns são discutidos a seguir. Terminais
+de computador consistem em duas partes: um teclado e um monitor. No mundo dos mainframes, essas partes costumam ser integradas em um único dispositivo ligado ao computador principal por uma linha serial ou por
+uma linha telefônica. Nos setores de reserva de passagens aéreas, bancário e em outros setores que usam mainfra-
+mes, esses dispositivos ainda estão sendo usados. No mundo dos computadores pessoais, o teclado e o monitor
+são dispositivos independentes. Qualquer que seja o caso, a tecnologia das duas partes é a mesma.
+
+### Teclados
+Há uma grande variedade de teclados. O IBM PC original vinha com um teclado munido de um contato
+mecânico sob cada tecla, que dava retorno tátil e emitia um clique quando a tecla era apertada corretamente. Hoje,
+os teclados mais baratos têm teclas que fazem apenas contato mecânico quando acionados. Os melhores têm uma
+lâmina de material elastométrico – espécie de borracha – entre as teclas e a placa de circuito impresso que está
+por baixo. Sob cada tecla há uma pequena saliência que cede quando pressionada corretamente. Um pontinho
+de material condutor dentro da saliência fecha o circuito. Alguns teclados têm um ímã sob cada tecla, que passa
+por uma bobina quando pressionado, induzindo assim a uma corrente que pode ser detectada. Também há vários
+outros métodos em uso, mecânicos e eletromagnéticos.
+
+Em computadores pessoais, quando uma tecla é pressionada, uma interrupção é gerada e a rotina de inter-
+rupções do teclado (uma parte do software do sistema operacional) é executada. A rotina de interrupções lê um
+registrador de hardware dentro do controlador de teclado para pegar o número da tecla (1 a 102) que acabou de
+ser pressionada. Quando a tecla é solta, ocorre uma segunda interrupção. Assim, se um usuário pressionar SHIFT,
+e em seguida pressionar e soltar M, e depois soltar SHIFT, o sistema operacional pode ver que o usuário quer um
+“M”, e não um “m”. O tratamento de sequências de várias teclas envolvendo SHIFT, CTRL e ALT é todo feito em
+software (incluindo a abominável sequência CTRL-ALT-DEL, que é usada para reiniciar PCs).
+
+### Touch screens
+Embora os teclados não ofereçam perigo de atrapalhar a máquina de escrever manual, há um novo sujeito
+na praça quando se trata de entrada do computador: uma touch screen (tela sensível ao toque). Embora esses
+dispositivos só tenham se tornado itens do mercado de massa com a introdução do iPhone da Apple em 2007,
+eles são muito mais antigos. A primeira tela sensível ao toque foi desenvolvida no Royal Radar Establishment, em
+Malvern, Grã-Bretanha, em 1965. Até mesmo a capacidade de encolhimento na tela, tão anunciada pelo iPhone,
+vem do trabalho inicial na Universidade de Toronto em 1982. Desde então, muitas tecnologias diferentes foram
+desenvolvidas e comercializadas.
+
+Dispositivos de toque podem ser encontrados em duas categorias: opacos e transparentes. Um dispositivo
+sensível ao toque opaco é o touchpad de um notebook. Um dispositivo transparente típico é a tela de um smart­
+phone ou tablet. Vamos analisar apenas o segundo. Eles costumam ser chamados de touch screens. Os principais
+tipos de touch screens são infravermelho, resistivo e capacitivo.
+
+As telas infravermelhas são transmissores de infravermelho, como os diodos ou lasers emissores de luz
+infravermelha (por exemplo) nas bordas esquerda ou superior do engaste em torno da tela e detectores nas
+bordas direita e inferior. Quando um dedo, caneta ou qualquer objeto opaco bloqueia um ou mais raios, o
+detector correspondente sente a queda no sinal e o hardware do dispositivo pode dizer ao sistema operacional
+quais raios foram bloqueados, permitindo que ele calcule a coordenadas (x, y) do dedo ou caneta. Embora
+esses dispositivos já tenham sido usados há algum tempo em quiosques e outras aplicações, eles não usados
+para dispositivos móveis.
+
+Outra tecnologia antiga consiste em touch screens resistivas. Estas consistem em duas camadas, sendo a
+superior flexível. Ela contém uma grande quantidade de fios horizontais. A inferior contém fios verticais. Quando
+um dedo ou outro objeto pressiona um ponto na tela, um ou mais dos fios entra em contato com os fios perpen-
+diculares na camada inferior. Os circuitos eletrônicos do dispositivo possibilitam a leitura de qual área foi pres-
+sionada. Essas telas não são caras para se montar, e são muito usadas em aplicações mais simples.
+
+As duas tecnologias são boas quando a tela é pressionada por um dedo, mas têm um problema quando dois
+dedos são usados. Para descrever a questão, usaremos a terminologia da touch screen infravermelha, mas a resistiva tem a mesma dificuldade. Imagine que os dois dedos estejam em (3, 3) e (8, 8). Como resultado, os feixes verti-
+cais x = 3 e x = 8 são interrompidos, assim como os feixes horizontais y = 3 e y = 8. Agora, imagine um cenário
+diferente, com os dedos em (3, 8) e (8, 3), que são os cantos opostos do retângulo cujos ângulos são (3, 3), (8,
+3), (8, 8) e (3, 8). Exatamente os mesmos feixes são bloqueados, de modo que o software não sabe qual dos dois
+cenários é o correto. Esse problema é conhecido como ghosting.
+
+Para poder detectar vários dedos ao mesmo tempo – uma propriedade exigida para os gestos de encolhimento
+e expansão –, uma nova tecnologia foi necessária. Aquela usada na maioria dos smartphones e tablets (mas não em
+câmeras digitais e outros dispositivos) é a touch screen capacitiva projetada. Existem vários tipos, mas o mais comum
+é o tipo de capacitância mútua. Todas as touch screens que podem detectar dois ou mais pontos de contato ao
+mesmo tempo são conhecidas como telas multitoque. Vejamos rapidamente como elas funcionam.
+
+Para os leitores que estão meio enferrujados em sua física do colégio, um capacitor é um dispositivo que
+pode armazenar carga elétrica. Um capacitor simples tem dois condutores separados por um isolador. Nas touch
+screens modernas, um padrão tipo grande com “fios” finos correndo verticalmente é separado de uma grade
+horizontal por uma camada isolante fina. Quando um dedo toca na tela, ela muda a capacitância em todas as
+intersecções tocadas (possivelmente afastadas). Essa mudança pode ser medida. Como uma demonstração de que
+uma touch screen moderna não é como as antigas telas infravermelhas e resistivas, tente tocar em uma com uma
+caneta, lápis, clipe de papel ou dedo com luva e você verá que nada acontece. O corpo humano é bom para arma-
+zenar carga elétrica, como pode ser comprovado dolorosamente por qualquer um que já tenha se arrastado por
+um tapete em um dia frio e seco e depois tocado em uma maçaneta de metal. Instrumentos de plástico, madeira
+e metal não são tão bons quanto pessoas em termos de sua capacitância.
+
+Os “fios” em uma touch screen não são os fios de cobre comuns, encontrados nos dispositivos elétricos
+normais, pois bloqueariam a luz da tela. Em vez disso, eles são tiras finas (em geral, com 50 micra) de óxido de
+índio-estanho condutor, ligadas em lados opostos de uma placa fina de vidro, que juntos formam os capacitores.
+Em alguns dispositivos mais novos, a placa de vidro isolante é substituída por uma fina camada de dióxido de
+silício (areia!), com as três camadas salpicadas (átomo por átomo) em algum substrato. De qualquer forma, os
+capacitores são protegidos contra poeira e arranhões por uma placa de vidro acima disso, para formar a superfície
+da tela a ser tocada. Quanto mais fina a placa de vidro superior, mais sensível é o desempenho, porém, mais frágil
+é o dispositivo.
+
+Em operação, tensões são aplicadas alternadamente aos “fios” horizontal e vertical, enquanto os valores de
+tensão, que são afetados pela capacitância de cada intersecção, são lidos dos outros. Essa operação é repetida
+muitas vezes por segundo, com as coordenadas tocadas sendo alimentadas no controlador do dispositivo como
+um fluxo de pares (x, y). Mais processamento, como determinar se ocorre apontamento, compressão, expressão
+ou toque, é feito pelo sistema operacional. Se você usar todos os 10 dedos e pedir a um amigo para usar os dele,
+o sistema operacional terá mais trabalho, mas o hardware de toque múltiplo poderá realizar essa tarefa.
+
+### Monitores de tela plana
+Os primeiros monitores de computador usavam tubos de raios catódicos (CRTs – cathode ray tubes), assim
+como os antigos aparelhos de televisão. Eles eram muito volumosos e pesados para serem usados em notebooks,
+portanto, era preciso uma tecnologia completamente diferente para suas telas. O desenvolvimento de telas planas
+ofereceu um tamanho físico necessário para os notebooks, e esses dispositivos também usavam menos potência.
+Hoje, os benefícios em tamanho e potência do monitor de tela plana quase eliminaram o uso de monitores CRT.
+
+A mais comum tecnologia de monitor de tela plana é o LCD (Liquid Crystal Display – monitor de cristal
+líquido). É uma tecnologia de alta complexidade, tem muitas variações e está mudando com grande rapidez, de
+modo que esta descrição será necessariamente breve e muito simplificada.
+
+Cristais líquidos são moléculas orgânicas viscosas que fluem como um líquido, mas também têm estru-
+tura espacial, como um cristal. Foram descobertos por um botânico austríaco, Friedrich Reinitzer, em 1888 e
+aplicados pela primeira vez em visores (por exemplo, de calculadoras e relógios) na década de 1960. Quando
+todas as moléculas estão alinhadas na mesma direção, as propriedades óticas do cristal dependem da direção e polarização da luz incidente. Usando um campo elétrico aplicado, o alinhamento molecular e, por conseguinte,
+as propriedades óticas, podem ser mudadas. Em particular, fazendo passar luz através de um cristal líquido, a
+intensidade da luz que sai dele pode ser controlada por meios elétricos. Essa propriedade pode ser explorada
+para construir monitores de tela plana.
+
+Uma tela de monitor de LCD consiste em duas placas de vidro paralelas entre as quais há um volume
+selado que contém um cristal líquido. Eletrodos transparentes são ligados a ambas as placas. Uma luz atrás da
+placa traseira, natural ou artificial, ilumina a tela por trás. Os eletrodos transparentes ligados a cada placa são
+usados para criar campos elétricos no cristal líquido. Diferentes partes da tela recebem tensões elétricas dife-
+rentes para controlar a imagem apresentada. Colados às partes frontal e traseira da tela há filtros de polarização
+(polaroides), pois a tecnologia do monitor requer a utilização de luz polarizada. A montagem geral é mostrada
+na Figura 2.33(a).
+
+### Figura 2.33 (a) Construção de uma tela de LCD. (b) Os sulcos nas placas traseira e frontal são perpendiculares uns aos outros.
+
+![alt text](image-102.png)
+
+Embora muitos tipos de monitores de LCD estejam em uso, agora vamos considerar um tipo particular
+de visor, o TN (Twisted Nematic – nemático torcido), como exemplo. Nesse monitor, a placa traseira contém
+minúsculos sulcos horizontais, e a frontal, minúsculos sulcos verticais, como ilustrado na Figura 2.33(b). Na
+ausência de um campo elétrico, as moléculas do LCD tendem a se alinhar com os sulcos. Uma vez que os alinha-
+mentos frontal e traseiro estão a 90 graus entre si, as moléculas (e, portanto, a estrutura cristalina) ficam torcidas
+entre as placas traseira e frontal.
+
+Na parte de trás do monitor há um polaroide horizontal que permite apenas a passagem de luz polarizada
+horizontalmente. Na parte da frente do visor há um polaroide vertical que permite apenas a passagem de luz
+polarizada verticalmente. Se não houvesse nenhum líquido presente entre as placas, a luz polarizada hori-
+zontalmente que entrasse pelo polaroide traseiro seria bloqueada pelo polaroide frontal, produzindo uma tela
+uniformemente negra.
+
+Contudo, a estrutura cristalina torcida das moléculas do LCD guia a luz na passagem e gira sua polarização,
+fazendo com que ela saia na vertical. Portanto, na ausência de um campo elétrico, a tela de LCD é uniformemente
+brilhante. Aplicando uma tensão elétrica em partes selecionadas da placa, a estrutura torcida pode ser destruída,
+bloqueando a luz nesses locais.
+
+Há dois esquemas que podem ser usados para aplicar a tensão elétrica. Em um monitor de matriz passiva (de
+baixo custo), ambos os eletrodos contêm fios paralelos. Em um monitor de 1.920 × 1.080, por exemplo, o eletrodo
+traseiro poderia ter 1.920 fios verticais e o frontal poderia ter 1.080 horizontais. Aplicando-se uma tensão elétrica
+em um dos fios verticais e em seguida fazendo-se pulsar um dos horizontais, a tensão em uma posição de pixel sele-
+cionada pode ser mudada, fazendo-a escurecer por um curto espaço de tempo. Um pixel (aglutinação das palavras
+“picture” e “element”) é um ponto colorido a partir do qual todas as imagens digitais são construí­das. Repetindo-se
+esse pulso para o próximo pixel e então para o seguinte, pode-se pintar uma linha escura de varredura. Em geral, a
+tela inteira é pintada 60 vezes por segundo, para enganar o olho e fazê-lo pensar que ali há uma imagem constante.
+
+O outro esquema de ampla utilização é o monitor de matriz ativa. É mais caro, mas produz melhor imagem.
+Em vez de apenas dois conjuntos de fios perpendiculares, ele tem um minúsculo elemento comutador em cada
+posição de pixel em um dos eletrodos. Desligando e ligando esses elementos, pode-se criar um padrão de tensão
+elétrica arbitrário na tela, o que permite um padrão de bits também arbitrário. Os elementos comutadores são
+denominados transistores de película fina (TFT – Thin Film Transistors) e os monitores de tela plana que os
+utilizam costumam ser denominados monitores TFT. Agora, a maioria dos notebooks e monitores de tela plana
+para desktops utiliza a tecnologia TFT.
+
+Até aqui, descrevemos como funciona um monitor monocromático. Basta dizer que monitores coloridos
+usam os mesmos princípios gerais dos monocromáticos, mas os detalhes são muito mais complicados. Filtros
+ópticos são usados para separar a luz branca em componentes vermelha, verde e azul em cada posição de pixel, de
+modo que estes possam ser exibidos independentemente. Toda cor pode ser obtida por uma superposição dessas
+três cores primárias.
+
+Outras tecnologias de tela estão surgindo. Uma das mais promissoras é a tela OLED (Organic Light Emitting
+Diode – diodo orgânico emissor de luz). Ela consiste em camadas de moléculas orgânicas carregadas eletrica-
+mente, dispostas entre dois eletrodos em forma de sanduíche. As mudanças de tensão fazem com que as molécu-
+las sejam excitadas e se movam para estados de energia mais altos. Quando elas retornam ao seu estado normal,
+emitem luz. Outros detalhes estão fora do escopo deste livro (e de seus autores).
+
+### RAM de vídeo
+Quase todos os monitores são renovados de 60 a 100 vezes por segundo por uma memória especial, denominada
+RAM de vídeo (memória de acesso aleatório de vídeo), embutida na placa controladora do monitor. Essa memória tem
+um ou mais mapas de bits que representam a imagem da tela. Em uma tela com, por exemplo, 1.920 × 1.080 elementos
+de imagem, denominados pixels, uma RAM de vídeo conteria 1.920 × 1.080 valores, um para cada pixel. Na verdade,
+ela poderia conter muitos desses mapas de bits, para permitir a passagem rápida de uma imagem para outra.
+
+Em um monitor comum, cada pixel seria representado como um valor RGB (red/green/blue) de 3 bytes, um
+para cada intensidade das componentes vermelha, verde e azul da cor do pixel (monitores de primeira linha usam
+10 ou mais bits por cor). Pelas leis da física, sabe-se que qualquer cor pode ser obtida por uma superposição linear
+de luzes vermelha, verde e azul.
+
+Uma RAM de vídeo com 1.920 × 1.080 pixels a 3 bytes/pixel requer mais de 6,2 MB para armazenar a imagem
+e uma boa quantidade de tempo de CPU para fazer qualquer coisa com ela. Por essa razão, alguns computadores
+adotam uma solução de conciliação usando um número de 8 bits para indicar a cor desejada. Então, esse número
+é usado como um índice para uma tabela de hardware denominada paleta de cores, que contém 256 entradas,
+cada uma com um valor RGB de 24 bits. Esse projeto, denominado cor indexada, reduz em dois terços o tamanho
+de memória da RAM de vídeo, mas permite somente 256 cores na tela ao mesmo tempo. Em geral, cada janela
+na tela tem seu próprio mapeamento. Porém, com apenas uma paleta de cores em hardware, quando há várias
+janelas presentes, muitas vezes apenas a janela corrente apresenta suas cores corretamente. Paletas de cores com
+216 entradas também são usadas, mas o ganho aqui é de apenas 1/3.
+
+Monitores de vídeo com mapas de bits requerem grande quantidade de largura de banda. Para apresentar
+multimídia em tela cheia, com todas as cores em um monitor de 1.920 × 1.080, é preciso copiar 6,2 MB de dados
+para a RAM de vídeo para cada quadro. Quando o vídeo é de movimento total, é preciso uma taxa de no mínimo 25 quadros por segundo, o que resulta uma taxa total de dados de 155 MB/s. Essa carga é mais do que o barra-
+mento PCI original podia manipular (132 MB/s), mas o PCIe pode tratar disso com facilidade.
+
+### 2.4.3 Mouses
+À medida que o tempo passa, os computadores estão sendo usados por pessoas menos versadas sobre o
+modo de funcionamento desses equipamentos. Máquinas da geração ENIAC só eram empregadas pelas pessoas
+que as construíram. Na década de 1950, computadores eram utilizados apenas por programadores profissionais
+altamente treinados. Agora, são amplamente usados por pessoas que precisam fazer algum trabalho e não sabem
+muito (ou nem querem saber) sobre como funcionam os computadores ou como são programados.
+
+Antigamente, a maioria dos computadores tinha interfaces de linha de comando, para as quais os usuários digi-
+tavam comandos. Visto que quem não é especialista quase sempre acha que interfaces de linha de comando não são
+amigáveis ao usuário – se não absolutamente hostis –, muitos fabricantes desenvolveram interfaces do tipo “apontar e
+clicar”, tais como as do Macintosh e do Windows. Usar esse modelo pressupõe que haja um modo de apontar algo na
+tela. O meio mais comum de permitir que usuários apontem algo na tela é um mouse.
+
+Um mouse é um caixinha de plástico que fica sobre a mesa, ao lado do teclado. Quando ela é movimentada
+sobre a mesa, um pequeno ponteiro também se movimenta na tela, permitindo que os usuários apontem itens. O
+mouse tem um, dois ou três botões na parte de cima, que possibilitam aos usuários selecionar itens apresentados
+em menus. Muita polêmica já se levantou por causa de discussões sobre o número de teclas que um mouse deve
+ter. Usuários ingênuos preferem uma só (não há como apertar a tecla errada se houver apenas uma), mas os sofis-
+ticados gostam do poder conferido por várias teclas para fazer coisas imaginativas.
+
+Três tipos de mouses foram produzidos: mecânicos, ópticos e óptico-mecânicos. Os primeiros tinham duas
+rodinhas de borracha para fora da parte inferior do corpo com eixos perpendiculares entre si. Quando o mouse
+era movimentado em paralelo com seu eixo principal, uma roda girava. Quando ele era movimentado ao longo
+da perpendicular de seu eixo principal, a outra roda girava. Cada rodinha comandava um resistor variável (poten-
+ciômetro). Medindo as alterações na resistência era possível ver como cada roda tinha girado e assim calcular a
+distância que o mouse tinha percorrido em cada direção. Depois, esse projeto foi substituído em grande parte por
+outro, no qual, em vez de rodinhas, era usada uma pequena esfera projetada um pouco para fora do fundo do
+mouse. Ele é mostrado na Figura 2.34.
+
+### Figura 2.34 Utilização do mouse para apontar itens de menu.
+
+![alt text](image-103.png)
+
+O segundo tipo de mouse é o óptico. Esse tipo não tem rodinhas nem esferas. Em vez delas, tem um LED
+(Light Emitting Diode – diodo emissor de luz) e um fotodetector na parte de baixo. Os primeiros mouses
+ópticos exigiam uma almofada plástica especial que continha uma grade retangular de linhas espaçadas muito
+próximas umas das outras para detectar quantas linhas tinham sido atravessadas e, assim, a que distância o
+mouse se movimentou. Os mouses ópticos modernos contêm um LED que ilumina as imperfeições da superfí-
+cie, junto com uma pequena câmera de vídeo que registra uma pequena imagem (em geral, 18 × 18 pixels) até
+1.000 vezes por segundo. Imagens consecutivas são comparadas para ver a que distância o mouse se moveu.
+Alguns mouses ópticos utilizam um laser no lugar de um LED para iluminação. Eles são mais precisos, mas
+também mais caros.
+
+O terceiro tipo de mouse é o óptico-mecânico. Assim como o mouse mecânico mais novo, ele tem uma esfera
+que gira dois eixos alinhados a 90 graus em relação um ao outro. Os eixos estão conectados a decodificadores com
+fendas que permitem a passagem da luz. Quando o mouse se movimenta, os eixos giram e pulsos de luz atingem
+os detectores sempre que aparece uma fenda entre um LED e seu detector. O número de pulsos detectados é pro-
+porcional à quantidade de movimento.
+
+Embora mouses possam ser montados de várias maneiras, um arranjo comum é enviar uma sequência de 3
+bytes ao computador toda vez que o mouse se movimenta a uma distância mínima (por exemplo, 0,01 polegada),
+às vezes denominada mickey. Em geral, esses caracteres vêm em uma linha serial, um bit por vez. O primeiro byte
+contém um inteiro com sinal que informa quantas unidades o mouse se moveu na direção x desde a última vez.
+O segundo dá a mesma informação para movimento na direção y. O terceiro contém o estado corrente das teclas
+do mouse. Às vezes, são usados 2 bytes para cada coordenada.
+
+No computador, um software de baixo nível aceita essas informações à medida que chegam e converte os
+movimentos relativos enviados pelo mouse em uma posição absoluta. Em seguida, ele apresenta na tela uma
+seta correspondente à posição onde o mouse está. Quando a seta indicar o item adequado, o usuário clica no
+botão do mouse e então o computador pode interpretar qual item foi selecionado, por saber onde a seta está
+posicionada na tela.
+
+## 2.4.4 Controladores de jogos
+Os videogames costumam ter exigências muito altas de E/S do usuário e, no mercado de console de vídeo,
+dispositivos de entrada especializados têm sido desenvolvidos. Nesta seção, veremos dois desenvolvimentos
+recentes em controladores para videogame, o Nintendo Wiimote e o Microsoft Kinect.
+
+### Controlador Wiimote
+Lançado em 2006 com o console de jogos Nintendo Wii, o controlador Wiimote contém botões tradicionais
+para jogos e mais uma capacidade de sensibilidade dupla ao movimento. Todas as interações com o Wiimote
+são enviadas em tempo real ao console de jogos, usando um rádio Bluetooth interno. Os sensores de movimento
+no Wiimote permitem que ele sinta seu próprio movimento nas três dimensões e mais; quando apontado para a
+televisão, ele oferece uma capacidade minuciosa para apontar.
+
+A Figura 2.35 ilustra como o Wiimote executa essa função de sensibilidade ao movimento. O rastrea-
+mento do movimento do Wiimote em três dimensões é realizado com um acelerômetro interno de 3 eixos.
+Esse dispositivo contém três massas pequenas, cada qual podendo se mover nos eixos x, y e z (com relação
+ao chip do acelerômetro). Elas se movem em proporção ao grau de aceleração em seu eixo particular, o
+que muda a capacitância da massa em relação a uma parede fixa de metal. Medindo as três capacitâncias
+variáveis, é possível sentir a aceleração em três dimensões. Usando essa tecnologia e algum cálculo clássico,
+o console Wii pode rastrear o movimento do Wiimote no espaço. Ao movimentar o Wiimote para atingir
+uma bola de tênis virtual, esse movimento é rastreado enquanto você se desloca em direção à bola e, se você
+virou o pulso no último momento para atingir a bola por cima, os acelerômetros do Wiimote também notarão
+esse movimento.
+
+### Figura 2.35 Sensores de movimento do controlador de videogame Wiimote.
+
+![alt text](image-104.png)
+
+Embora os acelerômetros funcionem bem para acompanhar o movimento do Wiimote enquanto ele se deslo-
+ca em três dimensões, eles não podem oferecer a sensibilidade de movimento detalhada necessária para controlar
+um ponteiro na tela da televisão. Os acelerômetros sofrem com pequenos erros inevitáveis em suas medições de
+aceleração, de modo que, com o tempo, o local exato do Wiimote (com base na integração de suas acelerações)
+se tornará cada vez menos preciso.
+
+Para oferecer a sensibilidade de movimento com precisão, o Wiimote utiliza uma tecnologia de visão de
+computador inteligente. Acima da televisão há uma “barra de sensor” que contém LEDs a uma distância fixa.
+No Wiimote há uma câmera que, quando apontada na barra de sensor, pode deduzir a distância e orientação em
+relação à televisão. Como os LEDs da barra de sensor estão afastados a certa distância, sua distância vista pelo
+Wiimote é proporcional àquela entre o Wiimote e a barra de sensor. O local da barra de sensor no campo de visão
+do Wiimote indica a direção que este aponta em relação à televisão. Observando essa orientação continua­mente,
+é possível dar suporte a uma capacidade de apontamento minucioso sem os erros de posição inerentes aos ace-
+lerômetros.
+
+### Controlador Kinect
+O Microsoft Kinect leva as capacidades de visão dos controladores de jogos a um nível inteiramente novo.
+Esse dispositivo usa apenas a visão do computador para determinar as interações do usuário com o console de
+jogos. Ele funciona sentindo a posição do usuário na sala, mais a orientação e o movimento de seu corpo. Os jogos
+são controlados por movimentos predeterminados de suas mãos, braços e qualquer outra coisa que os projetistas
+do jogo acreditarem que você deva mexer a fim de controlar seu jogo.
+
+A capacidade de sentir do Kinect é baseada em uma câmera de profundidade combinada com uma câmera de
+vídeo. A câmera de profundidade calcula a distância do objeto no campo de visão do Kinect. Ela faz isso emitindo
+uma matriz bidimensional de pontos a laser infravermelho, depois capturando seus reflexos com uma câmera
+infravermelha. Usando uma técnica de visão do computador chamada “iluminação estruturada”, o Kinect pode
+determinar a distância dos objetos em seu campo de visão com base em como o conjunto de pontos infraverme-
+lhos é agitado pelas superfícies iluminadas.
+
+A informação de profundidade é combinada com a informação de textura retornada da câmera de vídeo
+para produzir um mapa de profundidade texturizado. Esse mapa pode então ser processado pelos algoritmos
+de visão do computador para localizar a pessoa na sala (até mesmo reconhecendo seus rostos) e a orientação e
+movimento de seu corpo. Depois de processar, a informação sobre as pessoas na sala é enviada ao console do
+jogo, que usa esses dados para controlar o videogame.
+
+### 2.4.5 Impressoras
+Após o usuário preparar um documento ou buscar uma página na Web, muitas vezes quer imprimir seu
+trabalho, de modo que todos os computadores podem ser equipados com uma impressora. Nesta seção, descre-
+veremos alguns dos tipos mais comuns de impressoras.
+
+### Impressoras a laser
+Talvez o desenvolvimento mais interessante da impressão desde que Johann Gutenberg inventou o tipo
+móvel no século XV é a impressora a laser. Esse dispositivo combina uma imagem de alta qualidade, excelente
+flexibilidade, grande velocidade e custo moderado em um único periférico compacto. Impressoras a laser usam
+quase a mesma tecnologia das máquinas fotocopiadoras. Na verdade, muitas empresas fabricam equipamentos
+que combinam cópia e impressão (e, às vezes, também fax).
+
+A tecnologia básica é ilustrada na Figura 2.36. O coração da impressora é um tambor rotativo de precisão (ou
+uma correia, em alguns sistemas de primeira linha). No início de cada ciclo de página, ele recebe uma carga de até
+cerca de 1.000 volts e é revestido com um material fotossensível. Então, a luz de um laser passa pelo comprimento
+do tambor, refletindo-a de um espelho octogonal rotativo. O feixe de luz é modulado para produzir um padrão de
+pontos escuros e claros. Os pontos atingidos pelo feixe perdem sua carga elétrica.
+
+### Figura 2.36 Operação de uma impressora a laser.
+
+Figura 2.36: Operação de uma Impressora a Laser
+Este diagrama ilustra o processo eletrofotográfico, onde a luz é convertida em uma imagem física no papel através de calor e pressão.
+
+    MECANISMO DE IMPRESSÃO A LASER
+    ========================================
+    [ LASER ] ---> [ ESPELHO ROTATIVO ]
+                            |
+                            v (Feixe de luz)
+    [ TONER ] ----> [ TAMBOR CARREGADO ]
+                            | (Atração do pó)
+    [ PAPEL BRANCO ] ----> [ ROLETES AQUECIDOS ] ---> [ SAÍDA ]
+                                (Fusão)
+
+Figura 2.21: Disco com Cinco Zonas (ZBR)
+Diferente da velocidade linear constante (CLV) do CD-ROM, os discos rígidos modernos dividem o prato em zonas para manter a densidade de gravação eficiente em todas as trilhas.
+
+    GEOMETRIA DE DISCO (ZBR)
+            __________________________
+            /     /     /     /     /  \
+            |  Z4 |  Z3 |  Z2 |  Z1 | Z0 |  (Z0 = Externa)
+            \_____\_____\_____\_____\__/
+        
+        * Zona Externa (Z0): Mais setores por trilha.
+        * Zona Interna (Z4): Menos setores por trilha.
+
+### Notas para o eBook
+ - Conexão com seu Projeto: Assim como o seu IDS precisa de integridade no barramento PCIe (Fig. 2.32), os dados no CD-ROM (Fig. 2.26) dependem de 288 bytes de ECC para cada setor de 2.352 bytes para garantir que riscos físicos não corrompam o binário.
+
+ - Física do CD-R (2.27): O diodo de laser infravermelho queima pontos escuros na camada de corante para simular as depressões físicas do alumínio de um CD-ROM prensado.
+
+![alt text](image-105.png)
+
+Após pintar uma linha de pontos, o tambor gira uma fração de um grau para permitir que a próxima linha
+seja pintada. Com o decorrer da rotação, a primeira linha de pontos chega ao toner, um reservatório que contém
+um pó negro eletrostaticamente sensível. O toner é atraído por aqueles pontos que ainda estão carregados, for-
+mando uma imagem visual daquela linha. Um pouco mais adiante na trajetória de transporte, o tambor revestido
+de toner é pressionado contra o papel, transferindo o pó preto para ele. Em seguida, o papel passa por rolamentos
+aquecidos que fundem permanentemente o toner à superfície do papel, fixando a imagem. Em um ponto mais
+adiante de sua rotação, o tambor é descarregado e raspado para limpar qualquer resíduo de toner, preparando-o
+para receber nova carga elétrica e revestimento para imprimir a próxima página.
+
+Nem é preciso dizer que esse processo é uma combinação extremamente complexa de física, química,
+engenharia mecânica e engenharia ótica. Ainda assim, há vários fabricantes no mercado que oferecem conjuntos
+complexos denominados mecanismos de impressão. Fabricantes de impressoras a laser combinam os mecanis-
+mos de impressão com sua própria eletrônica e software próprio para montar uma impressora completa. A parte
+eletrônica consiste em uma CPU rápida embutida junto com megabytes de memória para conter um mapa de bits
+de uma página inteira e numerosas fontes, algumas delas embutidas, outras carregadas por download. Grande
+parte das impressoras aceita comandos que descrevem as páginas a serem impressas (ao contrário de apenas
+aceitar mapas de bits preparados pela CPU principal). Esses comandos são dados em linguagens como a PCL
+da HP e PostScript da Adobe ou PDF, que são linguagens de programação completas, embora especializadas.
+
+Impressoras a laser de 600 dpi ou mais podem executar um trabalho razoável na impressão de fotografias em
+preto e branco, mas a tecnologia é mais complicada do que pode parecer à primeira vista. Considere uma fotogra-
+fia digitalizada em 600 dpi que deve ser impressa por uma impressora de 600 dpi. A imagem contém 600 × 600
+pixels/polegada, cada um consistindo em um valor de cinza que varia de 0 (branco) a 255 (preto). A impressora
+também pode imprimir 600 dpi, mas cada pixel impresso é ou preto (toner presente) ou branco (nenhum toner
+presente). Valores cinza não podem ser impressos.
+
+A solução habitual para imprimir imagens com valores de cinza é usar a técnica do meio-tom (retícula), a mesma
+empregada para imprimir cartazes comerciais. A imagem é desmembrada em células de meios-tons, em geral com 6 ×
+6 pixels. Cada célula pode conter entre 0 e 36 pixels pretos. O olho percebe uma célula com muitos pixels como mais
+escura do que uma com menos pixels. Valores de cinza na faixa de 0 a 255 são representados dividindo essa faixa em
+37 zonas. Valores de 0 a 6 estão na zona 0, valores de 7 a 13 estão na zona 1 e assim por diante (a zona 36 é um pouco
+menor do que as outras porque 256 não é divisível exatamente por 37). Sempre que é encontrado um valor de cinza
+na zona 0, sua célula de meio-tom sobre o papel é deixada em branco, como ilustrado na Figura 2.37(a). Um valor de
+zona 1 é impresso como 1 pixel negro. Um valor de zona 2 é impresso como 2 pixels negros, conforme mostra a Figura
+2.37(b). Outros valores de zonas são mostrados nas figuras 2.37(c)–(f). Claro que pegar uma fotografia digitalizada
+a 600 dpi e usar essa técnica de meio-tom reduz a resolução efetiva a 100 células/polegada, denominada frequência
+de tela de meio-tom, medida por convenção em lpi (lines per inch – linhas por polegada).
+
+### Figura 2.37 - Pontos de meio-tom para várias faixas de escala de cinza. (a) 0–6. (b) 14–20. (c) 28–34. (d) 56–62. (e) 105–111.
+(f) 161–167.
+
+Figura 2.37: Pontos de Meio-Tom (Escala de Cinza)Esta figura ilustra como impressoras (que só possuem tinta preta) simulam tons de cinza agrupando pontos em matrizes de $6 \times 6$ pixels.
+
+    SIMULAÇÃO DE ESCALA DE CINZA (MATRIZ 6x6)
+    =================================================
+    (a) Branco     (c) Cinza Claro    (f) Cinza Escuro
+    [        ]     [    ###     ]     [  #######  ]
+    [        ]     [    ###     ]     [ ######### ]
+    [        ]     [    ###     ]     [ ######### ]
+    [        ]     [            ]     [  #######  ]
+    =================================================
+    Nível: 0-6       Nível: 28-34       Nível: 161-167
+
+        (a) 0-6          (b) 14-20         (c) 28-34
+        +-----------+     +-----------+     +-----------+
+        | . . . . . |     | . . . . . |     | . . . . . |
+        | . . . . . |     | . . # . . |     | . . # . . |
+        | . . . . . |     | . # # . . |     | . # # # . |
+        | . . . . . |     | . . . . . |     | . . # . . |
+        | . . . . . |     | . . . . . |     | . . . . . |
+        +-----------+     +-----------+     +-----------+
+
+        (d) 56-62         (e) 105-111       (f) 161-167
+        +-----------+     +-----------+     +-----------+
+        | . . # . . |     | . # # # . |     | . # # # . |
+        | . # # # . |     | # # # # # |     | # # # # # |
+        | # # # # # |     | # # # # # |     | # # # # # |
+        | . # # # . |     | # # # # # |     | # # # # # |
+        | . . # . . |     | . # # # . |     | . # # # . |
+        +-----------+     +-----------+     +-----------+
+
+![alt text](image-106.png)
+
+### Impressão colorida
+Embora a maioria das impressoras a laser seja monocromática, impressoras a laser coloridas estão se tor-
+nando mais comuns, de modo que talvez seja útil dar aqui alguma explicação sobre a impressão colorida (que
+também se aplica a impressoras a jato de tinta e outras). Como você poderia imaginar, isso não é trivial. Imagens coloridas podem ser vistas de duas maneiras: por luz transmitida e por luz refletida. Imagens por luz transmiti-
+da, como as produzidas em monitores, são compostas por superposição linear das três cores primárias aditivas:
+vermelho, verde e azul.
+
+Ao contrário, imagens por luz refletida, como fotografias em cores e fotos em revistas de papel lustroso,
+absorvem certos comprimentos de onda de luz e refletem o resto. Elas são compostas por uma superposição linear
+das três cores subtrativas primárias, ciano (toda cor vermelha absorvida), magenta (toda cor verde absorvida) e
+amarela (toda cor azul absorvida). Em teoria, toda cor pode ser produzida misturando as tintas ciano, amarela e
+magenta. Na prática, é difícil conseguir essas tintas com pureza suficiente para absorver toda a luz e produzir um
+negro verdadeiro. Por essa razão, praticamente todos os sistemas de impressão em cores usam quatro tintas: ciano,
+magenta, amarela e negra. Esses sistemas são denominados impressoras CMYK. O K é geralmente associado à
+cor negra (blacK), porém, ele é a placa chave com a qual as placas de cores são alinhadas em impressoras con-
+vencionais de quatro cores. Monitores, ao contrário, usam luz transmitida e o sistema RGB para produzir cores.
+
+O conjunto completo de cores que um monitor ou uma impressora podem produzir é denominado sua gama.
+Nenhum dispositivo tem uma gama que se iguale à do mundo real, já que cada cor vem em 256 intensidades no
+máximo, o que dá apenas 16.777.216 cores discretas. Imperfeições na tecnologia reduzem ainda mais esse total e
+as restantes nem sempre estão uniformemente espaçadas no espectro de cores. Além do mais, a percepção da cor
+tem muito a ver com o modo de funcionamento dos bastões e cones na retina, e não apenas com a física da luz.
+
+Como consequência dessas observações, converter uma imagem colorida que parece boa na tela em uma
+imagem impressa idêntica está longe de ser trivial. Entre os problemas estão:
+
+    1. Monitores em cores usam luz transmitida; impressoras em cores usam luz refletida.
+    2. Monitores produzem 256 intensidades por cor; impressoras têm de usar meios-tons.
+    3. Monitores têm um fundo negro; o papel tem um fundo claro.
+    4. As gamas RGB de um monitor e as gamas CMYK de uma impressora são diferentes.
+
+Obter imagens impressas em cores que reproduzem os tons do mundo real (ou até mesmo os das imagens
+na tela) requer calibração de dispositivos, software sofisticado e considerável conhecimento técnico e experiência
+da parte do usuário.
+
+### Impressoras a jato de tinta 
+Para impressão doméstica de baixo custo, as impressoras a jato de tinta são as favoritas. A cabeça de impres-
+são móvel, que mantém os cartuchos de tinta, é varrida horizontalmente pelo papel por uma correia, enquanto a
+tinta é espirrada por minúsculos esguichos. As gotículas de tinta têm um volume de mais ou menos 1 picolitro,
+de modo que 100 milhões delas formam uma única gota d’água.
+
+Impressoras a jato de tinta podem ter duas variedades: piezelétricas (usadas pela Epson) e térmicas (usadas
+pela Canon, HP e Lexmark). As impressoras a jato de tinta piezelétricas possuem um tipo especial de cristal
+próximo de sua câmara de tinta. Quando uma tensão elétrica é aplicada ao cristal, ela se deforma ligeiramente,
+forçando uma gotícula de tinta a sair pelo esguicho. Quanto maior a tensão, maior a gotícula, permitindo que o
+software controle seu tamanho.
+
+Impressoras a jato de tinta térmicas (também chamadas impressoras a jato de bolhas) contêm um minúsculo
+resistor dentro de cada esguicho. Quando uma tensão elétrica é aplicada ao resistor, ele se aquece extremamente
+rápido, elevando de imediato a temperatura da tinta que encosta nele até o ponto de ebulição, até que a tinta se
+vaporize para formar uma bolha de gás. A bolha de gás ocupa mais volume do que a tinta que a criou, produzindo
+pressão no esguicho. O único lugar para onde a tinta pode sair é pela frente do esguicho, para o papel. O esguicho
+é então resfriado e o vácuo resultante suga outra gota de tinta do cartucho. A velocidade da impressora é limitada
+pela velocidade com que o ciclo aquecer/resfriar pode ser repetido. As gotículas são todas do mesmo tamanho,
+mas menores do que as usadas pelas impressoras piezelétricas.
+
+As impressoras a jato de tinta normalmente possuem resoluções de pelo menos 1.200 dpi (dots per inch –
+pontos por polegada) e, no máximo, 4.800 dpi. Elas são baratas, silenciosas e possuem boa qualidade, apesar
+de também serem lentas, e utilizam cartuchos de tinta caros. Quando a melhor das impressoras a jato de tinta
+de alta qualidade é usada para imprimir fotografia em alta resolução profissional com papel fotográfico espe-
+cialmente lustroso, os resultados são parecidos com a fotografia convencional, até mesmo com impressões de
+20 × 25 cm.
+
+Para obter melhores resultados, é preciso usar tinta e papel especiais. Tintas à base de corantes consistem em
+corantes coloridos dissolvidos em uma base fluida. Elas dão cores brilhantes e fluem com facilidade. Sua principal
+desvantagem é que desbotam quando expostas à luz ultravioleta, tal como a contida na luz solar. Tintas à base
+de pigmentos contêm partículas sólidas de pigmentos suspensas em uma base fluida, que evapora do papel dei-
+xando ali o pigmento. Não desbotam com o tempo, mas não são tão brilhantes como as tintas à base de corantes
+e as partículas de pigmento tendem a entupir os bicos injetores, que requerem limpeza periódica. Para imprimir
+fotografias, é preciso papel lustroso ou revestido. Esses tipos de papel foram projetados especialmente para conter
+as gotículas de tinta e não permitir que elas se espalhem.
+
+### Impressoras especiais
+Embora impressoras a laser e a jato de tinta dominem os mercados de impressão doméstico e de escritório,
+outros tipos de impressoras são usados em outras situações, com outros requisitos em termos de qualidade de
+cor, preço e outras características.
+
+Uma variante da impressora a jato de tinta é a impressora de tinta sólida. Esse tipo de impressora aceita
+quatro blocos sólidos de uma tinta especial à base de cera, que são derretidos e passam para reservatórios de tinta
+quente. Os tempos de partida dessas impressoras podem chegar a 10 minutos, enquanto os blocos de tinta estão
+derretendo. A tinta quente é borrifada sobre o papel, onde se solidifica e se funde com o papel quando este é
+forçado a passar entre dois roletes rígidos. De certa forma, ela combina a ideia de borrifar tinta das impressoras a
+jato de tinta com a ideia de fundir a tinta no papel com roletes de borracha rígidos das impressoras a laser.
+
+Outro tipo de impressora em cores é a impressora a cera. Ela tem uma larga fita encerada em quatro cores,
+segmentada em faixas do tamanho de páginas. Milhares de elementos de aquecimento derretem a cera à medi-
+da que o papel passa por baixo dela. A cera se funde com o papel na forma de pixels usando o sistema CMYK.
+Impressoras a cera costumavam ser a principal tecnologia de impressão em cores, mas estão sendo substituídas
+pelos outros tipos cujos materiais de consumo são mais baratos.
+
+Ainda outro tipo de impressora em cores é a impressora por sublimação de corante, ou de tinta. Embora
+dê a entender algo de freudiano, sublimação é o nome científico da passagem do estado sólido para o gasoso sem
+passar pelo estado líquido. Gelo seco (dióxido de carbono congelado) é um material bem conhecido que sublima.
+Em uma impressora por sublimação de tinta, uma base contendo os corantes CMYK passa sobre um cabeçote de
+impressão térmico que contém milhares de elementos de aquecimento programáveis. As tintas são vaporizadas
+instantaneamente e absorvidas por um papel especial que está próximo. Cada elemento de aquecimento pode
+produzir 256 temperaturas diferentes. Quanto mais alta a temperatura, mais corante é depositado e mais intensa
+é a cor. Diferente de todas as outras impressoras em cores, nessa são possíveis cores praticamente contínuas para
+cada pixel, de modo que o meio-tom não é necessário. Pequenas impressoras de instantâneos muitas vezes usam o
+processo de sublimação de tinta para produzir imagens fotográficas de alto grau de realismo sobre papel especial
+(e caro).
+
+Por fim, chegamos à impressora térmica, que contém uma pequena cabeça de impressão com alguma quan-
+tidade de minúsculas agulhas que podem ser aquecidas. Quando uma corrente elétrica passa por uma agulha, ela
+se torna muito quente depressa. Quando um papel termicamente sensível especial é empurrado pela cabeça de
+impressão, os pontos são feitos no papel quando as agulhas estão quentes. Com efeito, uma impressora térmica é
+como as antigas impressoras matriciais, cujos pinos eram pressionados contra uma fita tipo máquina de escrever
+para formar os pontos de tinta no papel atrás da fita. As impressoras térmicas são muito usadas para imprimir
+recibos em lojas, caixas eletrônicos de banco, postos de gasolina automatizados etc.
+
+## 2.4.6 Equipamento de telecomunicações
+Hoje, grande parte dos computadores está ligada a uma rede de computadores, em geral a Internet. Para
+conseguir acesso, é preciso usar equipamento especial. Nesta seção, veremos como esse equipamento funciona.
+
+### Modems
+Com o crescimento da utilização de computadores nos últimos anos, é comum que um computador pre-
+cise se comunicar com outro. Por exemplo, muitas pessoas têm em casa computadores pessoais que usam para
+se comunicar com o que está em seu local de trabalho, com uma provedora de serviço de Internet (ISP – Internet
+Service Provider) ou com um sistema de home banking. Em muitos casos, a linha telefônica provê comunicação física.
+
+Contudo, uma linha telefônica comum (ou cabo) não é adequada para transmissão de sinais de computador
+que costumam representar um 0 como 0 volt e um 1 como 3 a 5 volts, conforme mostra a Figura 2.38(a). Sinais
+de dois níveis sofrem considerável distorção quando transmitidos por uma linha telefônica projetada para voz,
+ocasionando erros de transmissão. Todavia, um sinal de onda senoidal pura em uma frequência de 1.000 a 2.000
+Hz, denominada portadora, pode ser transmitido com relativamente pouca distorção, e esse fato é explorado
+como a base da maioria dos sistemas de telecomunicação.
+
+Como as pulsações de uma onda senoidal são totalmente previsíveis, uma onda senoidal pura não transmite
+nenhuma informação. Contudo, variando a amplitude, frequência ou fase, uma sequência de 1s e 0s pode ser
+transmitida, como mostra a Figura 2.38. Esse processo é denominado modulação, e o dispositivo que faz isso
+é denominado modem, que significa MOdulador DEModulador. Na modulação de amplitude (veja a Figura
+2.38(b)), são usados dois níveis de tensão elétrica (voltagem) para 0 e 1, respectivamente. Uma pessoa que esteja
+ouvindo dados transmitidos a uma taxa de dados muito baixa ouviria um ruído alto para 1 e nenhum ruído para 0.
+
+Em modulação de frequência (veja a Figura 2.38(c)), o nível de tensão elétrica (voltagem) é constante,
+mas a frequência da portadora é diferente para 1 e para 0. Uma pessoa que estivesse ouvindo dados digitais
+com frequência modulada ouviria dois tons, correspondentes a 0 e 1. A modulação de frequência costuma ser
+denominada modulação por chaveamento de frequência.
+
+### Figura 2.38- Transmissão bit a bit do número binário 01001011000100 por uma linha telefônica. (a) Sinal de dois níveis.
+(b) Modulação de amplitude. (c) Modulação de frequência. (d) Modulação de fase.
+
