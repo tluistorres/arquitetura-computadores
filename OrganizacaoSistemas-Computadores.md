@@ -3468,3 +3468,894 @@ denominada modulação por chaveamento de frequência.
 ### Figura 2.38- Transmissão bit a bit do número binário 01001011000100 por uma linha telefônica. (a) Sinal de dois níveis.
 (b) Modulação de amplitude. (c) Modulação de frequência. (d) Modulação de fase.
 
+Figura 2.27: Seção Transversal de um CD-R
+Este diagrama ilustra como o laser interage com a camada de corante para simular as depressões de um disco convencional.
+
+    +-----------------------------------------------------------+
+    |               ESTRUTURA FÍSICA DO CD-R                    |
+    |===========================================================|
+    | [ Verniz Protetor ]                                       |
+    | [ Camada Refletiva ]                                      |
+    | [ CAMADA DE CORANTE ] <--- Ponto escuro queimado pelo     |
+    |                            laser durante a escrita        |
+    | [ POLICARBONATO ]          (Espessura total: 1,2 mm)      |
+    |___________________________________________________________|
+    |                                                           |
+    |       ^                     |                             |
+    |       | [ Fotodetector ]    | [ Lente ]                   |
+    |       |                     |                             |
+    |       +----[ Prisma ]-------+                             |
+    |                ^                                          |
+    |                | [ Diodo de Laser ]                       |
+    +-----------------------------------------------------------+
+
+Figura 2.38: Técnicas de Modulação de Sinal
+Fundamental para entender como o binário viaja por meios analógicos, como linhas telefônicas.
+
+    BIT:     0      1      0      0      1      0      1
+    +-----------------------------------------------------------+
+    | (a) Sinal Digital (Níveis de Tensão V1 e V2)              |
+    |      ____        ____        ____        ____        ____ |
+    | ____|    |______|    |______|    |______|    |______|    |
+    |-----------------------------------------------------------|
+    | (b) AM (Modulação de Amplitude)                           |
+    |      _/\_        _/\_        _/\_        _/\_        _/\_ |
+    | _/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|    |
+    |      (Baixa)     (Alta)                                   |
+    |-----------------------------------------------------------|
+    | (c) FM (Modulação de Frequência)                          |
+    |      WWWW        wwww        WWWW        wwww        WWWW |
+    | wwww|    |wwwwww|    |wwwwww|    |wwwwww|    |wwwwww|    |
+    |     (Alta)      (Baixa)                                   |
+    |-----------------------------------------------------------|
+    | (d) PM (Modulação de Fase)                                |
+    |      _/\_  /|    _/\_  /|    _/\_  /|    _/\_  /|    _/\_ |
+    | _/\_|    |/_| \_|    |/_| \_|    |/_| \_|    |/_| \_|    |
+    |            ^----------- Mudança brusca de fase            |
+    +-----------------------------------------------------------+
+
+![alt text](image-107.png)
+
+Mapeamento Técnico
+
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Processamento          | Armazenamento / Transmissão   |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Diodo de Laser (2.27)  | Policarbonato                 | Emite o feixe que é focado pela lente       |
+    |                        |                               | para alterar quimicamente a camada de       |
+    |                        |                               | corante.                                    |
+    |                        |                               | Substrato plástico que dá suporte físico    |
+    |                        |                               | ao disco.                                   |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | BARRAMENTO INTERNO     |                               | Conexão com seu Projeto                     |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Modulação (2.38)       |                               | "Técnica de converter bits em ondas         |
+    |                        |                               | (Amplitude, Frequência ou Fase) para        |
+    |                        |                               | transmissão."                               |
+    |                        |                               | Entender modulação é a base para o seu      |
+    |                        |                               | estudo de protocolos de rede e segurança    |
+    |                        |                               | no IDS.                                     |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | DVD Dupla Face        | Camadas semirreflexivas       | permitem que o laser leia dois níveis        |
+    | (2.28)                |                               | de dados no mesmo lado.                      |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+### Notas de Revisão
+ - CD-R vs CD-ROM: O CD-R usa corante queimado, enquanto o CD-ROM usa depressões físicas (pits) em uma camada de alumínio.
+
+ - Modulação de Fase (PM): É a técnica mais complexa mostrada, onde a onda sofre uma "quebra" ou inversão para representar a mudança de bit.
+
+Em modulação de fase simples (veja Figura 2.38(d)), a amplitude e a frequência não mudam, mas a fase da
+portadora é invertida 180 graus quando os dados passam de 0 para 1 ou de 1 para 0. Em sistemas de fase modulada
+mais sofisticados, no início de cada intervalo de tempo indivisível, a fase da portadora é bruscamente mudada
+para 45, 135, 225 ou 315 graus, para permitir 2 bits por intervalo de tempo, denominado codificação de fase
+dibit. Por exemplo, uma mudança de fase de 45 graus poderia representar 00, uma mudança de fase de 135
+graus poderia representar 01 e assim por diante. Também existem outros esquemas para transmitir 3 ou mais
+bits por intervalo de tempo. O número de intervalos de tempo, isto é, o número de mudanças de sinal por
+segundo, é uma taxa de bauds. Com 2 ou mais bits por intervalo, a taxa de bits ultrapassará a taxa de bauds.
+Muitos confundem os dois termos. Novamente: a taxa de bauds é o número de vezes que o sinal muda por
+segundo, enquanto a taxa de bits é o número de bits transmitidos por segundo. A taxa de bits geralmente é um
+múltiplo da taxa de bauds, mas teoricamente ela pode ser menor.
+
+Se os dados a serem transmitidos consistirem em uma série de caracteres de 8 bits, seria desejável ter uma
+conexão capaz de transmitir 8 bits simultaneamente – isto é, oito pares de fios. Como as linhas telefônicas ofe-
+recem apenas um canal, os bits têm de ser enviados de modo serial, um após o outro (ou em grupos de dois se
+estiver sendo usada a codificação dibit). O dispositivo que aceita caracteres de um computador na forma de sinais
+de dois níveis, um bit por vez, e transmite os bits em grupos de um ou dois, em forma de amplitude, frequência
+ou fase modulada, é o modem. Para marcar o início e o final de cada caractere, é enviado um caractere de 8 bits
+precedido por um bit de início e seguido por um bit de fim, totalizando 10 bits.
+
+O modem que está transmitindo envia os bits individuais dentro de um caractere a intervalos de tempo
+regularmente espaçados. Por exemplo, 9.600 bauds implica uma mudança de sinal a cada 104 μs. Um segundo
+modem na extremidade receptora é usado para converter uma portadora modulada em um número binário. Como
+os bits chegam ao receptor a intervalos regulares, uma vez que o modem receptor tenha determinado o início do
+caractere, seu clock o informa quando amostrar a linha para ler os bits que estão entrando.
+
+Modems modernos funcionam a taxas de dados na faixa de 56 kbps, normalmente a taxas muito mais baixas.
+Eles usam uma combinação de técnicas para enviar múltiplos bits por baud, modulando a amplitude, a frequência
+e a fase. Quase todos eles são full-duplex, o que quer dizer que podem transmitir em ambas as direções ao mesmo
+tempo (usando frequências diferentes). Modems ou linhas de transmissão que só podem transmitir em uma dire-
+ção por vez (como uma ferrovia com uma única linha que pode transportar trens em direção ao norte ou trens em
+direção ao sul, mas não fazê-lo ao mesmo tempo) são denominados half-duplex. Linhas que só podem transmitir
+em uma direção são linhas simplex.
+
+### Linhas digitais de assinante (DSL – Digital Subscriber Lines)
+Quando a indústria da telefonia chegou por fim aos 56 kbps, ela se congratulou por um trabalho bem-feito.
+Enquanto isso, a indústria da TV a cabo estava oferecendo velocidades de até 10 Mbps em cabos compartilhados e
+as operadoras de satélites estavam planejando oferecer mais de 50 Mbps. À medida que o acesso à Internet tornou-
+-se uma parte cada vez mais importante de seus negócios, as telcos (telephone companies – empresas de telefonia)
+começaram a perceber que precisavam de um produto mais competitivo do que linhas discadas. A resposta dessas
+empresas foi começar a oferecer um novo serviço digital de acesso à Internet. Serviços com mais largura de banda
+do que o serviço telefônico padrão às vezes são denominados serviços de banda larga, embora, na realidade, o termo
+seja mais um conceito de marketing do que qualquer outra coisa. Por um ponto de vista estritamente técnico, banda
+larga significa que existem vários canais de sinalização, enquanto banda base significa que há somente um. Assim,
+teoricamente, a Ethernet a 10 gigabits, que é muito mais distante do que qualquer serviço de “banda larga” oferecido
+pela companhia telefônica, não é banda larga de forma alguma, pois tem apenas um canal de sinalização.
+
+De início, havia muitas ofertas que se sobrepunham, todas sob o mesmo nome geral de xDSL (Digital
+Subscriber Line), para vários x. Mais adiante, discutiremos o serviço que provavelmente vai se tornar o mais
+popular desses, o ADSL (Asymmetric DSL – DSL assimétrico). Visto que o ADSL ainda está sendo desenvolvido
+e nem todos os padrões estão totalmente em vigor, alguns dos detalhes dados mais adiante podem mudar com
+o tempo, mas o quadro básico deve continuar válido. Para obter mais informações sobre ADSL, veja Summers,
+1999; e Vetter et al., 2000.
+
+A razão por que modems são tão lentos é que os telefones foram inventados para transmitir a voz humana
+e todo o sistema foi cuidadosamente otimizado para essa finalidade. Dados sempre foram filhos adotivos. A
+linha, denominada loop local, de cada assinante da companhia telefônica é tradicionalmente limitada a cerca
+de 3.000 Hz por um filtro na central da empresa de telecomunicações. É esse filtro que limita a taxa de dados.
+A largura de banda real do loop local depende de seu comprimento, mas, para distâncias típicas de alguns qui-
+lômetros, 1,1 MHz é viável.
+
+O método mais comum da oferta de ADSL é ilustrado na Figura 2.39. Na verdade, o que ele faz é remover o
+filtro e dividir o espectro disponível de 1,1 MHz no loop local em 256 canais independentes de 4.312,5 Hz cada. O
+canal 0 é usado para POTS (Plain Old Telephone Service – serviço telefônico normal). Os canais de 1 a 5 não são
+usados para evitar que o sinal de voz e os sinais de dados interfiram uns com os outros. Dos 250 canais restantes,
+um é usado para controle na direção da empresa de telefonia e outro para controle na direção do usuário. O resto
+está disponível para dados do usuário. O ADSL equivale a ter 250 modems.
+
+### Figura 2.39 Operação de ADSL.
+
+Figura 2.31: PC Típico com Barramento PCI
+Esta arquitetura introduz a Ponte para PCI para permitir que a CPU e a Memória operem em frequências mais altas do que os periféricos.
+
+    +-------------------------------------------------------------+
+    |               ARQUITETURA DE BARRAMENTO PCI                 |
+    |=============================================================|
+    |                                                             |
+    |  [ CPU + Cache ] <--- Barramento de Memória ---> [ MEMÓRIA ]|
+    |          |                                                  |
+    |          +-------------[ PONTE PARA PCI ]-------------------+
+    |                                 |                           |
+    |          _______________________|________________________   |
+    |         |          |            |           |            |  |
+    |   [ CTRL VÍDEO ] [ CTRL REDE ]  |    [ CTRL SCSI ]-------+  |
+    |                                 |           |            |  |
+    |                                 |    [ DISCO SCSI ] [ SCAN ]|
+    |=============================================================|
+    |                        BARRAMENTO PCI                       |
+    +-------------------------------------------------------------+
+
+Figura 2.32: Arquitetura Moderna PCIe
+O padrão PCI Express substitui o barramento compartilhado por conexões ponto a ponto, utilizando um Complexo Raiz e Switches para gerenciar o tráfego de dados.
+
+    +-------------------------------------------------------------+
+    |                 ARQUITETURA PCI EXPRESS (PCIe)              |
+    |=============================================================|
+    |                                                             |
+    |   [ CPU ] + [ Cache ]                      [ MEMÓRIA ]      |
+    |          \                                /                 |
+    |           \______[ COMPLEXO RAIZ ]_______/                  |
+    |          ________/       |        \_________                |
+    |         |                |                  |               |
+    |     (Porta 1)        (Porta 2)          (Porta 3)           |
+    |         |                |                  |               |
+    |    [ SWITCH ]     [ DISPOSITIVO ]     [ PONTE PARA ]        |
+    |   /    |     \    [    PCIe     ]     [     PCI    ]        |
+    | [PCIe][PCIe][PCIe]                    =======+=======       |
+    |                                       BARRAMENTO PCI        |
+    +-------------------------------------------------------------+
+
+Figura 2.39: Operação de ADSL
+Ilustra a divisão do espectro de frequência em 256 canais de 4 kHz para voz e dados (direção da empresa e direção do usuário).
+
+    +-------------------------------------------------------------+
+    |                ESPECTRO DE FREQUÊNCIA ADSL                  |
+    |=============================================================|
+    | Potência                                                    |
+    |  ^    256 canais de 4 kHz                                   |
+    |  |   <--------------------------------------------------->  |
+    |  |  n  nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn  |
+    |  |_|_|___________________________________________________|  |
+    |  0   25                                              1.100  |
+    | kHz  kHz                                              kHz   |
+    | [VOZ] [ DIREÇÃO DA EMPRESA ] [   DIREÇÃO DO USUÁRIO    ]    |
+    +-------------------------------------------------------------+
+
+![alt text](image-108.png)
+
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Estrutura              | Função Principal              | Impacto no Sistema                          |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Ponte para PCI (2.31)  | Isola o tráfego da CPU/Memória| Permite multitarefa eficiente no seu        |
+    |                        | dos periféricos mais lentos.  | Ubuntu 24.04.                               |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Complexo Raiz (2.32)   | Ponto de conexão central para | Tecnologia base do seu IdeaPad Gaming 3.    |
+    |                        | todos os dispositivos PCIe no |                                             |
+    |                        | sistema.                      |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | ADSL (2.39)            | Divide a linha telefônica em  | Base histórica para o desenvolvimento de    |
+    |                        | canais independentes para voz | protocolos de rede modernos.                |
+    |                        | e dados.                      |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | SCSI (2.31)            | Barramento secundário para    | Estudo clássico para quem desenvolve        |
+    |                        | dispositivos de alto          | Network Performance Suites.                 |
+    |                        | desempenho como discos e      |                                             |
+    |                        | scanners.                     |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+
+### Conexão com seu eBook de Estudos
+ - Performance: A transição do barramento compartilhado (2.30) para o ponto a ponto (2.32) é o que permite que seu IDS Sentinel processe pacotes em tempo real sem colisões no barramento.
+
+ - Integridade: A modulação de sinal (2.38) e a divisão de canais ADSL (2.39) são fundamentais para entender como os dados do seu eBook são transmitidos com segurança pela rede.
+
+
+Em princípio, cada um dos canais remanescentes pode ser usado para um fluxo de dados full-duplex, mas,
+na prática, harmônicos, linhas cruzadas e outros efeitos mantêm os sistemas bem abaixo do limite teórico. Cabe
+ao provedor determinar quantos canais são usados na direção da empresa e quantos na direção do usuário. Uma
+proporção de 50–50 é tecnicamente possível, mas a maioria das provedoras aloca cerca de 80%–90% da largura
+de banda na direção do usuário, uma vez que eles descarregam mais dados do que carregam. Essa opção deu
+origem ao “A” em ADSL (de Assimétrico). Uma divisão comum são 32 canais na direção da empresa e o resto na
+direção do usuário.
+
+A qualidade da linha é monitorada constantemente dentro de cada canal e a taxa de dados é ajustada confor-
+me necessário, portanto, canais diferentes podem ter taxas de dados diferentes. Os dados propriamente ditos são
+enviados usando uma combinação de modulação de amplitude e de fase com até 15 bits por baud. Por exemplo,
+com 224 canais na direção do usuário e 15 bits/baud a 4.000 bauds, a largura de banda na direção do usuário é
+13,44 Mbps. Na prática, a relação sinal/ruído nunca é boa o suficiente para alcançar essa taxa, mas 4–8 Mbps é
+possível em distâncias curtas por loops de alta qualidade.
+
+Uma configuração ADSL típica é mostrada na Figura 2.40. Nesse esquema, o usuário ou um técnico da com-
+panhia telefônica deve instalar um NID (Network Interface Device – dispositivo de interface de rede) na casa
+ou escritório do cliente. Essa caixinha de plástico marca o final da propriedade da companhia telefônica e o início
+da propriedade do cliente. Próximo ao NID (ou às vezes combinado com ele) há um divisor, um filtro analógico
+que separa a faixa de 0–4.000 Hz usada pelo POTS dos dados. O sinal do POTS é direcionado ao telefone ou apa-
+relho de fax e o sinal de dados é direcionado a um modem ADSL. Na verdade, o modem ADSL é um processador
+de sinais digitais que foi montado para agir como 250 modems funcionando em paralelo a frequências diferentes.
+Uma vez que a maioria dos modems ADSL é externa, o computador deve estar conectado a ele em alta velocidade.
+Isso costuma ser feito com a instalação de uma placa Ethernet no computador e operação de uma Ethernet muito
+curta de dois nós que contém apenas o computador e o modem ADSL. (Ethernet é um padrão de rede local popular
+e barato.) Por vezes, usa-se a porta USB em vez da Ethernet. Sem dúvida, haverá placas internas de modem ADSL
+disponíveis no futuro.
+
+### Figura 2.40 Configuração típica de equipamento ADSL.
+
+Esta figura demonstra como a separação de voz e dados (mostrada no espectro da Fig. 2.39) é implementada fisicamente através de divisores (splitters) e o DSLAM.
+
+    +-----------------------------------------------------------+
+    |               INFRAESTRUTURA DE REDE ADSL                 |
+    |===========================================================|
+    | [ COMPANHIA TELEFÔNICA ]        [ RESIDÊNCIA DO USUÁRIO ] |
+    |                                                           |
+    | [Comutador de Voz]              [ Telefone ]              |
+    |        |                               |                  |
+    |   [ Codec ]                       [ Divisor ]             |
+    |        |                               |                  |
+    |   [ Divisor ] <--- Linha Telefônica ---> [ NID ]          |
+    |        |                               |                  |
+    |   [ DSLAM ]                       [ Modem ADSL ]          |
+    |        |                               |                  |
+    |  [ Para o ISP ]                 [ Computador ]            |
+    +-----------------------------------------------------------+
+
+![alt text](image-109.png)
+
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Tecnologia             | Processamento                 | Armazenamento / Conexão                     |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Escrita Óptica (2.27)  | "O laser aquece o corante a   | O fotodetector interpreta a mudança de      |
+    |                        | 200∘C, criando uma mancha     | refletividade como o bit binário.           |
+    |                        | escura permanente."           |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Densidade DVD (2.28)   | "O uso de dois substratos de  | Camadas semirreflexivas permitem que o      |
+    |                        | 0,6 mm colados permite a      | laser "enxergue através" de uma camada      |
+    |                        | leitura em ambos os lados do  | para ler a outra."                          |
+    |                        | disco."                       |                                             |
+    +------------------------+-------------------------------+---------------------------------------------+
+    | Rede ADSL (2.40)       | O DSLAM no escritório central | O Divisor na casa do cliente garante que    |
+    |                        | separa os dados de internet   | o sinal de alta frequência não interfira    |
+    |                        | do tráfego de voz.            | no telefone.                                |
+    +------------------------+-------------------------------+---------------------------------------------+
+
+### Notas de Estudo
+ - Independência de Meio: A configuração ADSL (Fig. 2.40) mostra que a infraestrutura física de cobre legada pôde ser reaproveitada para alta velocidade, conceito similar ao que você estuda em Sistemas Operacionais sobre abstração de hardware.
+
+ - Segurança: Para o desenvolvimento do seu IDS Sentinel, é crucial entender que o tráfego do DSLAM para o ISP é um ponto crítico de monitoramento de integridade de pacotes.
+
+Na outra extremidade da linha, no lado da empresa telefônica está instalado um divisor correspondente, no
+qual a parte da voz é filtrada e enviada ao comutador de voz normal. O sinal acima de 26 kHz é direcionado para
+um novo tipo de dispositivo denominado DSLAM (Digital Subscriber Line Access Multiplexer – multiplexador
+de acesso de linha digital de assinante), que contém o mesmo tipo de processador de sinal digital que o modem
+ADSL. Uma vez recuperado o sinal digital em um fluxo de bits, são formados pacotes e enviados à ISP.
+
+### Internet por cabo
+Muitas empresas de TV agora estão oferecendo acesso à Internet por meio de seus cabos. Como a tecnologia
+é muito diferente da ADSL, vale a pena fazer uma breve descrição. Em cada cidade, a operadora por cabo tem
+uma central e uma grande quantidade de caixas cheias de dispositivos eletrônicos denominados terminais de
+distribuição (headends) distribuídos por todo o seu território. Os terminais de distribuição estão conectados à
+central por cabos de alta largura de banda ou de fibra ótica.
+
+Cada terminal tem um ou mais cabos que passam por centenas de casas e escritórios. Cada cliente da prove-
+dora por cabo está ligado ao cabo que passa por sua casa ou escritório. Assim, centenas de usuários compartilham
+o mesmo cabo até o terminal. Em geral, o cabo tem uma largura de banda de mais ou menos 750 MHz. Esse
+sistema é radicalmente diferente do ADSL porque cada usuário de telefone tem uma linha privada (isto é, não
+compartilhada) com a central telefônica. Contudo, na prática, ter seu próprio canal de 1,1 MHz com uma empresa
+de telefonia não é muito diferente do que compartilhar uma porção de 200 MHz do espectro do cabo que chega
+ao terminal com 400 usuários, metade dos quais não o estará usando em qualquer dado momento. Porém, isso
+significa que um usuário de Internet por cabo conseguirá um serviço muito melhor às 4h00 do que às 16h00,
+enquanto o serviço ADSL é constante durante o dia inteiro. Quem quiser obter um serviço ideal de Internet por
+cabo deveria se mudar para uma vizinhança rica (casas mais afastadas uma da outra, portanto, menos usuários
+por cabo) ou para um bairro pobre (onde ninguém pode pagar pelo serviço de Internet).
+
+Uma vez que o cabo é um meio compartilhado, determinar quem pode enviar quando e em qual frequência
+é uma questão importante. Para ver como isso funciona, temos de fazer um breve resumo do modo de funciona-
+mento de uma TV a cabo. Nos Estados Unidos, os canais de televisão a cabo ocupam a região de 54 a 550 MHz
+(exceto para rádio FM, de 88 a 108 MHz). Esses canais têm 6 MHz de largura, incluindo faixas de proteção para impe-
+dir vazamento de sinal entre canais. Na Europa, a extremidade baixa é normalmente 65 MHz e os canais têm de 6 a 8
+MHz de largura para a resolução mais alta exigida por PAL e SECAM; porém, quanto ao mais, o esquema de alocação
+é similar. A porção inferior da banda não é usada para transmissão de televisão.
+
+Quando as empresas por cabo lançaram a Internet por cabo, tinham dois problemas a resolver:
+
+    1. Como acrescentar acesso à Internet sem interferir com programas de TV.
+    2. Como ter tráfego bidirecional quando os amplificadores são inerentemente unidirecionais.
+
+As soluções são as seguintes. Cabos modernos têm uma largura de banda de pelo menos 550 MHz, muitas
+vezes até 750 MHz ou mais. Os canais ascendentes (isto é, do usuário ao terminal de distribuição) entram na
+faixa de 5–42 MHz (um pouco mais alta na Europa), e o tráfego descendente (isto é, do terminal de distribuição
+ao usuário) usa as frequências da extremidade alta, como ilustrado na Figura 2.41.
+
+### Figura 2.41 Alocação de frequência em um sistema típico de TV a cabo usado para acesso à Internet.
+
+Este diagrama ilustra como o espectro de até 750 MHz é particionado para suportar múltiplos serviços simultâneos, como TV, rádio FM e internet (dados).
+
+    +--------------------------------------------------------------+
+    |          ESPECTRO DE FREQUÊNCIA (SISTEMA DE CABO)            |
+    |==============================================================|
+    | Freq (MHz): 0   5  42  54  88  108            550      750   |
+    |             |---|---|---|---|---|               |--------|   |
+    |             | D |   | T | F |   |               | DADOS  |   |
+    | SERVIÇO:    | A |   | V | M |      TV ANALÓGICA | DESCEN-|   |
+    |             | D |   |   |   |                   | DENTES |   |
+    |             | O |   |   |   |                   | (Down) |   |
+    |             | S |   |   |   |                   |        |   |
+    |             +---+   +---+---+                   +--------+   |
+    |               ^                                              |
+    |               |--- Dados Ascendentes (Upstream)              |
+    +-------------------------------------------------------------+
+
+![alt text](image-110.png)
+
+Mapeamento Técnico Consolidado
+
+    +------------------------+----------------------------------+---------------------------------------------+
+    | Tecnologia             | Processamento                    | Armazenamento / Conexão                     |
+    +------------------------+----------------------------------+---------------------------------------------+
+    | Escrita Óptica (2.27)  | "O laser altera quimicamente     | O fotodetector lê a mudança de              |
+    |                        | a camada de corante para         | refletividade através do prisma e da lente. |
+    |                        | simular as depressões ("pits")." |                                             |
+    +------------------------+----------------------------------+---------------------------------------------+
+    | Camadas DVD (2.28)     | O laser foca em diferentes       | "Dois substratos de 0,6 mm são unidos por   |
+    |                        | profundidades para ler a         | uma camada adesiva para formar o disco de   |
+    |                        | camada semirreflexiva ou o       | 1,2 mm."                                    |
+    |                        | refletor de alumínio.            |                                             |
+    +------------------------+----------------------------------+---------------------------------------------+
+    | TV a Cabo (2.41)       | Utiliza frequências baixas       | A largura de banda para dados descendentes  |
+    |                        | (5-42 MHz) para upload e         | é significativamente maior para favorecer   |
+    |                        | frequências altas (550-750 MHz)  | o consumo de conteúdo.                      |
+    |                        | para download.                   |                                             |
+    +------------------------+----------------------------------+---------------------------------------------+
+
+### Notas de Revisão para o Capítulo de Hardware
+ - Estrutura de Barramento: A evolução da estrutura lógica simples (Fig. 2.30) para o barramento PCI (Fig. 2.31) e finalmente para o PCIe ponto a ponto (Fig. 2.32) reflete a necessidade de maior largura de banda que você observa no seu IdeaPad ao processar dados em tempo real no IDS Sentinel.
+
+ - Conectividade: Enquanto o ADSL (Fig. 2.40) utiliza a rede telefônica de cobre com divisores de frequência, o sistema de cabo (Fig. 2.41) gerencia um espectro muito mais amplo para integrar entretenimento e dados no mesmo meio físico.
+
+ - Meio-tom (2.37): A técnica de simulação de cinza é um exemplo clássico de como limitações de hardware (apenas um tipo de toner/tinta) são superadas por algoritmos de processamento de imagem.
+
+
+Note que, como os sinais de TV são todos descendentes, é possível usar amplificadores ascendentes que
+funcionam apenas na região de 5 a 42 MHz, e amplificadores descendentes que só funcionam a 54 MHz e acima,
+conforme mostra a figura. Assim, obtemos uma assimetria nas larguras de banda ascendente e descendente, por-
+que há mais espectro disponível acima da banda da televisão do que abaixo dela. Por outro lado, a maior parte
+do tráfego será provavelmente na direção descendente, portanto, as operadoras por cabo não estão infelizes com
+essas coisas da vida. Como vimos antes, empresas de telefonia costumam oferecer um serviço DSL assimétrico,
+ainda que não tenham nenhuma razão técnica para fazê-lo.
+
+O acesso à Internet requer um modem por cabo, um dispositivo que tem duas interfaces: uma com o compu-
+tador e outra com a rede a cabo. A interface computador-modem a cabo é direta. Em geral, é Ethernet, exatamente
+como na ADSL. No futuro, o modem inteiro poderá se resumir a uma pequena placa inserida no computador,
+exatamente como nos antigos modems por telefone.
+
+A outra extremidade é mais complicada. Grande parte do padrão por cabo lida com engenharia de rádio, uma
+questão que está muito além do escopo deste livro. A única parte que vale a pena mencionar é que modems por
+cabo, assim como os ADSL, estão sempre ligados. Eles estabelecem uma conexão quando são ligados e a mantêm
+enquanto houver energia, porque operadoras por cabo não cobram por tempo de conexão.
+
+Para entender melhor como elas funcionam, vamos ver o que acontece quando um modem por cabo é ins-
+talado e ligado. O modem faz uma varredura dos canais descendentes em busca de um pacote especial lançado
+periodicamente pelo terminal de distribuição para fornecer parâmetros do sistema aos modems que acabaram de
+entrar em linha. Quando achar esse pacote, o novo modem anuncia sua presença em um dos canais ascendentes. O
+terminal de distribuição responde designando o modem a seus canais ascendente e descendente. Essas designações
+podem ser mudadas mais tarde se o terminal de distribuição achar necessário equilibrar a carga.
+
+O modem determina sua distância em relação ao terminal de distribuição enviando um pacote especial e
+observando quanto tempo demora para obter uma resposta. Esse processo é denominado ranging. É importante
+que o modem conheça sua distância para ajustar o modo como os canais ascendentes operam e para acertar sua
+temporização. Eles são divididos em mini-intervalos de tempo. Cada pacote ascendente deve se ajustar a um ou mais mini-intervalos de tempo consecutivos. O terminal de distribuição anuncia periodicamente o início de uma
+nova rodada de mini-intervalos, mas o tiro de largada não é ouvido por todos os modems simultaneamente por
+causa do tempo de propagação pelo cabo. Sabendo a que distância está do terminal de distribuição, cada modem
+pode calcular há quanto tempo o primeiro mini-intervalo de fato começou. O comprimento do mini-intervalo
+depende da rede. Uma carga útil típica é 8 bytes.
+
+Durante a inicialização, o terminal de distribuição também designa cada modem a um mini-intervalo que será
+usado para requisitar largura de banda ascendente. Como regra, múltiplos modems serão designados ao mesmo
+mini-intervalo, o que leva à disputa. Quando um computador quer enviar um pacote, ele o transfere ao modem,
+que então requisita o número necessário de mini-intervalos para ele. Se a requisição for aceita, o terminal de
+distribuição manda um reconhecimento pelo canal descendente, informando ao modem quais mini-intervalos
+foram reservados para seu pacote. Então, o pacote é enviado, começando no mini-intervalo a ele alocado. Pacotes
+adicionais podem ser requisitados usando um campo no cabeçalho.
+
+Por outro lado, se houver disputa para o mini-intervalo requisitado, nenhum reconhecimento será enviado e
+o modem espera um tempo aleatório, e tenta mais uma vez. Após cada uma dessas tentativas sucessivas malsuce-
+didas, o tempo aleatório é duplicado para distribuir a carga quando o tráfego estiver pesado.
+
+Os canais descendentes são gerenciados de modo diferente dos canais ascendentes. Uma razão é que há só
+um remetente (o terminal de distribuição), portanto, não há nenhuma disputa e nenhuma necessidade de mini-
+-intervalos que, na verdade, é apenas um modo de multiplexação por divisão estatística. Outra razão é que o
+tráfego descendente costuma ser muito maior do que o ascendente, portanto, é um pacote de tamanho fixo de
+204 bytes. Parte dele é um código de correção de erros Reed-Solomon e algumas outras informações de controle,
+sobrando 184 bytes de carga útil para o usuário. Esses números foram escolhidos por compatibilidade com a
+televisão digital, que usa MPEG-2, de modo que os canais de TV e os canais descendentes sejam formatados do
+mesmo modo. O aspecto lógico das conexões é mostrado na Figura 2.42.
+
+### Figura 2.42 - Detalhes típicos dos canais ascendente e descendente na América do Norte. QAM-64 (Quadrature Amplitude Modulation – modulação de amplitude em quadratura) permite 6 bits/Hz, mas funciona somente em altas frequências. QPSK (Quadrature
+Phase Shift Keying – modulação por chaveamento de fase em quadratura) funciona em baixas frequências, mas permite
+apenas 2 bits/Hz.
+
+Ilustra a diferença de modulação e largura de banda entre os dados que saem do modem em direção ao provedor (ISP) e os que chegam ao usuário.
+
+    +-------------------------------------------------------------+
+    |               OPERAÇÃO DE CANAIS EM CABO COAXIAL            |
+    |=============================================================|
+    |                                                             |
+    |           Fibra        [ TERMINAL ]         [ MODEM ]       |
+    | [ ISP ] ---------|      (Headend)           (Usuário)       |
+    |                  |          |                   |           |
+    |                  |    /=======================\ |           |
+    |                  |    |  Canal Descendente    | |           |
+    |                  |    |   (27 Mbps QAM-64)    | |           |
+    |                  |    |  [Dados]   [Dados]    | |           |
+    |                  |    |-----------------------| |           |
+    |                  |    |  Canal Ascendente     | |           |
+    |                  |    |    (9 Mbps QPSK)      | |           |
+    |                  |    | [..] [..] [..] [..]   | |           |
+    |                  |    \=======================/ |           |
+    |                  |          CABO COAXIAL        |           |
+    |                                                             |
+    +-------------------------------------------------------------+
+
+![alt text](image-111.png)
+
+Mapeamento Técnico Consolidado
+
+    ---------------------------+-------------------------------+---------------------------------------------+
+    | Tecnologia               | Modulação / Processamento     | Performance                                 |
+    +--------------------------+-------------------------------+---------------------------------------------+
+    | Canal Descendente (2.42) | Utiliza QAM-64, que permite   | Oferece 27 Mbps de largura de banda sem     |
+    |                          | 6 bits/Hz, mas exige altas    | contenção.                                  |
+    |                          | frequências.                  |                                             |
+    +--------------------------+-------------------------------+---------------------------------------------+
+    | Canal Ascendente (2.42)  | Utiliza QPSK, operando em     | Limitado a 9 Mbps e sujeito a contenção     |
+    |                          | baixas frequências com apenas | de pacotes.                                 |
+    |                          | 2 bits/Hz.                    |                                             |
+    +--------------------------+-------------------------------+---------------------------------------------+
+    | Integridade Óptica (2.27)| O laser e o fotodetector      |                                             |
+    |                          | operam através de um prisma   |                                             |
+    |                          | para garantir a leitura       |                                             |
+    |                          | correta dos bits.             |                                             |
+    |                          | "O substrato de policarbonato |                                             |
+    |                          | de 1,2 mm protege a camada    |                                             |
+    |                          | de dados."                    |                                             |
+    +--------------------------+-------------------------------+---------------------------------------------+
+    | Densidade DVD (2.28)     | Camadas semirreflexivas       | "Substratos colados de 0,6 mm dobram a      |
+    |                          | permitem que o laser mude o   | capacidade física."                         |
+    |                          | foco para ler diferentes      |                                             |
+    |                          | níveis de dados.              |                                             |
+    +--------------------------+-------------------------------+---------------------------------------------+
+
+### Notas para o eBook
+ - Performance de Rede: A diferença entre QAM-64 (download) e QPSK (upload) na Fig. 2.42 explica por que as taxas de envio são geralmente menores que as de recebimento.
+
+ - Conexão com Projetos: Entender esses diferentes esquemas de modulação é vital para o seu IDS Sentinel, pois o monitoramento de rede deve considerar as diferentes latências e larguras de banda de cada canal.
+
+ - Hardware Físico: Enquanto o ADSL (Fig. 2.40) isola voz e dados em canais de 4 kHz, o sistema de cabo (Fig. 2.41 e 2.42) usa bandas muito maiores para dados, atingindo frequências de até 750 MHz.
+
+
+Voltando à inicialização do modem, uma vez concluída a ranging e obtida a designação de seu canal ascendente,
+canal descendente e mini-intervalo, ele está liberado para começar a enviar pacotes. Esses pacotes vão até o terminal
+de distribuição, que os retransmite por um canal dedicado até a central da operadora por cabo e então até o ISP (que
+pode ser a própria empresa por cabo). O primeiro pacote é dirigido à ISP e requisita um endereço de rede (tecni-
+camente, um endereço IP) que é designado dinamicamente. O pacote também requisita e obtém um horário exato.
+
+A próxima etapa envolve segurança. Uma vez que o cabo é um meio compartilhado, quem quiser se dar ao
+trabalho pode ler todo o tráfego que passar por ele. Para evitar que qualquer um bisbilhote seus vizinhos (literalmente), todo o tráfego é criptografado em ambas as direções. Parte do procedimento de inicialização envolve
+estabelecer chaves criptográficas. A princípio, poderíamos pensar que conseguir que dois estranhos, o terminal
+de distribuição e o modem, combinem uma chave secreta em plena luz do dia com milhares de pessoas vigiando
+seria algo difícil. Acontece que não é, mas a técnica usada (o algoritmo Diffie-Hellman) está fora do escopo deste
+livro. Uma discussão sobre esse algoritmo é dada em Kaufman et al. (2002).
+
+Por fim, o modem tem de registrar (fazer login) e fornecer seu identificador exclusivo pelo canal seguro.
+Nesse ponto, está concluída a inicialização. Agora, o usuário pode se conectar com o ISP e começar a trabalhar.
+
+Há muito mais a ser dito sobre modems a cabo. Algumas referências relevantes são: Adams e Dulchinos, 2001;
+Donaldson e Jones, 2001; Dutta-Roy, 2001.
+
+## 2.4.7 Câmeras digitais
+Uma utilização cada vez mais popular de computadores é a fotografia digital, o que transforma câmeras
+digitais em uma espécie de periférico de computador. Vamos descrever rapidamente como isso funciona.
+Todas as câmeras têm uma lente que forma uma imagem do sujeito no fundo da câmera. Em um equipamen-
+to convencional, o fundo da câmera está coberto por uma película fotográfica sobre a qual é formada uma
+imagem latente quando a luz a atinge. Essa imagem latente pode ficar visível pela ação de certos produtos
+químicos presentes no líquido de revelação, ou revelador. Uma câmera digital funciona da mesma maneira,
+exceto que o filme é substituído por um arranjo retangular de CCDs (Charge-Coupled Devices – disposi-
+tivos de carga acoplada) sensíveis à luz. (Algumas câmeras digitais usam CMOS [Complementary Metal­
+‑Oxyde Semiconductor – semicondutor de óxido metálico complementar], mas aqui vamos nos concentrar
+nos CCDs, que são mais comuns.)
+
+Quando a luz atinge um CCD, ele adquire uma carga elétrica. Quanto mais luz, mais carga. A carga pode ser
+lida em um conversor analógico para digital como um inteiro de 0 a 255 (em câmeras mais baratas) ou de 0 a
+4.095 (em câmeras reflex digitais de uma lente). A configuração básica é mostrada na Figura 2.43.
+
+### Figura 2.43 - Câmera digital.
+
+Ilustra o caminho da luz desde a lente até o armazenamento em memória flash, destacando o arranjo de sensores CCD.
+
+    +-------------------------------------------------------------+
+    |                  ANATOMIA DE UMA CÂMERA DIGITAL             |
+    |=============================================================|
+    |                                                             |
+    |   Objeto        Lente       Diafragma      Processamento    |
+    |     (X)  --->   ( O )   --->   |  |   --->   [ CPU ]        |
+    |                                |  |          [ RAM ]        |
+    |                          [ Arranjo CCD ]     [ FLASH ]      |
+    |                                |                            |
+    |                     +----------v----------+                 |
+    |                     |  R | G | R | G  ... | <-- Sensor      |
+    |                     |  G | B | G | B  ... |     Bayer       |
+    |                     +---------------------+                 |
+    |                                                             |
+    +-------------------------------------------------------------+
+
+![alt text](image-112.png)
+
+Cada CCD produz um único valor, independente da cor da luz que o atinge. Para formar imagens colo-
+ridas, os CCDs são organizados em grupos de quatro elementos. Um filtro Bayer é colocado no topo do
+CCD de modo a permitir que somente a luz vermelha atinja um dos quatro em cada grupo, apenas a luz azul
+atinja um outro e só a luz verde atinja os outros dois. São usados dois CCDs para a luz verde porque utilizar
+quatro CCDs para representar um pixel é muito mais conveniente do que usar três, e o olho é mais sensível
+à luz verde do que à vermelha ou à azul. Quando um fabricante afirma que uma câmera tem, por exemplo,
+6 milhões de pixels, ele está mentindo. A câmera tem 6 milhões de CCDs que, juntos, formam 1,5 milhão
+de pixels. A imagem será lida como um arranjo de 2.828 × 2.121 pixels (em câmeras de baixo preço) ou de
+3.000 × 2.000 pixels (em SLRs digitais), mas os pixels extras são produzidos por interpolação pelo software
+dentro da câmera.
+
+Quando o botão do obturador da câmera é pressionado, o software no equipamento realiza três tare-
+fas: ajusta o foco, determina a exposição e efetua o equilíbrio do branco. O autofoco funciona analisando a
+informação de alta frequência na imagem e então movimentando a lente até que ela seja maximizada, para
+dar o máximo de detalhe. A exposição é determinada medindo a luz que cai sobre os CCDs e então ajustando
+o diafragma da lente e o tempo de exposição para fazer a intensidade da luz cair no meio da faixa de alcance
+dos CCDs. Ajustar o equilíbrio do branco tem a ver com medir o espectro da luz incidente para efetuar as
+necessárias correções de cor mais tarde.
+
+Então, a imagem é lida com base nos CCDs e armazenada como um arranjo de pixels na RAM interna da
+câmera. SLRs de primeira linha usados por fotojornalistas podem fotografar oito quadros de alta resolução por
+segundo por 5 segundos, e precisam de cerca de 1 GB de RAM interna para armazenar as imagens antes de
+processá-las e armazená-las permanentemente. Câmeras mais baratas têm menos RAM, mas ainda assim têm boa
+quantidade.
+
+Na fase de pós-captura, o software da câmera aplica correção da cor por equilíbrio do branco para compensar
+a luz avermelhada ou azulada (por exemplo, de um objeto na sombra ou da utilização de um flash). Em seguida,
+ele aplica um algoritmo para reduzir ruído e outro para compensar CCDs defeituosos. Logo após, o software
+tenta dar melhor definição à imagem (a menos que essa característica esteja desativada), procurando contornos e
+aumentando o gradiente de intensidade ao redor deles.
+
+Por fim, a imagem pode ser comprimida para reduzir a quantidade de armazenagem requerida. Um formato
+comum é o JPEG (Joint Photographic Experts Group – grupo associado de especialistas em fotografia), no qual
+uma transformada de Fourier espacial bidimensional é aplicada e alguns dos componentes de alta frequência são
+omitidos. O resultado dessa transformação é que a imagem requer um número menor de bits de armazenagem,
+mas perdem-se os detalhes mais sutis.
+
+Quando todo processamento interno à câmera estiver concluído, a imagem é gravada no meio de armaze-
+nagem, em geral uma memória rápida ou um minúsculo disco rígido removível denominado microdrive. O pós-
+-processamento e a gravação podem levar vários segundos por imagem.
+
+Quando o usuário chega em casa, a câmera pode ser conectada a um computador, em geral usando, por
+exemplo, uma entrada USB ou um cabo específico. Então, as imagens são transferidas da câmera para o disco
+rígido do computador. Usando software especial, tal como o Adobe Photoshop, o usuário pode recortar a imagem,
+ajustar brilho, contraste e equilíbrio de cor, destacar, escurecer ou remover porções da imagem e aplicar diversos
+filtros. Quando ele estiver contente com o resultado, os arquivos podem ser impressos em uma impressora em
+cores, enviados pela Internet a uma loja especializada para fazer o acabamento ou gravados em um CD-ROM ou
+DVD para armazenagem em arquivo e subsequente impressão.
+
+A quantidade de capacidade computacional, RAM, espaço em disco rígido e software em uma câmera digital
+SLR é estarrecedora. Além de o computador ter de fazer todas as coisas mencionadas, ainda precisa se comunicar
+com a CPU na lente e com a CPU na memória rápida, renovar a imagem na tela LCD e gerenciar todos os botões,
+engrenagens, luzes, mostradores e dispositivos da câmera em tempo real. Esse sistema embutido é extremamente
+poderoso e muitas vezes rivaliza com um computador de mesa de apenas alguns anos atrás.
+
+## 2.4.8 Códigos de caracteres
+Cada computador tem um conjunto de caracteres que ele usa. O conjunto mínimo contém as 26 letras
+maiúsculas, as 26 letras minúsculas, os algarismos de 0 a 9 e um conjunto de símbolos especiais, como espaço,
+sinal de menos, vírgula e retorno ao início da linha.
+
+Para transferir esses caracteres para o computador, um número é designado a cada um, por exemplo, a
+= 1, b = 2, ..., z = 26, + = 27, – = 28. O mapeamento de caracteres para números inteiros é denominado código
+de caracteres. É essencial que computadores que se comunicam usem o mesmo código ou não conseguirão se
+entender. Por essa razão, foram desenvolvidos padrões. A seguir, examinaremos dois dos mais importantes.
+
+### ASCII
+Um código de ampla utilização é denominado ASCII (American Standard Code for Information Interchange –
+código padrão americano para troca de informações). Cada caractere ASCII tem 7 bits, o que permite 128
+caracteres no total. Porém, como os computadores são orientados a byte, cada caractere ASCII é armazenado em
+um byte separado. A Figura 2.44 mostra o código ASCII. Os códigos de 0 a 1F (hexadecimal) são caracteres de
+controle e não são impressos. Os códigos de 128 a 255 não fazem parte do ASCII, mas o IBM PC os definiu para
+serem caracteres especiais, como os smileys, e a maioria dos computadores tem suporte para eles.
+
+Figura 2.44 O conjunto de caracteres ASCII.
+
+    +------+-----+---------------------------------+------+-----+---------------------------------+
+    | Hexa | Nome| Significado                     | Hexa | Nome| Significado                     |
+    +------+-----+---------------------------------+------+-----+---------------------------------+
+    | 0    | NUL | Null (Nulo)                     | 10   | DLE | Data Link Escape                |
+    | 1    | SOH | Start Of Heading                | 11   | DC1 | Device Control 1                |
+    | 2    | STX | Start Of Text                   | 12   | DC2 | Device Control 2                |
+    | 3    | ETX | End Of Text                     | 13   | DC3 | Device Control 3                |
+    | 4    | EOT | End Of Transmission             | 14   | DC4 | Device Control 4                |
+    | 5    | ENQ | Enquiry                         | 15   | NAK | Negative AcKnowledgement        |
+    | 6    | ACK | ACKnowledgement                 | 16   | SYN | Synchronous Idle                |
+    | 7    | BEL | Bell (Sinal Sonoro)             | 17   | ETB | End of Transmission Block       |
+    | 8    | BS  | BackSpace                       | 18   | CAN | CANcel                          |  
+    | 9    | HT  | Horizontal Tab                  | 19   | EM  | End of Medium                   |
+    | A    | LF  | Line Feed                       | 1A   | SUB | SUBstitute                      |
+    | B    | VT  | Vertical Tab                    | 1B   | ESC | ESCape                          |
+    | C    | FF  | Form Feed                       | 1C   | FS  | File Separator                  |
+    | D    | CR  | Carriage Return                 | 1D   | GS  | Group Separator                 |
+    | E    | SO  | Shift Out                       | 1E   | RS  | Record Separator                |
+    | F    | SI  | Shift In                        | 1F   | US  | Unit Separator                  |
+    +------+-----+---------------------------------+------+-----+---------------------------------+
+
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    | Hexa| Car | Hexa| Car | Hexa| Car | Hexa| Car | Hexa| Car | Hexa| Car |
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    | 20  | Esp | 30  | 0   | 40  | @   | 50  | P   | 60  | `   | 70  | p   |
+    | 21  | !   | 31  | 1   | 41  | A   | 51  | Q   | 61  | a   | 71  | q   |
+    | 22  | "   | 32  | 2   | 42  | B   | 52  | R   | 62  | b   | 72  | r   |
+    | 23  | #   | 33  | 3   | 43  | C   | 53  | S   | 63  | c   | 73  | s   |
+    | 24  | $   | 34  | 4   | 44  | D   | 54  | T   | 64  | d   | 74  | t   |
+    | 25  | %   | 35  | 5   | 45  | E   | 55  | U   | 65  | e   | 75  | u   |
+    | 26  | &   | 36  | 6   | 46  | F   | 56  | V   | 66  | f   | 76  | v   |
+    | 27  | '   | 37  | 7   | 47  | G   | 57  | W   | 67  | g   | 77  | w   |
+    | 28  | (   | 38  | 8   | 48  | H   | 58  | X   | 68  | h   | 78  | x   |
+    | 29  | )   | 39  | 9   | 49  | I   | 59  | Y   | 69  | i   | 79  | y   |
+    | 2A  | *   | 3A  | :   | 4A  | J   | 5A  | Z   | 6A  | j   | 7A  | z   |
+    | 2B  | +   | 3B  | ;   | 4B  | K   | 5B  | [   | 6B  | k   | 7B  | {   |
+
+    | 2C  | ,   | 3C  | <   | 4C  | L   | 5C  | \   | 6C  | l   | 7C  | |   |
+    | 2D  | -   | 3D  | =   | 4D  | M   | 5D  | ]   | 6D  | m   | 7D  | }   |
+    | 2E  | .   | 3E  | >   | 4E  | N   | 5E  | ^   | 6E  | n   | 7E  | ~   |
+    | 2F  | /   | 3F  | ?   | 4F  | O   | 5F  | _   | 6F  | o   | 7F  | DEL |
+    +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+### Notas Técnicas para o seu eBook:
+ - Controle de Fluxo: Os caracteres de 0 a 1F são códigos de controle. No desenvolvimento do seu IDS Sentinel, esses caracteres são frequentemente filtrados ou monitorados para evitar ataques de injeção em protocolos de rede.
+
+ - Diferença de Sistemas: O caractere LF (0Ah) é o padrão de quebra de linha no seu Ubuntu, enquanto o Windows utiliza a combinação CR + LF (0Dh 0Ah).
+
+ - Comunicação de Dados: O caractere ACK (06h) e NAK (15h) são a base lógica para os protocolos de confirmação que você estuda em redes, como o funcionamento do ADSL e Cabo vistos anteriormente.
+
+
+Muitos dos caracteres de controle ASCII são destinados à transmissão de dados. Por exemplo, uma men-
+sagem pode ser composta de um caractere SOH (start of header – início de cabeçalho), um caractere STX (start
+of text – início de texto), o texto em si, um caractere ETX (end of text – fim do texto) e então um caractere EOT
+(end of transmission – fim da transmissão). Contudo, na prática, as mensagens enviadas por linhas telefônicas e
+redes são formatadas de modo muito diferente, de modo que os caracteres ASCII de controle de transmissão já
+não são muito usados.
+
+Os caracteres de impressão ASCII são diretos. Incluem as letras maiúsculas e minúsculas, dígitos, sinais de
+pontuação e alguns símbolos matemáticos.
+
+### Unicode
+A indústria do computador se desenvolveu em grande parte nos Estados Unidos, o que levou ao conjunto
+de caracteres ASCII. Esse código é bom para a língua inglesa, mas não tão bom para outros idiomas. O francês
+precisa de acentos (por exemplo, système); o alemão precisa de sinais diacríticos (por exemplo, für) e assim por
+diante. Algumas línguas europeias têm certas letras que não se encontram no ASCII, tais como a alemã ß e a
+dinamarquesa ø. Alguns idiomas têm alfabetos inteiramente diferentes (por exemplo, russo e árabe), e algumas
+poucas línguas não têm alfabeto algum (por exemplo, a chinesa). Como os computadores se espalharam pelos
+quatro cantos do mundo e como os fabricantes de software querem vender produtos em países onde a maioria
+dos usuários não fala inglês, é preciso um novo conjunto de caracteres.
+
+A primeira tentativa de ampliar o ASCII foi o IS 646, que acrescentou mais 128 caracteres ao ASCII, trans-
+formando-o em um código de 8 bits denominado Latin-1. A maioria dos caracteres adicionais eram letras latinas
+com acentos e sinais diacríticos. A próxima tentativa foi o IS 8859, que introduziu o conceito de uma página de
+código, um conjunto de 256 caracteres para um idioma particular ou grupo de idiomas. O IS 8859-1 é Latin-1.
+O IS 8859-2 trata dos idiomas eslavos baseados no latim (por exemplo, tcheco, polonês e húngaro). O IS 8859-3
+contém os caracteres necessários para os idiomas turco, maltês, esperanto, galego e assim por diante. O problema
+da abordagem da página de código é que o software tem de manter controle da página em que está; é impossível
+misturar idiomas nas páginas e o esquema não cobre a língua japonesa nem a chinesa.
+
+Um grupo de empresas de computadores resolveu esse problema formando um consórcio para criar um novo
+sistema, denominado Unicode, e transformando-o em um Padrão Internacional (IS 10646). Agora, o Unicode é
+suportado por algumas linguagens de programação (por exemplo, Java), alguns sistemas operacionais (por exem-
+plo, Windows) e muitas aplicações.
+
+A ideia que fundamenta o Unicode é designar a cada caractere e símbolo um valor único de 16 bits, deno-
+minado ponto de código. Não são usados caracteres multibytes nem sequências de escape. Símbolos de 16 bits
+simplificam a escrita do software.
+
+Com símbolos de 16 bits, o Unicode tem 65.536 pontos de código. Visto que todos os idiomas do mundo usam
+cerca de 200 mil símbolos, os pontos de código são um recurso escasso que deve ser alocado com grande cuidado.
+Para acelerar a aceitação do Unicode, o consórcio teve a brilhante ideia de usar Latin-1 como pontos de código 0 a
+255, o que facilita a conversão entre ASCII e Unicode. Para evitar desperdiçar pontos de código, cada sinal diacrítico
+tem seu próprio ponto de código. Cabe ao software combinar sinais diacríticos com seus vizinhos para formar novos
+caracteres. Embora isso aumente o trabalho do software, economiza preciosos pontos de código.
+
+O espaço do ponto de código é dividido em blocos, cada qual um múltiplo de 16 pontos de código. Todo alfa-
+beto importante em Unicode tem uma sequência de zonas consecutivas. Alguns exemplos (e o número de pontos
+de código alocados) são latim (336), grego (144), cirílico (256), armênio (96), hebraico (112), devanágari (128),
+gurmuqui (128), oriá (128), telugo (128) e canará (128). Note que cada um desses idiomas recebeu um número
+maior de pontos de código do que número de letras que possui. Essa opção foi escolhida em parte porque muitas
+línguas têm várias formas para cada letra. Por exemplo, cada letra em português tem duas formas – minúscula e
+MAIÚSCULA. Alguns idiomas têm três ou mais formas, possivelmente dependendo de a letra estar no início, no
+meio ou no final de uma palavra.
+
+Além desses alfabetos, foram designados pontos de código para sinais diacríticos (112), sinais de pontuação
+(112), subscritos e sobrescritos (48), símbolos monetários (48), símbolos matemáticos (256), formas geomé-
+tricas (96) e sinais variados (dingbats) (192).
+
+Depois desses, vêm os símbolos necessários para as línguas chinesa, japonesa e coreana. Primeiro, há 1.024
+símbolos fonéticos (por exemplo, katakana e bopomofo) e, em seguida, os ideogramas han unificados (20.992)
+usados em chinês e japonês, e as sílabas hangul do idioma coreano (11.156).
+
+Para permitir que os usuários inventem caracteres especiais para finalidades especiais, 6.400 pontos de códi-
+go foram designados para uso local.
+
+Embora o Unicode solucione muitas dificuldades associadas com a internacionalização, ele não resolve (nem
+tenta resolver) todos os problemas do mundo. Por exemplo, enquanto o alfabeto latino está em ordem alfabética,
+os ideogramas han não estão na ordem do dicionário. Por conseguinte, um programa em inglês pode procurar cat
+e dog em ordem alfabética simplesmente comparando o valor Unicode de seu primeiro caractere. Um programa
+em japonês precisa de tabelas externas para interpretar qual dos dois símbolos vem antes do outro no dicionário.
+
+Outra questão é que surgem novas palavras o tempo todo. Há 50 anos ninguém falava de applets, ciberespaço,
+gigabytes, lasers, modems, smileys ou videoteipes. Acrescentar novas palavras em inglês não requer novos pontos
+de código, mas adicioná-las em japonês, sim. Além de novas palavras técnicas, há uma demanda para adicionar
+no mínimo 20 mil novos nomes de pessoas e lugares (a maioria chineses). Os cegos acham que o braille deveria
+estar presente e grupos de interesse especial de todos os tipos querem o que entendem como pontos de código a
+que têm direito. O consórcio Unicode estuda e decide todas as novas propostas.
+
+O Unicode usa o mesmo ponto de código para caracteres que parecem quase idênticos mas têm significados
+diferentes ou são escritos de maneira ligeiramente diferente em japonês e chinês (como se processadores de texto
+em inglês sempre escrevessem blue como blew, porque têm o mesmo som). Há quem considere isso uma otimização
+para economizar pontos de código escassos; outros o veem como imperialismo cultural anglo-saxão (e você acha que
+designar 16 bits para caracteres não foi uma decisão muito política?). Para piorar as coisas, um dicionário japonês
+completo tem 50 mil kanji (excluindo nomes), portanto, com apenas 20.992 pontos de código disponíveis para os
+ideogramas han, escolhas tiveram de ser feitas. Nem todos os japoneses acham que um consórcio de fabricantes de
+computadores – mesmo que alguns deles sejam japoneses – é o fórum ideal para fazer essas escolhas.
+
+Adivinha só: 65.536 pontos de código não foram suficientes para satisfazer a todos, de modo que, em 1996,
+16 planos adicionais de 16 bits cada foram acrescentados, expandindo o número total de caracteres para 1.114.112.
+
+### UTF-8
+Embora melhor que o ASCII, o Unicode por fim esgotou os pontos de código e também requer 16 bits por
+caractere para representar o texto ASCII puro, o que é um desperdício. Por conseguinte, outro esquema de codifi-
+cação foi desenvolvido para resolver essas questões. Ele é denominado Formato de Transformação UTF-8 UCS,
+em que UCS significa Universal Character Set (conjunto de caracteres universal), que é Unicode na essência.
+Códigos UTF-8 têm tamanho variável, de 1 a 4 bytes, e podem codificar cerca de dois bilhões de caracteres. Ele
+é o conjunto de caracteres dominante em uso na Web.
+
+Uma das propriedades interessantes do UTF-8 é que os códigos de 0 a 127 são os caracteres ASCII, permitin-
+do que sejam expressos em 1 byte (contra os 2 bytes do Unicode). Para caracteres que não são ASCII, o bit de alta
+ordem do primeiro byte é definido como 1, indicando que virão 1 ou mais bytes adicionais. No fim, seis formatos
+diferentes são usados, conforme ilustra a Figura 2.45. Os bits marcados com “d” são bits de dados.
+
+### Figura 2.45 O esquema de codificação UTF-8.
+
+Diferente do ASCII fixo, o UTF-8 é um sistema de largura variável. O número de bits de dados (representados por d) determina quantos bytes são necessários para codificar o caractere.
+
+    +-------+---------+---------+---------+---------+---------+--0------+
+    | Bits  | Byte 1  | Byte 2  | Byte 3  | Byte 4  | Byte 5  | Byte 6  |
+    +-------+---------+---------+---------+---------+---------+---------+
+    | 7     | 0ddddddd|         |         |         |         |         |
+    | 11    | 110ddddd| 10dddddd|         |         |         |         |
+    | 16    | 1110dddd| 10dddddd| 10dddddd|         |         |         |
+    | 21    | 11110ddd| 10dddddd| 10dddddd| 10dddddd|         |         |
+    | 26    | 111110dd| 10dddddd| 10dddddd| 10dddddd| 10dddddd|         |
+    | 31    | 1111110d| 10dddddd| 10dddddd| 10dddddd| 10dddddd| 10dddddd|
+    +-------+---------+---------+---------+---------+---------+---------+
+
+Mapeamento de Processamento e Armazenamento
+Para manter a consistência com o modelo de tabelas que você utiliza para arquitetura, aqui está a lógica de funcionamento do UTF-8:
+
+    +-------------------------------+-------------------------------+
+    | Processamento (Lógica)        | Armazenamento (Estrutura)     |
+    +-------------------------------+-------------------------------+
+    | Identificação                 | O primeiro byte indica o      |
+    |                               | tamanho da sequência pelo     |
+    |                               | número de 1s iniciais.        |
+    +-------------------------------+-------------------------------+
+    | Compatibilidade               | "Se o primeiro bit for 0, o   |
+    |                               | byte é tratado exatamente     |
+    |                               | como ASCII de 7 bits."        |
+    +-------------------------------+-------------------------------+
+    | Continuação                   | Bytes subsequentes sempre     |
+    |                               | começam com 10 para evitar    |
+    |                               | confusão com inícios de       |
+    |                               | sequência.                    |
+    +-------------------------------+-------------------------------+
+    | Eficiência                    | Caracteres comuns (latinos)   |
+    |                               | ocupam menos espaço (1 byte)  |
+    |                               | que símbolos complexos.        |
+    +-------------------------------+-------------------------------+
+
+### Notas Técnicas para o eBook
+ - Desenvolvimento em C: Ao manipular strings no seu projeto IDS Sentinel, lembre-se que strlen() contará o número de bytes, e não necessariamente o número de caracteres se a string contiver caracteres UTF-8 multi-byte.
+
+ - Interoperabilidade: Como você alterna entre Windows 11 e Linux, o UTF-8 garante que arquivos de código criados em um sistema sejam lidos sem erros de codificação ("mojibake") no outro.
+
+ - Segurança de Rede: Em sistemas de detecção de intrusão, ataques de "Overlong UTF-8" tentam ocultar caracteres proibidos (como / ou \) usando sequências multi-byte inválidas para burlar filtros de segurança.
+
+
+O UTF-8 tem uma série de vantagens em relação ao Unicode e outros esquemas. Primeiro, se um programa
+ou documento utiliza apenas caracteres que estão no conjunto ASCII, cada um pode ser representado em 8 bits.
+Segundo, o primeiro byte de cada caractere UTF-8 determina exclusivamente o número de bytes deste. Terceiro,
+os bytes de continuação em um caractere UTF-8 sempre começam com 10, enquanto o byte inicial nunca começa
+assim, tornando o código autossincronizável. Em particular, no caso de um erro de comunicação ou memória,
+sempre é possível prosseguir e achar o início do próximo caractere (supondo que ele não tenha sido danificado).
+
+Em geral, o UTF-8 é usado para codificar apenas os 17 planos Unicode, embora o esquema tenha muito
+mais de 1.114.112 pontos de código. Porém, se os antropólogos descobrirem novas tribos em Nova Guiné (ou em
+outro lugar) cujos idiomas ainda não sejam conhecidos (ou se, no futuro, fizermos contato com extraterrestres),
+o UTF-8 conseguirá acrescentar seus alfabetos ou ideogramas.
+
+## 2.5 Resumo
+Sistemas de computadores são compostos por três tipos de componentes: processadores, memórias e dispo-
+sitivos de E/S. A tarefa de um processador é buscar instruções, uma por vez, em uma memória, decodificá-las e
+executá-las. O ciclo busca-decodificação-execução pode ser descrito como um algoritmo e, na verdade, às vezes ele
+é executado por um interpretador de software que roda em um nível mais baixo. Para ganhar velocidade, muitos
+computadores agora têm um ou mais pipelines (paralelismo) ou têm um projeto superescalar com múltiplas uni-
+dades funcionais que funcionam em paralelo. Um pipeline permite que uma instrução seja dividida em etapas e as
+etapas para diferentes instruções sejam executadas ao mesmo tempo. Múltiplas unidades funcionais é outra forma
+de obter paralelismo sem afetar o conjunto de instruções ou a arquitetura visível ao programador ou compilador.
+
+Sistemas com vários processadores são cada vez mais comuns. Computadores paralelos incluem processa-
+dores matriciais, nos quais a mesma operação é efetuada sobre múltiplos conjuntos de dados ao mesmo tempo;
+multiprocessadores, nos quais várias CPUs compartilham uma memória; e multicomputadores, nos quais cada
+um dos vários computadores tem sua própria memória, mas se comunicam passando mensagens.
+
+Memórias podem ser categorizadas como primárias ou secundárias. A memória primária é usada para conter o
+programa que está sendo executado no momento. Seu tempo de acesso é curto – algumas poucas dezenas de nanos-
+segundos, no máximo – e independe do endereço que está sendo acessado. Caches reduzem ainda mais esse tempo
+de acesso. Eles são necessários porque as velocidades do processador são muito maiores do que as velocidades da
+memória, o que significa que ter de esperar pelos acessos à memória o tempo todo atrasa bastante a execução
+do processador. Algumas memórias são equipadas com códigos de correção de erros para aumentar a confiabilidade.
+
+Memórias secundárias, ao contrário, têm tempos de acesso muito mais longos (milissegundos ou mais) e
+dependem da localização dos dados que estão sendo lidos ou escritos. Fitas, discos magnéticos e discos ópticos
+são as memórias secundárias mais comuns. Há muitas variedades de discos magnéticos, incluindo discos IDE,
+discos SCSI e RAIDs. Entre os discos ópticos figuram CD-ROMs, CD-Rs, DVDs e Blu-rays.
+
+Dispositivos de E/S são usados para transferir informações para dentro e para fora do computador. Então, são
+conectados ao processador e à memória por um ou mais barramentos. Alguns exemplos são terminais, mouses,
+impressoras e modems. A maioria dos dispositivos de E/S usa o código de caracteres ASCII, embora o Unicode
+também seja usado e o UTF-8 esteja ganhando rápida aceitação à medida que a indústria de computadores se
+volta mais para a Web.
