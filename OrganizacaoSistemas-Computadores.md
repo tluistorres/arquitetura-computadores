@@ -6,7 +6,7 @@ Um computador digital consiste em um sistema interconectado de processadores, me
 um por vez.
 
 ## 2.1 Processadores
-A organização de um computador simples com barramento é mostrada na Figura 2.1. A CPU (Central Processing Unit - unidade central de processamento) é o “cérebro” do computador. Sua função é executar programas armazenados na memória principal buscando suas instruções, examinando-as e então executando-as uma após a outra. Os componentes são conectados por um barramento, conjunto de fios paralelos que transmitem endereços, dados e sinais de controle. Barramentos podem ser externos à CPU, conectando-a à memória e aos dispositivos de E/S, mas também podem ser internos, como veremos em breve. Os computadores modernos possuem vários barramentos.
+A organização de um computador simples com barramento é mostrada na Figura 2.1. A CPU (Central Processing Unit - Unidade Central de Processamento) é o “cérebro” do computador. Sua função é executar programas armazenados na memória principal buscando suas instruções, examinando-as e então executando-as uma após a outra. Os componentes são conectados por um barramento, conjunto de fios paralelos que transmitem endereços, dados e sinais de controle. Barramentos podem ser externos à CPU, conectando-a à memória e aos dispositivos de E/S, mas também podem ser internos, como veremos em breve. Os computadores modernos possuem vários barramentos.
 
 **• Figura 2.1 A organização de um computador simples com uma CPU e dois dispositivos de E/S.**
 
@@ -53,6 +53,7 @@ A Figura 2.1 é fundamental, pois ela resume a Organização de um Computador Si
     CPU (Unidade de Controle e ULA)             	    Registradores e Memória Principal
 
     A Unidade de Controle decodifica as instruções      Registradores: Armazenamento interno ultrarrápido na CPU (Nível 1). Memória 
+    
     ULA (Figura 1.5) executa os cálculos aritméticos    Principal: Onde o Mapa de Memória reside (Figura 3.60).
     e lógicos.
 
@@ -70,12 +71,12 @@ A CPU é composta por várias partes distintas. A unidade de controle é respons
 
 A CPU também contém uma pequena memória de alta velocidade usada para armazenar resultados temporários e para algum controle de informações. Essa memória é composta de uma quantidade de registradores, cada um deles com determinado tamanho e função. Em geral, todos os registradores têm o mesmo tamanho. Cada um pode conter um número, até algum máximo definido pelo tamanho do registrador. Registradores podem ser lidos e escritos em alta velocidade porque são internos à CPU.
 
-O registrador mais importante é o Contador de Programa (PC - Program Counter), que indica a próxima instrução a ser buscada para execução. (O nome “contador de programa” é um tanto enganoso, porque nada tem a ver com contar qualquer coisa; porém, o termo é de uso universal.) Também importante é o Registrador de Instrução (IR - Instruction Register), que mantém a instrução que está sendo executada no momento em questão. A maioria dos computadores também possui diversos outros registradores, alguns de uso geral, outros de uso específico. Outros registradores são usados pelo sistema operacional para controlar o computador.
+O registrador mais importante é o Contador de Programa (PC - Program Counter), que indica a próxima instrução a ser buscada para execução. (O nome “contador de programa” é um tanto enganoso, porque nada tem a ver com contar qualquer coisa; porém, o termo é de uso universal). Também importante é o Registrador de Instrução (IR - Instruction Register), que mantém a instrução que está sendo executada no momento em questão. A maioria dos computadores também possui diversos outros registradores, alguns de uso geral, outros de uso específico. Outros registradores são usados pelo sistema operacional para controlar o computador.
 
 ## 2.1.1 Organização da CPU
-A organização interna de parte de uma típica CPU de von Neumann é mostrada na Figura 2.2 com mais detalhes. Essa parte é denominada caminho de dados e é composta por registradores (em geral 1 a 32), da ULA (unidade lógica e aritmética) e por diversos barramentos que conectam as partes. Os registradores alimentam dois registradores de entrada da ULA, representados por A e B n a figura. Eles contêm a entrada da ULA enquanto ela está executando alguma operação de computação. O caminho de dados é muito importante em todas as máquinas e nós o discutiremos minuciosamente em todo este livro.
+A organização interna de parte de uma típica CPU de Von Neumann é mostrada na Figura 2.2 com mais detalhes. Essa parte é denominada caminho de dados e é composta por registradores (em geral 1 a 32), da ULA (unidade lógica e aritmética) e por diversos barramentos que conectam as partes. Os registradores alimentam dois registradores de entrada da ULA, representados por A e B na figura. Eles contêm a entrada da ULA enquanto ela está executando alguma operação de computação. O caminho de dados é muito importante em todas as máquinas e nós o discutiremos minuciosamente em todo este livro.
 
-**• Figura 2.2 0 caminho de dados de uma típica máquina de von Neumann.**
+**• Figura 2.2 0 caminho de dados de uma típica máquina de Von Neumann.**
 
 A Figura 2.2 detalha o Caminho de Dados interno da CPU, mostrando como uma operação aritmética simples ( A + B) acontece fisicamente entre os registradores e a ULA.
 
@@ -114,7 +115,7 @@ A Figura 2.2 detalha o Caminho de Dados interno da CPU, mostrando como uma opera
 
     Ciclo da ULA	                                               Hierarquia de Registradores
 
-    A ULA recebe os operandos dos registradores de entrada,        Os registradores (Nível 1) são a memória mais rápida do sistema, realiza a soma e coloca o resultado no registrador             servindo de fonte e destino imediato para a ULA.
+    A ULA recebe os operandos dos registradores de entrada,        Os registradores (Nível 1) são a memória mais rápida do sistema, realiza a soma e coloca o resultado no registrador    servindo de fonte e destino imediato para a ULA.
     de saída.
 
                                                                    BARRAMENTO INTERNO
@@ -133,7 +134,7 @@ Este diagrama é o "coração" do que você estuda em Assembly e C:
 
 A ULA efetua adição, subtração e outras operações simples sobre suas entradas, produzindo assim um resultado no registrador de saída, o qual pode ser armazenado em um registrador. Mais tarde, ele pode ser escrito (isto é, armazenado) na memória, se desejado. Nem todos os projetos têm os registradores A, B e de saída. No exemplo, ilustramos uma adição, mas as ULAs também realizam outras operações.
 
-Grande parte das instruções pode ser dividida em uma de duas categorias: registrador-memória ou registrador-registrador.Instruções registrador-memória permitem que palavras de memória sejam buscadas em registradores, onde podem ser usadas como entradas de ULA em instruções subsequentes, por exemplo. (“Palavras” são as unidades de dados movimentadas entre memória e registradores. Uma palavra pode ser um número inteiro. Discutiremos organização de memória mais adiante neste capítulo.) Outras instruções registrador-memória permitem que registradores voltem à memória para armazenagem.
+Grande parte das instruções pode ser dividida em uma de duas categorias: registrador-memória ou registrador-registrador.Instruções registrador-memória permitem que palavras de memória sejam buscadas em registradores, onde podem ser usadas como entradas de ULA em instruções subsequentes, por exemplo. (“Palavras” são as unidades de dados movimentadas entre memória e registradores. Uma palavra pode ser um número inteiro. Discutiremos organização de memória mais adiante neste capítulo). Outras instruções registrador-memória permitem que registradores voltem à memória para armazenagem.
 
 O outro tipo de instrução é registrador-registrador. Uma instrução registrador-registrador típica busca dois operandos nos registradores, traz os dois até os registradores de entrada da ULA, efetua alguma operação com eles (por exemplo, adição ou AND booleano) e armazena o resultado em um dos registradores. O processo de passar dois operandos pela ULA e armazenar o resultado é denominado ciclo do caminho de dados e é o coração da maioria das CPUs. Até certo ponto considerável, ele define o que a máquina pode fazer. Quanto mais rápido for o ciclo do caminho de dados, mais rápido será o funcionamento da máquina.
 
@@ -142,7 +143,7 @@ A CPU executa cada instrução em uma série de pequenas etapas. Em termos simpl
 
     1. Trazer a próxima instrução da memória até o registrador de instrução.
     
-    2. Alterar o contador de programa para que aponte para a próxima instrução.Capítulo 2 • Organização de sistemas de computadores
+    2. Alterar o contador de programa para que aponte para a próxima instrução. 
     
     3. Determinar o tipo de instrução trazida.
     
@@ -156,7 +157,7 @@ A CPU executa cada instrução em uma série de pequenas etapas. Em termos simpl
 
 Tal sequência de etapas costuma ser denominada ciclo buscar-decodificar-executar. É fundamental para a operação de todos os computadores.
 
-Essa descrição do modo de funcionamento de uma CPU é muito parecida com um programa escrito em inglês. A Figura 2.3 mostra esse programa informal reescrito como um método Java (isto é, um procedimento) denominado interpret. A máquina que está sendo interpretada tem dois registradores visíveis para programas usuários: o contador de programa (PC), para controlar o endereço da próxima instrução a ser buscada, e o acumulador (AC), para acumular resultados aritméticos. Também tem registradores internos para conter a instrução corrente durante sua execução (instr), o tipo da instrução corrente (instr_type), o endereço do operando da instrução (datajoc) e o operando corrente em si (data). Admitimos que as instruções contêm um único endereço de memória. A localização de memória endereçada contém o operando, por exemplo, o item de dado a ser somado ao acumulador.
+Essa descrição do modo de funcionamento de uma CPU é muito parecida com um programa escrito em inglês. A Figura 2.3 mostra esse programa informal reescrito como um método Java (isto é, um procedimento) denominado interpret. A máquina que está sendo interpretada tem dois registradores visíveis para programas usuários: o contador de programa (PC), para controlar o endereço da próxima instrução a ser buscada, e o acumulador (AC), para acumular resultados aritméticos. Também tem registradores internos para conter a instrução corrente durante sua execução (instr), o tipo da instrução corrente (instr_type), o endereço do operando da instrução (data_loc) e o operando corrente em si (data). Admitimos que as instruções contêm um único endereço de memória. A localização de memória endereçada contém o operando, por exemplo, o item de dado a ser somado ao acumulador.
 
 **• Figura 2.3 Interpretador para um computador simples (escrito em Java).**
 
@@ -227,7 +228,7 @@ O sucesso do Motorola 68000, que tinha um grande conjunto de instruções interp
 
 Outro fator a favor da interpretação naquela época foi a existência de memórias rápidas somente de leitura, denominadas memórias de controle, para conter os interpretadores. Suponha que uma instrução interpretada típica precisasse de 10 instruções do interpretador, denominadas microinstruções, a 100 ns cada, e duas referências à memória principal a 500 ns cada. Então, o tempo total de execução era 2.000 ns, apenas um fator de dois pior do que o melhor que a execução direta podia conseguir. Se a memória de controle não estivesse disponível, a instrução levaria 6.000 ns. Uma penalidade de fator seis é muito mais difícil de aceitar do que uma penalidade de fator dois.
 
-## 2.1.1 RISC versus CISC
+## 2.1.3 RISC versus CISC
 Durante o final da década de 1970, houve experiências com instruções muito complexas que eram possibilitadas pelo interpretador. Os projetistas tentavam fechar a “lacuna semântica” entre o que as máquinas podiam fazer e o que as linguagens de programação de alto nível demandavam. Quase ninguém pensava em projetar máquinas mais simples, exatamente como agora não há muita pesquisa na área de projeto de planilhas, redes, servidores Web etc. menos poderosos (o que talvez seja lamentável).
 
 Um grupo que se opôs à tendência e tentou incorporar algumas das idéias de Seymour Cray em um minicomputador de alto desempenho foi liderado por John Cocke na IBM. Esse trabalho resultou em um minicomputador denominado 801. Embora a IBM nunca tenha lançado essa máquina no mercado e os resultados tenham sido publicados só muitos anos depois (Radin, 1982), a notícia vazou e outros começaram a investigar arquiteturas semelhantes.
@@ -236,7 +237,7 @@ Em 1980, um grupo em Berkeley, liderado por David Patterson e Cario Séquin, com
 
 Esses novos processadores tinham diferenças significativas em relação aos que havia no comércio naquela época. Uma vez que essas novas CPUs não eram compatíveis com os produtos existentes, seus projetistas tinham liberdade para escolher novos conjuntos de instruções que maximizassem o desempenho total do sistema. Embora a ênfase inicial estivesse dirigida a instruções simples, que podiam ser executadas rapidamente, logo se percebeu que projetar instruções que podiam ser emitidas (iniciadas) rapidamente era a chave do bom desempenho. Na verdade, o tempo que uma instrução demorava importava menos do que quantas delas podiam ser iniciadas por segundo.
 
-Na época em que o projeto desses processadores simples estava no início, a característica que chamou a atenção de todos era o número relativamente pequeno de instruções disponíveis, em geral cerca de 50. Esse número era muito menor do que as 200 a 300 de computadores como o VAX da DEC e os grandes mainframes da IBM. De fato, o acrônimo RISC quer dizer Reduced Instruction Set Computer (computador com conjunto de instruções reduzido), em comparação com CISC, que significa Complex Instruction Set Computer (computador com conjunto de instruções complexo), uma referência nada sutil ao VAX que, na época, dominava os departamentos de ciência da computação das universidades. Hoje em dia, poucas pessoas acham que o tamanho do conjunto de instruções seja um assunto importante, mas o nome pegou.
+Na época em que o projeto desses processadores simples estava no início, a característica que chamou a atenção de todos era o número relativamente pequeno de instruções disponíveis, em geral cerca de 50. Esse número era muito menor do que as 200 a 300 de computadores como o VAX da DEC e os grandes mainframes da IBM. De fato, o acrônimo RISC quer dizer Reduced Instruction Set Computer (Computador com Conjunto de Instruções Reduzido), em comparação com CISC, que significa Complex Instruction Set Computer (Computador com Conjunto de Instruções Complexo), uma referência nada sutil ao VAX que, na época, dominava os departamentos de ciência da computação das universidades. Hoje em dia, poucas pessoas acham que o tamanho do conjunto de instruções seja um assunto importante, mas o nome pegou.
 
 Encurtando a história, seguiu-se uma grande guerra santa, com os defensores do RISC atacando a ordem estabelecida (VAX, Intel, grandes mainframes da IBM). Eles afirmavam que o melhor modo de projetar um computador era ter um pequeno número de instruções simples que executassem em um só ciclo do caminho de dados da Figura 2.2, ou seja, buscar dois registradores, combiná-los de algum modo (por exemplo, adicionando-os ou fazendo AND) e armazenar o resultado de volta em um registrador. O argumento desses pesquisadores era de que, mesmo que uma máquina RISC precisasse de quatro ou cinco instruções para fazer o que uma CISC fazia com uma só, se as instruções RISC fossem dez vezes mais rápidas (porque não eram interpretadas), o RISC vencia. Também vale a pena destacar que, naquele tempo, a velocidade de memórias principais tinha alcançado a velocidade de memórias de controle somente de leitura, de modo que a penalidade imposta pela interpretação tinha aumentado demais, o que favorecia muito as máquinas RISC.
 
@@ -244,18 +245,18 @@ Era de imaginar que, dadas as vantagens de desempenho da tecnologia RISC, as má
 
 Antes de tudo, há a questão da compatibilidade e dos bilhões de dólares que as empresas tinham investido em software para a linha Intel. Em segundo lugar, o que era surpreendente, a Intel conseguiu empregar as mesmas idéias mesmo em uma arquitetura CISC. A partir do 486, as CPUs da Intel contêm um núcleo RISC que executa as instruções mais simples (que normalmente são as mais comuns) em um único ciclo do caminho de dados, enquanto interpreta as mais complicadas no modo CISC de sempre. O resultado disso é que as instruções comuns são rápidas e as menos comuns são lentas. Mesmo que essa abordagem híbrida não seja tão rápida quanto um projeto RISC puro, ela resulta em desempenho global competitivo e ainda permite que softwares antigos sejam executados sem modificação.
 
-## 2.1.2 Princípios de projeto para computadores modernos
+## 2.1.4 Princípios de projeto para computadores modernos
 Agora que já se passaram mais de duas décadas desde que as primeiras máquinas RISC foram lançadas, certos princípios de projeto passaram a ser aceitos como um bom modo de projetar computadores, dado o estado atual da tecnologia de hardware. Se ocorrer uma importante mudança na tecnologia (por exemplo, se, de repente, um novo processo de fabricação fizer o ciclo de memória ficar dez vezes mais rápido do que o tempo de ciclo da CPU), todas as apostas perdem. Assim, os projetistas de máquinas devem estar sempre de olho nas mudanças tecnológicas que possam afetar o equilíbrio entre os componentes.
 
 Dito isso, há um conjunto de princípios de projeto, às vezes denominados princípios de projeto RISC, que os arquitetos de CPUs de uso geral se esforçam por seguir. Limitações externas, como a exigência de compatibilidade com alguma arquitetura existente, muitas vezes exigem uma solução de conciliação de tempos em tempos, mas esses princípios são metas que a maioria dos projetistas se esforça para cumprir. A seguir, discutiremos os principais.
 
 **• Todas as instruções são executadas diretamente por hardware**
 
-Todas as instruções comuns são executadas diretamente pelo hardware - não são interpretadas por micro-instruções. Eliminar um nível de interpretação dá alta velocidade à maioria das instruções. No caso de computadores que executam conjuntos de instruções CISC, as instruções mais complexas podem ser subdivididas em partes separadas que então podem ser executadas como uma sequência de microinstruções. Essa etapa extra torna a máquina mais lenta, porém, para instruções que ocorrem com menos frequência, isso pode ser aceitável.
+Todas as instruções comuns são executadas diretamente pelo hardware - não são interpretadas por microinstruções. Eliminar um nível de interpretação dá alta velocidade à maioria das instruções. No caso de computadores que executam conjuntos de instruções CISC, as instruções mais complexas podem ser subdivididas em partes separadas que então podem ser executadas como uma sequência de microinstruções. Essa etapa extra torna a máquina mais lenta, porém, para instruções que ocorrem com menos frequência, isso pode ser aceitável.
 
 **• Maximize a taxa de execucão das instruções**
 
-Computadores modernos recorrem a muitos truques para maximizar seu desempenho, entre os quais o principal é tentar iniciar o máximo possível de instruções por segundo. Afinal, se você puder emitir 500 milhões de instruções por segundo, terá construído um processador de 500 MIPS, não importa quanto tempo elas realmente levem para ser concluídas. (MIPS quer dizer Milhões de Instruções Por Segundo. O processador MIPS recebeu esse nome como um trocadilho desse acrônimo. Oficialmente, ele significa Microprocessor without Interlocked Pipeline Stages - microprocessador sem estágios paralelos de interbloqueio.) Esse princípio sugere que o paralelismo pode desempenhar um importante papel na melhoria do desempenho, uma vez que emitir grandes quantidades de instruções lentas em curto intervalo de tempo só é possível se várias instruções puderem ser executadas ao mesmo tempo.
+Computadores modernos recorrem a muitos truques para maximizar seu desempenho, entre os quais o principal é tentar iniciar o máximo possível de instruções por segundo. Afinal, se você puder emitir 500 milhões de instruções por segundo, terá construído um processador de 500 MIPS, não importa quanto tempo elas realmente levem para ser concluídas. (MIPS quer dizer Milhões de Instruções Por Segundo. O processador MIPS recebeu esse nome como um trocadilho desse acrônimo. Oficialmente, ele significa Microprocessor Without Interlocked Pipeline Stages - microprocessador sem estágios paralelos de interbloqueio.) Esse princípio sugere que o paralelismo pode desempenhar um importante papel na melhoria do desempenho, uma vez que emitir grandes quantidades de instruções lentas em curto intervalo de tempo só é possível se várias instruções puderem ser executadas ao mesmo tempo.
 
 Embora as instruções sempre sejam encontradas na ordem do programa, nem sempre elas são executadas nessa mesma ordem (porque algum recurso necessário pode estar ocupado) e não precisam terminar na ordem do programa. É claro que, se a instrução 1 estabelece um registrador e a instrução 2 usa esse registrador, deve-se tomar muito cuidado para garantir que a instrução 2 não leia o registrador até que ele contenha o valor correto. Fazer isso funcionar direito requer muito controle, mas possibilita ganhos de desempenho por executar várias instruções ao mesmo tempo.
 
@@ -267,11 +268,15 @@ Um limite crítico para a taxa de emissão de instruções é a decodificação 
 
 Um dos modos mais simples de subdividir operações em etapas separadas é requerer que os operandos para a maioria das instruções venham de registradores da CPU e a eles retornem. A operação de movimentação de operandos da memória para registradores pode ser executada em instruções separadas. Uma vez que o acesso à memória pode levar um longo tempo, e que o atraso é imprevisível, o melhor é sobrepor essas instruções a outras se elas nada fizerem exceto movimentar operandos entre registradores e memória. Essa observação significa que somente instruções LOAD e STORE devem referenciar a memória. Todas as outras devem operar apenas em registradores.
 
+    - Sobreposição (Pipeline): Ao limitar o acesso à memória apenas às instruções LOAD (trazer da memória para o registrador) e STORE (levar do registrador para a memória), a CPU pode organizar as instruções de processamento (aritméticas e lógicas) para serem executadas simultaneamente com as transferências de dados, melhorando o desempenho.
+
+    - Funcionamento: Em arquiteturas Load/Store, instruções como ADD, SUB, AND, etc., operam apenas em registradores. Se uma operação precisar de um dado na memória, uma instrução LOAD deve ser usada primeiro, seguida da operação, e se necessário, um STORE para devolver o resultado à memória.
+
 **• Providencie muitos registradores**
 
 Visto que o acesso à memória é relativamente lento, é preciso providenciar muitos registradores (no mínimo, 32) de modo que, assim que uma palavra for buscada, ela possa ser mantida em um registrador até não ser mais necessária. Esgotar os registradores e ter de descarregá-los de volta à memória só para ter de recarregá-los mais tarde é indesejável e deve ser evitado o máximo possível. A melhor maneira de conseguir isso é ter um número suficiente de registradores.
 
-## 2.1.3 Paralelismo no nível de instrução
+## 2.1.5 Paralelismo no nível de instrução
 Arquitetos de computadores estão sempre se esforçando para melhorar o desempenho das máquinas que projetam. Fazer os chips funcionarem com maior rapidez aumentando suas velocidades de clock é um modo, mas, para cada novo projeto, há um limite para o que é possível fazer por força bruta naquele momento da História. Por conseguinte, grande parte dos arquitetos de computadores busca o paralelismo (fazer duas ou mais coisas ao mesmo tempo) como um meio de conseguir desempenho ainda melhor para dada velocidade de clock.
 
 O paralelismo tem duas formas gerais, a saber, no nível de instrução e no nível de processador. Na primeira, o paralelismo é explorado dentro de instruções individuais para obter da máquina mais instruções por segundo. Na última, várias CPUs trabalham juntas no mesmo problema. Cada abordagem tem seus próprios méritos. Nesta seção, vamos estudar o paralelismo no nível de instrução; na seção seguinte, estudaremos o paralelismo no nível de processador.
@@ -294,7 +299,7 @@ Em vez de esperar uma instrução terminar completamente para começar a próxim
 
     (a) Os Estágios do Pipeline
 
-       S1             S2             S3             S4             S5
+       S1                S2               S3               S4               S5
     +---------+      +---------+      +---------+      +---------+      +---------+
     | Unidade |      | Unidade |      | Unidade |      | Unidade |      | Unidade |
     |  Busca  |----->|  Decod. |----->|  Busca  |----->|  Exec.  |----->|  Grav.  |
@@ -305,11 +310,14 @@ Em vez de esperar uma instrução terminar completamente para começar a próxim
 
     ESTÁGIO | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  <-- Ciclos de Clock
     --------+---+---+---+---+---+---+---+---+---+
-    S1    | I1| I2| I3| I4| I5| I6| I7| I8| I9|
-    S2    |   | I1| I2| I3| I4| I5| I6| I7| I8|
-    S3    |   |   | I1| I2| I3| I4| I5| I6| I7|
-    S4    |   |   |   | I1| I2| I3| I4| I5| I6|
-    S5    |   |   |   |   | I1| I2| I3| I4| I5|
+    S1      | I1| I2| I3| I4| I5| I6| I7| I8| I9|
+    S2      |   | I1| I2| I3| I4| I5| I6| I7| I8|
+    S3      |   |   | I1| I2| I3| I4| I5| I6| I7|
+    S4      |   |   |   | I1| I2| I3| I4| I5| I6|
+    S5      |   |   |   |   | I1| I2| I3| I4| I5|
+
+              1   2   3   4   5   6   7   8   8
+                        Tempo --->
 
 ### Insight 
 O Pipeline é o segredo da velocidade do seu Lenovo IdeaPad:
@@ -318,17 +326,15 @@ O Pipeline é o segredo da velocidade do seu Lenovo IdeaPad:
 
  - No seu Ubuntu 24.04: O kernel gerencia o contexto de execução, mas é o hardware (Figura 1.12) que mantém esse fluxo constante para garantir que a análise de pacotes do seu IDS ocorra sem atrasos.
 
-
-Na Figura 2.4(b), vemos como o pipeline funciona em função do tempo. Durante o ciclo de clock 1, o estágio SI está trabalhando na instrução 1, buscando-a na memória. Durante o ciclo 2, o estágio S2 decodifica a instrução 1, enquanto o estágio SI busca a instrução 2. Durante o ciclo 3, o estágio S3 busca os operandos para a instrução 1, o estágio S2 decodifica a instrução 2 e o estágio SI busca a terceira instrução. Durante o ciclo 4, o estágio S4 executa a instrução 1, S3 busca os operandos para a instrução 2, S2 decodifica a instrução 3 e SI busca a instrução 4. Por fim, durante o ciclo 5, S5 escreve (grava) o resultado da instrução 1 de volta ao registrador, enquanto os outros estágios trabalham nas instruções seguintes.
+Na Figura 2.4(b), vemos como o pipeline funciona em função do tempo. Durante o ciclo de clock 1, o estágio S1 está trabalhando na instrução 1, buscando-a na memória. Durante o ciclo 2, o estágio S2 decodifica a instrução 1, enquanto o estágio SI busca a instrução 2. Durante o ciclo 3, o estágio S3 busca os operandos para a instrução 1, o estágio S2 decodifica a instrução 2 e o estágio S1 busca a terceira instrução. Durante o ciclo 4, o estágio S4 executa a instrução 1, S3 busca os operandos para a instrução 2, S2 decodifica a instrução 3 e S1 busca a instrução 4. Por fim, durante o ciclo 5, S5 escreve (grava) o resultado da instrução 1 de volta ao registrador, enquanto os outros estágios trabalham nas instruções seguintes.
 
 Vamos considerar uma analogia para esclarecer melhor o conceito de pipelining. Imagine uma fábrica de bolos na qual a operação de produção dos bolos e a operação da embalagem para expedição são separadas. Suponha que o departamento de expedição tenha uma longa esteira transportadora ao longo da qual trabalham cinco funcionários (unidades de processamento). A cada 10 segundos (o ciclo de clock), o funcionário 1 coloca uma embalagem de bolo vazia na esteira. A caixa é transportada até o funcionário 2, que coloca um bolo dentro dela. Um pouco mais tarde, a caixa chega à estação do funcionário 3, onde é fechada e selada. Em seguida, prossegue até o funcionário 4, que coloca uma etiqueta na embalagem. Por fim, o funcionário 5 retira a caixa da esteira e a coloca em um grande contêiner que mais tarde será despachado para um supermercado. Em termos gerais, esse é o modo como um pipeline de computador também funciona: cada instrução (bolo) passa por diversos estágios de processamento antes de aparecer já concluída na extremidade final.
 
 Voltando ao nosso pipeline da Figura 2.4, suponha que o tempo de ciclo dessa máquina seja 2 ns. Sendo assim, uma instrução leva 10 ns para percorrer todo o caminho do pipeline de cinco estágios. À primeira vista, como uma instrução demora 10 ns, parece que a máquina poderia funcionar em 100 MIPS, mas, na verdade, ela funciona muito melhor do que isso. A cada ciclo de clock (2 ns), uma nova instrução é concluída, portanto, a velocidade real de processamento é 500 MIPS, e não 100 MIPS.
 
-
 O pipelining permite um compromisso entre latência (o tempo que demora para executar uma instrução) e largura de banda de processador (quantos MIPS a CPU tem). Com um tempo de ciclo de T ns e n estágios no pipeline, a latência é nT ns porque cada instrução passa por n estágios, cada um dos quais demora T ns.
 
-Visto que uma instrução é concluída a cada ciclo de clock e que há 109/T ciclos de clock por segundo, o número de instruções executadas por segundo é 107T. Por exemplo, se T = 2 ns, 500 milhões de instruções são executadas a cada segundo. Para obter o número de MIPS, temos de dividir a taxa de execução de instrução por 1 milhão para obter (109/T)/106 = 1.000/T MIPS. Em teoria, poderiamos medir taxas de execução de instrução em BIPS em vez de MIPS, mas ninguém faz isso, portanto, nós também não o faremos.
+Visto que uma instrução é concluída a cada ciclo de clock e que há 10^9/T ciclos de clock por segundo, o número de instruções executadas por segundo é 10^7T. Por exemplo, se T = 2 ns, 500 milhões de instruções são executadas a cada segundo. Para obter o número de MIPS, temos de dividir a taxa de execução de instrução por 1 milhão para obter (10^9/T)/10^6 = 1.000/T MIPS. Em teoria, poderiamos medir taxas de execução de instrução em BIPS em vez de MIPS, mas ninguém faz isso, portanto, nós também não o faremos.
 
 **• Arquiteturas superescalares**
 
@@ -405,35 +411,35 @@ Este chip de 2011 é um exemplo clássico de processador de alto desempenho com 
 Figura 1.14: Sistema Nvidia Tegra 2 (SoC)
 Diferente do i7, o Tegra 2 é um System on a Chip, integrando funções multimídia e de rede no mesmo silício.
 
-    +-----------------------------------------------------------+
-    | [ Proc. Sinal Imagem ]  [ Proc. Codificação Vídeo ] [CACHE]|
+    +-------------------------------------------------------------+
+    | [ Proc. Sinal Imagem ]  [ Proc. Codificação Vídeo ] [CACHE] |
     |                         [ Proc. Decodif. Vídeo    ] [CPU A7]|
-    +-----------------------+---------------------------+-------+
-    |                       |                           |  CPU  |
-    | [ Proc. Áudio ]       |          E / S            | CORTEX|
-    |                       |        (Entrada           |  A9   |
-    +-----------------------+           e               +-------+
-    | [ Video Dual ]        |         Saída)            |  CPU  |
-    |                       |                           | CORTEX|
-    +-------+-------+-------+-----------+---------------+  A9   |
-    | HDMI  | NAND  |  USB  |           | [ Proc. Gráfico ]     |
-    +-------+-------+-------+-----------+-----------------------+
+    +-----------------------+---------------------------+---------+
+    |                       |                           |  CPU    |
+    | [ Proc. Áudio ]       |          E / S            | CORTEX  |
+    |                       |        (Entrada           |  A9     |
+    +-----------------------+           e               +---------+
+    | [ Video Dual ]        |         Saída)            |  CPU    |
+    |                       |                           | CORTEX  |
+    +-------+-------+-------+-----------+---------------+  A9     |
+    | HDMI  | NAND  |  USB  |           | [ Proc. Gráfico ]       |
+    +-------+-------+-------+-----------+-------------------------+
 
 Figura 2.6: Processador Superescalar
 Este diagrama ilustra a lógica interna (estágios S1 a S5) que permite que o seu processador execute múltiplas operações simultaneamente através de unidades funcionais dedicadas.
 
-    [S1]         [S2]         [S3]           [S4]           [S5]
-    +--------+   +--------+   +--------+   +-------------+  +--------+
-    | Unid.  |   | Unid.  |   | Unid.  |   |    ULA 1    |  |        |
-    | busca  |-->| decod. |-->| busca  |-->+-------------+  | Unid.  |
+      [S1]         [S2]         [S3]           [S4]           [S5]
+    +--------+   +--------+   +--------+   +-------------+  +---------+
+    | Unid.  |   | Unid.  |   | Unid.  |   |    ULA 1    |  |         |
+    | busca  |-->| decod. |-->| busca  |-->+-------------+  | Unid.   |
     | instr. |   | instr. |   | oper.  |   |    ULA 2    |  | gravação|
-    +--------+   +--------+   +--------+   +-------------+  |        |
-                                    |        |    LOAD     |  | (Resul.)|
-                                    |        +-------------+  |        |
-                                    |        |    STORE    |  |        |
-                                    |        +-------------+  |        |
-                                    |        |  Pto. Flut. |  |        |
-                                    |        +-------------+  +--------+
+    +--------+   +--------+   +--------+   +-------------+  |         |
+                                    |      |    LOAD     |  | (Resul.)|
+                                    |      +-------------+  |         |
+                                    |      |    STORE    |  |         |
+                                    |      +-------------+  |         |
+                                    |      |  Pto. Flut. |  |         |
+                                    |      +-------------+  +---------+
 
 ![alt text](image-79.png)
 
@@ -464,15 +470,27 @@ Paralelismo no nível de instrução ajuda um pouco, mas pipelining e operação
 
 **• Computadores paralelos**
 
-Um número substancial de problemas em domínios de cálculo como ciências físicas, engenharia e gráficos de computador envolve laços e matrizes, ou então tem estrutura de alta regularidade. Muitas vezes, os mesmos cálculos são efetuados em muitos conjuntos diferentes de dados ao mesmo tempo. A regularidade e a estrutura desses programas os tornam alvos especialmente fáceis para aceleração por meio de execução paralela. Há dois métodos que têm sido usados para executar esses programas altamente regulares de modo rápido e eficaz: processadores SIMD e processadores vetoriais. Embora esses dois esquemas guardem notáveis semelhanças na maioria de seus aspectos, por ironia o primeiro deles é considerado um computador paralelo, enquanto o segundo é considerado
+Um número substancial de problemas em domínios de cálculo como ciências físicas, engenharia e gráficos de computador envolve laços e matrizes, ou então tem estrutura de alta regularidade. Muitas vezes, os mesmos cálculos são efetuados em muitos conjuntos diferentes de dados ao mesmo tempo. A regularidade e a estrutura desses programas os tornam alvos especialmente fáceis para aceleração por meio de execução paralela. Há dois métodos que têm sido usados para executar esses programas altamente regulares de modo rápido e eficaz: processadores **SIMD** e processadores vetoriais. Embora esses dois esquemas guardem notáveis semelhanças na maioria de seus aspectos, por ironia o primeiro deles é considerado um computador paralelo, enquanto o segundo é considerado
 uma extensão de um processador único.
 
-Computadores paralelos de dados encontraram muitas aplicações bem-sucedidas como consequência de sua notável eficiência. Eles são capazes de produzir poder de computação significativo com menos transistores do que os métodos alternativos. Gordon Moore (da lei de Moore) observou que o silício custa cerca de 1 bilhão de dólares por acre (4.047 m²). Assim, quanto mais poder de computação puder ser espremido desse acre de silício, mais dinheiro uma empresa de computador poderá obter vendendo silício. Os processadores paralelos de dados são um dos meios mais eficientes de espremer o desempenho do silício. Como todos os processadores estão rodando a mesma instrução, o sistema só precisa de um “cérebro” controlando o computador. Em consequência, o processador só precisa de um estágio de busca, um estágio de decodificação e um conjunto de lógica de controle. Essa é uma enorme economia no silício, que dá aos computadores paralelos uma grande vantagem sobre outros processadores, desde que o software que eles estejam rodando seja altamente regular, com bastante paralelismo.
+Computadores paralelos de dados encontraram muitas aplicações bem sucedidas como consequência de sua notável eficiência. Eles são capazes de produzir poder de computação significativo com menos transistores do que os métodos alternativos. Gordon Moore (da lei de Moore) observou que **o silício custa cerca de 1 bilhão de dólares por acre (4.047 m²)**. Assim, quanto mais poder de computação puder ser espremido desse acre de silício, mais dinheiro uma empresa de computador poderá obter vendendo silício. Os processadores paralelos de dados são um dos meios mais eficientes de espremer o desempenho do silício. Como todos os processadores estão rodando a mesma instrução, o sistema só precisa de um “cérebro” controlando o computador. Em consequência, o processador só precisa de um estágio de busca, um estágio de decodificação e um conjunto de lógica de controle. Essa é uma enorme economia no silício, que dá aos computadores paralelos uma grande vantagem sobre outros processadores, desde que o software que eles estejam rodando seja altamente regular, com bastante paralelismo.
 
-Um processador SIMD (Single Instruction-stream Multiple Data-stream, ou fluxo único de instruções, fluxo múltiplo de dados) consiste em um grande número de processadores idênticos que efetuam a mesma sequên­cia de instruções sobre diferentes conjuntos de dados. O primeiro processador SIMD do mundo foi o ILLIAC IV da Universidade de Illinois (Bouknight et al., 1972). O projeto original do ILLIAC IV consistia em quatro quadrantes, cada um deles com uma grade quadrada de 8 × 8 elementos de processador/memória. Uma única unidade de controle por quadrante transmitia uma única instrução a todos os processadores, que era executada
-no mesmo passo por todos eles, cada um usando seus próprios dados de sua própria memória. Por causa de um excesso de custo, somente um quadrante de 50 megaflops (milhões de operações de ponto flutuante por segundo) foi construído; se a construção da máquina inteira de 1 gigaflop tivesse sido concluída, ela teria duplicado a capacidade de computação do mundo inteiro.
+Um processador SIMD (Single Instruction, Multiple Data , ou Fluxo Único de Instruções, Fluxo Múltiplo de Dados) consiste em um grande número de processadores idênticos que efetuam a mesma sequên­cia de instruções sobre diferentes conjuntos de dados. O primeiro processador SIMD do mundo foi o ILLIAC IV da Universidade de Illinois (Bouknight et al., 1972). O projeto original do ILLIAC IV consistia em quatro quadrantes, cada um deles com uma grade quadrada de 8 × 8 elementos de processador/memória. Uma única unidade de controle por quadrante transmitia uma única instrução a todos os processadores, que era executada
+no mesmo passo por todos eles, cada um usando seus próprios dados de sua própria memória. Por causa de um excesso de custo, somente um quadrante de 50 megaflops (milhões de operações de ponto flutuante por segundo) foi construído; se a construção da máquina inteira de 1 gigaflops tivesse sido concluída, ela teria duplicado a capacidade de computação do mundo inteiro.
+
 
 As modernas unidades de processamento de gráficos (GPUs) contam bastante com o processamento SIMD para fornecer poder computacional maciço com poucos transistores. O processamento de gráficos foi apropriado para processadores SIMD porque a maioria dos algoritmos é altamente regular, com operações repetidas sobre pixels, vértices, texturas e arestas. A Figura 2.7 mostra o processador SIMD no núcleo da GPU Fermi da Nvidia. A GPU Fermi contém até 16 multiprocessadores de fluxo (com memória compartilhada – SM) SIMD, com cada multiprocessador contendo 32 processadores SIMD. A cada ciclo, o escalonador seleciona dois threads para executar no processador SIMD. A próxima instrução de cada thread é então executada em até 16 processadores SIMD, embora possivelmente menos se não houver paralelismo de dados suficiente. Se cada thread for capaz de realizar 16 operações por ciclo, um núcleo GPU Fermi totalmente carregado com 32 multiprocessadores realizará incríveis 512 operações por ciclo. Esse é um feito impressionante, considerando que uma CPU quad-core de uso geral com tamanho semelhante lutaria para conseguir 1/32 desse processamento.
+
+Descomplicar isso :
+
+    - Escalonador: Seleciona 2 threads para executar no processador SIMD (Single Instruction, Multiple Data) a cada ciclo.
+    
+    - Execução: A próxima instrução de cada thread é executada em até 16 processadores SIMD. Se não houver paralelismo de dados suficiente, menos processadores são usados.
+
+    - Paralelismo: Se cada thread realizar 16 operações por ciclo, um núcleo GPU Fermi com 32 multiprocessadores pode realizar até 512 operações por ciclo (32 multiprocessadores x 16 operações por ciclo).
+    
+    - Em resumo, a GPU usa paralelismo para executar muitas operações simultaneamente, aumentando a velocidade de processamento. 🚀
+
 
 **• Figura 2.7 O núcleo SIMD da unidade de processamento de gráficos Fermi.**
 
@@ -489,20 +507,20 @@ As modernas unidades de processamento de gráficos (GPUs) contam bastante com o 
     | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] |
     | [N][N][N][N]   [N][N][N][N] | [N][N][N][N]   [N][N][N][N] |
     |                                                           |
-    |           +-----+--------> [ DETALHE DE 'N' ] <------+----+
-    |           |                                          |
-    |           |   [Operando A]        [Operando B]       |
-    |           |       /     \         /      \           |
-    |           |   +--v---+   +-------v--+     +--v---+   |
-    |           |   |Unid. |   |   ULA    |     |Unid. |   |
-    |           |   | Ponto|---| (Operaçõ.|     |  de  |   |
-    |           |   | Flutu|   | Inteiras)|-----| Busca|   |
-    |           |   | ante |   |          |     | Oper.|   |
-    |           |   +--+---+   +-------+--+     +------+   |
-    |           |       \             /                    |
-    |           |        v           v                     |
-    |           |   [Registrador de Resultado]             |
-    |                                                           |
+    |           +-----+--------> [ DETALHE DE 'N' ] <-----------+
+    |           |                                               |
+    |           |   [Operando A]        [Operando B]            |
+    |           |       /     \         /      \                |
+    |           |   +--v---+   +-------v--+     +--v---+        |
+    |           |   |Unid. |   |   ULA    |     |Unid. |        |
+    |           |   | Ponto|---| (Operaçõ.|     |  de  |        |
+    |           |   | Flutu|   | Inteiras)|-----| Busca|        |
+    |           |   | ante |   |          |     | Oper.|        |
+    |           |   +--+---+   +-------+--+     +------+        |
+    |           |       \             /                         |
+    |           |        v           v                          |
+    |           |   [Registrador de Resultado]                  |
+    |           |                                               |
     +-----------------------------------------------------------+
     |                    Rede de Interconexão                   |
     +-----------------------------------------------------------+
@@ -516,10 +534,10 @@ As modernas unidades de processamento de gráficos (GPUs) contam bastante com o 
 
     Processamento                                       Armazenamento
 
-    Arquitetura Massivamente                            ParalelaAcesso à Memória (SIMD)
+    Arquitetura Massivamente                            Paralela Acesso à Memória (SIMD)
 
-    O "Despacho de Instruções" envia a mesma ordem      Todos os núcleos [N] acessam a "Memória Compartilhada" de forma coordenada, (ex: SUB) para todos os núcleos [N] de um bloco     minimizando conflitos de barramento (visto na Figura 2.1).
-    simultaneamente.
+    O "Despacho de Instruções" envia a mesma ordem      Todos os núcleos [N] acessam a "Memória Compartilhada" de forma coordenada, (ex: SUB) para todos os núcleos [N]     minimizando conflitos de barramento (visto na Figura 2.1).
+    de um bloco simultaneamente.
 
                                                         BARRAMENTO INTERNO
 
@@ -547,11 +565,11 @@ Há vários esquemas de implementação possíveis. O mais simples é um barrame
 
 **• Figura 2.8 (a) Multiprocessador de barramento único. (b) Multicomputador com memórias locais.**
 
-Figura 2.8: Comparação de Sistemas Paralelos (
+Figura 2.8: Comparação de Sistemas Paralelos 
 
 (a) Multiprocessador de barramento único
 
-      [CPU]   [CPU]   [CPU]   [CPU]      [ MEMÓRIA ]
+      [CPU]   [CPU]   [CPU]   [CPU]     [ MEMÓRIA  ]
         |       |       |       |       [ COMPART. ]
     +---+-------+-------+-------+------------+------+
     |                BARRAMENTO GERAL               |
@@ -561,11 +579,11 @@ Figura 2.8: Comparação de Sistemas Paralelos (
 
     [MEM.L] [MEM.L] [MEM.L] [MEM.L]
         |       |       |       |
-    [CPU ]  [CPU ]  [CPU ]  [CPU ]      [ MEMÓRIA ]
+    [CPU ]  [CPU ]  [CPU ]  [CPU ]      [ MEMÓRIA  ]
         |       |       |       |       [ COMPART. ]
    +----+-------+-------+-------+------------+------+
-    |                BARRAMENTO GERAL               |
-    +-----------------------------------------------+
+   |                BARRAMENTO GERAL                |
+   +------------------------------------------------+
     *(Legenda: MEM.L = Memória Local)*
 
 ![alt text](image-81.png)
@@ -595,11 +613,11 @@ Uma vez que multiprocessadores são mais fáceis de programar e multicomputadore
 A memória é a parte do computador onde são armazenados programas e dados. Alguns cientistas da computação (em especial, os britânicos) usam o termo armazém ou armazenagem em vez de memória, se bem que o termo “armazenagem” está sendo usado cada vez mais para a armazenagem em disco. Sem uma memória da qual os processadores possam ler e na qual possam gravar, ou escrever, informações, não haveria computadores digitais com programas armazenados.
 
 ## 2.2.1 Bits
-A unidade básica de memória é dígito binário, denominado bit. Um bit pode conter um 0 ou um 1. É a unidade mais simples possível. (Um dispositivo capaz de armazenar somente zeros dificilmente poderia formar a base de um sistema de memória; são necessários pelo menos dois valores.)
+A unidade básica de memória é dígito binário, denominado bit. Um bit pode conter um 0 ou um 1. É a unidade mais simples possível. (Um dispositivo capaz de armazenar somente zeros dificilmente poderia formar a base de um sistema de memória; são necessários pelo menos dois valores).
 
 As pessoas costumam dizer que computadores usam aritmética binária porque ela é “eficiente”. O que elas querem dizer, embora quase nunca percebam, é que informações digitais podem ser armazenadas distinguindo entre valores diferentes de alguma quantidade física contínua, tal como tensão ou corrente elétrica. Quanto maior for o número de valores que precisam ser distinguidos, menores serão as separações entre valores adjacentes, e menos confiável será a memória. O sistema numérico binário requer a distinção entre apenas dois valores. Por conseguinte, é o método mais confiável para codificar informações digitais. Se você não estiver familiarizado com números binários, consulte o Apêndice A.
 
-Há empresas que anunciam que seus computadores têm aritmética decimal, bem como binária, como é o caso da IBM e seus grandes mainframes. Essa façanha é realizada usando-se 4 bits para armazenar um dígito decimal que utiliza um código denominado BCD (Binary Coded Decimal – decimal codificado em binário). Quatro bits oferecem 16 combinações, usadas para os 10 dígitos de 0 a 9, mas seis combinações não são usadas. O número 1.944 é mostrado a seguir codificado em formato decimal e em formato binário puro, usando 16 bits em cada exemplo:
+Há empresas que anunciam que seus computadores têm aritmética decimal, bem como binária, como é o caso da IBM e seus grandes mainframes. Essa façanha é realizada usando-se 4 bits para armazenar um dígito decimal que utiliza um código denominado **BCD (Binary Coded Decimal – decimal codificado em binário)**. Quatro bits oferecem 16 combinações, usadas para os 10 dígitos de 0 a 9, mas seis combinações não são usadas. O número 1.944 é mostrado a seguir codificado em formato decimal e em formato binário puro, usando 16 bits em cada exemplo:
 
     decimal: 0001 1001 0100 0100        binário: 0000011110011000
 
@@ -614,7 +632,7 @@ Memórias consistem em uma quantidade de células (ou locais), cada uma das quai
 
 Três formas de estruturar a mesma quantidade de bits em diferentes larguras de célula.
 
-    (a) 12 x 8 bits          (b) 8 x 12 bits          (c) 6 x 16 bits
+    (a) 12 x 8 bits          (b) 8 x 12 bits             (c) 6 x 16 bits
         
     0 [][][][][][][][]       0 [][][][][][][][][][][][]   0 [][][][][][][][][][][][][][][][]
     1 [][][][][][][][]       1 [][][][][][][][][][][][]   1 [][][][][][][][][][][][][][][][]
@@ -623,11 +641,11 @@ Três formas de estruturar a mesma quantidade de bits em diferentes larguras de 
     .        ...             4 [][][][][][][][][][][][]   4 [][][][][][][][][][][][][][][][]
     11 [][][][][][][][]       .        ...                5 [][][][][][][][][][][][][][][][]
                              7 [][][][][][][][][][][][]
+    <---- 8 bits ---->       <------- 12 bits ------->    <------------ 16 bits ----------->
 
 ![alt text](image-82.png)
 
-Computadores que usam o sistema de números binários (incluindo notação octal ou hexadecimal para números binários) expressam endereços de memória como números binários. Se um endereço tiver m bits, o número máximo de células endereçáveis é 2m. Por exemplo, um endereço usado para referenciar a memória da Figura 2.9(a) precisa de no mínimo 4 bits para expressar todos os números de 0 a 11. Contudo, um endereço de 3 bits é suficiente para as figuras 2.9(b) e (c). O número de bits no endereço determina o número máximo de células diretamente endereçáveis na memória e é independente do número de bits por célula. Uma memória com 212 células de 8 bits cada e uma memória com 212 células de 64 bits cada precisam de endereços de 12 bits. A Figura 2.10 mostra o número de bits por célula para alguns computadores que já foram vendidos comer-
-cialmente.
+Computadores que usam o sistema de números binários (incluindo notação octal ou hexadecimal para números binários) expressam endereços de memória como números binários. Se um endereço tiver m bits, o número máximo de células endereçáveis é 2m. Por exemplo, um endereço usado para referenciar a memória da Figura 2.9(a) precisa de no mínimo 4 bits para expressar todos os números de 0 a 11. Contudo, um endereço de 3 bits é suficiente para as figuras 2.9(b) e (c). O número de bits no endereço determina o número máximo de células diretamente endereçáveis na memória e é independente do número de bits por célula. Uma memória com 2^12 células de 8 bits cada e uma memória com 2^12 células de 64 bits cada precisam de endereços de 12 bits. A Figura 2.10 mostra o número de bits por célula para alguns computadores que já foram vendidos comercialmente.
 
 A significância da célula é que ela é a menor unidade endereçável. Há poucos anos, praticamente todos os fabricantes de computadores padronizaram células de 8 bits, que é denominada um byte. O termo octeto também é usado. Bytes são agrupados em palavras. Um computador com uma palavra de 32 bits tem 4 bytes/palavra, enquanto um computador com uma palavra de 64 bits tem 8 bytes/palavra. A significância de uma palavra é que grande parte das instruções efetua operações com palavras inteiras, por exemplo, somando duas palavras. Assim, uma máquina de 32 bits terá registradores de 32 bits e instruções para manipular palavras de 32 bits, enquanto uma máquina de 64 bits terá registradores de 64 bits e instruções para movimentar, somar, subtrair e, em geral, manipular palavras de 64 bits.
 
@@ -674,7 +692,7 @@ Crucial para entender como palavras de 32 bits são distribuídas na memória en
     (a) BIG ENDIAN                  (b) LITTLE ENDIAN
         
         Endereço de Byte                Endereço de Byte
-         0   1   2   3                   3   2   1   0
+          0   1   2   3                   3   2   1   0
         +---+---+---+---+               +---+---+---+---+
     0   | 0 | 1 | 2 | 3 |            0  | 3 | 2 | 1 | 0 |
         +---+---+---+---+               +---+---+---+---+
@@ -684,6 +702,8 @@ Crucial para entender como palavras de 32 bits são distribuídas na memória en
         +---+---+---+---+               +---+---+---+---+
     12  |12 |13 |14 |15 |           12  |15 |14 |13 |12 |
         +---+---+---+---+               +---+---+---+---+
+                    byte                            byte
+ 
     <--Palavra de 32 bits-->        <--Palavra de 32 bits--> 
 
 ![alt text](image-83.png)
@@ -709,38 +729,80 @@ A Figura 2.12. Esta figura é vital para o seu "Projeto IDS", pois demonstra o q
 
 Este exemplo usa um registro de pessoal com um nome ("JIM SMITH") e um número de matrícula (21, 12, 00, 00).
 
-    (a) Máquina Big Endian           (b) Máquina Little Endian
-        0   1   2   3                    3   2   1   0
-        +---+---+---+---+                +---+---+---+---+
-    0   | J | I | M |   |             0  |   | M | I | J |  (Nome)
-        +---+---+---+---+                +---+---+---+---+
-    4   | S | M | I | T |             4  | T | I | M | S |  (Nome)
-        +---+---+---+---+                +---+---+---+---+
-    8   | H |   | 0 | 0 |             8  | 0 | 0 |   | H |  (H = matrícula)
-        +---+---+---+---+                +---+---+---+---+
-    12  | 21| 12| 0 | 0 |            12  | 0 | 0 | 12| 21|  (ID numérico)
-        +---+---+---+---+                +---+---+---+---+
-
-        (c) Após Transferência           (d) Após Troca de Bytes (Swap)
-             (Sem correção)                   (Resultado desejado)
-        3   2   1   0                    3   2   1   0
-        +---+---+---+---+                +---+---+---+---+
-    0   | J | I | M |   |             0  |   | M | I | J |  <-- Nome "quebra"
-        +---+---+---+---+                +---+---+---+---+
-    4   | S | M | I | T |             4  | T | I | M | S |  <-- Nome "quebra"
-        +---+---+---+---+                +---+---+---+---+
-    8   | H |   | 0 | 0 |             8  | 0 | 0 |   | H |  <-- Numérico OK!
-        +---+---+---+---+                +---+---+---+---+
-    12  | 21| 12| 0 | 0 |            12  | 0 | 0 | 12| 21|  <-- Numérico OK!
-        +---+---+---+---+                +---+---+---+---+
+    +-------------------------------------------------------------------------------+
+    |          TRANSFERÊNCIA DE REGISTROS E TROCA DE BYTES                          |
+    |===============================================================================|
+    |                                                                               |
+    |   (a) Big Endian            (b) Little Endian         (c) Transferido         |
+    |   Addr | 0 | 1 | 2 | 3 |    Addr | 0 | 1 | 2 | 3 |    Addr | 0 | 1 | 2 | 3 |  |
+    |   -----+---------------+    -----+---------------+    -----+------------------+  
+    |     0  | J | I | M |   |         |   | M | I | J |      0  |   | M | I | J |  |
+    |     4  | S | M | I | T |      4  | T | I | M | S |      4  | T | I | M | S |  |
+    |     8  | H | 0 | 0 | 0 |      8  | 0 | 0 | 0 | H |      8  | 0 | 0 | 0 | H |  |
+    |    12  | 0 | 0 | 0 | 21|      12 | 0 | 0 | 0 | 21|     12  | 21| 0 | 0 | 0 |  |
+    |    16  | 0 | 0 | 1 | 4 |     16  | 0 | 0 | 1 | 4 |     16  | 4 | 1 | 0 | 0 |  |
+    |                                                                               |
+    |                    (d) Resultado da Troca                                     |
+    |                       Addr | 0 | 1 | 2 | 3 |                                  |
+    |                       -----+---------------+                                  |
+    |                         0  | J | I | M |   |                                  |
+    |                         4  | S | M | I | T |                                  |
+    |                         8  | H | 0 | 0 | 0 |                                  |
+    |                        12  | 0 | 0 | 0 | 21|                                  |
+    |                        16  | 0 | 0 | 1 | 4 |                                  |
+    |                                                                               |
+    +-------------------------------------------------------------------------------+
 
 ![alt text](image-84.png)
+
+O valor 14 que você vê na Figura 2.12 não é o número decimal quatorze, mas sim a representação hexadecimal do número 260.
+
+Aqui está a decomposição matemática para o seu eBook:
+
+ - **O Cálculo do Departamento (260)**
+ 
+ O texto menciona que o departamento é 260, calculado como 1 x 256 + 4.
+ 
+  1. Na base hexadecimal, 256 é representado como 100 na base 16 ( 100_16).
+  
+  2. Portanto, 260 em decimal é igual a 0104_16 em hexadecimal (1 x 16^2 + 0 x 16^1 + 4 x 16^0).
+
+A Representação nos Bytes (32 bits)
+
+ - Como o registro usa palavras de 4 bytes, o número 260 (0104_16) precisa preencher os 4 espaços. Os bytes seriam: 00, 00, 01, 04.
+
+        +-------------------------------------------------------------+
+        |              DETALHE DO ENDEREÇO 16 (DEPARTAMENTO)          |
+        |=============================================================|
+        |                                                             |
+        | Valor Decimal: 260                                          |
+        | Valor Hexa:    0x 00 00 01 04                               |
+        |                                                             |
+        | No Diagrama (a) Big Endian:                                 |
+        | Addr 16 | Byte 0 | Byte 1 | Byte 2 | Byte 3 |               |
+        | --------|--------|--------|--------|--------|               |
+        |         |   0    |   0    |   1    |   4    |               |
+        |                                                             |
+        | No Diagrama (b) Little Endian:                              |
+        | Addr 16 | Byte 0 | Byte 1 | Byte 2 | Byte 3 |               |
+        | --------|--------|--------|--------|--------|               |
+        |         |   4    |   1    |   0    |   0    |               |
+        +-------------------------------------------------------------+
+
+**Resumo para o Registro:**
+
+        +-------------+---------------+----------------------------+
+        | Campo       | Valor Decimal | Representação Hexa (Bytes) |
+        +-------------+---------------+----------------------------+
+        | Idade       | 21            | 00 00 00 15                |
+        | Departamento| 260           | 00 00 01 04                |
+        +-------------+---------------+----------------------------+
 
 A a Figura 2.12 ilustra o "pesadelo" dos desenvolvedores de sistemas de rede. Se você apenas trocar os bytes para consertar o número da matrícula (item d), você acaba invertendo a ordem das letras no nome (que já estavam certas por serem lidas individualmente).
 
 Isso reforça por que, no seu eBook, é importante destacar que strings e inteiros exigem tratamentos diferentes na memória.
 
-Ambas as representações são boas e internamente consistentes. Os problemas começam quando uma das máquinas tenta enviar um registro à outra por uma rede. Vamos supor que a big endian envie o registro à little endian um byte por vez, começando com o byte 0 e terminando com o byte 19. (Vamos ser otimistas e supor que os bits dos bytes não sejam invertidos pela transmissão porque, assim como está, já temos problemas suficientes.) Portanto, o byte 0 da big endian entra na memória da little endian no byte 0 e assim por diante, como mostra a Figura 2.12(c).
+Ambas as representações são boas e internamente consistentes. Os problemas começam quando uma das máquinas tenta enviar um registro à outra por uma rede. Vamos supor que a big endian envie o registro à little endian um byte por vez, começando com o byte 0 e terminando com o byte 19. (Vamos ser otimistas e supor que os bits dos bytes não sejam invertidos pela transmissão porque, assim como está, já temos problemas suficientes). Portanto, o byte 0 da big endian entra na memória da little endian no byte 0 e assim por diante, como mostra a Figura 2.12(c).
 
 Quando a little endian tenta imprimir o nome, ela funciona bem, mas a idade sai como 21 × 224 e o departamento também fica errado. Essa situação surge porque a transmissão inverteu a ordem dos caracteres em uma palavra, como deveria, mas também inverteu os bytes de um inteiro, o que não deveria.
 
@@ -757,13 +819,11 @@ Dadas duas palavras de código quaisquer, por exemplo, 10001001 e 10110001, é p
 
 Com uma palavra de memória de m bits, todos os 2m padrões de bits são válidos, mas, devido ao modo como os bits de verificação são computados, somente 2m das 2n palavras de código são válidas. Se uma leitura de memória aparecer com uma palavra de código inválida, o computador sabe que ocorreu um erro de memória. Dado o algoritmo para calcular os bits de verificação, é possível montar uma lista completa das palavras de código válidas e, por meio dela, achar as duas palavras de código cuja distância de Hamming seja mínima. Essa distância é a distância de Hamming do código completo.
 
-As propriedades de detecção de erro e correção de erro de um código dependem de sua distância de Hamming. Para detectar d erros de único bit, você precisa de um código de distância d + 1 porque, com tal código, não existe nenhum modo que permita que d erros de único bit mudem uma palavra de código válida para outra. De modo semelhante, para corrigir erros de único bit, você precisa de um código de distância 2d + 1 porque, desse modo, as palavras de código válidas estão tão distantes uma da outra que, mesmo que d mude, a palavra de código original ainda estará mais perto do que qualquer outra, portanto, ela pode ser unicamente
-determinada.
+As propriedades de detecção de erro e correção de erro de um código dependem de sua distância de Hamming. Para detectar d erros de único bit, você precisa de um código de distância d + 1 porque, com tal código, não existe nenhum modo que permita que d erros de único bit mudem uma palavra de código válida para outra. De modo semelhante, para corrigir erros de único bit, você precisa de um código de distância 2d + 1 porque, desse modo, as palavras de código válidas estão tão distantes uma da outra que, mesmo que d mude, a palavra de código original ainda estará mais perto do que qualquer outra, portanto, ela pode ser unicamente determinada.
 
 Como um exemplo simples de um código de detecção de erro, considere um código em que um único bit de paridade é anexado aos dados. O bit de paridade é escolhido de modo que o número de bits 1 na palavra de código seja par (ou ímpar). Tal código tem uma distância 2, uma vez que qualquer erro de bit único produz uma palavra de código com paridade errada. Ou seja, ele precisa de dois erros de único bit para ir de uma palavra de código válida até outra palavra de código válida. Ele pode ser usado para detectar erros isolados. Sempre que uma palavra que contenha paridade errada for lida da memória, uma condição de erro é sinalizada. O programa não pode continuar, mas, ao menos, nenhum resultado errado é calculado.
 
-Como um exemplo simples de um código de correção de erros, considere um código que tenha apenas quatro
-palavras de código válidas:
+Como um exemplo simples de um código de correção de erros, considere um código que tenha apenas quatro palavras de código válidas:
 
     0000000000        0000011111          1111100000     e     1111111111
 
@@ -803,7 +863,22 @@ Para um sistema de alta performance como o seu "Projeto IDS", entender o acrésc
 
     Confiabilidade no Barramento	                                  Impacto no seu Código C
 
-    Evita que ruídos elétricos no barramento (Figura 2.1) alterem um  Ao lidar com structs grandes no seu IDS, você aproveita bit de um pacote de rede crítico.                                     melhor o hardware se a palavra for larga (E. AVX-512 no seu i                                                                 i7).
+    Evita que ruídos elétricos no barramento (Figura 2.1) alterem um  Ao lidar com structs grandes no seu IDS, você aproveita bit de um pacote de rede crítico.                                     melhor o hardware se a palavra for larga (E. AVX-512 no seu -
+                                                                      i7).
+
+Ao lidar com structs grandes, é mais eficiente aproveitar a largura da palavra do processador, especialmente se você estiver usando instruções de vetor como AVX-512 no seu i7.
+
+Isso significa que, se você alinhar os dados da struct para que eles sejam processados em blocos de 512 bits (ou 64 bytes), você pode aproveitar melhor as capacidades do processador e melhorar o desempenho.
+
+Além disso, é importante considerar o alinhamento de memória para evitar penalidades de desempenho devido a acessos desalinhados.
+ 
+ Então, se você está trabalhando com structs grandes, é uma boa ideia:
+ 
+   - Alinhar os dados para a largura da palavra do processador (no caso do AVX-512, 64 bytes)Usar instruções de vetor para processar os dados em paralelo
+
+   - Evitar acessos desalinhados à memória
+
+   - Isso pode fazer uma grande diferença no desempenho do seu código! 🚀
 
 ### Insight: "A Economia de Escala Digital"
 Ao documentar isso no seu eBook, note que quanto maior a palavra, menor o "imposto" de bits que você paga pela segurança:
@@ -814,28 +889,44 @@ Ao documentar isso no seu eBook, note que quanto maior a palavra, menor o "impos
 
 Esse limite inferior teórico pode ser conseguido usando um método criado por Richard Hamming (1950). Antes de analisar o algoritmo de Hamming, vamos examinar uma representação gráfica simples que ilustra com clareza a ideia de um código de correção de erros para palavras de 4 bits. O diagrama de Venn da Figura 2.14(a) contém três círculos, A, B e C, que juntos formam sete regiões. Como exemplo, vamos codificar a palavra de memória de 4 bits 1100 nas regiões AB, ABC, AC e BC, 1 bit por região (em ordem alfabética). Essa codificação é mostrada na Figura 2.14(a).
 
-**Figura 2.14 (a) Codificação de 1100. (b) Paridade par adicionada. (c) Erro em AC.**
+Figura 2.14, que ilustra o conceito visual da detecção e correção de erros de bit único (SEC - Single Error Correction) utilizando diagramas de Venn, facilitando o entendimento antes de entrarmos na matemática do algoritmo de Hamming.
 
-**Figura 2.14: Codificação de Erros**
-Visualização de como bits de paridade são usados para detectar e corrigir erros em uma sequência de dados.
+Este método é amplamente utilizado em memórias ECC (Error Correcting Code), fundamentais para a estabilidade de servidores como os que você configura na Oracle Cloud.
 
-    ((a) Codificação              (b) Paridade                (c) Erro em C
-          de 1100                      Adicionada                  (Detection)
-    
-          /---\                        /---\                        /---\
-         /  0  \                      /  0  \                      /  0  \
-        |--- ---|                    |--- ---|                    |--- ---|
-     /--| 1 | 0 |--\              /--| 1 | 0 |--\              /--| 1 | 0 |--\
-    /  1 \ --- / 0  \            /  1 \ --- / 1  \            /  1 \ --- / 1  \
-    \    /     \    /            \    /     \    /            \    /   X \    / <-- ERRO!
-     \--/       \--/              \--/       \--/              \--/       \--/
-       B         C                  B         C                  B         C
-                                                          (Soma de paridade em C = ÍMPAR)
+**Figura 2.14: Detecção e Correção de Erros com Bits de Paridade**
+
+    +-------------------------------------------------------------+
+    |           MECANISMO DE CORREÇÃO DE ERRO (HAMMING)           |
+    |=============================================================|
+    |                                                             |
+    |   (a) Codificação 1100      (b) Paridade Par Adicionada     |
+    |         _______                    _______                  |
+    |        /       \                 /        \                 |
+    |     A /   0     \ C           A /   0 | 0   \ C             |
+    |      |     \ /   |             |     \ /     |              |
+    |      |  1 | 1 | 0|             |  1 | 1 | 1  |              |
+    |      |     / \   |             |     / \     |              |
+    |       \___/   \_/               \___/0  \___/               |
+    |           \ B /                     \ B /                   |
+    |            \_/                       \_/                    |
+    |                                                             |
+    |   (c) Erro no Bit AC         [bits de paridade: 0, 0, 1]    |
+    |         _______                                             |
+    |        /       \             ANÁLISE DO ERRO (c):           |
+    |     A /   0 | 1 <--- ERRO!   - Círculo A: 0+1+1+1 = 3 (Ímpar)|
+    |      |     \ /   |           - Círculo B: 1+1+0+0 = 2 (Par)  |
+    |      |  1 | 1 | 1|           - Círculo C: 1+1+1+0 = 3 (Ímpar)|
+    |      |     / \   |                                          |
+    |       \___/0 \___/           Conclusão: A intersecção de A  |
+    |           \ B /              e C (AC) deve ser corrigida.   |
+    |            \_/                                              |
+    +-------------------------------------------------------------+
+
 ![alt text](image-85.png)
 
 Em seguida, acrescentamos um bit de paridade a cada uma dessas três regiões vazias para produzir paridade par, como ilustrado na Figura 2.14(b). Por definição, agora a soma dos bits em cada um dos três círculos, A, B e C, é um número par. No círculo A, temos os quatro números 0, 0, 1 e 1, cuja soma total é 2, um número par. No círculo B, os números são 1, 1, 0 e 0, cuja soma total é 2, um número par. Por fim, no círculo C, temos a mesma coisa. Nesse exemplo, por acaso todos os círculos são iguais, mas as somas de 0 e 4 também são possíveis em outros exemplos. Essa figura corresponde a uma palavra de código com 4 bits de dados e 3 bits de paridade.
 
-Agora, suponha que algo de ruim aconteça com o bit na região AC e ele mude de 0 para 1, conforme mostra a Figura 2.14(c). Agora, o computador pode ver que os círculos A e C têm a paridade errada (ímpar). A única mudança de bit individual que pode corrigi-los é restaurar AC para 0, o que corrige o erro. Desse modo, o com- putador pode corrigir automaticamente erros de memória em único bit.
+Agora, suponha que algo de ruim aconteça com o bit na região AC e ele mude de 0 para 1, conforme mostra a Figura 2.14(c). Agora, o computador pode ver que os círculos A e C têm a paridade errada (ímpar). A única mudança de bit individual que pode corrigi-los é restaurar AC para 0, o que corrige o erro. Desse modo, o computador pode corrigir automaticamente erros de memória em único bit.
 
 Agora, vamos ver como o algoritmo de Hamming pode ser usado para construir códigos de correção de erros para qualquer tamanho de palavra de memória. Em um código de Hamming, são acrescentados r bits de paridade a uma palavra de m bits, formando uma nova palavra de comprimento m + r bits. Os bits são numerados começando com 1, não com 0, sendo que o bit 1 é o da extrema esquerda (ordem alta). Todos os bits cujo número de bit for uma potência de 2 são de paridade; os restantes são usados para dados. Por exemplo, com uma palavra de 16 bits, são adicionados 5 bits de paridade. Os bits 1, 2, 4, 8 e 16 são bits de paridade e todos os restantes são bits de dados. No total, a palavra de memória tem 21 bits (16 de dados, 5 de paridade). Neste exemplo, usaremos
 (arbitrariamente) a paridade par.
@@ -871,9 +962,63 @@ A Figura 2.15 mostra a construção de um código de Hamming para a palavra de m
                         Bits de Paridade (P)
                 nas posições de potência de 2 (1, 2, 4, 8, 16)
 
-![alt text](image-86.png)
+                       Palavra de memória 1111000010101110
+                0  0   1  0  1  1  1 0  0  0  0  0  1  0  1  1  0  1  1  1 0
+                1  2   3  4  5  6  7 8  9 10 11 12 13 14 15 16 17 18 19 20 21
+                ^  ^     ^           ^                       ^
+                |__|_____|___________|_______________________|
+                        Bits de Paridade (P)
+                nas posições de potência de 2 (1, 2, 4, 8, 16)
 
-    Mapeamento Técnico 
+1. A Estratégia de Montagem (Onde colocar os bits?)
+
+Imagine que a memória é uma fila de 21 posições.
+
+ - Os Fiscais (Bits de Paridade): Eles são colocados sempre nas posições que são potências de 2 (1, 2, 4, 8, 16). Eles não carregam dados, apenas vigiam os outros.
+ 
+ - A Carga (Bits de Dados): Os seus 16 bits originais (1111000010101110) são "encaixados" nos buracos que sobraram (posições 3, 5, 6, 7, 9, 10...).
+
+        +-------------------------------+---------------------------------------------------------------------------+
+        | Processamento (Regra)         | Armazenamento (Posição na Memória)                                        |
+        +-------------------------------+---------------------------------------------------------------------------+
+        | Potências de 2                | Posições 1, 2, 4, 8, 16 (Bits de Verificação)                             |
+        | Restante                      | Posições 3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21 (Dados)|
+        +-------------------------------+---------------------------------------------------------------------------+
+
+2. O "Poder de Visão" de cada Fiscal
+Cada bit de paridade cuida de um grupo específico de posições. O segredo é que cada posição de dado é vigiada por uma combinação única de fiscais.
+
+ - Fiscal 1: Vigia todas as posições ímpares (1, 3, 5, 7...).
+
+ - Fiscal 4: Vigia as posições 4, 5, 6, 7 e depois pula para 12, 13, 14, 15.
+
+3. O Exemplo do Erro (O Bit 5 "virou")
+Se uma sobrecarga elétrica inverter o Bit 5, o sistema faz uma "chamada" para ver quem está vendo algo errado:
+
+ - O Fiscal 1 grita: "Ei, meu grupo (que inclui o 5) está com paridade ímpar! Tem erro aqui!".
+
+ - O Fiscal 2 diz: "No meu grupo está tudo certo" (o 2 não vigia o 5).
+
+ - O Fiscal 4 grita: "No meu grupo (que inclui o 5) também tem erro!".
+
+ - O Fiscal 8 e o 16 dizem: "Aqui está tudo ok".
+
+4. A Mágica Matemática (Localizando o Bit)
+Para descobrir qual bit falhou, o computador simplesmente soma o número dos fiscais que gritaram "erro":
+
+ - Fiscal 1 (Incorreto)
+ 
+ - Fiscal 4 (Incorreto)
+ 
+ - Soma: 1 + 4 = 5.
+
+O computador agora sabe: O erro está na posição 5! Ele inverte o bit de volta e os dados do seu eBook estão salvos sem que o usuário perceba a falha.
+
+**Resumo para o seu eBook:**
+
+O código de Hamming não apenas detecta que algo deu errado; ele usa a intersecção dos grupos de paridade para realizar a autocorreção (SEC - Single Error Correction). É por isso que servidores com memória ECC são tão estáveis: eles corrigem esses "tirinhos" elétricos em tempo real.
+
+**Mapeamento Técnico** 
 
     Processamento                                            Armazenamento                     
 
@@ -964,20 +1109,40 @@ Por fim, um quinto aspecto é o número de caches. Hoje em dia não é incomum t
 ## 2.2.6 Empacotamento e tipos de memória
 Desde os primeiros dias da memória de semicondutor até o início da década 1990, a memória era fabricada, comprada e instalada como chips únicos. As densidades dos chips iam de 1 K bits até 1 M bits e além, mas cada chip era vendido como uma unidade separada. Os primeiros PCs costumavam ter soquetes vazios nos quais podiam ser ligados chips de memória adicionais, se e quando o comprador precisasse deles.
 
-Desde o início da década de 1990, usa-se um arranjo diferente. Um grupo de chips, em geral 8 ou 16, é montado em uma minúscula placa de circuito impresso e vendido como uma unidade. Essa unidade é denominada SIMM (Single Inline Memory Module – módulo único de memória em linha) ou DIMM (Dual Inline Memory Module – módulo duplo de memória em linha), dependendo se tem uma fileira de conectores de um só lado ou de ambos os lados da placa. Os SIMMs têm um conector de borda com 72 contatos e transferem 32 bits por ciclo de clock. Os DIMMs em geral têm conectores de borda com 120 contatos em cada lado da placa, perfazendo um total de 240 contatos e transferem 64 bits por ciclo de clock. Os mais comuns hoje são os DIMMs DDR3, que é a terceira versão das memórias de taxa dupla. Um exemplo típico de DIMM é ilustrado na Figura 2.17.
+Desde o início da década de 1990, usa-se um arranjo diferente. Um grupo de chips, em geral 8 ou 16, é montado em uma minúscula placa de circuito impresso e vendido como uma unidade. Essa unidade é denominada **SIMM (Single Inline Memory Module – módulo único de memória em linha)** ou **DIMM (Dual Inline Memory Module – módulo duplo de memória em linha)**, dependendo se tem uma fileira de conectores de um só lado ou de ambos os lados da placa. Os SIMMs têm um conector de borda com 72 contatos e transferem 32 bits por ciclo de clock. Os DIMMs em geral têm conectores de borda com 120 contatos em cada lado da placa, perfazendo um total de 240 contatos e transferem 64 bits por ciclo de clock. Os mais comuns hoje são os DIMMs DDR3, que é a terceira versão das memórias de taxa dupla. Um exemplo típico de DIMM é ilustrado na Figura 2.17.
 
 **• Figura 2.17 Visão superior de um DIMM de 4 GB, com oito chips de 256 MB em cada lado. O outro lado tem a mesma aparência.**
 
-        <-------------------- 133 mm -------------------->
+         <-------------------- 133 mm --------------------> |
         +--------------------------------------------------+
-        |  +---+   +---+   +---+   +---+   +---+   +---+   |
-        |  |CHIP|  |CHIP|  |CHIP|  |CHIP|  |CHIP|  |CHIP|  | --+
-        |  |256 |  |256 |  |256 |  |256 |  |256 |  |256 |  |   | Lado A:
-        |  | MB |  | MB |  | MB |  | MB |  | MB |  | MB |  |   | 8 Chips
-        |  +---+   +---+   +---+   +---+   +---+   +---+   | --+
-        |                                                  |
-        +--||||||||||||||||||||||||||||||||||||||||||||||--+
+        |  +----+  +----+  +----+  +----+  +----+   +---+   |
+        |  |CHIP|  |CHIP|  |CHIP|  |CHIP|  |CHIP|   |CHIP|  | --+
+        |  |256 |  |256 |  |256 |  |256 |  |256 |   |256 |  |   | Lado A:
+        |  | MB |  | MB |  | MB |  | MB |  | MB |   | MB |  |   | 8 Chips
+        |  +----+  +----+  +----+  +----+  +----+   +----+  | --+
+        |                                                   |
+        +--||||||||||||||||||||||||||||||||||||||||||||||---+
             ^^^^^^^^^^^^^^^^^^ CONECTOR ^^^^^^^^^^^^^^^^^^
+
+    +-------------------------------------------------------------+
+    |              MÓDULO DE MEMÓRIA DIMM (4 GB)                  |
+    |=============================================================|
+    |                                                             |
+    |   <-------------------- 133 mm -------------------->        |
+    |   _________________________________________________         |
+    |  |                                                 |        |
+    |  |  [C] [C] [C] [C]     [C] [C] [C] [C]            |        |
+    |  |                                                 |        |
+    |  |  (8 CHIPS DE 256 MB NESTE LADO VISÍVEL)         |        |
+    |  |                                                 |        |
+    |  |  [C] [C] [C] [C]     [C] [C] [C] [C]            |        |
+    |  |_________________________________________________|        |
+    |    |||||||||||||||||||||||||||||||||||||||||||||||          |
+    |    ^                  CONECTOR                    ^         |
+    |                                                             |
+    |   NOTA: O OUTRO LADO POSSUI MAIS 8 CHIPS IDÊNTICOS.         |
+    |   TOTAL GERAL = 16 CHIPS                                    |
+    +-------------------------------------------------------------+
 
     Mapeamento Técnico 
 
@@ -992,6 +1157,7 @@ Desde o início da década de 1990, usa-se um arranjo diferente. Um grupo de chi
     
     Conecta-se diretamente à placa-mãe através do barramento de    Situada após a Cache (Figura 2.16), a RAM DIMM é onde o seu sistema (Figura 2.8).                                          Ubuntu carrega os processos do seu IDS.
 
+O sistema operacional Ubuntu carrega os processos do Intrusion Detection System (IDS) na memória RAM (DIMM)
 
 ### Insight para o eBook: "Do Bit ao Pente de Memória"
 Ao adicionar esta figura ao seu material, você conecta todos os pontos anteriores:
@@ -1014,18 +1180,18 @@ A solução tradicional para armazenar grandes quantidades de dados é uma hiera
 
 **• Figura 2.18 - Hierarquia de memória de cinco níveis.**
 
-                 /  \
-                /----\
-               / Reg  \  <-- Dentro da CPU (Velocidade Extrema)
-              /--------\
-             /  Cache   \ <-- L1, L2, L3 (Onde seu IDS brilha)
-            /------------\
-           / Mem. Principal\ <-- DIMM de 4GB (Seu Ubuntu roda aqui)
-          /----------------\
-         / SSD / Disco Mag. \ <-- Armazenamento Persistente
-        /--------------------\
-       / Fita / Disco Óptico  \ <-- Backup (Arquivamento)
-      /------------------------\
+                           /  \
+                          /----\
+                         / Reg  \  <-- Dentro da CPU (Velocidade Extrema)
+                        /--------\
+                       /  Cache   \ <-- L1, L2, L3 (Onde seu IDS brilha) - Intrusion Detection System 
+                      /------------\
+                     / Mem. Principal\ <-- DIMM de 4GB (Seu Ubuntu roda aqui)
+                    /----------------\
+                   / SSD / Disco Mag. \ <-- Armazenamento Persistente
+                  /--------------------\
+                 / Fita / Disco Óptico  \ <-- Backup (Arquivamento)
+                /------------------------\
 
     ![alt text](image-88.png)
 
@@ -1053,9 +1219,9 @@ Mesmo em sistemas modernos, entender a geometria de um disco magnético é funda
 
 
     Direção da Rotação
-                <-----------------
-         /-------------------------------\
-        /   SETOR 1      GAP      SETOR 2 \
+                 <-----------------
+          /-------------------------------\
+         /   SETOR 1      GAP      SETOR 2 \
         |  +---------+   +---+   +---------+ |
         |  |Preâmbulo|   |   |   |Preâmbulo| |
         |  |---------|   | I |   |---------| |
@@ -1118,18 +1284,29 @@ Hoje, usa-se uma estratégia diferente. Os cilindros são divididos em zonas (no
 **• Figura 2.21 - Disco com cinco zonas. Cada zona tem muitas trilhas.**
 
 Mostra como os discos modernos dividem a superfície em zonas concêntricas para aproveitar melhor o espaço físico, colocando mais setores nas trilhas externas.
-
-                 ______
-              /          \
-             /     /--\   \
-            |     |    |   |  <-- Zonas Externas (Mais Setores)
-            |     |    |   |  <-- Zonas Internas (Menos Setores)
-             \     \--/   /
-              \__________/
+       
+        +-------------------------------------------------------------+
+        |          GEOMETRIA DE ARMAZENAMENTO POR ZONAS               |
+        |=============================================================|
+        |                                                             |
+        |                / \                                          |
+        |               | O |  <-- Eixo Central                       |
+        |              /     \                                        |
+        |             |  Z5   | <-- Zona Interna (Menos setores)      |
+        |            /         \                                      |
+        |           |    Z3     |                                     |
+        |          /             \                                    |
+        |         |      Z1       | <-- Zona Externa (Mais setores)   |
+        |          \             /                                    |
+        |           \___________/                                     |
+        |                                                             |
+        |  * Setor: A menor unidade de alocação visível (fatia).      |
+        |  * Trilha: O caminho circular completo em uma zona.         |
+        +-------------------------------------------------------------+
 
 ![alt text](image-91.png)
 
-Associado a cada drive há um controlador de disco, um chip que controla o drive. Alguns controladores contêm uma CPU completa. Entre as tarefas do controlador estão: aceitar comandos do software, como READ, WRITE e FORMAT (escrevendo todos os preâmbulos), controlar o movimento do braço, detectar e corrigir erros e converter bytes de 8 bits lidos na memória em uma corrente serial de bits e vice-versa. Alguns controladores também manipulam o buffer de múltiplos setores, fazendo cache de setores lidos para potencial uso futuro e remapeando setores ruins. Essa última função é causada pela existência de setores que têm um ponto ruim, ou seja, permanentemente magnetizado. Quando descobre um setor ruim, o controlador o substitui por um dos setores sobressalentes reservados para esse fim dentro de cada cilindro ou zona.
+Associado a cada drive há um **controlador de disco**, um chip que controla o drive. Alguns controladores contêm uma CPU completa. Entre as tarefas do controlador estão: aceitar comandos do software, como READ, WRITE e FORMAT (escrevendo todos os preâmbulos), controlar o movimento do braço, detectar e corrigir erros e converter bytes de 8 bits lidos na memória em uma corrente serial de bits e vice-versa. Alguns controladores também manipulam o buffer de múltiplos setores, fazendo cache de setores lidos para potencial uso futuro e remapeando setores ruins. Essa última função é causada pela existência de setores que têm um ponto ruim, ou seja, permanentemente magnetizado. Quando descobre um setor ruim, o controlador o substitui por um dos setores sobressalentes reservados para esse fim dentro de cada cilindro ou zona.
 
 ## 2.3.3 Discos IDE
 Os discos dos modernos computadores pessoais evoluíram daquele usado no IBM PC XT, que era um disco Seagate de 10 MB controlado por um controlador de disco Xebec em um cartão de encaixe (plug-in). O disco Seagate tinha 4 cabeçotes, 306 cilindros e 17 setores por trilha. O controlador conseguia manipular dois drives. O sistema operacional lia e escrevia em um disco colocando parâmetros em registradores da CPU e então chamando o BIOS (Basic Input Output System – sistema básico de entrada e saída) localizado na memória somente de leitura do PC. O BIOS emitia as instruções de máquina para carregar os registradores do controlador de disco que
