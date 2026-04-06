@@ -1957,8 +1957,7 @@ desenvolvidas e comercializadas.
 
 Dispositivos de toque podem ser encontrados em duas categorias: opacos e transparentes. Um dispositivo sensível ao toque opaco é o touchpad de um notebook. Um dispositivo transparente típico é a tela de um smart­phone ou tablet. Vamos analisar apenas o segundo. Eles costumam ser chamados de touch screens. Os principais tipos de touch screens são infravermelho, resistivo e capacitivo.
 
-As telas infravermelhas são transmissores de infravermelho, como os diodos ou lasers emissores de luz infravermelha (por exemplo) nas bordas esquerda ou superior do engaste em torno da tela e detectores nas bordas direita e inferior. Quando um dedo, caneta ou qualquer objeto opaco bloqueia um ou mais raios, o detector correspondente sente a queda no sinal e o hardware do dispositivo pode dizer ao sistema operacional quais raios foram bloqueados, permitindo que ele calcule a coordenadas (x, y) do dedo ou caneta. Embora esses dispositivos já tenham sido usados há algum tempo em quiosques e outras aplicações, eles não usados
-para dispositivos móveis.
+As telas infravermelhas são transmissores de infravermelho, como os diodos ou lasers emissores de luz infravermelha (por exemplo) nas bordas esquerda ou superior do engaste em torno da tela e detectores nas bordas direita e inferior. Quando um dedo, caneta ou qualquer objeto opaco bloqueia um ou mais raios, o detector correspondente sente a queda no sinal e o hardware do dispositivo pode dizer ao sistema operacional quais raios foram bloqueados, permitindo que ele calcule a coordenadas (x, y) do dedo ou caneta. Embora esses dispositivos já tenham sido usados há algum tempo em quiosques e outras aplicações, eles não usados para dispositivos móveis.
 
 Outra tecnologia antiga consiste em touch screens resistivas. Estas consistem em duas camadas, sendo a superior flexível. Ela contém uma grande quantidade de fios horizontais. A inferior contém fios verticais. Quando um dedo ou outro objeto pressiona um ponto na tela, um ou mais dos fios entra em contato com os fios perpendiculares na camada inferior. Os circuitos eletrônicos do dispositivo possibilitam a leitura de qual área foi pressionada. Essas telas não são caras para se montar, e são muito usadas em aplicações mais simples.
 
@@ -1974,7 +1973,6 @@ Os “fios” em uma touch screen não são os fios de cobre comuns, encontrados
 Em operação, tensões são aplicadas alternadamente aos “fios” horizontal e vertical, enquanto os valores de tensão, que são afetados pela capacitância de cada intersecção, são lidos dos outros. Essa operação é repetida muitas vezes por segundo, com as coordenadas tocadas sendo alimentadas no controlador do dispositivo como um fluxo de pares (x, y). Mais processamento, como determinar se ocorre apontamento, compressão, expressão ou toque, é feito pelo sistema operacional. Se você usar todos os 10 dedos e pedir a um amigo para usar os dele, o sistema operacional terá mais trabalho, mas o hardware de toque múltiplo poderá realizar essa tarefa.
 
 **• Monitores de tela plana**
-
 Os primeiros monitores de computador usavam tubos de raios catódicos (CRTs – cathode ray tubes), assim como os antigos aparelhos de televisão. Eles eram muito volumosos e pesados para serem usados em notebooks, portanto, era preciso uma tecnologia completamente diferente para suas telas. O desenvolvimento de telas planas ofereceu um tamanho físico necessário para os notebooks, e esses dispositivos também usavam menos potência. Hoje, os benefícios em tamanho e potência do monitor de tela plana quase eliminaram o uso de monitores CRT.
 
 A mais comum tecnologia de monitor de tela plana é o LCD (Liquid Crystal Display – monitor de cristal líquido). É uma tecnologia de alta complexidade, tem muitas variações e está mudando com grande rapidez, de modo que esta descrição será necessariamente breve e muito simplificada.
@@ -1994,18 +1992,18 @@ Na parte de trás do monitor há um polaroide horizontal que permite apenas a pa
 
 Contudo, a estrutura cristalina torcida das moléculas do LCD guia a luz na passagem e gira sua polarização, fazendo com que ela saia na vertical. Portanto, na ausência de um campo elétrico, a tela de LCD é uniformemente brilhante. Aplicando uma tensão elétrica em partes selecionadas da placa, a estrutura torcida pode ser destruída, bloqueando a luz nesses locais.
 
-Há dois esquemas que podem ser usados para aplicar a tensão elétrica. Em um monitor de matriz passiva (de baixo custo), ambos os eletrodos contêm fios paralelos. Em um monitor de 1.920 × 1.080, por exemplo, o eletrodo traseiro poderia ter 1.920 fios verticais e o frontal poderia ter 1.080 horizontais. Aplicando-se uma tensão elétrica em um dos fios verticais e em seguida fazendo-se pulsar um dos horizontais, a tensão em uma posição de pixel selecionada pode ser mudada, fazendo-a escurecer por um curto espaço de tempo. Um pixel (aglutinação das palavras “picture” e “element”) é um ponto colorido a partir do qual todas as imagens digitais são construí­das. Repetindo-se esse pulso para o próximo pixel e então para o seguinte, pode-se pintar uma linha escura de varredura. Em geral, a tela inteira é pintada 60 vezes por segundo, para enganar o olho e fazê-lo pensar que ali há uma imagem constante.
+Há dois esquemas que podem ser usados para aplicar a tensão elétrica. Em um monitor de matriz passiva (de baixo custo), ambos os eletrodos contêm fios paralelos. Em um monitor de 1.920 × 1.080, por exemplo, o eletrodo traseiro poderia ter 1.920 fios verticais e o frontal poderia ter 1.080 horizontais. Aplicando-se uma tensão elétrica em um dos fios verticais e em seguida fazendo-se pulsar um dos horizontais, a tensão em uma posição de pixel selecionada pode ser mudada, fazendo-a escurecer por um curto espaço de tempo. Um pixel (aglutinação das palavras “picture” e “element”) é um ponto colorido a partir do qual todas as imagens digitais são construí­das. Repetindo-se esse pulso para o próximo pixel e então para o seguinte, pode-se pintar uma linha escura de varredura. Em geral, **a tela inteira é pintada 60 vezes por segundo, para enganar o olho e fazê-lo pensar que ali há uma imagem constante**.
 
-O outro esquema de ampla utilização é o monitor de matriz ativa. É mais caro, mas produz melhor imagem. Em vez de apenas dois conjuntos de fios perpendiculares, ele tem um minúsculo elemento comutador em cada posição de pixel em um dos eletrodos. Desligando e ligando esses elementos, pode-se criar um padrão de tensão elétrica arbitrário na tela, o que permite um padrão de bits também arbitrário. Os elementos comutadores são denominados transistores de película fina (TFT – Thin Film Transistors) e os monitores de tela plana que os utilizam costumam ser denominados monitores TFT. Agora, a maioria dos notebooks e monitores de tela plana para desktops utiliza a tecnologia TFT.
+O outro esquema de ampla utilização é o monitor de matriz ativa. É mais caro, mas produz melhor imagem. Em vez de apenas dois conjuntos de fios perpendiculares, ele tem um minúsculo elemento comutador em cada posição de pixel em um dos eletrodos. Desligando e ligando esses elementos, pode-se criar um padrão de tensão elétrica arbitrário na tela, o que permite um padrão de bits também arbitrário. Os elementos comutadores são denominados **transistores de película fina (TFT – Thin Film Transistors)** e os monitores de tela plana que os utilizam costumam ser denominados monitores TFT. Agora, a **maioria dos notebooks e monitores de tela plana para desktops utiliza a tecnologia TFT**.
 
 Até aqui, descrevemos como funciona um monitor monocromático. Basta dizer que monitores coloridos usam os mesmos princípios gerais dos monocromáticos, mas os detalhes são muito mais complicados. Filtros ópticos são usados para separar a luz branca em componentes vermelha, verde e azul em cada posição de pixel, de modo que estes possam ser exibidos independentemente. Toda cor pode ser obtida por uma superposição dessas três cores primárias.
 
-Outras tecnologias de tela estão surgindo. Uma das mais promissoras é a tela OLED (Organic Light Emitting Diode – diodo orgânico emissor de luz). Ela consiste em camadas de moléculas orgânicas carregadas eletricamente, dispostas entre dois eletrodos em forma de sanduíche. As mudanças de tensão fazem com que as moléculas sejam excitadas e se movam para estados de energia mais altos. Quando elas retornam ao seu estado normal, emitem luz. Outros detalhes estão fora do escopo deste livro (e de seus autores).
+Outras tecnologias de tela estão surgindo. Uma das mais promissoras é a tela **OLED (Organic Light Emitting Diode – diodo orgânico emissor de luz)**. Ela consiste em camadas de moléculas orgânicas carregadas eletricamente, dispostas entre dois eletrodos em forma de sanduíche. As mudanças de tensão fazem com que as moléculas sejam excitadas e se movam para estados de energia mais altos. Quando elas retornam ao seu estado normal, emitem luz. Outros detalhes estão fora do escopo deste livro (e de seus autores).
 
 **• RAM de vídeo**
 Quase todos os monitores são renovados de 60 a 100 vezes por segundo por uma memória especial, denominada RAM de vídeo (memória de acesso aleatório de vídeo), embutida na placa controladora do monitor. Essa memória tem um ou mais mapas de bits que representam a imagem da tela. Em uma tela com, por exemplo, 1.920 × 1.080 elementos de imagem, denominados pixels, uma RAM de vídeo conteria 1.920 × 1.080 valores, um para cada pixel. Na verdade, ela poderia conter muitos desses mapas de bits, para permitir a passagem rápida de uma imagem para outra.
 
-Em um monitor comum, cada pixel seria representado como um valor RGB (red/green/blue) de 3 bytes, um para cada intensidade das componentes vermelha, verde e azul da cor do pixel (monitores de primeira linha usam 10 ou mais bits por cor). Pelas leis da física, sabe-se que qualquer cor pode ser obtida por uma superposição linear de luzes vermelha, verde e azul.
+Em um monitor comum, cada pixel seria representado como um valor RGB (red/green/blue) de 3 bytes, um para cada intensidade das componentes vermelha, verde e azul da cor do pixel **(monitores de primeira linha usam 10 ou mais bits por cor)**. Pelas leis da física, sabe-se que qualquer cor pode ser obtida por uma superposição linear de luzes vermelha, verde e azul.
 
 Uma RAM de vídeo com 1.920 × 1.080 pixels a 3 bytes/pixel requer mais de 6,2 MB para armazenar a imagem e uma boa quantidade de tempo de CPU para fazer qualquer coisa com ela. Por essa razão, alguns computadores adotam uma solução de conciliação usando um número de 8 bits para indicar a cor desejada. Então, esse número é usado como um índice para uma tabela de hardware denominada paleta de cores, que contém 256 entradas, cada uma com um valor RGB de 24 bits. Esse projeto, denominado cor indexada, reduz em dois terços o tamanho de memória da RAM de vídeo, mas permite somente 256 cores na tela ao mesmo tempo. Em geral, cada janela
 na tela tem seu próprio mapeamento. Porém, com apenas uma paleta de cores em hardware, quando há várias janelas presentes, muitas vezes apenas a janela corrente apresenta suas cores corretamente. Paletas de cores com 216 entradas também são usadas, mas o ganho aqui é de apenas 1/3.
@@ -2025,7 +2023,7 @@ Três tipos de mouses foram produzidos: mecânicos, ópticos e óptico-mecânico
 
 ![alt text](image-103.png)
 
-O segundo tipo de mouse é o óptico. Esse tipo não tem rodinhas nem esferas. Em vez delas, tem um LED (Light Emitting Diode – diodo emissor de luz) e um fotodetector na parte de baixo. Os primeiros mouses ópticos exigiam uma almofada plástica especial que continha uma grade retangular de linhas espaçadas muito próximas umas das outras para detectar quantas linhas tinham sido atravessadas e, assim, a que distância o mouse se movimentou. Os mouses ópticos modernos contêm um LED que ilumina as imperfeições da superfície, junto com uma pequena câmera de vídeo que registra uma pequena imagem (em geral, 18 × 18 pixels) até 1.000 vezes por segundo. Imagens consecutivas são comparadas para ver a que distância o mouse se moveu. Alguns mouses ópticos utilizam um laser no lugar de um LED para iluminação. Eles são mais precisos, mas também mais caros.
+O segundo tipo de mouse é o óptico. Esse tipo não tem rodinhas nem esferas. Em vez delas, tem um **LED (Light Emitting Diode – diodo emissor de luz)** e um fotodetector na parte de baixo. Os primeiros mouses ópticos exigiam uma almofada plástica especial que continha uma grade retangular de linhas espaçadas muito próximas umas das outras para detectar quantas linhas tinham sido atravessadas e, assim, a que distância o mouse se movimentou. Os mouses ópticos modernos contêm um LED que ilumina as imperfeições da superfície, junto com uma pequena câmera de vídeo que registra uma pequena imagem (em geral, 18 × 18 pixels) até 1.000 vezes por segundo. Imagens consecutivas são comparadas para ver a que distância o mouse se moveu. Alguns mouses ópticos utilizam um laser no lugar de um LED para iluminação. Eles são mais precisos, mas também mais caros.
 
 O terceiro tipo de mouse é o óptico-mecânico. Assim como o mouse mecânico mais novo, ele tem uma esfera que gira dois eixos alinhados a 90 graus em relação um ao outro. Os eixos estão conectados a decodificadores com fendas que permitem a passagem da luz. Quando o mouse se movimenta, os eixos giram e pulsos de luz atingem os detectores sempre que aparece uma fenda entre um LED e seu detector. O número de pulsos detectados é proporcional à quantidade de movimento.
 
@@ -2041,14 +2039,9 @@ Lançado em 2006 com o console de jogos Nintendo Wii, o controlador Wiimote cont
 
 A Figura 2.35 ilustra como o Wiimote executa essa função de sensibilidade ao movimento. O rastreamento do movimento do Wiimote em três dimensões é realizado com um acelerômetro interno de 3 eixos. Esse dispositivo contém três massas pequenas, cada qual podendo se mover nos eixos x, y e z (com relação ao chip do acelerômetro). Elas se movem em proporção ao grau de aceleração em seu eixo particular, o que muda a capacitância da massa em relação a uma parede fixa de metal. Medindo as três capacitâncias variáveis, é possível sentir a aceleração em três dimensões. Usando essa tecnologia e algum cálculo clássico, o console Wii pode rastrear o movimento do Wiimote no espaço. Ao movimentar o Wiimote para atingir uma bola de tênis virtual, esse movimento é rastreado enquanto você se desloca em direção à bola e, se você virou o pulso no último momento para atingir a bola por cima, os acelerômetros do Wiimote também notarão esse movimento.
 
-**• Figura 2.35 Sensores de movimento do controlador de videogame Wiimote.**
-
-![alt text](image-104.png)
-
 Embora os acelerômetros funcionem bem para acompanhar o movimento do Wiimote enquanto ele se desloca em três dimensões, eles não podem oferecer a sensibilidade de movimento detalhada necessária para controlar um ponteiro na tela da televisão. Os acelerômetros sofrem com pequenos erros inevitáveis em suas medições de aceleração, de modo que, com o tempo, o local exato do Wiimote (com base na integração de suas acelerações) se tornará cada vez menos preciso.
 
-Para oferecer a sensibilidade de movimento com precisão, o Wiimote utiliza uma tecnologia de visão de computador inteligente. Acima da televisão há uma “barra de sensor” que contém LEDs a uma distância fixa. No Wiimote há uma câmera que, quando apontada na barra de sensor, pode deduzir a distância e orientação em relação à televisão. Como os LEDs da barra de sensor estão afastados a certa distância, sua distância vista pelo Wiimote é proporcional àquela entre o Wiimote e a barra de sensor. O local da barra de sensor no campo de visão do Wiimote indica a direção que este aponta em relação à televisão. Observando essa orientação continua­mente, é possível dar suporte a uma capacidade de apontamento minucioso sem os erros de posição inerentes aos ace-
-lerômetros.
+Para oferecer a sensibilidade de movimento com precisão, o Wiimote utiliza uma tecnologia de visão de computador inteligente. Acima da televisão há uma “barra de sensor” que contém LEDs a uma distância fixa. No Wiimote há uma câmera que, quando apontada na barra de sensor, pode deduzir a distância e orientação em relação à televisão. Como os LEDs da barra de sensor estão afastados a certa distância, sua distância vista pelo Wiimote é proporcional àquela entre o Wiimote e a barra de sensor. O local da barra de sensor no campo de visão do Wiimote indica a direção que este aponta em relação à televisão. Observando essa orientação continua­mente, é possível dar suporte a uma capacidade de apontamento minucioso sem os erros de posição inerentes aos acelerômetros.
 
 **• Controlador Kinect**
 O Microsoft Kinect leva as capacidades de visão dos controladores de jogos a um nível inteiramente novo. Esse dispositivo usa apenas a visão do computador para determinar as interações do usuário com o console de jogos. Ele funciona sentindo a posição do usuário na sala, mais a orientação e o movimento de seu corpo. Os jogos são controlados por movimentos predeterminados de suas mãos, braços e qualquer outra coisa que os projetistas do jogo acreditarem que você deva mexer a fim de controlar seu jogo.
@@ -2112,35 +2105,13 @@ a 600 dpi e usar essa técnica de meio-tom reduz a resolução efetiva a 100 cé
 **• Figura 2.37 - Pontos de meio-tom para várias faixas de escala de cinza. (a) 0–6. (b) 14–20. (c) 28–34. (d) 56–62. (e) 105–111.
 (f) 161–167.**
 
-Figura 2.37: Pontos de Meio-Tom (Escala de Cinza)Esta figura ilustra como impressoras (que só possuem tinta preta) simulam tons de cinza agrupando pontos em matrizes de $6 \times 6$ pixels.
-
-    SIMULAÇÃO DE ESCALA DE CINZA (MATRIZ 6x6)
-    =================================================
-    (a) Branco     (c) Cinza Claro    (f) Cinza Escuro
-    [        ]     [    ###     ]     [  #######  ]
-    [        ]     [    ###     ]     [ ######### ]
-    [        ]     [    ###     ]     [ ######### ]
-    [        ]     [            ]     [  #######  ]
-    =================================================
-    Nível: 0-6       Nível: 28-34       Nível: 161-167
-
-        (a) 0-6          (b) 14-20         (c) 28-34
-        +-----------+     +-----------+     +-----------+
-        | . . . . . |     | . . . . . |     | . . . . . |
-        | . . . . . |     | . . # . . |     | . . # . . |
-        | . . . . . |     | . # # . . |     | . # # # . |
-        | . . . . . |     | . . . . . |     | . . # . . |
-        | . . . . . |     | . . . . . |     | . . . . . |
-        +-----------+     +-----------+     +-----------+
-
-        (d) 56-62         (e) 105-111       (f) 161-167
-        +-----------+     +-----------+     +-----------+
-        | . . # . . |     | . # # # . |     | . # # # . |
-        | . # # # . |     | # # # # # |     | # # # # # |
-        | # # # # # |     | # # # # # |     | # # # # # |
-        | . # # # . |     | # # # # # |     | # # # # # |
-        | . . # . . |     | . # # # . |     | . # # # . |
-        +-----------+     +-----------+     +-----------+
+    (a) 0-6       (b) 14-20     (c) 28-34     (d) 56-62     (e) 105-111    (f) 161-167
+    +-------+     +-------+     +-------+     +-------+     +-------+     +-------+
+    | . . . |     | . . . |     | . . . |     | . # . |     | . # . |     | # # # |
+    | . . . |     | . # . |     | . # # |     | # # # |     | # # # |     | # # # |
+    | . . . |     | . . # |     | . # # |     | . # . |     | # # # |     | # # # |
+    +-------+     +-------+     +-------+     +-------+     +-------+     +-------+
+     BRANCO       CLARÍSSIMO      CLARO         MÉDIO        ESCURO         PRETO
 
 ![alt text](image-106.png)
 
