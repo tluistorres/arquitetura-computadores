@@ -1309,27 +1309,35 @@ Mostra como os discos modernos dividem a superfície em zonas concêntricas para
 Associado a cada drive há um **controlador de disco**, um chip que controla o drive. Alguns controladores contêm uma CPU completa. Entre as tarefas do controlador estão: aceitar comandos do software, como READ, WRITE e FORMAT (escrevendo todos os preâmbulos), controlar o movimento do braço, detectar e corrigir erros e converter bytes de 8 bits lidos na memória em uma corrente serial de bits e vice-versa. Alguns controladores também manipulam o buffer de múltiplos setores, fazendo cache de setores lidos para potencial uso futuro e remapeando setores ruins. Essa última função é causada pela existência de setores que têm um ponto ruim, ou seja, permanentemente magnetizado. Quando descobre um setor ruim, o controlador o substitui por um dos setores sobressalentes reservados para esse fim dentro de cada cilindro ou zona.
 
 ## 2.3.3 Discos IDE
-Os discos dos modernos computadores pessoais evoluíram daquele usado no IBM PC XT, que era um disco Seagate de 10 MB controlado por um controlador de disco Xebec em um cartão de encaixe (plug-in). O disco Seagate tinha 4 cabeçotes, 306 cilindros e 17 setores por trilha. O controlador conseguia manipular dois drives. O sistema operacional lia e escrevia em um disco colocando parâmetros em registradores da CPU e então chamando o BIOS (Basic Input Output System – sistema básico de entrada e saída) localizado na memória somente de leitura do PC. O BIOS emitia as instruções de máquina para carregar os registradores do controlador de disco que
+Os discos dos modernos computadores pessoais evoluíram daquele usado no IBM PC XT, que era um disco Seagate de 10 MB controlado por um controlador de disco Xebec em um cartão de encaixe (plug-in). O disco Seagate tinha 4 cabeçotes, 306 cilindros e 17 setores por trilha. O controlador conseguia manipular dois drives. O sistema operacional lia e escrevia em um disco colocando parâmetros em registradores da CPU e então chamando o **BIOS (Basic Input Output System – sistema básico de entrada e saída)** localizado na memória somente de leitura do PC. O BIOS emitia as instruções de máquina para carregar os registradores do controlador de disco que
 iniciava as transferências.
 
-A tecnologia evoluiu rapidamente e passou do controlador em uma placa separada para o controlador integrado com os drives, começando com drives IDE (Integrated Drive Electronics – eletrônica integrada ao drive) em meados da década de 1980. Contudo, as convenções de chamada do BIOS não foram alteradas por causa da compatibilidade. Essas convenções de chamada endereçavam setores dando seus números de cabeçote, cilindro e setor, sendo que a numeração de cabeçotes e cilindros começava em 0, e de setores, em 
-
+A tecnologia evoluiu rapidamente e passou do controlador em uma placa separada para o controlador integrado com os drives, começando com drives **IDE (Integrated Drive Electronics – eletrônica integrada ao drive)** em meados da década de 1980. Contudo, as convenções de chamada do BIOS não foram alteradas por causa da compatibilidade. Essas convenções de chamada endereçavam setores dando seus números de cabeçote, cilindro e setor, sendo que a numeração de cabeçotes e cilindros começava em 0, e de setores, em 
 1. Essa escolha provavelmente se deveu a um erro da parte do programador original do BIOS, que escreveu sua obra-prima em assembler
 8088. Com 4 bits para o cabeçote, 6 bits para o setor e 10 bits para o cilindro, o drive máximo podia ter 16 cabeçotes, 63 setores e 1.024 cilindros, para um total de 1.032.192 setores. Esse drive máximo tinha uma capacidade de 504 MB, o que devia parecer uma infinidade naquela época, porém, agora, decerto não. (Hoje você criticaria uma nova máquina que não pudesse manipular drives maiores do que 1.000 TB?)
 
 Infelizmente, não passou muito tempo e apareceram drives acima de 504 MB, mas com a geometria errada (por exemplo, 4 cabeçotes, 32 setores e 2.000 cilindros totalizam 256.000 setores). O sistema operacional não conseguia endereçá-los de modo algum, por causa das convenções de chamada do BIOS há muito cristalizadas. O resultado é que os controladores de disco começaram a mentir, fingindo que a geometria estava dentro dos limites do BIOS embora, na verdade, estivesse remapeando a geometria virtual para a geometria real. Embora essa técnica funcionasse, causava grandes estragos nos sistemas operacionais que posicionavam dados cuidadosamente para minimizar tempos de busca.
 
-Com o tempo, os drives IDE evoluíram para drives EIDE (Extended IDE – IDE estendido), que também suportavam um segundo esquema de endereçamento denominado LBA (Logical Block Addressing – endereçamento de blocos lógicos), que numera os setores começando em 0 até um máximo de 228 – 1. Esse esquema requer que o controlador converta endereços LBA para endereços de cabeçote, setor e cilindro, mas ultrapassa o limite de 504 MB. Infelizmente, ele criava um novo gargalo a 228 × 29 bytes (128 GB). Em 1994, quando foi adotado o padrão EIDE, ninguém poderia imaginar discos de 128 GB. Comitês de padronização, assim como os políticos, têm tendência de empurrar problemas para que o próximo comitê os resolva.
+Com o tempo, os drives IDE evoluíram para drives **EIDE (Extended IDE – IDE estendido)**, que também suportavam um segundo esquema de endereçamento denominado **LBA (Logical Block Addressing – endereçamento de blocos lógicos)**, que numera os setores começando em 0 até um máximo de 2^28 – 1. Esse esquema requer que o controlador converta endereços LBA para endereços de cabeçote, setor e cilindro, mas ultrapassa o limite de 504 MB. Infelizmente, ele criava um novo gargalo a 2^28 × 29 bytes (128 GB). Em 1994, quando foi adotado o padrão EIDE, ninguém poderia imaginar discos de 128 GB. Comitês de padronização, assim como os políticos, têm tendência de empurrar problemas para que o próximo comitê os resolva.
 
 Drives e controladores EIDE também tinham outras melhorias. Por exemplo, controladores EIDE podiam ter dois canais, cada um com um drive primário e um secundário. Esse arranjo permitia um máximo de quatro drives por controlador. Drives de CD-ROM e DVD também eram suportados, e a taxa de transferência aumentou de 4 MB/s para 16,67 MB/s.
 
-Enquanto a tecnologia de disco continuava a melhorar, o padrão EIDE continuava a evoluir, mas, por alguma razão, o sucessor do EIDE foi denominado ATA-3 (AT Attachment), uma referência ao IBM PC/AT (onde AT se referia à então “tecnologia avançada” – Advanced Technology – de uma CPU de 16 bits executando em 8 MHz).
+Enquanto a tecnologia de disco continuava a melhorar, o padrão EIDE continuava a evoluir, mas, por alguma razão, o sucessor do EIDE foi denominado **ATA-3 (AT Attachment)**, uma referência ao IBM PC/AT (onde AT se referia à então “tecnologia avançada” – Advanced Technology – de uma CPU de 16 bits executando em 8 MHz).
 
-Na edição seguinte, o padrão recebeu o nome de ATAPI-4 (ATA Packet Interface – interface de pacotes ATA) e a velocidade aumentou para 33 MB/s. Com o ATAPI-5, ela alcançou 66 MB/s.
+Na edição seguinte, o padrão recebeu o nome de **ATAPI-4 (ATA Packet Interface – interface de pacotes ATA)** e a velocidade aumentou para 33 MB/s. Com o ATAPI-5, ela alcançou 66 MB/s.
 
-Nessa época, o limite de 128 GB imposto pelos endereços LBA de 28 bits estava ficando cada vez mais ameaçador, portanto, o ATAPI-6 alterou o tamanho do LBA para 48 bits. O novo padrão entrará em dificuldade quando os discos chegarem a 248 × 29 bytes (128 PB). Com um aumento de capacidade de 50% ao ano, o limite de 48 bits deverá durar até mais ou menos 2035. Para saber como o problema foi resolvido, favor consultar a décima primeira edição deste livro. A melhor aposta é que o tamanho do LBA alcance 64 bits. O padrão ATAPI-6 também aumentou a taxa de transferência para 100 MB/s e atacou a questão do ruído do disco pela primeira vez.
+Nessa época, o limite de 128 GB imposto pelos endereços LBA de 28 bits estava ficando cada vez mais ameaçador, portanto, o ATAPI-6 alterou o tamanho do LBA para 48 bits. O novo padrão entrará em dificuldade quando os discos chegarem a 2^48 × 29 bytes (128 PB). Com um aumento de capacidade de 50% ao ano, o limite de 48 bits deverá durar até mais ou menos 2035. Para saber como o problema foi resolvido, favor consultar a décima primeira edição deste livro. A melhor aposta é que o tamanho do LBA alcance 64 bits. O padrão ATAPI-6 também aumentou a taxa de transferência para 100 MB/s e atacou a questão do ruído do disco pela primeira vez.
 
 O padrão ATAPI-7 é uma ruptura radical com o passado. Em vez de aumentar o tamanho do conector do drive (para aumentar a taxa de dados), esse padrão usa o que é chamado ATA serial para transferir 1 bit por vez por um conector de 7 pinos a velocidades que começam em 150 MB/s e que, com o tempo, espera-se que alcancem 1,5 GB/s. Substituir o atual cabo plano de 80 fios por um cabo redondo com apenas alguns milímetros a mais de espessura melhora o fluxo de ar dentro do computador. Além disso, o ATA serial usa 0,5 volt para sinalização (em comparação com os 5 volts dos drives ATAPI-6), o que reduz o consumo de energia. É provável que, dentro de alguns anos, todos os computadores usarão ATA serial. A questão do consumo de energia pelos discos é cada vez mais importante, tanto na extremidade mais alta do mercado, onde centrais de dados têm vastas coleções de discos, como na mais baixa, onde os notebooks são limitados em questão de energia (Gurumurthi et al., 2003).
+
+O ATA serial (SATA) já é amplamente utilizado hoje em dia. Na verdade, ele substituiu quase que completamente o PATA (Parallel ATA) em computadores desktop e laptops.
+O SATA oferece várias vantagens em relação ao PATA, incluindo:
+
+ - Velocidade: O SATA tem taxas de transferência mais rápidas, chegando a até 6 Gbit/s (600 MB/s) no SATA III.
+ 
+ - Cableamento: Os cabos SATA são mais finos e flexíveis, facilitando a gestão de cabos dentro do computador.
+ 
+ - Conectividade: O SATA suporta hot-swapping, permitindo que dispositivos sejam conectados e desconectados sem precisar reiniciar o computador.
 
 ## 2.3.4 Discos SCSI
 Discos SCSI não são diferentes de discos IDE em relação ao modo como seus cilindros, trilhas e setores são organizados, mas têm uma interface diferente e taxas de transferência muito mais elevadas. A história dos SCSI remonta a Howard Shugart, o inventor do disco flexível, cuja empresa lançou o disco SASI (Shugart Associates System Interface – interface de sistema da Shugart Associates) em 1979. Após algumas modificações e muita discussão, a ANSI o padronizou em 1986 e mudou o nome para SCSI (Small Computer System Interface – interface para sistemas computacionais pequenos). A pronúncia de SCSI em inglês é “scâzi”, de scuzzy. Desde então, foram padronizadas versões cada vez mais rápidas sob os nomes de Fast SCSI (10 MHz), Ultra SCSI (20 MHz), Ultra2 SCSI (40 MHz), Ultra3 SCSI (80 MHz) e Ultra4 SCSI (160 MHz). Cada uma dessas versões também tem uma versão larga (16 bits). As principais combinações são mostradas na Figura 2.22.
@@ -1352,7 +1360,7 @@ Discos SCSI não são diferentes de discos IDE em relação ao modo como seus ci
 ### Insight para o eBook: "A Corrida pela Largura de Banda"
 Ao incluir esta tabela, você pode destacar um conceito importante para os leitores do seu eBook:
 
- - Paralelismo de Barramento: O termo "Wide" indica que estamos dobrando a "estrada" (de 8 para 16 bits), o que permite dobrar a  - velocidade mesmo mantendo o mesmo "limite de velocidade" (MHz).
+ - Paralelismo de Barramento: O termo "Wide" indica que estamos dobrando a "estrada" (de 8 para 16 bits), o que permite dobrar a velocidade mesmo mantendo o mesmo "limite de velocidade" (MHz).
 
 Limites Físicos: Note que a evolução do SCSI parou no Ultra5 devido a problemas de interferência eletromagnética em barramentos paralelos de alta frequência, o que abriu caminho para as interfaces seriais modernas como o SATA e o SAS.
 
@@ -1369,8 +1377,7 @@ ambiente em que há múltiplos processos ativos ao mesmo tempo. IDE e EIDE permi
 O desempenho da CPU vem tendo aumento exponencial na última década e dobra a cada 18 meses mais ou menos. O mesmo não acontece com o desempenho do disco. Na década de 1970, os tempos médios de busca em discos de minicomputadores eram de 50 a 100 ms. Agora, são de 10 ms. Na maioria das indústrias técnicas (por exemplo, automóveis ou aviação), um fator de 5 a 10 de melhoria de desempenho em duas décadas seria uma grande notícia, mas na indústria de computadores isso é constrangedor. Assim, a lacuna entre o desempenho da
 CPU e o do disco ficou cada vez maior com o passar do tempo.
 
-Como vimos, muitas vezes é usado processamento paralelo para acelerar o desempenho da CPU. Ao longo dos anos, ocorreu a várias pessoas que a E/S paralela também poderia ser uma boa ideia. Em seu artigo de 1988, Patterson et al. sugeriram seis organizações específicas de disco que poderiam ser usadas para melhorar o desempenho, a confiabilidade do disco, ou ambos (Patterson et al., 1988). Essas ideias logo foram adotadas pela indústria e deram origem a uma nova classe de dispositivos de E/S, denominados RAID. Patterson et al. definiram RAID como Redundant Array of Inexpensive Disks (arranjo redundante de discos baratos), mas a indústria
-redefiniu o I como “independente” em vez de barato (inexpensive) – talvez para que pudessem usar discos caros? Já que também era preciso ter um vilão (como no caso RISC versus CISC, também devido a Patterson), nesse caso o bandido era o SLED (Single Large Expensive Disk – disco único grande e caro).
+Como vimos, muitas vezes é usado processamento paralelo para acelerar o desempenho da CPU. Ao longo dos anos, ocorreu a várias pessoas que a E/S paralela também poderia ser uma boa ideia. Em seu artigo de 1988, Patterson et al. sugeriram seis organizações específicas de disco que poderiam ser usadas para melhorar o desempenho, a confiabilidade do disco, ou ambos (Patterson et al., 1988). Essas ideias logo foram adotadas pela indústria e deram origem a uma nova classe de dispositivos de E/S, denominados **RAID**. Patterson et al. definiram **RAID como Redundant Array of Inexpensive Disks (arranjo redundante de discos baratos)**, mas a indústria redefiniu o I como “independente” em vez de barato (inexpensive) – talvez para que pudessem usar discos caros? Já que também era preciso ter um vilão (como no caso RISC versus CISC, também devido a Patterson), nesse caso o bandido era o SLED (Single Large Expensive Disk – disco único grande e caro).
 
 A ideia fundamental de um RAID é instalar uma caixa cheia de discos próxima ao computador, em geral um grande servidor, substituir a placa do controlador de disco por um controlador RAID, copiar os dados para o RAID e então continuar a execução normal. Em outras palavras, um RAID deveria parecer um SLED para o sistema operacional, mas ter melhor desempenho e melhor confiabilidade. Uma vez que discos SCSI têm bom desempenho, baixo preço e a capacidade de ter até 7 drives em um único controlador (15 para o wide SCSI), é natural que a maioria dos RAIDs consista em um controlador RAID SCSI mais uma caixa de discos SCSI que parecem para o
 sistema operacional como um único disco grande. Portanto, não é preciso alterar software para usar o RAID, um ótimo argumento de venda para muitos administradores de sistemas.
@@ -1402,7 +1409,7 @@ A Figura 2.23 é essencial. Ela consolida os conceitos de redundância e integri
         Erro de Bit                  Disco de Paridade Dedicado
         [B1][B2][B3][ P ]            [B1][B2][B3][B4] [Paridade]
         [B4][B5][B6][ P ]             ^   ^   ^   ^      ^
-        (Usa Hamming)               +---+---+---+------+
+        (Usa Hamming)                +---+---+---+------+
 
     (e) RAID 4 (Paridade Bloco)  (f) RAID 5 (Paridade Distribuída)
         Disco Dedicado               Alta Disponibilidade
@@ -1426,17 +1433,6 @@ A Figura 2.23 é essencial. Ela consolida os conceitos de redundância e integri
     |                        | evitando o gargalo de um      |                                             |
     |                        | único disco de paridade.      |                                             |
     +------------------------+-------------------------------+---------------------------------------------+
-
-### Resumo do Capítulo: Da CPU ao Armazenamento Seguro
-Agora você tem a jornada completa mapeada:
-
-    1. Processamento: Começamos com a Figura 2.7 (SIMD/Fermi) mostrando como processar dados em massa.
-
-    2. Organização: Vimos na Figura 2.9 e 2.11 como esses dados são endereçados e ordenados (Endianness).
-
-    3. Velocidade: A Figura 2.16 e a pirâmide 2.18 explicaram a necessidade da Cache para alimentar a CPU.
-
-    4. Confiabilidade: Fechamos com RAID (2.23) para garantir que, mesmo se o hardware falhar, os dados do seu IDS e do seu eBook permaneçam intactos.
 
 O computador Thinking Machine CM-2 usava esse esquema, pegando palavras de 32 bits de dados e adicionando 6 bits de paridade para formar uma palavra de Hamming de 38 bits, mais um bit extra para paridade de palavra, e distribuindo cada palavra em 39 drives de disco. O rendimento total era imenso porque em um tempo de setor ele podia escrever o equivalente a 32 setores de dados. Além disso, perder um drive não causava problemas, porque essa perda equivaleria a perder 1 bit em cada palavra de 39 bits lida, algo que o código de Hamming poderia manipular facilmente.
 
@@ -1476,8 +1472,9 @@ Esta figura é fascinante porque explica como o seu SSD retém dados mesmo sem e
     | Origem |             | Dreno |
     +--------+-------------+-------+
             Semicondutor           |
-                                   | Terra
-
+                                   | 
+                              -- Terra -- 
+                                 
 ![alt text](image-93.png)
 
 Mapeamento Técnico
@@ -1495,8 +1492,17 @@ Mapeamento Técnico
         |                        |                               | backups criptografados que você faz.        |
         +------------------------+-------------------------------+---------------------------------------------+
 
-
 Para programar uma célula de bit flash, uma alta tensão (no mundo dos computadores, 12 V é uma alta tensão) é aplicada à porta de controle, que acelera o processo de injeção de portadora quente na porta flutuante. Os elétrons são embutidos na porta flutuante, que coloca uma carga negativa interna no transistor flash. A carga negativa embutida aumenta a tensão necessária para ligar o transistor flash e, testando se o canal liga ou não com uma tensão alta ou baixa, é possível determinar se a porta flutuante está carregada ou não, resultando em um valor 0 ou 1 para a célula flash. A carga embutida permanece no transistor, mesmo que o sistema perca a alimentação, tornando a célula de memória flash não volátil.
+
+**A carga embutida na porta flutuante de uma célula de memória flash pode permanecer por um período de tempo muito longo, tipicamente entre 10 a 20 anos, mesmo sem alimentação elétrica. Isso ocorre porque a porta flutuante é isolada por uma camada de óxido, que impede a perda de carga.**
+
+No entanto, é importante notar que a retenção de dados em uma célula de memória flash pode ser afetada por vários fatores, como:
+
+ - **Temperatura** 
+ - **Ciclos de escrita e leitura** 
+ - **Qualidade da célula de memória.** 
+
+ **Em geral, os fabricantes de memória flash garantem uma retenção de dados de pelo menos 10 anos, mas em condições normais de uso, a carga embutida pode permanecer por muito mais tempo.**
 
 Visto que os SSDs são basicamente memória, eles possuem desempenho superior aos discos giratórios, com tempo de busca zero. Enquanto um disco magnético típico pode acessar dados em até 100 MB/s, um SSD pode operar duas a três vezes mais rápido. E como o dispositivo não possui partes móveis, ele é muito adequado para uso em notebooks, onde trepidações e movimentos não afetarão sua capacidade de acessar dados. A desvantagem dos SSDs, em comparação com discos magnéticos, é o seu custo. Enquanto os discos magnéticos custam centavos de dólar por gigabyte, um SSD típico custará de um a três dólares por gigabyte, tornando seu uso apropriado apenas para aplicações com drive menor ou em situações em que o custo não é um problema. O custo dos SSDs está caindo, mas ainda há um longo caminho até que alcancem os discos magnéticos baratos. Assim, embora os SSDs estejam substituindo os discos magnéticos em muitos computadores, talvez ainda leve um bom tempo antes que o disco magnético siga o caminho dos dinossauros (a menos que outro grande meteoro atinja a Terra, mas nesse caso nem os SSDs sobreviveriam).
 
@@ -1522,7 +1528,7 @@ As depressões e os planos são escritos em uma única espiral contínua que com
 
 **• Figura 2.25 Estrutura de gravação de um disco compacto ou CD-ROM.**
 
-![alt text](image-94.png)
+![alt text](image-113.png)
 
 Para fazer a música ser tocada a uma taxa uniforme, é preciso que as depressões e os planos passem sob a luz a uma velocidade linear constante. Em consequência, a taxa de rotação deve ser continuamente reduzida à medida que o cabeçote de leitura se move da parte interna para a externa do CD. Na parte interna, a taxa de rotação é de 530 RPM para conseguir a taxa de reprodução regular de 120 cm/s; na parte mais externa, tem de cair para 200 RPM para dar a mesma velocidade linear no cabeçote. Um drive de velocidade linear constante é bem diferente de um drive de disco magnético, que funciona a uma velocidade angular constante, independente de onde o cabeçote esteja posicionado naquele momento. Além disso, 530 RPM estão bem longe das 3.600 a 7.200 RPM com as quais gira a maioria dos discos magnéticos.
 
@@ -1566,7 +1572,7 @@ Estrutura de um Setor (2.352 bytes):
 
     +-----------+---------------------------+-----------+
     | PREÂMBULO |           DADOS           |    ECC    |
-    | (12 bytes)|       (2.048 bytes)       | (288 bytes|
+    | (12 bytes)|       (2.048 bytes)       | 288 bytes |
     +-----------+---------------------------+-----------+
     |  Sync/Id  |    Conteúdo Principal     | Correção  |
     +-----------+---------------------------+-----------+
@@ -1590,7 +1596,7 @@ Figura 2.26: Fluxo Lógico e Estrutura do CD-ROM (Modo 1)
     ESTRUTURA DO SETOR (2.352 BYTES TOTAIS)
     +-----------+---------------------------------------+-----------+
     | PREÂMBULO |           DADOS DO USUÁRIO            |  ECC/EDC  |
-    | (12 bytes)|           (2.048 bytes)               | (288 bytes|
+    | (12 bytes)|           (2.048 bytes)               | 288 bytes|
     +-----------+---------------------------------------+-----------+
     | Sinc/ID   |     Conteúdo Real (Arquivos/Logs)     | Proteção  |
     +-----------+---------------------------------------+-----------+
@@ -1627,7 +1633,7 @@ A última peça do quebra-cabeça do CD-ROM é o sistema de arquivos. Para possi
 O IS 9660 nível 2 permite nomes de até 32 caracteres e o nível 3 permite arquivos não contíguos. As extensões Rock Ridge (o nome extravagante se deve à cidade em que Mel Brooks filmou Blazing Saddles [Banzé no Oeste]) permitem nomes muito longos (para UNIX), UIDs, GIDs, e enlaces simbólicos, mas os CD-ROMs que não obedecem ao nível 1 não poderão ser lidos em todos os computadores.
 
 ## 2.3.8 CDs graváveis
-De início, o equipamento necessário para produzir um CD-ROM mestre (ou CD de áudio, por falar nisso) era muito dispendioso. Mas, como sempre acontece na indústria de computadores, nada permanece caro por muito tempo. Em meados da década de 1990, gravadores de CD não maiores do que um reprodutor de CD eram um periférico comum disponível na maioria das lojas de computadores. Esses dispositivos ainda eram diferentes dos discos magnéticos porque, uma vez gravados, os CD-ROMs não podiam ser apagados. Ainda assim, eles logo encontraram um nicho como um meio de backup para grandes discos rígidos magnéticos e também permitiram que indivíduos ou novas empresas fabricassem seus próprios CD-ROMs em pequena escala ou produzissem mestres para fornecer a empresas comerciais de reprodução de grandes volumes de CDs. Esses drives são conhecidos como CD-Rs (CD-Recordables – CDs graváveis).
+De início, o equipamento necessário para produzir um CD-ROM mestre (ou CD de áudio, por falar nisso) era muito dispendioso. Mas, como sempre acontece na indústria de computadores, nada permanece caro por muito tempo. Em meados da década de 1990, gravadores de CD não maiores do que um reprodutor de CD eram um periférico comum disponível na maioria das lojas de computadores. Esses dispositivos ainda eram diferentes dos discos magnéticos porque, uma vez gravados, os CD-ROMs não podiam ser apagados. Ainda assim, eles logo encontraram um nicho como um meio de backup para grandes discos rígidos magnéticos e também permitiram que indivíduos ou novas empresas fabricassem seus próprios CD-ROMs em pequena escala ou produzissem mestres para fornecer a empresas comerciais de reprodução de grandes volumes de CDs. Esses drives são conhecidos como **CD-Rs (CD-Recordables – CDs graváveis)**.
 
 Os CD-Rs começaram com discos em branco de policarbonato de 120 mm de diâmetro que são como CD-ROMs, exceto por conterem um sulco de 0,6 mm de largura para guiar o laser durante a escrita (gravação). O sulco tem um desvio senoidal de 0,3 mm a uma frequência de exatos 22,05 kHz para prover realimentação contínua, de modo que a rotação possa ser monitorada e ajustada com precisão, caso necessário. Os primeiros CD-Rs pareciam CD-ROMs normais, exceto por terem a superfície superior dourada, e não prateada. Essa cor vinha da utilização de ouro verdadeiro em vez de alumínio na camada refletiva. Diferente dos CDs prateados que continham depressões físicas, nos CD-Rs as diferentes refletividades das depressões e dos planos têm de ser simuladas. Isso é feito com a adição de uma camada de corante entre o policarbonato e a superfície refletiva, como mostra a Figura 2.27. São usadas duas espécies de corantes: cianina, que é verde, e ftalocianina, que é amarelo-alaranjada. Os químicos podem discutir eternamente sobre qual das duas é melhor. Com o tempo, a camada refletiva dourada foi substituída por uma camada de alumínio.
 
@@ -1677,7 +1683,7 @@ Contudo, a gravação incremental cria um novo problema. Antes do Orange Book, t
 O CD-R possibilita que indivíduos e empresas copiem CD-ROMs (e CDs de áudio) com facilidade, em geral com a violação dos direitos autorais do editor. Vários esquemas já foram inventados para dificultar esse tipo de pirataria e também a leitura de um CD-ROM usando qualquer outra coisa que não seja o software do editor. Um deles envolve gravar todos os comprimentos de arquivos do CD-ROM como multigigabyte, frustrando quaisquer tentativas de copiar os arquivos para disco rígido com a utilização de software de cópia padrão. Os verdadeiros comprimentos estão embutidos no software do editor ou ocultos (possivelmente criptografados) no CD-ROM em um lugar não esperado. Outro esquema usa intencionalmente ECCs incorretos em setores selecionados, na esperança de que o software de cópia de CDs “corrija” os erros. O software de aplicação verifica os ECCs e se recusa a funcionar se estiverem “corrigidos”. Usar lacunas não padronizadas entre trilhas e outros “defeitos” físicos também são possibilidades.
 
 ## 2.3.9 CDs regraváveis
-Embora todos estejam acostumados com outras mídias que aceitam apenas uma escrita, como papel fotográfico, existe uma demanda por CD-ROMs regraváveis. Uma tecnologia disponível agora é o CD-RW (CD-ReWritable – CDs regraváveis), que usa um meio do mesmo tamanho do CD-R. Contudo, em vez dos corantes cianina ou ftalocianina, o CD-RW usa uma liga de prata, índio, antimônio e telúrio para a camada de gravação. Essa liga tem dois estados estáveis: cristalino e amorfo, com diferentes refletividades.
+Embora todos estejam acostumados com outras mídias que aceitam apenas uma escrita, como papel fotográfico, existe uma demanda por CD-ROMs regraváveis. Uma tecnologia disponível agora é o **CD-RW (CD-ReWritable – CDs regraváveis)**, que usa um meio do mesmo tamanho do CD-R. Contudo, em vez dos corantes cianina ou ftalocianina, o CD-RW usa uma liga de prata, índio, antimônio e telúrio para a camada de gravação. Essa liga tem dois estados estáveis: cristalino e amorfo, com diferentes refletividades.
 
 Os drives de CD-RW usam lasers com três potências diferentes. Em alta potência, o laser funde a liga fazendo-a passar do estado cristalino de alta refletividade para o estado amorfo de baixa refletividade, para representar uma depressão. Em potência média, a liga se funde e volta a seu estado natural cristalino para se tornar novamente um plano. Em baixa potência, o estado do material é sondado (para leitura), mas não ocorre qualquer transição de fase.
 
@@ -1689,7 +1695,9 @@ O formato básico do CD/CD-ROM está na praça desde 1980. Em meados da década 
 Essa combinação de tecnologia e demanda por três indústrias imensamente ricas e poderosas resultou no DVD, na origem um acrônimo para Digital Video Disk (disco de vídeo digital), mas agora oficialmente Digital Versatile Disk (disco versátil digital). DVDs usam o mesmo desenho geral dos CDs, com discos de policarbonato de 120 mm moldados por injeção que contêm depressões e planos iluminados por um diodo de laser e lidos por um fotodetector. A novidade é o uso de
 
     1. Depressões menores (0,4 mícron versus 0,8 mícron para CDs).
+
     2. Uma espiral mais apertada (0,74 mícron entre trilhas versus 1,6 mícron para CDs).
+    
     3. Um laser vermelho (a 0,65 mícron versus 0,78 mícron para CDs).
 
 Juntas, essas melhorias aumentam sete vezes a capacidade, passando para 4,7 GB. Um drive de DVD 1x funciona a 1,4 MB/s (versus 150 KB/s para CDs). Infelizmente, a troca para lasers vermelhos usados em supermercados significa que os reprodutores de DVD precisarão de um segundo laser para poder ler os CDs e CD-ROMs existentes, aumentando um pouco de complexidade e custo.
@@ -1741,6 +1749,10 @@ na Europa.
 Nada fica parado no negócio de computadores, certamente não na tecnologia de armazenagem. O DVD mal acabara de ser lançado e seu sucessor já ameaçava torná-lo obsoleto. O sucessor do DVD é o Blu-ray (raio azul), assim chamado porque usa um laser azul, em vez do vermelho usado por DVDs. Um laser azul tem comprimento de onda mais curto do que o laser vermelho, o que permite um foco mais preciso e, portanto, depressões e planos menores. Discos Blu-ray de uma face contêm cerca de 25 GB de dados; os de dupla face contêm cerca de 50 GB. A taxa de dados é mais ou menos 4,5 MB/s, o que é bom para um disco óptico, mas ainda insignificante em
 comparação com discos magnéticos (cf. ATAPI-6 a 100 MB/s e wide Ultra5 SCSI a 640 MB/s). Espera-se que, com o tempo, o Blu-ray substitua CD-ROMs e DVDs, mas essa transição ainda levará alguns anos.
 
+O Blu-ray está substituindo os DVDs, mas a transição ainda está em andamento. O Blu-ray oferece várias vantagens, como maior capacidade de armazenamento (até 50 GB em camada dupla) e melhor qualidade de vídeo e áudio (1080p e 4K Ultra HD).
+
+No entanto, a adoção do Blu-ray ainda é limitada, principalmente devido ao custo mais alto dos reprodutores e discos em comparação com os DVDs. Além disso, o streaming de mídia também está se tornando cada vez mais popular, o que pode afetar a demanda por discos físicos.
+
 ## 2.4 Entrada/Saída
 Como mencionamos no início deste capítulo, um sistema de computador tem três componentes principais: a CPU, as memórias (primária e secundária) e os equipamentos de E/S (entrada/saída), ou I/O (Input/Output), como impressoras, scanners e modems. Até aqui, só examinamos CPU e as memórias. Agora, é hora de examinar os equipamentos de E/S e como eles estão conectados ao restante do sistema.
 
@@ -1784,7 +1796,7 @@ A Figura 2.30 é a peça final ideal. Ela integra a CPU e a memória com os cont
          |            |            |             |
     [ CPU ]      [ MEMÓRIA ]       |             |
     |            |                 |             |
-    ==+============+================+=============+====== [ BARRAMENTO ]
+  ==+============+=================+=============+====== [ BARRAMENTO ]
 
 ![alt text](image-99.png)
 
@@ -1803,7 +1815,7 @@ ISA (Industry Standard Architecture). A maioria dos fabricantes de discos e disp
 de máquina, ao passo que no contexto de barramentos quer dizer Industry Standard Architecture (arquitetura padrão da indústria).
 
 ### Os barramentos PCI e PCIe
-Não obstante, a despeito da pressão do mercado para que nada mudasse, o antigo barramento era mesmo muito lento, portanto, era preciso fazer algo. Essa situação levou outras empresas a desenvolver máquinas com múltiplos barramentos, um dos quais era o antigo barramento ISA, ou seu sucessor compatível, o EISA (Extended ISA – ISA estendido). Agora, o mais popular deles é o barramento PCI (Peripheral Component Interconnect – interconexão de componentes periféricos). Esse barramento foi projetado pela Intel, mas a empresa decidiu passar todas as patentes para domínio público, a fim de incentivar toda a indústria (incluindo seus concorrentes) a adotá-lo.
+Não obstante, a despeito da pressão do mercado para que nada mudasse, o antigo barramento era mesmo muito lento, portanto, era preciso fazer algo. Essa situação levou outras empresas a desenvolver máquinas com múltiplos barramentos, um dos quais era o antigo barramento ISA, ou seu sucessor compatível, o **EISA (Extended ISA – ISA estendido)**. Agora, o mais popular deles é o barramento **PCI (Peripheral Component Interconnect – interconexão de componentes periféricos)**. Esse barramento foi projetado pela Intel, mas a empresa decidiu passar todas as patentes para domínio público, a fim de incentivar toda a indústria (incluindo seus concorrentes) a adotá-lo.
 
 O barramento PCI pode ser usado em muitas configurações, mas a Figura 2.31 ilustra uma configuração típica. Nesse caso, a CPU se comunica com um controlador de memória por meio de uma conexão dedicada, de alta velocidade. O controlador se comunica diretamente com a memória e com o barramento PCI, de modo que o tráfego CPU-memória não passa pelo barramento PCI. Outros periféricos podem ser conectados diretamente ao barramento PCI. Uma máquina com esse projeto teria dois ou três conectores PCI vazios, permitindo que os clientes conectem placas de E/S PCI para novos periféricos.
 
@@ -1814,19 +1826,26 @@ Qualquer que seja a velocidade de algo no mundo da computação, muita gente ach
 Figura 2.31: PC Típico e o Barramento PCI 
 Esta figura ilustra uma arquitetura mais avançada que a anterior, introduzindo o conceito de Ponte (Bridge) para separar o tráfego da CPU/Memória do tráfego de periféricos no barramento PCI.
 
-    ARQUITETURA DE BARRAMENTO PCI
-    =======================================
-    [ CPU + Cache ] <--- Barramento de Memória ---> [ MEMÓRIA PRINCIPAL ]
-            |                                               |
-            +--------------[ PONTE PARA PCI ]---------------+
-                                    |
-            _______________________|________________________
-            |          |            |           |            |
-    [ CTRL VÍDEO ] [ CTRL REDE ]  |    [ CTRL SCSI ]-------+
-                                    |           |            |
-                                    |     [ DISCO SCSI ] [ SCANNER ]
-    ================================================================
-                            BARRAMENTO PCI
+    +-------------------------------------------------------------+
+    |           ARQUITETURA DE BARRAMENTO PCI CLÁSSICA            |
+    |=============================================================|
+    |                                                             |
+    |   +-------+          +-----------+          +-----------+   |
+    |   |  CPU  | <======> |   PONTE   | <======> |  MEMÓRIA  |   |
+    |   | (Cache)          |  PARA PCI |          | PRINCIPAL |   |
+    |   +-------+          +-----+-----+          +-----------+   |
+    |                            | (Barramento de Memória)        |
+    |                            |                                |
+    |  +-----------+       +-----+-----+       +-----------+      |
+    |  |CONTROLADOR| <===> | BARRAMENTO| <===> |CONTROLADOR|      |
+    |  |  DE VÍDEO |       |    PCI    |       |  DE REDE  |      |
+    |  +-----------+       +-----+-----+       +-----------+      |
+    |                            |                                |
+    |                      +-----+-----+                          |
+    |                      |CONTROLADOR| <== [BARRAMENTO SCSI]    |
+    |                      |   SCSI    | === [Disco / Scanner]    |
+    |                      +-----------+                          |
+    +-------------------------------------------------------------+
 
 ![alt text](image-100.png)
 
@@ -1859,29 +1878,30 @@ Enquanto o barramento PCI foi apenas uma atualização para o ISA mais antigo, c
 
 A Figura 2.32 detalha a arquitetura PCIe (PCI Express), que é o padrão atual de comunicação de alta velocidade no seu Lenovo IdeaPad Gaming 3. Diferente do barramento PCI compartilhado (Fig. 2.31), o PCIe utiliza conexões ponto a ponto e um Complexo Raiz para gerenciar o tráfego.
 
-    +-----------------------------------------------------------------------+
-    |                   ARQUITETURA MODERNA (PCI EXPRESS)                   |
-    |=======================================================================|
-    |                                                                       |
-    |   [   CPU    ]                                      [  MEMÓRIA  ]     |
-    |   [  Cache   ]                                      [           ]     |
-    |       |                                                   |           |
-    |  +----+---------------------------------------------------+----+      |
-    |  |                        COMPLEXO RAIZ                        |      |
-    |  +---------+--------------------+--------------------+---------+      |
-    |            |                    |                    |                |
-    |        (Porta 1)            (Porta 2)            (Porta 3)            |
-    |            |                    |                    |                |
-    |       [ SWITCH ]           [ DISPOSITIVO]      [ PONTE PARA ]         |
-    |      /     |    \          [    PCIe    ]      [     PCI    ]         |
-    |     /      |     \                                   |                |
-    | [PCIe]  [PCIe]  [PCIe]                      ========+========         |
-    |                                              BARRAMENTO PCI           |
-    |                                             [PCIe]   [PCIe]           |
-    |                                                                       |
-    |=======================================================================|
-    |                COMUNICAÇÃO SERIAL PONTO A PONTO                       |
-    +-----------------------------------------------------------------------+
+    +-------------------------------------------------------------+
+    |          ARQUITETURA MODERNA PCI EXPRESS (PCIe)             |
+    |=============================================================|
+    |                                                             |
+    |   +-------+                                +-----------+    |
+    |   |  CPU  |                                |  MEMÓRIA  |    |
+    |   | (Cache)                                |           |    |
+    |   +---+---+                                +-----+-----+    |
+    |       |                                          |          |
+    |   +---+------------------------------------------+---+      |
+    |   |                  COMPLEXO RAIZ                   |      |
+    |   +-------+--------------+---------------+-----------+      |
+    |           |              |               |                  |
+    |       (Porta 1)      (Porta 2)       (Porta 3)              |
+    |           |              |               |                  |
+    |      +----+---+    +-----+-----+   +-----+-----+            |
+    |      | SWITCH |    | DISPOSITIVO|  | PONTE PCI |            |
+    |      +--+--+--+    |    PCIe    |  +-----+-----+            |
+    |         |  |       +------------+        |                  |
+    |         |  |                  ============================= |
+         +----+  +----+              [BARRAMENTO PCI ANTIGO]      |
+    |    |Disp|  |Disp|              [  Disp  |  Disp      ]      |
+    |    |PCIe|  |PCIe|                                           |
+    +-------------------------------------------------------------+
 
 ![alt text](image-101.png)
 
