@@ -2181,7 +2181,7 @@ Em modulação de frequência (veja a Figura 2.38(c)), o nível de tensão elét
 Figura 2.38: Técnicas de Modulação de Sinal
 Fundamental para entender como o binário viaja por meios analógicos, como linhas telefônicas.
 
-    BIT: 0  1    0  0    1   0  0   1   0 0    1     0 0    1
+    BIT: 0  1    0  0    1   0  0   1    0  0    1   0  0   1
     +------------------------------------------------------------+
     | (a) Sinal Digital (Níveis de Tensão V1 e V2)               |
     |      ____        ____        ____        ____        ____  |
@@ -2202,6 +2202,34 @@ Fundamental para entender como o binário viaja por meios analógicos, como linh
     | _/\_|    |/_| \_|    |/_| \_|    |/_| \_|    |/_| \_|    | |
     |            ^----------- Mudança brusca de fase             |
     +------------------------------------------------------------+
+
+    Sinal Digital (Bits):  0     1     0     0     1     0     1     1     0     0     0     1     0
+                         |  |  |--|  |  |  |  |  |--|  |  |  |--|  |--|  |  |  |  |  |  |  |--|  |  |
+    (a) Sinal Binário:   |__|--|  |__|__|--|__|--|--|__|__|__|--|__|
+
+                         _  _  ____  _  _  _  _  ____  _  _  ____  ____  _  _  _  _  _  _  ____  _  _
+    (b) AM (Amplitude):  |  | |    | |  | |  | |    | |  | |    ||    | |  | |  | |  | |  | |    | |  |
+        (Onda alta = 1)  |__| |____| |__| |__| |____| |__| |____||____| |__| |__| |__| |__| |____| |__|
+
+                          /\/\  /\/\/\/\ /\/\  /\/\  /\/\/\/\ /\/\  /\/\/\/\ /\/\/\/\ /\/\  /\/\  /\/\  /\/\/\/\ /\/\
+    (c) FM (Frequência):  |  |  | |||| | |  |  |  |  | |||| | |  |  | |||| | | |||| | |  |  |  |  |  |  | |||| | |  |
+        (Onda rápida = 1) \/\/  \/\/\/\ \/\/  \/\/  \/\/\/\ \/\/  \/\/\/\ \/\/\/\ \/\/  \/\/  \/\/  \/\/\/\ \/\/
+
+                         /\/\  \/\/\  /\/\  /\/\  \/\/\  /\/\  \/\/\  /\/\/\  /\/\  /\/\  /\/\  \/\/\  /\/\
+    (d) PM (Fase):       |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+        (Inversão = 1)   --^-----^-----^-----^-----^-----^-----^-----^-----^-----^-----^-----^-----^---
+                         |     |     |     |     |     |     |     |     |     |     |     |     |
+                        MUDANÇAS DE FASE (A ONDA "PULA" PARA INDICAR A TROCA DO BIT)
+
+**O que observar no diagrama para seu eBook:**
+
+ - (a) Sinal de dois níveis: É o dado puro saindo do seu processador. É uma voltagem constante (ex: 5V para 1 e 0V para 0).
+
+ - (b) Modulação de Amplitude (AM): A frequência da onda é a mesma, mas o sinal "cresce" no bit 1 e "encolhe" no bit 0. É sensível a ruídos elétricos (chuva ou motores podem criar picos que o receptor confunde com 1).
+
+ - (c) Modulação de Frequência (FM): A amplitude é constante, mas o sinal "corre" mais rápido para representar o 1. É muito mais resistente a ruídos do que o AM.
+
+ - (d) Modulação de Fase (PM): Note que na transição de cada bit, a onda não termina seu ciclo natural; ela sofre um "salto" abrupto. O receptor detecta esse desalinhamento no tempo para saber que um novo bit chegou.
 
 ![alt text](image-107.png)
 
@@ -2234,14 +2262,14 @@ Fundamental para entender como o binário viaja por meios analógicos, como linh
 
  - Modulação de Fase (PM): É a técnica mais complexa mostrada, onde a onda sofre uma "quebra" ou inversão para representar a mudança de bit.
 
-Em modulação de fase simples (veja Figura 2.38(d)), a amplitude e a frequência não mudam, mas a fase da portadora é invertida 180 graus quando os dados passam de 0 para 1 ou de 1 para 0. Em sistemas de fase modulada mais sofisticados, no início de cada intervalo de tempo indivisível, a fase da portadora é bruscamente mudada para 45, 135, 225 ou 315 graus, para permitir 2 bits por intervalo de tempo, denominado codificação de fase dibit. Por exemplo, uma mudança de fase de 45 graus poderia representar 00, uma mudança de fase de 135 graus poderia representar 01 e assim por diante. Também existem outros esquemas para transmitir 3 ou mais
+Em **modulação de fase simples** (veja Figura 2.38(d)), a amplitude e a frequência não mudam, mas a fase da portadora é invertida 180 graus quando os dados passam de 0 para 1 ou de 1 para 0. Em sistemas de fase modulada mais sofisticados, no início de cada intervalo de tempo indivisível, a fase da portadora é bruscamente mudada para 45, 135, 225 ou 315 graus, para permitir 2 bits por intervalo de tempo, denominado codificação de fase dibit. Por exemplo, uma mudança de fase de 45 graus poderia representar 00, uma mudança de fase de 135 graus poderia representar 01 e assim por diante. Também existem outros esquemas para transmitir 3 ou mais
 bits por intervalo de tempo. O número de intervalos de tempo, isto é, o número de mudanças de sinal por segundo, é uma taxa de bauds. Com 2 ou mais bits por intervalo, a taxa de bits ultrapassará a taxa de bauds. Muitos confundem os dois termos. Novamente: a taxa de bauds é o número de vezes que o sinal muda por segundo, enquanto a taxa de bits é o número de bits transmitidos por segundo. A taxa de bits geralmente é um múltiplo da taxa de bauds, mas teoricamente ela pode ser menor.
 
 Se os dados a serem transmitidos consistirem em uma série de caracteres de 8 bits, seria desejável ter uma conexão capaz de transmitir 8 bits simultaneamente – isto é, oito pares de fios. Como as linhas telefônicas oferecem apenas um canal, os bits têm de ser enviados de modo serial, um após o outro (ou em grupos de dois se estiver sendo usada a codificação dibit). O dispositivo que aceita caracteres de um computador na forma de sinais de dois níveis, um bit por vez, e transmite os bits em grupos de um ou dois, em forma de amplitude, frequência ou fase modulada, é o modem. Para marcar o início e o final de cada caractere, é enviado um caractere de 8 bits precedido por um bit de início e seguido por um bit de fim, totalizando 10 bits.
 
 O modem que está transmitindo envia os bits individuais dentro de um caractere a intervalos de tempo regularmente espaçados. Por exemplo, 9.600 bauds implica uma mudança de sinal a cada 104 μs. Um segundo modem na extremidade receptora é usado para converter uma portadora modulada em um número binário. Como os bits chegam ao receptor a intervalos regulares, uma vez que o modem receptor tenha determinado o início do caractere, seu clock o informa quando amostrar a linha para ler os bits que estão entrando.
 
-Modems modernos funcionam a taxas de dados na faixa de 56 kbps, normalmente a taxas muito mais baixas. Eles usam uma combinação de técnicas para enviar múltiplos bits por baud, modulando a amplitude, a frequência e a fase. Quase todos eles são full-duplex, o que quer dizer que podem transmitir em ambas as direções ao mesmo tempo (usando frequências diferentes). Modems ou linhas de transmissão que só podem transmitir em uma direção por vez (como uma ferrovia com uma única linha que pode transportar trens em direção ao norte ou trens em direção ao sul, mas não fazê-lo ao mesmo tempo) são denominados half-duplex. Linhas que só podem transmitir em uma direção são linhas simplex.
+Modems modernos funcionam a taxas de dados na faixa de 56 kbps, normalmente a taxas muito mais baixas. Eles usam uma combinação de técnicas para enviar múltiplos bits por baud, modulando a amplitude, a frequência e a fase. Quase todos eles são **full-duplex**, o que quer dizer que podem transmitir em ambas as direções ao mesmo tempo (usando frequências diferentes). Modems ou linhas de transmissão que só podem transmitir em uma direção por vez (como uma ferrovia com uma única linha que pode transportar trens em direção ao norte ou trens em direção ao sul, mas não fazê-lo ao mesmo tempo) são denominados **half-duplex**. Linhas que só podem transmitir em uma direção são linhas simplex.
 
 **• Linhas digitais de assinante (DSL – Digital Subscriber Lines)**
 Quando a indústria da telefonia chegou por fim aos 56 kbps, ela se congratulou por um trabalho bem-feito. Enquanto isso, a indústria da TV a cabo estava oferecendo velocidades de até 10 Mbps em cabos compartilhados e as operadoras de satélites estavam planejando oferecer mais de 50 Mbps. À medida que o acesso à Internet tornou-se uma parte cada vez mais importante de seus negócios, as telcos (telephone companies – empresas de telefonia) começaram a perceber que precisavam de um produto mais competitivo do que linhas discadas. A resposta dessas empresas foi começar a oferecer um novo serviço digital de acesso à Internet. Serviços com mais largura de banda do que o serviço telefônico padrão às vezes são denominados serviços de banda larga, embora, na realidade, o termo seja mais um conceito de marketing do que qualquer outra coisa. Por um ponto de vista estritamente técnico, banda larga significa que existem vários canais de sinalização, enquanto banda base significa que há somente um. Assim,
@@ -2302,7 +2330,7 @@ Ilustra a divisão do espectro de frequência em 256 canais de 4 kHz para voz e 
     |                ESPECTRO DE FREQUÊNCIA ADSL                  |
     |=============================================================|
     | Potência                                                    |
-    |  ^    256 canais de 4 kHz                                   |
+    |  ^                  256 canais de 4 kHz                     |
     |  |   <--------------------------------------------------->  |
     |  |  n  nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn  |
     |  |_|_|___________________________________________________|  |
@@ -2339,33 +2367,59 @@ Ilustra a divisão do espectro de frequência em 256 canais de 4 kHz para voz e 
 
  - Integridade: A modulação de sinal (2.38) e a divisão de canais ADSL (2.39) são fundamentais para entender como os dados do seu eBook são transmitidos com segurança pela rede.
 
-
 Em princípio, cada um dos canais remanescentes pode ser usado para um fluxo de dados full-duplex, mas, na prática, harmônicos, linhas cruzadas e outros efeitos mantêm os sistemas bem abaixo do limite teórico. Cabe ao provedor determinar quantos canais são usados na direção da empresa e quantos na direção do usuário. Uma proporção de 50–50 é tecnicamente possível, mas a maioria das provedoras aloca cerca de 80%–90% da largura de banda na direção do usuário, uma vez que eles descarregam mais dados do que carregam. Essa opção deu origem ao “A” em ADSL (de Assimétrico). Uma divisão comum são 32 canais na direção da empresa e o resto na
 direção do usuário.
 
 A qualidade da linha é monitorada constantemente dentro de cada canal e a taxa de dados é ajustada conforme necessário, portanto, canais diferentes podem ter taxas de dados diferentes. Os dados propriamente ditos são enviados usando uma combinação de modulação de amplitude e de fase com até 15 bits por baud. Por exemplo, com 224 canais na direção do usuário e 15 bits/baud a 4.000 bauds, a largura de banda na direção do usuário é 13,44 Mbps. Na prática, a relação sinal/ruído nunca é boa o suficiente para alcançar essa taxa, mas 4–8 Mbps é possível em distâncias curtas por loops de alta qualidade.
 
-Uma configuração ADSL típica é mostrada na Figura 2.40. Nesse esquema, o usuário ou um técnico da companhia telefônica deve instalar um NID (Network Interface Device – dispositivo de interface de rede) na casa ou escritório do cliente. Essa caixinha de plástico marca o final da propriedade da companhia telefônica e o início da propriedade do cliente. Próximo ao NID (ou às vezes combinado com ele) há um divisor, um filtro analógico que separa a faixa de 0–4.000 Hz usada pelo POTS dos dados. O sinal do POTS é direcionado ao telefone ou aparelho de fax e o sinal de dados é direcionado a um modem ADSL. Na verdade, o modem ADSL é um processador de sinais digitais que foi montado para agir como 250 modems funcionando em paralelo a frequências diferentes. Uma vez que a maioria dos modems ADSL é externa, o computador deve estar conectado a ele em alta velocidade. Isso costuma ser feito com a instalação de uma placa Ethernet no computador e operação de uma Ethernet muito curta de dois nós que contém apenas o computador e o modem ADSL. (Ethernet é um padrão de rede local popular e barato.) Por vezes, usa-se a porta USB em vez da Ethernet. Sem dúvida, haverá placas internas de modem ADSL disponíveis no futuro.
+Uma configuração ADSL típica é mostrada na Figura 2.40. Nesse esquema, o usuário ou um técnico da companhia telefônica deve instalar um **NID (Network Interface Device – dispositivo de interface de rede)** na casa ou escritório do cliente. Essa caixinha de plástico marca o final da propriedade da companhia telefônica e o início da propriedade do cliente. Próximo ao NID (ou às vezes combinado com ele) há um divisor, um filtro analógico que separa a faixa de 0–4.000 Hz usada pelo POTS dos dados. O sinal do POTS é direcionado ao telefone ou aparelho de fax e o sinal de dados é direcionado a um modem ADSL. Na verdade, o modem ADSL é um processador de sinais digitais que foi montado para agir como 250 modems funcionando em paralelo a frequências diferentes. Uma vez que a maioria dos modems ADSL é externa, o computador deve estar conectado a ele em alta velocidade. Isso costuma ser feito com a instalação de uma placa Ethernet no computador e operação de uma Ethernet muito curta de dois nós que contém apenas o computador e o modem ADSL. (Ethernet é um padrão de rede local popular e barato.) Por vezes, usa-se a porta USB em vez da Ethernet. Sem dúvida, haverá placas internas de modem ADSL disponíveis no futuro.
+
+**• Já existem estes omponentes de rede:**
+
+ - Placas Ethernet: São comuns em computadores e dispositivos de rede, permitindo conexão à rede local (LAN) e à Internet.
+ 
+ - Porta USB: É amplamente utilizada para conectar dispositivos, incluindo adaptadores de rede (Ethernet ou Wi-Fi) e modems.
+ 
+ - Modems ADSL: Já existem placas internas de modem ADSL, mas o ADSL está sendo substituído por tecnologias mais rápidas, como o VDSL e a fibra óptica.
+ 
+ - Placas internas de modem ADSL: Sim, essas placas existem, mas o uso de ADSL está diminui
 
 **• Figura 2.40 Configuração típica de equipamento ADSL.**
 
 Esta figura demonstra como a separação de voz e dados (mostrada no espectro da Fig. 2.39) é implementada fisicamente através de divisores (splitters) e o DSLAM.
 
-    +-----------------------------------------------------------+
-    |               INFRAESTRUTURA DE REDE ADSL                 |
-    |===========================================================|
-    | [ COMPANHIA TELEFÔNICA ]        [ RESIDÊNCIA DO USUÁRIO ] |
-    |                                                           |
-    | [Comutador de Voz]              [ Telefone ]              |
-    |        |                               |                  |
-    |   [ Codec ]                       [ Divisor ]             |
-    |        |                               |                  |
-    |   [ Divisor ] <--- Linha Telefônica ---> [ NID ]          |
-    |        |                               |                  |
-    |   [ DSLAM ]                       [ Modem ADSL ]          |
-    |        |                               |                  |
-    |  [ Para o ISP ]                 [ Computador ]            |
-    +-----------------------------------------------------------+
+    +-----------------------------------------------------------------------+
+    |                   INFRAESTRUTURA DE CONEXÃO ADSL                      |
+    |=======================================================================|
+    |                                                                       |
+    |   CASA OU ESCRITÓRIO DO CLIENTE          ESCRITÓRIO DA CIA. TELEFÔNICA|
+    |   _____________________________          ___________________________  |
+    |  |       [ TELEFONE ]          |        |    [ COMUTADOR DE VOZ ]   | |
+    |  |____________|________________|        |_____________|_____________| |
+    |               |                                       |               |
+    |               |                                    [ CODEC ]          |
+    |               |                                       |               |
+    |         [ DIVISOR ] <------- LINHA TELEFÔNICA ----> [ DIVISOR ]       |
+    |          (Splitter)            DE COBRE              (Splitter)       |
+    |               |                                       |               |
+    |        _______|_______                         _______|_______        |
+    |       |  MODEM ADSL   |                       |     DSLAM     |       |
+    |       |_______|_______|                       |_______|_______|       |
+    |               |                                       |               |
+    |         [ COMPUTADOR ]                          [ PARA O ISP ]        |
+    |________________________________|        |_____________________________|
+    |                                                                       |
+    +-----------------------------------------------------------------------+
+
+**• Detalhes Técnicos para Documentação**
+
+ - Divisor (Splitter): Este componente atua como um filtro de frequências, permitindo que os dados de alta frequência (internet) e os sinais de baixa frequência (voz) viajem pelo mesmo fio de cobre sem interferência.
+
+ - Modem ADSL: Converte os dados digitais do seu computador (via Ethernet) em sinais analógicos para a rede telefônica.
+
+ - DSLAM (Digital Subscriber Line Access Multiplexer): Localizado na central, ele concentra o tráfego de centenas de clientes e o direciona para o Provedor de Serviços de Internet (ISP).
+
+ - NID (Network Interface Device): É o ponto de demarcação física onde a rede da operadora entra na residência do cliente.
 
 ![alt text](image-109.png)
 
@@ -2386,7 +2440,8 @@ Esta figura demonstra como a separação de voz e dados (mostrada no espectro da
     |                        | do tráfego de voz.            | no telefone.                                |
     +------------------------+-------------------------------+---------------------------------------------+
 
-### Notas de Estudo
+**• Notas de Estudo**
+
  - Independência de Meio: A configuração ADSL (Fig. 2.40) mostra que a infraestrutura física de cobre legada pôde ser reaproveitada para alta velocidade, conceito similar ao que você estuda em Sistemas Operacionais sobre abstração de hardware.
 
  - Segurança: Para o desenvolvimento do seu IDS Sentinel, é crucial entender que o tráfego do DSLAM para o ISP é um ponto crítico de monitoramento de integridade de pacotes.
@@ -2410,23 +2465,44 @@ Quando as empresas por cabo lançaram a Internet por cabo, tinham dois problemas
 As soluções são as seguintes. Cabos modernos têm uma largura de banda de pelo menos 550 MHz, muitas vezes até 750 MHz ou mais. Os canais ascendentes (isto é, do usuário ao terminal de distribuição) entram na faixa de 5–42 MHz (um pouco mais alta na Europa), e o tráfego descendente (isto é, do terminal de distribuição ao usuário) usa as frequências da extremidade alta, como ilustrado na Figura 2.41.
 
 **• Figura 2.41 Alocação de frequência em um sistema típico de TV a cabo usado para acesso à Internet.**
-
 Este diagrama ilustra como o espectro de até 750 MHz é particionado para suportar múltiplos serviços simultâneos, como TV, rádio FM e internet (dados).
 
-    +--------------------------------------------------------------+
-    |          ESPECTRO DE FREQUÊNCIA (SISTEMA DE CABO)            |
-    |==============================================================|
-    | Freq (MHz): 0   5  42  54  88  108            550      750   |
-    |             |---|---|---|---|---|               |--------|   |
-    |             | D |   | T | F |   |               | DADOS  |   |
-    | SERVIÇO:    | A |   | V | M |      TV ANALÓGICA | DESCEN-|   |
-    |             | D |   |   |   |                   | DENTES |   |
-    |             | O |   |   |   |                   | (Down) |   |
-    |             | S |   |   |   |                   |        |   |
-    |             +---+   +---+---+                   +--------+   |
-    |               ^                                              |
-    |               |--- Dados Ascendentes (Upstream)              |
-    +-------------------------------------------------------------+
+    +-----------------------------------------------------------------------------+
+    |              ESPECTRO DE FREQUÊNCIAS (SISTEMA DE CABO)                      |
+    |=============================================================================|
+    |                                                                             |
+    |  0    5   42  54  88  108                               550          750 MHz|
+    |  |    |    |   |   |   |                                 |            |     |
+    |  +----+----+---+---+---+---------------------------------+------------+     |
+    |  | R  | UP | V |TV |FM |             TELEVISÃO           |    DOWN    |     |
+    |  +----+----+---+---+---+---------------------------------+------------+     |
+    |                                                                             |
+    |  [UP]   = Dados Ascendentes (Upload do Usuário)                             |
+    |  [DOWN] = Dados Descendentes (Download para o Usuário)                      |
+    |  [TV]   = Canais de Televisão Analógica/Digital                             |
+    |  [FM]   = Estações de Rádio FM                                              |
+    |  [R]    = Faixa de Guarda/Reserva (0-5 MHz)                                 |
+    |                                                                             |
+    |  <-- Ascendentes --> | <----------- Frequências Descendentes ----------->   |
+    |     (5 - 42 MHz)     |              (54 - 750 MHz)                          |
+    +-----------------------------------------------------------------------------+
+
+**• Figura 2.41: Alocação de Frequência em TV a Cabo** 
+Ilustra como a internet é entregue via cabo coaxial, dividindo o espectro de frequências.
+
+ - Dados Ascendentes (5-42 MHz): Faixa menor usada para Upload (do usuário para a rede).
+
+ - TV e FM (54-550 MHz): Grande parte do espectro reservada para canais de vídeo e rádio.
+
+ - Dados Descendentes (550-750 MHz): Faixa de alta frequência usada para Download, permitindo maiores velocidades.
+
+**• Detalhamento Técnico para o eBook**
+
+ - Divisão Assimétrica: Assim como no ADSL, a faixa para Download (Dados Descendentes) é muito maior (550 a 750 MHz) do que a de Upload (5 a 42 MHz), refletindo o consumo típico de usuários que baixam mais dados do que enviam.
+
+ - Frequências de TV: A maior parte do cabo (de 108 a 550 MHz) é dedicada aos canais de TV, o que garante que a internet não interfira na qualidade da imagem.
+
+ - Faixas de Guarda: Existem pequenos espaços vazios entre as bandas (como entre 42 e 54 MHz) para evitar que o sinal de upload "vaze" e cause interferência nos canais de TV.
 
 ![alt text](image-110.png)
 
@@ -2450,13 +2526,47 @@ Mapeamento Técnico Consolidado
     |                        | para download.                   |                                             |
     +------------------------+----------------------------------+---------------------------------------------+
 
-### Notas de Revisão para o Capítulo de Hardware
+            +---------------+
+            |  Internet     |
+            +---------------+
+                  |
+                  |
+                  v
+            +---------------+
+            |  Modem de Cabo|
+            |  (filtragem)  |
+            +---------------+
+                  |
+                  |
+                  v
+            +---------------+
+            |  Faixa de     |
+            |  Frequência   |
+            +---------------+
+                  |
+                  |---> 5 - 42 MHz (upload)
+                  |
+                  |---> 550 - 750 MHz (download)
+                  |
+                  v
+            +-------------------+
+            |  Placa de Rede    |
+            |  (Lenovo IdeaPad) |
+            +-------------------+
+                  |
+                  |
+                  v
+            +---------------+
+            |  Computador   |
+            +---------------+
+
+**• Notas de Revisão para o Capítulo de Hardware**
+
  - Estrutura de Barramento: A evolução da estrutura lógica simples (Fig. 2.30) para o barramento PCI (Fig. 2.31) e finalmente para o PCIe ponto a ponto (Fig. 2.32) reflete a necessidade de maior largura de banda que você observa no seu IdeaPad ao processar dados em tempo real no IDS Sentinel.
 
  - Conectividade: Enquanto o ADSL (Fig. 2.40) utiliza a rede telefônica de cobre com divisores de frequência, o sistema de cabo (Fig. 2.41) gerencia um espectro muito mais amplo para integrar entretenimento e dados no mesmo meio físico.
 
  - Meio-tom (2.37): A técnica de simulação de cinza é um exemplo clássico de como limitações de hardware (apenas um tipo de toner/tinta) são superadas por algoritmos de processamento de imagem.
-
 
 Note que, como os sinais de TV são todos descendentes, é possível usar amplificadores ascendentes que funcionam apenas na região de 5 a 42 MHz, e amplificadores descendentes que só funcionam a 54 MHz e acima, conforme mostra a figura. Assim, obtemos uma assimetria nas larguras de banda ascendente e descendente, porque há mais espectro disponível acima da banda da televisão do que abaixo dela. Por outro lado, a maior parte do tráfego será provavelmente na direção descendente, portanto, as operadoras por cabo não estão infelizes com essas coisas da vida. Como vimos antes, empresas de telefonia costumam oferecer um serviço DSL assimétrico,
 ainda que não tenham nenhuma razão técnica para fazê-lo.
@@ -2478,8 +2588,7 @@ Os canais descendentes são gerenciados de modo diferente dos canais ascendentes
 televisão digital, que usa MPEG-2, de modo que os canais de TV e os canais descendentes sejam formatados do mesmo modo. O aspecto lógico das conexões é mostrado na Figura 2.42.
 
 **• Figura 2.42 - Detalhes típicos dos canais ascendente e descendente na América do Norte. QAM-64 (Quadrature Amplitude Modulation – modulação de amplitude em quadratura) permite 6 bits/Hz, mas funciona somente em altas frequências. QPSK (Quadrature
-Phase Shift Keying – modulação por chaveamento de fase em quadratura) funciona em baixas frequências, mas permite
-apenas 2 bits/Hz.**
+Phase Shift Keying – modulação por chaveamento de fase em quadratura) funciona em baixas frequências, mas permite apenas 2 bits/Hz.**
 
 Ilustra a diferença de modulação e largura de banda entre os dados que saem do modem em direção ao provedor (ISP) e os que chegam ao usuário.
 
