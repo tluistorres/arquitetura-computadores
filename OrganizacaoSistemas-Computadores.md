@@ -2105,13 +2105,16 @@ a 600 dpi e usar essa técnica de meio-tom reduz a resolução efetiva a 100 cé
 **• Figura 2.37 - Pontos de meio-tom para várias faixas de escala de cinza. (a) 0–6. (b) 14–20. (c) 28–34. (d) 56–62. (e) 105–111.
 (f) 161–167.**
 
-    (a) 0-6       (b) 14-20     (c) 28-34     (d) 56-62     (e) 105-111    (f) 161-167
-    +-------+     +-------+     +-------+     +-------+     +-------+     +-------+
-    | . . . |     | . . . |     | . . . |     | . # . |     | . # . |     | # # # |
-    | . . . |     | . # . |     | . # # |     | # # # |     | # # # |     | # # # |
-    | . . . |     | . . # |     | . # # |     | . # . |     | # # # |     | # # # |
-    +-------+     +-------+     +-------+     +-------+     +-------+     +-------+
-     BRANCO       CLARÍSSIMO      CLARO         MÉDIO        ESCURO         PRETO
+    (a) 0-6            (b) 14-20            (c) 28-34           (d) 56-62          (e) 105-111         (f) 161-167
+    +-------------+     +-------------+     +-------------+     +-------------+     +-------------+     +-------------+
+    | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . # # . . |
+    | . . . . . . |     | . . . . . . |     | . . . . . . |     | . # . . . . |     | . # # # . . |     | . # # # # . |
+    | . . . . . . |     | . . # . . . |     | . . # # . . |     | . # # # . . |     | . # # # # . |     | # # # # # # |
+    | . . . . . . |     | . . . # . . |     | . . # # . . |     | . # # # . . |     | . # # # # . |     | . # # # # # |
+    | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . . # . . |     | . # # # # . |     | . # # # # . |
+    | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . . . . . |     | . . # # . . |
+    +-------------+     +-------------+     +-------------+     +-------------+     +-------------+     +-------------+
+        BRANCO            CLARÍSSIMO            CLARO                MÉDIO              ESCURO              PRETO
 
 ![alt text](image-106.png)
 
@@ -2151,77 +2154,54 @@ as gotículas de tinta e não permitir que elas se espalhem.
 **• Impressoras especiais**
 Embora impressoras a laser e a jato de tinta dominem os mercados de impressão doméstico e de escritório, outros tipos de impressoras são usados em outras situações, com outros requisitos em termos de qualidade de cor, preço e outras características.
 
-Uma variante da impressora a jato de tinta é a impressora de tinta sólida. Esse tipo de impressora aceita quatro blocos sólidos de uma tinta especial à base de cera, que são derretidos e passam para reservatórios de tinta quente. Os tempos de partida dessas impressoras podem chegar a 10 minutos, enquanto os blocos de tinta estão derretendo. A tinta quente é borrifada sobre o papel, onde se solidifica e se funde com o papel quando este é forçado a passar entre dois roletes rígidos. De certa forma, ela combina a ideia de borrifar tinta das impressoras a jato de tinta com a ideia de fundir a tinta no papel com roletes de borracha rígidos das impressoras a laser.
+Uma variante da impressora a jato de tinta é a **impressora de tinta sólida**. Esse tipo de impressora aceita quatro blocos sólidos de uma tinta especial à base de cera, que são derretidos e passam para reservatórios de tinta quente. Os tempos de partida dessas impressoras podem chegar a 10 minutos, enquanto os blocos de tinta estão derretendo. A tinta quente é borrifada sobre o papel, onde se solidifica e se funde com o papel quando este é forçado a passar entre dois roletes rígidos. De certa forma, ela combina a ideia de borrifar tinta das impressoras a jato de tinta com a ideia de fundir a tinta no papel com roletes de borracha rígidos das impressoras a laser.
 
 Outro tipo de impressora em cores é a impressora a cera. Ela tem uma larga fita encerada em quatro cores, segmentada em faixas do tamanho de páginas. Milhares de elementos de aquecimento derretem a cera à medida que o papel passa por baixo dela. A cera se funde com o papel na forma de pixels usando o sistema CMYK. Impressoras a cera costumavam ser a principal tecnologia de impressão em cores, mas estão sendo substituídas pelos outros tipos cujos materiais de consumo são mais baratos.
 
-Ainda outro tipo de impressora em cores é a impressora por sublimação de corante, ou de tinta. Embora dê a entender algo de freudiano, sublimação é o nome científico da passagem do estado sólido para o gasoso sem passar pelo estado líquido. Gelo seco (dióxido de carbono congelado) é um material bem conhecido que sublima. Em uma impressora por sublimação de tinta, uma base contendo os corantes CMYK passa sobre um cabeçote de impressão térmico que contém milhares de elementos de aquecimento programáveis. As tintas são vaporizadas instantaneamente e absorvidas por um papel especial que está próximo. Cada elemento de aquecimento pode produzir 256 temperaturas diferentes. Quanto mais alta a temperatura, mais corante é depositado e mais intensa
-é a cor. Diferente de todas as outras impressoras em cores, nessa são possíveis cores praticamente contínuas para cada pixel, de modo que o meio-tom não é necessário. Pequenas impressoras de instantâneos muitas vezes usam o processo de sublimação de tinta para produzir imagens fotográficas de alto grau de realismo sobre papel especial
-(e caro).
+Ainda outro tipo de impressora em cores é a **impressora por sublimação de corante, ou de tinta**. Embora dê a entender algo de freudiano, sublimação é o nome científico da passagem do estado sólido para o gasoso sem passar pelo estado líquido. Gelo seco (dióxido de carbono congelado) é um material bem conhecido que sublima. Em uma impressora por sublimação de tinta, uma base contendo os corantes CMYK passa sobre um cabeçote de impressão térmico que contém milhares de elementos de aquecimento programáveis. As tintas são vaporizadas instantaneamente e absorvidas por um papel especial que está próximo. Cada elemento de aquecimento pode produzir 256 temperaturas diferentes. Quanto mais alta a temperatura, mais corante é depositado e mais intensa
+é a cor. Diferente de todas as outras impressoras em cores, nessa são possíveis cores praticamente contínuas para cada pixel, de modo que o meio-tom não é necessário. Pequenas impressoras de instantâneos muitas vezes usam o processo de sublimação de tinta para produzir imagens fotográficas de alto grau de realismo sobre papel especial (e caro).
 
-Por fim, chegamos à impressora térmica, que contém uma pequena cabeça de impressão com alguma quantidade de minúsculas agulhas que podem ser aquecidas. Quando uma corrente elétrica passa por uma agulha, ela se torna muito quente depressa. Quando um papel termicamente sensível especial é empurrado pela cabeça de impressão, os pontos são feitos no papel quando as agulhas estão quentes. Com efeito, uma impressora térmica é como as antigas impressoras matriciais, cujos pinos eram pressionados contra uma fita tipo máquina de escrever para formar os pontos de tinta no papel atrás da fita. As impressoras térmicas são muito usadas para imprimir recibos em lojas, caixas eletrônicos de banco, postos de gasolina automatizados etc.
+Por fim, chegamos à impressora térmica, que contém uma pequena cabeça de impressão com alguma quantidade de minúsculas agulhas que podem ser aquecidas. Quando uma corrente elétrica passa por uma agulha, ela se torna muito quente depressa. Quando um papel termicamente sensível especial é empurrado pela cabeça de impressão, os pontos são feitos no papel quando as agulhas estão quentes. Com efeito, uma impressora térmica é como as antigas impressoras matriciais, cujos pinos eram pressionados contra uma fita tipo máquina de escrever para formar os pontos de tinta no papel atrás da fita. **As impressoras térmicas são muito usadas para imprimir recibos em lojas, caixas eletrônicos de banco, postos de gasolina automatizados etc.**
 
 ## 2.4.6 Equipamento de telecomunicações
-Hoje, grande parte dos computadores está ligada a uma rede de computadores, em geral a Internet. Para
-conseguir acesso, é preciso usar equipamento especial. Nesta seção, veremos como esse equipamento funciona.
+Hoje, grande parte dos computadores está ligada a uma rede de computadores, em geral a Internet. Para conseguir acesso, é preciso usar equipamento especial. Nesta seção, veremos como esse equipamento funciona.
 
 **• Modems**
 Com o crescimento da utilização de computadores nos últimos anos, é comum que um computador precise se comunicar com outro. Por exemplo, muitas pessoas têm em casa computadores pessoais que usam para se comunicar com o que está em seu local de trabalho, com uma provedora de serviço de Internet (ISP – Internet Service Provider) ou com um sistema de home banking. Em muitos casos, a linha telefônica provê comunicação física.
 
 Contudo, uma linha telefônica comum (ou cabo) não é adequada para transmissão de sinais de computador que costumam representar um 0 como 0 volt e um 1 como 3 a 5 volts, conforme mostra a Figura 2.38(a). Sinais de dois níveis sofrem considerável distorção quando transmitidos por uma linha telefônica projetada para voz, ocasionando erros de transmissão. Todavia, um sinal de onda senoidal pura em uma frequência de 1.000 a 2.000 Hz, denominada portadora, pode ser transmitido com relativamente pouca distorção, e esse fato é explorado como a base da maioria dos sistemas de telecomunicação.
 
-Como as pulsações de uma onda senoidal são totalmente previsíveis, uma onda senoidal pura não transmite nenhuma informação. Contudo, variando a amplitude, frequência ou fase, uma sequência de 1s e 0s pode ser transmitida, como mostra a Figura 2.38. Esse processo é denominado modulação, e o dispositivo que faz isso é denominado modem, que significa MOdulador DEModulador. Na modulação de amplitude (veja a Figura 2.38(b)), são usados dois níveis de tensão elétrica (voltagem) para 0 e 1, respectivamente. Uma pessoa que esteja ouvindo dados transmitidos a uma taxa de dados muito baixa ouviria um ruído alto para 1 e nenhum ruído para 0.
+Como as pulsações de uma onda senoidal são totalmente previsíveis, uma onda senoidal pura não transmite nenhuma informação. Contudo, variando a amplitude, frequência ou fase, uma sequência de 1s e 0s pode ser transmitida, como mostra a Figura 2.38. Esse processo é denominado modulação, e o dispositivo que faz isso é denominado modem, que significa **MOdulador DEModulador**. Na modulação de amplitude (veja a Figura 2.38(b)), são usados dois níveis de tensão elétrica (voltagem) para 0 e 1, respectivamente. Uma pessoa que esteja ouvindo dados transmitidos a uma taxa de dados muito baixa ouviria um ruído alto para 1 e nenhum ruído para 0.
 
 Em modulação de frequência (veja a Figura 2.38(c)), o nível de tensão elétrica (voltagem) é constante, mas a frequência da portadora é diferente para 1 e para 0. Uma pessoa que estivesse ouvindo dados digitais com frequência modulada ouviria dois tons, correspondentes a 0 e 1. A modulação de frequência costuma ser denominada modulação por chaveamento de frequência.
 
 **• Figura 2.38- Transmissão bit a bit do número binário 01001011000100 por uma linha telefônica. (a) Sinal de dois níveis.
 (b) Modulação de amplitude. (c) Modulação de frequência. (d) Modulação de fase.**
 
-Figura 2.27: Seção Transversal de um CD-R
-Este diagrama ilustra como o laser interage com a camada de corante para simular as depressões de um disco convencional.
-
-    +-----------------------------------------------------------+
-    |               ESTRUTURA FÍSICA DO CD-R                    |
-    |===========================================================|
-    | [ Verniz Protetor ]                                       |
-    | [ Camada Refletiva ]                                      |
-    | [ CAMADA DE CORANTE ] <--- Ponto escuro queimado pelo     |
-    |                            laser durante a escrita        |
-    | [ POLICARBONATO ]          (Espessura total: 1,2 mm)      |
-    |___________________________________________________________|
-    |                                                           |
-    |       ^                     |                             |
-    |       | [ Fotodetector ]    | [ Lente ]                   |
-    |       |                     |                             |
-    |       +----[ Prisma ]-------+                             |
-    |                ^                                          |
-    |                | [ Diodo de Laser ]                       |
-    +-----------------------------------------------------------+
-
 Figura 2.38: Técnicas de Modulação de Sinal
 Fundamental para entender como o binário viaja por meios analógicos, como linhas telefônicas.
 
-    BIT:     0      1      0      0      1      0      1
-    +-----------------------------------------------------------+
-    | (a) Sinal Digital (Níveis de Tensão V1 e V2)              |
-    |      ____        ____        ____        ____        ____ |
-    | ____|    |______|    |______|    |______|    |______|    |
-    |-----------------------------------------------------------|
-    | (b) AM (Modulação de Amplitude)                           |
-    |      _/\_        _/\_        _/\_        _/\_        _/\_ |
-    | _/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|    |
-    |      (Baixa)     (Alta)                                   |
-    |-----------------------------------------------------------|
-    | (c) FM (Modulação de Frequência)                          |
-    |      WWWW        wwww        WWWW        wwww        WWWW |
-    | wwww|    |wwwwww|    |wwwwww|    |wwwwww|    |wwwwww|    |
-    |     (Alta)      (Baixa)                                   |
-    |-----------------------------------------------------------|
-    | (d) PM (Modulação de Fase)                                |
-    |      _/\_  /|    _/\_  /|    _/\_  /|    _/\_  /|    _/\_ |
-    | _/\_|    |/_| \_|    |/_| \_|    |/_| \_|    |/_| \_|    |
-    |            ^----------- Mudança brusca de fase            |
-    +-----------------------------------------------------------+
+    BIT: 0  1    0  0    1   0  0   1   0 0    1     0 0    1
+    +------------------------------------------------------------+
+    | (a) Sinal Digital (Níveis de Tensão V1 e V2)               |
+    |      ____        ____        ____        ____        ____  |
+    | ____|    |______|    |______|    |______|    |______|    | | 
+    |------------------------------------------------------------|
+    | (b) AM (Modulação de Amplitude)                            |
+    |      _/\_        _/\_        _/\_        _/\_        _/\_  |
+    | _/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|    |_/\/\_|      |
+    |      (Baixa)     (Alta)                                    |
+    |------------------------------------------------------------|
+    | (c) FM (Modulação de Frequência)                           |
+    |      WWWW        wwww        WWWW        wwww        WWWW  |
+    | wwww|    |wwwwww|    |wwwwww|    |wwwwww|    |wwwwww|    | | 
+    |     (Alta)      (Baixa)                                    |
+    |------------------------------------------------------------|
+    | (d) PM (Modulação de Fase)                                 |
+    |      _/\_  /|    _/\_  /|    _/\_  /|    _/\_  /|    _/\_  |
+    | _/\_|    |/_| \_|    |/_| \_|    |/_| \_|    |/_| \_|    | |
+    |            ^----------- Mudança brusca de fase             |
+    +------------------------------------------------------------+
 
 ![alt text](image-107.png)
 
@@ -2245,8 +2225,8 @@ Fundamental para entender como o binário viaja por meios analógicos, como linh
     |                        |                               | estudo de protocolos de rede e segurança    |
     |                        |                               | no IDS.                                     |
     +------------------------+-------------------------------+---------------------------------------------+
-    | DVD Dupla Face        | Camadas semirreflexivas       | permitem que o laser leia dois níveis        |
-    | (2.28)                |                               | de dados no mesmo lado.                      |
+    | DVD Dupla Face         | Camadas semirreflexivas       | permitem que o laser leia dois níveis       |
+    | (2.28)                 |                               | de dados no mesmo lado.                     |
     +------------------------+-------------------------------+---------------------------------------------+
 
 ### Notas de Revisão
