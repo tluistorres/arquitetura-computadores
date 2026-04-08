@@ -2525,40 +2525,32 @@ Mapeamento Técnico Consolidado
     |                        | frequências altas (550-750 MHz)  | o consumo de conteúdo.                      |
     |                        | para download.                   |                                             |
     +------------------------+----------------------------------+---------------------------------------------+
-
-            +---------------+
-            |  Internet     |
-            +---------------+
-                  |
-                  |
-                  v
-            +---------------+
-            |  Modem de Cabo|
-            |  (filtragem)  |
-            +---------------+
-                  |
-                  |
-                  v
+            
             +---------------+
             |  Faixa de     |
             |  Frequência   |
             +---------------+
                   |
-                  |---> 5 - 42 MHz (upload)
+                  |---> 5 - 42 MHz 
+                  |       |
+                  |       |-> Envia dados (commit GitHub)
                   |
-                  |---> 550 - 750 MHz (download)
-                  |
-                  v
-            +-------------------+
-            |  Placa de Rede    |
-            |  (Lenovo IdeaPad) |
-            +-------------------+
-                  |
+                  |---> 550 - 750 MHz
+                  |       |
+                  |       |-> Baixa dados (ISO, YouTube)
                   |
                   v
-            +---------------+
-            |  Computador   |
-            +---------------+
+            +-----------------+
+            |  Isolamento     |
+            |  (Modem de Cabo)|
+            +-----------------+
+                  |
+                  |
+                  v
+            +------------------+
+            |  Placa de Rede   |
+            |  (Lenovo IdeaPad)|
+            +------------------+
 
 **• Notas de Revisão para o Capítulo de Hardware**
 
@@ -2593,23 +2585,18 @@ Phase Shift Keying – modulação por chaveamento de fase em quadratura) funcio
 Ilustra a diferença de modulação e largura de banda entre os dados que saem do modem em direção ao provedor (ISP) e os que chegam ao usuário.
 
     +-------------------------------------------------------------+
-    |               OPERAÇÃO DE CANAIS EM CABO COAXIAL            |
+    |              FLUXO DE DADOS NO CABO COAXIAL                 |
     |=============================================================|
     |                                                             |
-    |           Fibra        [ TERMINAL ]         [ MODEM ]       |
-    | [ ISP ] ---------|      (Headend)           (Usuário)       |
-    |                  |          |                   |           |
-    |                  |    /=======================\ |           |
-    |                  |    |  Canal Descendente    | |           |
-    |                  |    |   (27 Mbps QAM-64)    | |           |
-    |                  |    |  [Dados]   [Dados]    | |           |
-    |                  |    |-----------------------| |           |
-    |                  |    |  Canal Ascendente     | |           |
-    |                  |    |    (9 Mbps QPSK)      | |           |
-    |                  |    | [..] [..] [..] [..]   | |           |
-    |                  |    \=======================/ |           |
-    |                  |          CABO COAXIAL        |           |
-    |                                                             |
+    |   [ ISP ] ---Fibra---> [ TERMINAL ] ========= [ MODEM ]     |
+    |                                       ||                    |
+    |   CANAL DESCENDENTE (Download):       || (Cabo Coaxial)     |
+    |   >> [ Pacote 184 bytes ] >>          ||                    |
+    |   (27 Mbps / QAM-64 / 6 bits/Hz)      ||                    |
+    |                                       ||                    |
+    |   CANAL ASCENDENTE (Upload):          ||                    |
+    |   << [ Pacote 8 bytes ] <<            ||                    |
+    |   (9 Mbps / QPSK / 2 bits/Hz)         ||                    |
     +-------------------------------------------------------------+
 
 ![alt text](image-111.png)
@@ -2648,6 +2635,9 @@ Mapeamento Técnico Consolidado
 
  - Hardware Físico: Enquanto o ADSL (Fig. 2.40) isola voz e dados em canais de 4 kHz, o sistema de cabo (Fig. 2.41 e 2.42) usa bandas muito maiores para dados, atingindo frequências de até 750 MHz.
 
+ - QAM-64: Usado no download para alta performance (6 bits por símbolo), mas requer sinal limpo.
+
+ - QPSK: Usado no upload por ser mais robusto contra ruídos, embora carregue menos dados (2 bits por símbolo).
 
 Voltando à inicialização do modem, uma vez concluída a ranging e obtida a designação de seu canal ascendente, canal descendente e mini-intervalo, ele está liberado para começar a enviar pacotes. Esses pacotes vão até o terminal de distribuição, que os retransmite por um canal dedicado até a central da operadora por cabo e então até o ISP (que pode ser a própria empresa por cabo). O primeiro pacote é dirigido à ISP e requisita um endereço de rede (tecnicamente, um endereço IP) que é designado dinamicamente. O pacote também requisita e obtém um horário exato.
 
@@ -2658,8 +2648,7 @@ Por fim, o modem tem de registrar (fazer login) e fornecer seu identificador exc
 Há muito mais a ser dito sobre modems a cabo. Algumas referências relevantes são: Adams e Dulchinos, 2001; Donaldson e Jones, 2001; Dutta-Roy, 2001.
 
 ## 2.4.7 Câmeras digitais
-Uma utilização cada vez mais popular de computadores é a fotografia digital, o que transforma câmeras digitais em uma espécie de periférico de computador. Vamos descrever rapidamente como isso funciona. Todas as câmeras têm uma lente que forma uma imagem do sujeito no fundo da câmera. Em um equipamento convencional, o fundo da câmera está coberto por uma película fotográfica sobre a qual é formada uma imagem latente quando a luz a atinge. Essa imagem latente pode ficar visível pela ação de certos produtos
-químicos presentes no líquido de revelação, ou revelador. Uma câmera digital funciona da mesma maneira, exceto que o filme é substituído por um arranjo retangular de CCDs (Charge-Coupled Devices – dispositivos de carga acoplada) sensíveis à luz. (Algumas câmeras digitais usam CMOS [Complementary Metal­‑Oxyde Semiconductor – semicondutor de óxido metálico complementar], mas aqui vamos nos concentrar nos CCDs, que são mais comuns.)
+Uma utilização cada vez mais popular de computadores é a fotografia digital, o que transforma câmeras digitais em uma espécie de periférico de computador. Vamos descrever rapidamente como isso funciona. Todas as câmeras têm uma lente que forma uma imagem do sujeito no fundo da câmera. Em um equipamento convencional, o fundo da câmera está coberto por uma película fotográfica sobre a qual é formada uma imagem latente quando a luz a atinge. Essa imagem latente pode ficar visível pela ação de certos produtos químicos presentes no líquido de revelação, ou revelador. Uma câmera digital funciona da mesma maneira, exceto que o filme é substituído por um arranjo retangular de **CCDs (Charge-Coupled Devices – dispositivos de carga acoplada)** sensíveis à luz. (Algumas câmeras digitais usam CMOS [Complementary Metal­‑Oxyde Semiconductor – semicondutor de óxido metálico complementar], mas aqui vamos nos concentrar nos CCDs, que são mais comuns.)
 
 Quando a luz atinge um CCD, ele adquire uma carga elétrica. Quanto mais luz, mais carga. A carga pode ser lida em um conversor analógico para digital como um inteiro de 0 a 255 (em câmeras mais baratas) ou de 0 a 4.095 (em câmeras reflex digitais de uma lente). A configuração básica é mostrada na Figura 2.43.
 
@@ -2667,21 +2656,49 @@ Quando a luz atinge um CCD, ele adquire uma carga elétrica. Quanto mais luz, ma
 
 Ilustra o caminho da luz desde a lente até o armazenamento em memória flash, destacando o arranjo de sensores CCD.
 
-    +-------------------------------------------------------------+
-    |                  ANATOMIA DE UMA CÂMERA DIGITAL             |
-    |=============================================================|
-    |                                                             |
-    |   Objeto        Lente       Diafragma      Processamento    |
-    |     (X)  --->   ( O )   --->   |  |   --->   [ CPU ]        |
-    |                                |  |          [ RAM ]        |
-    |                          [ Arranjo CCD ]     [ FLASH ]      |
-    |                                |                            |
-    |                     +----------v----------+                 |
-    |                     |  R | G | R | G  ... | <-- Sensor      |
-    |                     |  G | B | G | B  ... |     Bayer       |
-    |                     +---------------------+                 |
-    |                                                             |
-    +-------------------------------------------------------------+
+        +-------------------------------------------------------------+
+        |                  ANATOMIA DE UMA CÂMERA DIGITAL             |
+        |=============================================================|
+        |                                                             |
+        |   Objeto        Lente       Diafragma      Processamento    |
+        |     (X)  --->   ( O )   --->   |  |   --->   [ CPU ]        |
+        |                                |  |          [ RAM ]        |
+        |                          [ Arranjo CCD ]     [ FLASH ]      |
+        |                                |                            |
+        |                     +----------v----------+                 |
+        |                     |  R | G | R | G  ... | <-- Sensor      |
+        |                     |  G | B | G | B  ... |     Bayer       |
+        |                     |  R | G | R | G  ... |                 |
+        |                     |  G | G | G | B  ... |                 |
+                              +---------------------+                 |
+        |                                                             |
+        +-------------------------------------------------------------+
+
+        +---------------------------------------------------------------------+
+        |              ARQUITETURA DE CAPTURA DE IMAGEM                       |
+        |=====================================================================|
+        |                                                                     |
+        |   OBJETO  ===>  [ LENTE ]  ===> [ DIAFRAGMA ] ===> [ ARRANJO CCDs ] |
+        |   (Luz)         (Óptica)        (Controle Luz)    (Sensor Cor)      |
+        |                                                         ||          |
+        |                                                         ||          |
+        |   +-----------------------------------------------------VV---+      |
+        |   |         PROCESSAMENTO E ARMAZENAMENTO (LÓGICA)           |      |
+        |   |                                                          |      |
+        |   |   [ CPU ] <-----> [ RAM ] <-----> [ MEMÓRIA FLASH ]      |      |
+        |   +----------------------------------------------------------+      |
+        |                                                                     |
+        |   DETALHE DO PIXEL (PADRÃO BAYER):                                  |
+        |                                                                     |
+        |   [R][G]   O sensor CCD não captura cores. Ele usa um filtro        |
+        |   [G][B]   (Bayer) onde cada sub-pixel é sensível a apenas          |
+        |            uma cor primária (RGB).                                  |
+        |                                                                     |
+        |   * Composição do Pixel Final (demosaicing):                        |
+        |     - 1 CCD Vermelho (R)                                            |
+        |     - 1 CCD Azul (B)                                                |
+        |     - 2 CCDs Verdes (G)                                             |
+        +---------------------------------------------------------------------+
 
 ![alt text](image-112.png)
 
@@ -2748,7 +2765,6 @@ Um código de ampla utilização é denominado ASCII (American Standard Code for
     | 29  | )   | 39  | 9   | 49  | I   | 59  | Y   | 69  | i   | 79  | y   |
     | 2A  | *   | 3A  | :   | 4A  | J   | 5A  | Z   | 6A  | j   | 7A  | z   |
     | 2B  | +   | 3B  | ;   | 4B  | K   | 5B  | [   | 6B  | k   | 7B  | {   |
-
     | 2C  | ,   | 3C  | <   | 4C  | L   | 5C  | \   | 6C  | l   | 7C  | |   |
     | 2D  | -   | 3D  | =   | 4D  | M   | 5D  | ]   | 6D  | m   | 7D  | }   |
     | 2E  | .   | 3E  | >   | 4E  | N   | 5E  | ^   | 6E  | n   | 7E  | ~   |
@@ -2803,7 +2819,6 @@ Embora melhor que o ASCII, o Unicode por fim esgotou os pontos de código e tamb
 Uma das propriedades interessantes do UTF-8 é que os códigos de 0 a 127 são os caracteres ASCII, permitindo que sejam expressos em 1 byte (contra os 2 bytes do Unicode). Para caracteres que não são ASCII, o bit de alta ordem do primeiro byte é definido como 1, indicando que virão 1 ou mais bytes adicionais. No fim, seis formatos diferentes são usados, conforme ilustra a Figura 2.45. Os bits marcados com “d” são bits de dados.
 
 **• Figura 2.45 O esquema de codificação UTF-8.**
-
 Diferente do ASCII fixo, o UTF-8 é um sistema de largura variável. O número de bits de dados (representados por d) determina quantos bytes são necessários para codificar o caractere.
 
     +-------+---------+---------+---------+---------+---------+--0------+
@@ -2817,7 +2832,24 @@ Diferente do ASCII fixo, o UTF-8 é um sistema de largura variável. O número d
     | 31    | 1111110d| 10dddddd| 10dddddd| 10dddddd| 10dddddd| 10dddddd|
     +-------+---------+---------+---------+---------+---------+---------+
 
-Mapeamento de Processamento e Armazenamento
+**• Como ler o esquema (A Lógica dos Prefixos)**
+1. Diferente do formato fixo de memória que você viu na arquitetura do barramento, o UTF-8 utiliza os primeiros bits de cada byte para "avisar" ao sistema o que vem a seguir:
+
+ - O Byte de Início (Byte 1):
+
+ - Se começa com 0: Indica que o caractere tem apenas 1 byte (totalmente compatível com ASCII).
+
+ - Se começa com 110: Indica que o caractere total tem 2 bytes.
+
+ - Se começa com 1110: Indica que o caractere total tem 3 bytes.
+
+A regra é simples: o número de 1s antes do primeiro 0 diz quantos bytes o caractere ocupa.
+
+2. Os Bytes de Continuação (Bytes 2 a 6):
+
+ - Todos começam obrigatoriamente com 10. Isso serve para que o sistema saiba que aquele byte não é o início de uma nova letra, mas sim a continuação da anterior.
+
+**• Mapeamento de Processamento e Armazenamento**
 Para manter a consistência com o modelo de tabelas que você utiliza para arquitetura, aqui está a lógica de funcionamento do UTF-8:
 
     +-------------------------------+-------------------------------+
@@ -2841,7 +2873,15 @@ Para manter a consistência com o modelo de tabelas que você utiliza para arqui
     |                               | que símbolos complexos.        |
     +-------------------------------+-------------------------------+
 
-### Notas Técnicas para o eBook
+**•Por que isso é vital para o seu eBook?**
+
+ - Eficiência de Espaço: No seu diretório estruturas_de_dados, textos em português ou inglês usam predominantemente 1 byte por caractere, economizando memória em comparação com o UTF-16 (que usaria 2 bytes fixos).
+
+ - Segurança (IDS Sentinel): Se o seu analisador de pacotes capturar um fluxo de texto, ele precisa entender essa codificação variável. Caso contrário, um caractere de 3 bytes (como um emoji ou símbolo matemático) pode ser lido erroneamente como três caracteres de 1 byte, corrompendo a lógica do seu sistema.
+
+ - Robustez: Se um byte for perdido durante a transmissão no barramento ou rede, o prefixo 10 ajuda o software a se sincronizar novamente no próximo caractere que começar com 0 ou 11.
+
+**• Notas Técnicas para o eBook**
  - Desenvolvimento em C: Ao manipular strings no seu projeto IDS Sentinel, lembre-se que strlen() contará o número de bytes, e não necessariamente o número de caracteres se a string contiver caracteres UTF-8 multi-byte.
 
  - Interoperabilidade: Como você alterna entre Windows 11 e Linux, o UTF-8 garante que arquivos de código criados em um sistema sejam lidos sem erros de codificação ("mojibake") no outro.
