@@ -1042,3 +1042,286 @@ tibilidade com equipamentos herdados ou protocolos e sem as restrições de barr
 limites ao número de pinos que o conector de borda pode ter.
 
 **• Figura 8.13   Exemplo da arquitetura CoreConnect da IBM.**
+Este diagrama ilustra a organização de um sistema em chip (SoC) usando múltiplos barramentos interligados por uma ponte.
+
+    +-------------------------------------------------------------+
+    |               BARRAMENTO DE REGISTRADORES                   |
+    +-------------------------------------------------------------+
+        |           |           |                 |           |
+    +-------+   +-------+   +-------+         +-------+   +-------+
+    | CPU   |   | Outra |   | Disp. |         | Disp. |   | Disp. |
+    | Contr.|   | CPU   |   | E/S   |         | E/S   |   | E/S   |
+    +-------+   +-------+   +-------+         +-------+   +-------+
+        |           |           |                 |           |
+    [======= BARRAMENTO DE =======]     +-----+   [== BARRAMENTO ==]
+    [======= PROCESSADOR   =======]<--->|PONTE|<-->[== PERIFÉRICOS ==]
+        |           |           |       +-----+   [================]
+        |       +-------+       |                         |
+        +-------|MEMÓRIA|-------+                     +-------+
+                +-------+                             |ÁRBITRO|
+                                                      +-------+
+
+![alt text](image-122.png)
+
+**• Notas Técnicas para o eBook:**
+
+ - Escalonamento (Fig. 8.7): A granulação fina alterna threads a cada ciclo, enquanto a grossa espera por eventos longos de latência.
+
+ - Densidade SMT (Fig. 8.8): O SMT é a técnica que permite ao seu Core i7 rodar instruções de threads diferentes simultaneamente no mesmo ciclo de clock, eliminando quase toda a ociosidade.
+
+ - Hierarquia de Barramentos (Fig. 8.13): O uso de uma Ponte de Barramentos permite separar o tráfego rápido (CPU/Memória) do tráfego mais lento (Periféricos), evitando que dispositivos lentos reduzam a performance global do sistema.
+
+O CoreConnect consiste em três barramentos. O barramento de processador é de alta velocidade, síncrono, com pipeline, com 32, 64 ou 128 linhas de dados com clocks de 66, 133 ou 183 MHz. Assim, a vazão máxima é 23,4 Gbps (contra 4,2 Gbps para o barramento PCI). As características de pipeline permitem que os núcleos
+requisitem o barramento enquanto está ocorrendo uma transferência e permitem que diferentes núcleos usem linhas diferentes ao mesmo tempo, semelhante ao barramento PCI. O barramento de processador é otimizado para curtas transferências de blocos. Ele foi projetado para conectar núcleos rápidos, como CPUs, decodificadores MPEG-2, redes de alta velocidade e itens semelhantes.
+
+Estender o **barramento de processador** ao chip inteiro reduziria seu desempenho, portanto, um segundo barramento está presente para dispositivos de E/S lentos, como UARTs, temporizadores, controladores USB, dispositivos de E/S serial e assim por diante. Esse barramento de periféricos foi projetado com o objetivo de simplificar sua interface com periféricos de 8, 16 e 32 bits usando não mais do que uma centena de portas. Ele também é síncrono, com uma vazão máxima de 300 Mbps. Os dois barramentos são conectados por uma ponte, não muito diferente das pontes que foram usadas para conectar os barramentos PCI e ISA em PCs, até o barramento ISA ser descontinuado há alguns anos.
+
+O terceiro barramento é o barramento de registradores de dispositivo, de mútua apresentação, assíncrono, de velocidade muito baixa, utilizado para permitir que os processadores acessem os registradores de dispositivos de todos os periféricos de modo a controlar os dispositivos correspondentes. É destinado a transferências pouco frequentes de apenas alguns bytes por vez.
+
+Ao fornecer barramento no chip, interface e estrutura padronizados, a IBM espera criar uma versão em miniatura do mundo do PCI, na qual muitos fabricantes produzam processadores e controladores fáceis de serem interconectados. Entretanto, uma diferença é que, no mundo do PCI, os fabricantes produzem e vendem
+as placas propriamente ditas que os montadores e usuários finais de PC compram. No mundo do CoreConnect, terceiros projetam núcleos, mas não os fabricam. Em vez disso, eles os licenciam como propriedade intelectual para empresas de eletrônicos de consumo e outras, que então projetam chips multiprocessadores heterogêneos
+por encomenda, baseados em seus próprios núcleos e em núcleos licenciados por terceiros. Visto que fabricar esses chips tão grandes e complexos requer maciço investimento em unidades industriais, na maioria dos casos as empresas de eletrônicos de consumo apenas fazem o projeto e subcontratam a fabricação do chip com um fabricante de semicondutores. Existem núcleos para várias CPUs (ARM, MIPS, PowerPC etc.), bem como para decodificadores MPEG, processadores de sinais digitais e todos os controladores de E/S padronizados.
+
+O CoreConnect da IBM não é o único barramento no chip popular no mercado. O AMBA (Advanced Microcontroller Bus Architecture – arquitetura de barramento avançado de microcontrolador), também é muito usado para conectar CPUs ARM a outras CPUs e dispositivos de E/S (Flynn, 1997). Outros barramentos no chip um pouco menos populares são o VCI (Virtual Component Interconnect – interconexão de componentes virtuais) e o OCP-IP (Open Core Protocol-International Partnership – Aliança Internacional de Protocolo de Núcleo Aberto), que também estão competindo por uma fatia do mercado (Bhakthavatchalu et al., 2010). Barramentos no chip são
+apenas o começo; há quem já esteja pensando em redes inteiras em um chip (Ahmadinia e Shahrabi, 2011). Como os fabricantes de chips encontram uma dificuldade cada vez maior para elevar frequências de clock por causa de problemas de dissipação de calor, multiprocessadores em um único chip são um tópico que desperta muito interesse. Mais informações podem ser encontradas em Gupta et al., 2010; Herrero et al., 2010; e Mishra et al., 2011.
+
+## 8.2 Coprocessadores
+Agora que já vimos alguns dos modos de conseguir paralelismo no chip, vamos subir um degrau e ver como o computador pode ganhar velocidade com a adição de um segundo processador especializado. Há uma variedade desses coprocessadores, de pequenos a grandes. Nos mainframes IBM 360 e em todos os seus sucessores, existem
+canais independentes de E/S para fazer entrada/saída. De modo semelhante, o CDC 6600 tinha dez processadores independentes para efetuar E/S. Gráficos e aritmética de ponto flutuante são outras áreas em que são usados coprocessadores. Até mesmo um chip DMA pode ser visto como um coprocessador. Em alguns casos, a CPU dá ao coprocessador uma instrução ou um conjunto de instruções e ordena que ele as execute; em outros casos, ele é mais independente e funciona em grande parte por si só.
+
+Em termos físicos, coprocessadores podem variar de um gabinete separado (os canais de E/S do 360) a uma placa de expansão (processadores de rede) ou uma área no chip principal (ponto flutuante). Em todos os casos, o que os distingue é o fato de que algum outro processador é o principal e que os coprocessadores estão lá para ajudá-lo. Agora, examinaremos três áreas em que é possível aumentar a velocidade: processamento de rede, multimídia e criptografia.
+
+## 8.2.1 Processadores de rede
+Grande parte dos computadores de hoje estão conectados a uma rede ou à Internet. Como resultado desse progresso tecnológico em hardware de rede, as redes agora são tão rápidas que ficou cada vez mais difícil processar em software todos os dados que entram e que saem. Por conseguinte, foram desenvolvidos processadores
+especiais de rede para lidar com o tráfego e muitos computadores de alta tecnologia agora têm um desses processadores. Nesta seção, antes de tudo, vamos dar uma breve introdução a redes e em seguida discutiremos como funcionam os processadores de rede.
+
+**• Introdução a redes**
+Redes de computadores podem ser de dois tipos gerais: redes locais, ou LANs (Local-Area Networks), que
+conectam vários computadores dentro de um edifício, campus, escritório ou residência, e redes de longa distân-
+cia ou WANs (Wide-Area Networks), que conectam computadores espalhados por uma grande área geográfica.
+A LAN mais popular é denominada Ethernet. A Ethernet original consistia em um cabo grosso no qual eram
+forçosamente inseridos os fios que vinham de cada computador, usando uma derivação conhecida pelo eufemis-
+mo conector vampiro. Ethernets modernas ligam os computadores a um switch central, como ilustrado no lado
+direito da Figura 8.14. A Ethernet original se arrastava a 3 Mbps, mas a primeira versão comercial foi de 10 Mbps.
+Ela não demorou muito a ser substituída pela Fast Ethernet a 100 Mbps e, em seguida, pela Gigabit Ethernet a
+1 Gbps. Já existe no mercado uma Ethernet de 10 gigabits e uma de 40 gigabits já está pronta para ser lançada.
+
+A organização das WANs é diferente. Elas consistem em computadores especializados denominados rotea-
+dores conectados por fios ou fibras óticas, como mostra a parte do meio da Figura 8.14. Blocos de dados denomi-
+nados pacotes, normalmente de 64 a cerca de 1.500 bytes, são movidos da máquina de origem e passam por um
+ou mais roteadores até alcançarem seu destino. Em cada salto, um pacote é armazenado na memória do roteador
+e então repassado ao próximo roteador ao longo do caminho, tão logo a linha de transmissão necessária esteja
+disponível. Essa técnica é denominada comutação de pacotes armazena-e-encaminha.
+
+**• Figura 8.14   Como os usuários são conectados a servidores na Internet.**
+Este diagrama ilustra o caminho físico de um pacote de dados desde o seu computador até o servidor de destino.
+
+    +-----------+
+    | Usuários  |----\
+    +-----------+     \  +-----+     ( PACOTES )     +-------------+
+                    >--->| ISP |====================>|  INTERNET   |
+    +-----------+     /  +-----+    (Fibra Ótica)    | (Roteadores)|
+    | Usuários  |----/                               +-------------+
+    +-----------+                                             |
+                                                              |
+            +-------------------------------------------------+
+            |
+            |      INSTALAÇÕES DO PROVEDOR (APPLICATION PROVIDER) - Instalações do provedor de aplicação
+            |     +----------+      +----------+      +----------+
+            \---->| FIREWALL |----->|  SWITCH  |----->| SERVIDOR |
+                  +----------+      +----------+      +----------+
+
+![alt text](image-123.png)
+
+**• Hardware de Rede: O ISP (Provedor de Internet) converte o sinal da sua linha telefônica para enlaces de alta velocidade como a Fibra Ótica para atravessar a rede de roteadores da Internet.**
+
+Embora muitos achem que Internet é uma WAN única, tecnicamente ela é um conjunto de muitas WANs conectadas umas às outras. Todavia, essa distinção não é importante para nossa finalidade. A Figura 8.14 dá uma visão da Internet do ponto de vista de um usuário doméstico. O computador do usuário em geral está conectado a um servidor Web pelo sistema telefônico, por meio de um modem discado de 56 kbps ou por ADSL, que foi discutido no Capítulo 2. (Como alternativa, pode ser usado um cabo de TV, caso em que o lado esquerdo da Figura 8.14 é ligeiramente diferente e a empresa de TV a cabo é o ISP.) O computador do usuário desmembra em pacotes os dados que serão enviados ao servidor e envia esses pacotes ao ISP (Internet Service Provider – provedor de serviços de Internet), uma empresa que oferece acesso à Internet aos seus clientes. O ISP tem uma conexão de alta velocidade (geralmente por fibra ótica) com uma das redes regionais ou backbones que compõem a Internet. Os pacotes do usuário são repassados salto por salto pela Internet até chegarem ao servidor Web.
+
+A maioria das empresas que oferece serviços de Web tem um computador especializado denominado firewall, que filtra todo o tráfego que chega na tentativa de remover pacotes indesejados (por exemplo, pacotes de hackers que estejam tentando invadir a rede). O firewall está conectado à LAN local, normalmente um switch
+Ethernet, que roteia pacotes até o servidor desejado. É claro que a realidade é muito mais complicada do que mostramos, mas a ideia básica da Figura 8.14 continua válida.
+
+O software de rede consiste em múltiplos protocolos, e cada um deles é um conjunto de formatos, sequências de troca e regras sobre o significado dos pacotes. Por exemplo, quando um usuário quer buscar uma página Web em um servidor, seu browser envia ao servidor um pacote que contém uma requisição GET PAGE usando
+o protocolo HTTP (HyperText Transfer Protocol – protocolo de transferência de hipertexto). O servidor sabe como processar essas requisições. Há muitos protocolos em uso e, com frequência, eles são combinados. Na maioria das situações, os protocolos são estruturados como uma série de camadas, sendo que as mais altas passam pacotes para as mais baixas para processamento e a camada mais baixa efetua a transmissão propriamente dita. No lado receptor, os pacotes percorrem seu caminho pelas camadas na ordem inversa.
+
+Uma vez que processamento de protocolos é o que os processadores de rede fazem para ganhar a vida, é necessário explicar um pouco sobre protocolos antes de estudar os processadores de rede em si. Por enquanto, vamos voltar à requisição GET PAGE. Como ela é enviada ao servidor Web? O que acontece é que, em pri-
+meiro lugar, o browser estabelece uma conexão com o servidor Web usando um protocolo denominado TCP (Transmission Control Protocol – protocolo de controle de transmissão). O software que executa esse protocolo verifica se todos os pacotes foram recebidos corretamente e na ordem certa. Se um pacote se perder, o software TCP garante que ele seja retransmitido tantas vezes quantas forem necessárias até ser recebido.
+
+Na prática, o que acontece é que o browser Web formata a requisição GET PAGE como uma mensagem HTTP correta e então a entrega ao software TCP para que seja transmitida pela conexão. O software TCP acrescenta um cabeçalho à frente da mensagem, que contém um número de sequência e outras informações. Naturalmente, esse cabeçalho é denominado cabeçalho TCP.
+
+Isso feito, o software TCP pega o cabeçalho TCP e a carga útil (ou payload, que contém a requisição GET PAGE) e os passa a outro software que executa o Protocolo IP (Internet Protocol). Esse software anexa à frente do pacote um cabeçalho IP que contém o endereço da origem (a máquina da qual o pacote está partindo), o endereço de destino (a máquina para a qual o pacote deve ir), por quantos saltos mais o pacote pode viver (para evitar que pacotes perdidos fiquem vagando eternamente pela rede), uma soma de verificação (para detectar erros de transmissão e de memória) e outros campos.
+
+Em seguida, o pacote resultante (que agora é composto do cabeçalho IP, cabeçalho TCP e requisição GET PAGE) é passado para baixo, para a camada de enlace de dados, e é acrescentado um cabeçalho de enlace de dados à frente do pacote para a transmissão. A camada de enlace de dados também acrescenta uma soma de verificação ao final do pacote, denominada CRC (Cyclic Redundancy Code – código de redundância cíclica) para detectar erros de transmissão. A presença de somas de verificação na camada de enlace de dados e na de IP poderia parecer redundante, mas ela melhora a confiabilidade. A cada salto, o CRC é verificado e o cabeçalho e o CRC são removidos e recriados em um formato apropriado para o enlace de saída. A Figura 8.15 mostra o aspecto do pacote quando está na Ethernet. Em uma linha telefônica (para ADSL) ele é semelhante, exceto pelo “cabeçalho de linha telefônica” em vez de um cabeçalho Ethernet. O gerenciamento de cabeçalhos é importante e é uma das coisas que os processadores de rede podem fazer. Não é preciso dizer que apenas arranhamos a superfície da questão de redes de computadores. Se o leitor quiser um tratamento mais abrangente, consulte Tanenbaum e Wetherall, 2011.
+
+**• Figura 8.15 - Pacote tal como aparece na Ethernet.**
+Este diagrama é fundamental para o seu projeto de IDS Sentinel, pois mostra exatamente como os cabeçalhos são empilhados (encapsulamento) para que você possa realizar a análise de protocolos como IP e TCP.
+
+    +-----------+-----------+-----------+-------------------------+-----+
+    | Cabeçalho | Cabeçalho | Cabeçalho |                         |  C  |
+    | Ethernet  |    IP     |    TCP    |       Carga Útil        |  R  |
+    |           |           |           |                         |  C  |
+    +-----------+-----------+-----------+-------------------------+-----+
+
+**• Introdução a processadores de rede**
+Há muitos tipos de dispositivos conectados às redes. Usuários finais têm computadores pessoais (de mesa ou notebooks), é claro, porém, cada vez mais também têm máquinas de jogos, PDAs (palmtops) e smartphones. Empresas têm PCs e servidores como sistemas finais. Todavia, há também numerosos dispositivos que funcionam
+como sistemas intermediários em redes, entre eles roteadores, switches, firewalls, proxies da Web e balanceadores de carga. O interessante é que esses sistemas intermediários são os mais exigentes, já que são eles que devem movimentar o maior número de pacotes por segundo. Servidores também são exigentes, mas as máquinas do usuário não são.
+
+Dependendo da rede e do pacote em si, um pacote que chega pode precisar de vários tipos de processamento antes de ser repassado para a linha de saída ou para o programa de aplicação. Esse processamento pode incluir decidir para onde enviar o pacote, fragmentá-lo, reconstruí-lo a partir de seus pedaços, gerenciar sua qualidade de serviço (em especial para fluxos de áudio e vídeo), gerenciar segurança (por exemplo, criptografar e decriptografar), compressão/descompressão e assim por diante.
+
+Com a velocidade das LANs se aproximando de 40 gigabits/segundo e pacotes de 1 KB, um computador em rede pode ter de processar quase 5 milhões de pacotes/segundo. Quando os pacotes são de 64 bytes, o número deles que tem de ser processado por segundo sobe a quase 80 milhões. Executar todas as várias funções que
+acabamos de mencionar em 12–200 ns (além das múltiplas cópias do pacote que, sempre, são necessárias) simplesmente não é viável em software. A assistência do hardware é essencial.
+
+Um tipo de solução de hardware para processamento rápido de pacotes é usar um ASIC (Application-Specific Integrated Circuit – circuito integrado específico da aplicação) por especificação. Esse chip é como um programa fixo que executa qualquer conjunto de funções de processamento para o qual foi projetado. Muitos roteadores atuais usam ASICs. Entretanto, os ASICs têm muitos problemas. Primeiro, o projeto de um ASIC é muito demorado e sua fabricação também. Eles são rígidos, portanto, se for necessária uma nova funcionalidade, será preciso projetar e fabricar um novo chip. Além do mais, o gerenciamento de bugs é um pesadelo, visto que o único modo de consertá-los é projetar, fabricar, despachar e instalar novos chips. Também são caros, a menos que o volume seja tão grande
+que permita amortizar o esforço do desenvolvimento com uma quantidade substancial de chips.
+
+Uma segunda solução é o FPGA (Field Programmable Gate Array – arranjo de portas programável em campo), um conjunto de portas que pode ser organizado conforme o circuito desejado modificando sua fiação em campo. O tempo de chegada ao mercado desses chips é muito mais curto do que o dos ASICs, e sua fiação pode ser modificada em campo removendo-os do sistema e inserindo-os em um dispositivo especial de reprogramação. Por outro lado, eles são complexos, lentos e caros e, por isso, não são atraentes, exceto para aplicações que têm um nicho de mercado específico.
+
+Por fim, chegamos aos processadores de rede, dispositivos programáveis que podem manipular pacotes que chegam e que saem à velocidade dos fios, isto é, em tempo real. Um projeto comum é uma placa de expansão que contém um processador de rede em um chip junto com memória e lógica de apoio. Uma ou mais linhas de rede se conectam com a placa e são roteadas para o processador de rede. Ali, os pacotes são extraídos, processados e enviados por uma linha de rede diferente (por exemplo, para um roteador) ou enviados para o barramento do sistema principal (por exemplo, o barramento PCI) no caso de dispositivo de usuário final, como um PC. Uma placa de processador de rede e um chip típicos são ilustrados na Figura 8.16.
+
+**• Figura 8.16 - Placa e chip de um processador de rede típico.**
+Este diagrama é o complemento perfeito para o seu estudo sobre o pacote Ethernet (Figura 8.15), pois mostra o "motor" físico que processa esses pacotes em alta velocidade.
+
+    +-----------------------------------------------------------------------+
+    |                   PLACA DE PROCESSADOR DE REDE                        |
+    |=======================================================================|
+    |  [ MEMÓRIA ]                                                          |
+    |  +-------+-------+         [ PROCESSADOR DE REDE ]                    |
+    |  | SRAM  | SDRAM |         +---------------------------------------+  |
+    |  +-------+-------+         |  +---------+  +---------+  +--------+ |  |
+    |  | Inter.| Inter.|         |  | CPU de  |  | Memória |  | Inter. | |  |
+    |  | SRAM  | SDRAM | <------>|  | Controle|  | Local   |  | de Rede| |  |
+    |  +-------+-------+         |  +---------+  +---------+  +--------+ |  |
+    |                            |       |            |            |     |  |
+    |                            |  [========== BARRAMENTOS ===========] |  |
+    |                            |       |            |            |     |  |
+    |  +---------------+         |  +-----+  +-----+  +-----+  +-----+   |  |
+    |  | INTERFACE PCI | <------>|  | PPE |  | PPE |  | PPE |  | PPE |   |  |
+    |  +---------------+         |  +-----+  +-----+  +-----+  +-----+   |  |
+    |                            +---------------------------------------+  |
+    |                               (PPE = Processadores Especializados)    |
+    |_______________________________________________________________________|
+    | |||||||||||||||||||||||||| CONECTOR PCI ||||||||||||||||||||||||||||| |
+    +-----------------------------------------------------------------------+
+
+**• Notas Técnicas para o eBook:**
+
+ - PPE (Packet Processing Elements): São os núcleos especializados em processar pacotes individualmente. Em vez de núcleos genéricos como os do seu Core i7, esses são otimizados para tarefas de rede (como verificar o CRC ou ler o cabeçalho IP que vimos antes).
+
+ - Hierarquia de Memória: O chip utiliza SRAM para tarefas que exigem altíssima velocidade (como tabelas de roteamento rápidas) e SDRAM para armazenamento de pacotes em trânsito (buffers).
+
+ - Interface de Rede e PCI: O processador se comunica com a rede externa e com o restante do sistema (seu Ubuntu, por exemplo) através dessas interfaces dedicadas, garantindo que o tráfego de dados não sature o barramento principal do computador.
+
+Tanto a SRAM quanto a SDRAM são fornecidas na placa e normalmente são usadas de modos diferentes. A SRAM é mais rápida, porém mais cara do que a SDRAM, portanto, há apenas uma pequena quantidade dela. A SRAM é usada para conter tabelas de roteamento e outras estruturas de dados fundamentais, enquanto a SDRAM contém os pacotes que estão sendo processados. Como a SRAM e a SDRAM são externas ao chip do processador de rede, os projetistas da placa têm flexibilidade para determinar quanto fornecer de cada uma. Desse modo, placas de baixa tecnologia com uma única linha de rede (por exemplo, para um PC ou um servidor) podem ser equipadas com uma pequena quantidade de memória, enquanto uma placa de alta tecnologia para um roteador de grande porte pode ser equipada com muito mais.
+
+Chips de processadores de rede são otimizados para processar de modo rápido grandes quantidades de pacotes que entram e saem. Isso significa milhões de pacotes por segundo por linha de rede, e um roteador poderia ter, facilmente, meia dúzia de linhas. A única maneira de atingir tais taxas de processamento é construir processadores de rede munidos de alto grau de paralelismo. E, de fato, todos os processadores de rede consistem em vários PPEs, denominados pelos variados nomes Protocol/Programmable/Packet Processing Engines (dispositivos de processamento de protocolo/programáveis/pacotes). Cada um é um núcleo RISC (talvez modificado) e uma pequena quantidade de memória interna para conter o programa e algumas variáveis.
+
+Os PPEs podem ser organizados de dois modos diferentes. A organização mais simples é todos os PPEs idênticos. Quando um pacote chega ao processador de rede, seja um pacote de entrada que vem de uma linha de rede, seja um de saída que vem do barramento, ele é entregue a um PPE ocioso para processamento. Se não houver
+um, o pacote entra na fila da SDRAM na placa até que algum PPE seja liberado. Quando é usada essa organização, as conexões horizontais mostradas entre os PPEs na Figura 8.16 não existem porque os PPEs não têm nenhuma necessidade de se comunicar uns com os outros.
+
+A outra forma de organização de PPEs é o pipeline. Nessa organização, cada PPE executa uma etapa de processamento e então alimenta um ponteiro para seu pacote de saída para o próximo PPE no pipeline. Desse modo, o pipeline de PPE age de modo muito parecido com os de CPU que estudamos no Capítulo 2. Em ambas as organizações, os PPEs são completamente programáveis.
+
+Em projetos avançados, os PPEs têm multithreading, o que significa que eles têm vários conjuntos de registradores e um registrador em hardware que indica qual deles está em uso no momento. Essa característica é usada para executar vários programas ao mesmo tempo, permitindo que um programa (isto é, um thread) comute
+apenas alterando a variável “conjunto atual de registradores”. Mais frequentemente, quando um PPE protela, por exemplo, quando referencia a SDRAM (o que toma vários ciclos de clock), ele pode comutar instantaneamente para um thread executável. Dessa maneira, um PPE pode conseguir alta utilização, mesmo quando bloqueia com frequência para acessar a SDRAM ou realizar alguma outra operação externa lenta. Além dos PPEs, todos os processadores de rede contêm um processador de controle, quase sempre apenas uma CPU RISC padronizada de uso geral, para realizar todo o trabalho não relacionado com processamento de pacotes, tal como atualização das tabelas de roteamento. Seu programa e dados estão na memória no chip local.
+
+Além do mais, muitos chips de processadores de rede também contêm um ou mais processadores especializados para compatibilizar padrões ou outras operações críticas. Na realidade, esses processadores são pequenos ASICs que são bons para executar uma única operação simples, como consultar um endereço de destino na tabela de roteamento. Todos os componentes do processador de rede se comunicam por um ou mais barramentos paralelos no chip, que funcionam a velocidades de multigigabits/segundo.
+
+**• Processamento de pacotes**
+Quando um pacote chega, ele passa por vários estágios de processamento, independentemente de o processador de rede ter uma organização paralela ou de pipeline. Alguns processadores de rede dividem essas etapas em operações executadas em pacotes que chegam (seja de uma linha de rede, seja de um barramento de sistema),
+denominadas processamento de entrada, e operações executadas em pacotes de saída, denominadas processamento de saída. Quando essa distinção é feita, todo pacote passa, primeiro, pelo processamento de entrada e, em seguida, pelo de saída. A fronteira entre o processamento de entrada e o de saída é flexível porque algumas etapas podem ser realizadas em quaisquer das duas partes (por exemplo, coletar estatísticas de tráfego).
+
+A seguir, discutiremos uma ordenação potencial das várias etapas, mas observe que nem todos os pacotes precisam de todas as etapas e muitas outras ordenações são igualmente válidas.
+
+    1. Soma de verificação. Se o pacote de entrada estiver chegando da Ethernet, o CRC é recalculado para ser comparado com o que está no pacote e ter certeza de que não há erro de transmissão algum. Se o CRC Ethernet estiver correto, ou não estiver presente, a soma de verificação IP é recalculada e comparada
+    com a que está no pacote para ter certeza de que o pacote IP não foi danificado por um bit defeituoso na memória do remetente após o cálculo da soma de verificação IP ali efetuado. Se todas as somas estiverem corretas, o pacote é aceito para o processamento seguinte; caso contrário, é simplesmente
+    descartado.
+
+    2. Extração do campo. O cabeçalho relevante é analisado e os campos fundamentais são extraídos. Em um switch Ethernet, só o cabeçalho Ethernet é examinado, ao passo que, em um roteador IP, o cabeçalho IP é inspecionado. Os campos fundamentais são armazenados em registradores (organização em PPEs paralelos) ou SRAM (organização em pipeline).
+    
+    3. Classificação de pacotes. O pacote é classificado conforme uma série de regras programáveis. A classificação mais simples é distinguir pacotes de dados dos de controle, mas em geral são feitas distinções mais refinadas.
+    
+    4. Seleção de caminho. A maioria dos processadores de rede tem um caminho rápido especial, otimizado, para tratar os pacotes de dados mais comuns; todos os outros pacotes são tratados de modo diferente, muitas vezes pelo processador de controle. Por conseguinte, é preciso escolher o caminho rápido ou o caminho lento.
+
+    5. Determinação da rede de destino. Pacotes IP contêm um endereço de destino de 32 bits. Não é possível (nem desejável) ter uma tabela de 232 entradas para consultar o destino de cada pacote IP, de modo que a parte da extrema esquerda do endereço IP é o número da rede e o resto especifica a máquina naquela
+    rede. Números de rede podem ter qualquer comprimento, portanto, determinar o número da rede de destino não é uma tarefa trivial e piora pelo fato de que várias combinações são possíveis e a mais longa é a que conta. Nessa fase, muitas vezes é usado um ASIC por encomenda.
+    
+    6. Consulta de rota. Uma vez conhecido o número da rede de destino, a linha de saída a usar pode ser consultada em uma tabela na SRAM. Mais uma vez, nessa etapa pode ser usado um ASIC fabricado por encomenda.
+    
+    7. Fragmentação e reconstrução. Programadores gostam de apresentar grandes cargas úteis à camada TCP para reduzir o número de chamadas de sistema necessárias, mas todos, TCP, IP e Ethernet, têm tamanhos máximos para os pacotes que podem manusear. Como consequência desses limites, cargas úteis e pacotes talvez tenham de ser fragmentados no lado remetente e seus pedaços reconstruídos no lado receptor. Essas são tarefas que o processador de rede pode realizar.
+    
+    8. Computação. Às vezes, é necessário realizar computação pesada sobre a carga útil, por exemplo, comprimir/descomprimir dados e criptografar/decriptografar dados. Essas são tarefas que um processador de rede pode realizar.
+
+    9. Gerenciamento de cabeçalho. Às vezes, é preciso adicionar ou remover cabeçalhos, ou modificar alguns de seus campos. Por exemplo, o cabeçalho IP tem um campo que conta o número de saltos que o pacote ainda pode fazer antes de ser descartado. Toda vez que é retransmitido, esse campo deve ser decrementado, algo que o processador de rede pode fazer.
+    
+    10. Gerenciamento de fila. Pacotes que chegam e saem muitas vezes têm de ser colocados em filas enquanto esperam sua vez de serem processados. Aplicações de multimídia talvez precisem de algum espaçamento de tempo entre pacotes para evitar instabilidade no sinal (jitter). Um firewall ou roteador pode precisar distribuir a carga que chega entre várias linhas de saída de acordo com certas regras. Todas essas tarefas podem ser executadas pelo processador de rede.
+    
+    11. Geração de soma de verificação. Pacotes de saída precisam receber uma soma de verificação. A soma de verificação IP pode ser gerada pelo processador de rede, mas o CRC Ethernet é em geral calculado pelo hardware.
+
+    12. Contabilidade. Em alguns casos, é preciso uma contabilidade para o tráfego de pacotes, em especial quando uma rede está repassando tráfego para outras redes como um serviço comercial. O processador de rede pode fazer a contabilidade.
+    
+    13. Coleta de dados estatísticos. Por fim, muitas organizações gostam de coletar dados estatísticos referentes a seu tráfego. Elas querem saber quantos pacotes vieram e quantos foram enviados, em que horários do dia e outras informações. O processador de rede é um bom local para fazer essa coleta.
+
+**• Melhorias de desempenho**
+Desempenho é o que importa em processadores de rede. O que pode ser feito para melhorá-lo? Porém, antes de melhorar o desempenho, temos de definir o que ele significa. Um modo de medição é o número de pacotes repassados por segundo. Um segundo modo é o número de bytes transmitidos por segundo. Essas medições são
+diferentes e um esquema que funciona bem para pacotes pequenos pode não funcionar tão bem para pacotes grandes. Em particular, no caso de pacotes pequenos, melhorar o número de consultas de destino por segundo pode ajudar muito, mas, quando se trata de pacotes grandes, pode não ajudar.
+
+O modo mais direto de melhorar o desempenho é aumentar a velocidade de clock do processador de rede. Claro que o desempenho não é linear em relação à velocidade de clock, visto que tempo de ciclo de memória e outros fatores também o influenciam. Além disso, um clock mais rápido significa que mais calor deve ser dissipado.
+
+Introduzir mais PPEs e paralelismo costuma ser um método que dá ótimos resultados, em especial quando a organização consiste em PPEs paralelos. Um pipeline mais profundo também pode ajudar, mas só se o trabalho de processar um pacote puder ser subdividido em porções menores.
+
+Outra técnica é adicionar processadores especializados ou ASICs para tratar operações específicas, que tomam muito tempo e são realizadas repetidas vezes, e que podem ser executadas com maior rapidez em hardware do que em software. Consultas, cálculos de somas de verificação e criptografia estão entre as muitas candidatas.
+
+Adicionar mais barramentos internos e aumentar a largura dos barramentos existentes pode ajudar a ganhar velocidade porque os pacotes passam pelo sistema com maior rapidez. Por fim, substituir SDRAM por SRAM costuma ser entendido como algo que melhora o desempenho, mas, por certo, tem um preço.
+
+É claro que há muito mais a dizer sobre processadores de rede. Algumas referências são Freitas et al., 2009; Lin et al., 2010; e Yamamoto e Nakao, 2011.
+
+## 8.2.2 Processadores gráficos
+Uma segunda área na qual coprocessadores são usados é o tratamento de processamento gráfico de alta resolução, como renderização 3D. CPUs comuns não são muito boas nas computações maciças necessárias para processar as grandes quantidades de dados requeridas nessas aplicações. Por essa razão, alguns PCs atuais e a
+maioria dos PCs futuros serão equipados com GPUs (Graphics Processing Units – unidades de processamento gráfico) para os quais passarão grandes porções do processamento geral.
+
+**• A GPU Fermi NVIDIA**
+Estudaremos essa área cada vez mais importante por meio de um exemplo: a GPU Fermi NVIDIA, uma arquitetura usada em uma família de chips de processamento gráfico que estão disponíveis em diversas velocidades e tamanhos. A arquitetura da GPU Fermi aparece na Figura 8.17. Ela é organizada em 16 SMs (Streaming
+Multiprocessors – multiprocessadores streaming), tendo sua própria cache nível 1 privada com alta largura de banda. Cada multiprocessador streaming contém 32 núcleos CUDA, para um total de 512 núcleos CUDA por GPU Fermi. Um núcleo CUDA (Compute Unified Device Architecture – arquitetura de elemento unificado de computação) é um processador simples que dá suporte a cálculos com inteiros e ponto flutuante com precisão simples. Um único SM com 32 núcleos CUDA é ilustrado na Figura 2.7. Os 16 SMs compartilham acesso a uma única cache nível 2 unificada de 768 KB, que está conectada a uma interface DRAM de múltiplas portas. A inter-
+face do processador hospedeiro oferece um caminho de comunicação entre o sistema hospedeiro e a GPU por meio de uma interface de barramento DRAM compartilhada, em geral por meio de uma interface PCI-Express.
+
+A arquitetura Fermi é projetada para executar, com eficiência, códigos de processamento de gráficos, vídeo e imagens, que costumam ter muitos cálculos redundantes espalhados por muitos pixels. Por causa dessa redundância, os multiprocessadores streaming, embora capazes de executar 16 operações por vez, exigem que todas as operações executadas em um único ciclo sejam idênticas. Esse estilo de processamento é denominado computação SIMD (Single-Instruction Multiple Data – instrução única, múltiplos dados), e tem a importante vantagem de que cada SM busca e decodifica apenas uma única instrução a cada ciclo. Somente compartilhando o processamento de instruções por todos os núcleos em um SM é que a NVIDIA consegue colocar 512 núcleos em uma única pastilha de silício. Se os programadores puderem aproveitar todos os recursos de computação (sempre um “se” muito grande e incerto), então o sistema oferece vantagens computacionais significativas sobre arquiteturas escalares tradicionais, como o Core i7 ou o OMAP4430.
+
+**• Figura 8.17 - A arquitetura da GPU Fermi.**
+Este diagrama é excelente para contrastar com o Core i7 (Figura 8.11), mostrando como uma GPU prioriza milhares de pequenos núcleos para processamento massivo em paralelo.
+
+    +-----------------------------------------------------------------------+
+    |                    ARQUITETURA DA GPU (FERMI)                         |
+    |=======================================================================|
+    |                                                                       |
+    |  [ SM ] [ SM ] [ SM ] [ SM ] [ SM ] [ SM ] [ SM ] [ SM ]              |
+    |  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+        |
+    |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||        |
+    |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   ||||| (NÚCLEOS|
+    |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||  CUDA) |
+    |  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+        |
+    |    ^       ^       ^       ^       ^       ^       ^       ^          |
+    |    |       |       |       |       |       |       |       |          |
+    |  [=========== CACHE L2 / MEMÓRIA COMPARTILHADA =============]         |
+    |    |                                                       |          |
+    |    v                                                       v          |
+    | +----------+                                         +------------+   |
+    | | PARA DRAM|                                         | INTERFACE  |   |
+    | +----------+                                         | HOSPEDEIRO |   |
+    |                                                      +------------+   |
+    +-----------------------------------------------------------------------+
+    (SM = Multiprocessador Streaming | Cada SM contém 32 núcleos CUDA)
+
+![alt text](image-124.png)
+
+**• Notas Técnicas para o seu eBook:**
+
+ - Núcleos CUDA: Diferente dos núcleos IA-32 complexos do seu Core i7, os núcleos CUDA são unidades simples e eficientes, focadas em cálculos matemáticos pesados. A Fermi possui centenas deles trabalhando em sincronia.
+
+ - Multiprocessadores Streaming (SM): Os núcleos são agrupados em SMs. Cada SM compartilha uma pequena memória local ultrarrápida (Memória Compartilhada), permitindo que os núcleos troquem dados sem precisar acessar a DRAM externa o tempo todo.
+
+ - Cache L2 Unificado: Serve como o ponto central de comunicação entre todos os SMs, a memória de vídeo (DRAM) e o processador principal do seu computador (Interface do Hospedeiro).
+
+Os requisitos de processamento SIMD dentro dos SMs impõem restrições sobre o tipo de código que os programadores podem executar sobre essas unidades. De fato, cada núcleo CUDA precisa estar rodando o mesmo código em sincronismo para alcançar 16 operações ao mesmo tempo. Para aliviar esse peso ao programador, a
+NVIDIA desenvolveu a linguagem de programação CUDA, a qual especifica o paralelismo do programa usando threads. Threads são então agrupados em blocos, designados a processadores streaming. Desde que cada thread em um bloco execute exatamente a mesma sequência de código (ou seja, todos os desvios tomem a mesma decisão), até 16 operações serão executadas em simultâneo (supondo que haja 16 threads prontos para executar). Quando os threads em um SM tomarem decisões de desvio diferentes, haverá um efeito de diminuição de desempenho, denominado divergência de desvio, forçando os threads com caminhos de código diferentes a serem executados de modo serial no SM. A divergência de desvio reduz o paralelismo e atrasa o processamento da GPU. Felizmente, há uma grande faixa de atividades no processamento gráfico e de imagens, que poderá evitar a divergência de desvio e alcançar bons ganhos de velocidade. Também muitos outros códigos se beneficiaram da arquitetura no estilo SIMD sobre processadores gráficos, como imagens médicas, resolução de prova, previsão financeira e análise de gráficos. Essa ampliação das aplicações em potencial para GPUs lhes deu o novo apelido de GPGPUs (General-Purpose Graphics Processing Units – unidades de processamento gráfico de uso geral).
+
+Com 512 núcleos CUDA, a GPU Fermi pararia sem uma largura de banda de memória significativa. Para fornecer essa largura de banda, a GPU Fermi implementa uma hierarquia de memória moderna, conforme ilustrado na Figura 8.18. Todos os SMs têm uma memória compartilhada dedicada e uma cache de dados nível 1 privada. A memória compartilhada dedicada é endereçada diretamente pelos núcleos CUDA, e oferece compartilhamento rápido de dados entre threads dentro de um único SM. A cache de nível 1 agiliza os acessos aos dados da DRAM. Para acomodar a grande variedade de uso dos dados do programa, os SMs podem ser configurados com memória compartilhada de 16 KB e cache nível 1 de 48 KB ou memória compartilhada de 48 KB e cache nível 1 de 16 KB. Todos os SMs compartilham uma única cache nível 2 de 768 KB. A cache nível 2 oferece acesso mais rápido aos dados da DRAM que não couberem nas de nível 1. A cache nível 2 também oferece compartilhamento entre SMs, embora esse modo seja muito mais lento do que o que ocorre dentro da memória compartilhada de um SM. Além da cache nível 2 está a DRAM, que mantém os dados restantes, imagens e texturas, usados por programas rodando na GPU Fermi. Programas eficientes tentarão evitar o acesso à DRAM a todo custo, pois um único acesso pode levar centenas de ciclos para concluir.
+
+**• Figura 8.18 - Hierarquia de memória da GPU Fermi.**
