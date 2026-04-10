@@ -814,26 +814,16 @@ Mais informações sobre multithreading e sua implementação dentro dos process
 Gerber e Binstock, 2004; e Gepner et al., 2011.
 
 ## 8.1.3 Multiprocessadores com um único chip
-Embora o multithreading ofereça ganhos em desempenho significativos por um custo modesto, para algu-
-mas aplicações é preciso um ganho em desempenho muito maior do que ele pode oferecer. Para conseguir esse
-desempenho estão sendo desenvolvidos chips multiprocessadores. Há duas áreas de interesse para esses chips
-que contêm duas ou mais CPUs: servidores de alta tecnologia e equipamentos eletrônicos de consumo. A seguir,
-vamos fazer um breve estudo de cada uma delas.
+Embora o multithreading ofereça ganhos em desempenho significativos por um custo modesto, para algumas aplicações é preciso um ganho em desempenho muito maior do que ele pode oferecer. Para conseguir esse desempenho estão sendo desenvolvidos chips multiprocessadores. Há duas áreas de interesse para esses chips
+que contêm duas ou mais CPUs: servidores de alta tecnologia e equipamentos eletrônicos de consumo. A seguir, vamos fazer um breve estudo de cada uma delas.
 
 **• Multiprocessadores homogêneos em um chip**
-Com os avanços na tecnologia VLSI, agora é possível colocar duas ou mais CPUs de grande capacidade em
-um único chip. Visto que essas CPUs em geral compartilham a mesma cache de nível 2 e memória principal, elas
-se qualificam como um multiprocessador, como discutimos no Capítulo 2. Uma área de aplicação típica é um
-grande conjunto de hospedeiros Web (server farm) composto de muitos servidores. Ao colocar duas CPUs na
-mesma caixa, compartilhando não só memória, mas também discos e interfaces de rede, muitas vezes pode-se
-dobrar o desempenho do servidor sem dobrar o custo (porque, mesmo ao dobro do preço, o chip de CPU é apenas
+Com os avanços na tecnologia VLSI, agora é possível colocar duas ou mais CPUs de grande capacidade em um único chip. Visto que essas CPUs em geral compartilham a mesma cache de nível 2 e memória principal, elas se qualificam como um multiprocessador, como discutimos no Capítulo 2. Uma área de aplicação típica é um
+grande conjunto de hospedeiros Web (server farm) composto de muitos servidores. Ao colocar duas CPUs na mesma caixa, compartilhando não só memória, mas também discos e interfaces de rede, muitas vezes pode-se dobrar o desempenho do servidor sem dobrar o custo (porque, mesmo ao dobro do preço, o chip de CPU é apenas
 uma fração do custo total do sistema).
 
-Há dois projetos predominantes para multiprocessadores de pequena escala em um único chip. No primeiro,
-mostrado na Figura 8.10(a), na realidade há só um chip, mas ele tem um segundo pipeline, o que pode dobrar a
-taxa de execução de instruções. No segundo, mostrado na Figura 8.10(b), há núcleos separados no chip e cada
-um contém uma CPU completa. Um núcleo é um grande circuito, tal como uma CPU, controlador de E/S ou
-cache, que pode ser colocado em um chip de forma modular, normalmente ao lado de outros núcleos.
+Há dois projetos predominantes para multiprocessadores de pequena escala em um único chip. No primeiro, mostrado na Figura 8.10(a), na realidade há só um chip, mas ele tem um segundo pipeline, o que pode dobrar a taxa de execução de instruções. No segundo, mostrado na Figura 8.10(b), há núcleos separados no chip e cada
+um contém uma CPU completa. Um núcleo é um grande circuito, tal como uma CPU, controlador de E/S ou cache, que pode ser colocado em um chip de forma modular, normalmente ao lado de outros núcleos.
 
 **• Figura 8.10   Multiprocessadores com um único chip. (a) Chip com pipeline dual. (b) Chip com dois núcleos.**
 
@@ -854,18 +844,12 @@ cache, que pode ser colocado em um chip de forma modular, normalmente ao lado de
 
 ![alt text](image-120.png)
 
-O primeiro projeto permite que recursos, como unidades funcionais, sejam compartilhados entre os proces-
-sadores, o que permite que uma CPU use recursos que a outra não necessita. Por outro lado, essa técnica requer
-um novo projeto para o chip e não funciona muito bem para mais de duas CPUs. Por comparação, colocar dois
-ou mais núcleos de CPU no mesmo chip é algo relativamente fácil de fazer.
+O primeiro projeto permite que recursos, como unidades funcionais, sejam compartilhados entre os processadores, o que permite que uma CPU use recursos que a outra não necessita. Por outro lado, essa técnica requer um novo projeto para o chip e não funciona muito bem para mais de duas CPUs. Por comparação, colocar dois ou mais núcleos de CPU no mesmo chip é algo relativamente fácil de fazer.
 
-Discutiremos multiprocessadores mais adiante neste capítulo. Embora o foco dessa discussão esteja mais em
-multiprocessadores construídos a partir de chips com uma única CPU, grande parte também pode ser aplicada a
-chips com múltiplas CPUs.
+Discutiremos multiprocessadores mais adiante neste capítulo. Embora o foco dessa discussão esteja mais em multiprocessadores construídos a partir de chips com uma única CPU, grande parte também pode ser aplicada a chips com múltiplas CPUs.
 
 **• O multiprocessador em um único chip Core i7**
-A CPU Core i7 é um processador em um único chip manufaturado com quatro ou mais núcleos em uma
-única pastilha de silício. A organização de alto nível de um processador Core i7 é ilustrada na Figura 8.11.
+A CPU Core i7 é um processador em um único chip manufaturado com quatro ou mais núcleos em uma única pastilha de silício. A organização de alto nível de um processador Core i7 é ilustrada na Figura 8.11.
 
 **• Figura 8.11   Arquitetura do multiprocessador em um único chip do Core i7.**
 
@@ -900,63 +884,34 @@ A CPU Core i7 é um processador em um único chip manufaturado com quatro ou mai
 
  - Eficiência de Pipeline: Ao unir as latências da Figura 8.4 com essa estrutura, você vê por que o Multithreading é necessário: se um núcleo trava em uma divisão de 17 ciclos, a rede em anel permite que as outras CPUs continuem acessando o Cache L3 sem interrupções.
 
-Cada processador no Core i7 tem suas próprias caches L1 privada para instrução e dados, mais sua própria
-cache L2 unificada privada. Os processadores são conectados às caches privadas com conexões ponto a ponto
-dedicadas. O próximo nível da hierarquia de memória é a cache de dados L3 compartilhada e unificada.
+Cada processador no Core i7 tem suas próprias caches L1 privada para instrução e dados, mais sua própria cache L2 unificada privada. Os processadores são conectados às caches privadas com conexões ponto a ponto dedicadas. O próximo nível da hierarquia de memória é a cache de dados L3 compartilhada e unificada.
 
-As caches L2 se conectam à cache compartilhada L3 usando uma rede em anel. Quando um pedido de comu-
-nicação entra na rede em anel, ele é encaminhado para o próximo nó na rede, onde é verificado se alcançou seu
-nó de destino. Esse processo continua de um nó para outro no anel, até que o nó de destino seja encontrado ou o
-pedido chegue a sua origem novamente (quando o destino não existe). A vantagem de uma rede em anel é que ela
-é um modo barato de conseguir alta largura de banda, com o custo de maior latência enquanto os pedidos saltam
-de um nó para outro. A rede em anel do Core i7 tem duas finalidades principais. Primeiro, ela oferece um modo
-de mover pedidos de memória e E/S entre as caches e processadores. Segundo, ela executa as verificações neces-
-sárias para garantir que cada processador esteja sempre tendo uma visão coerente da memória. Aprenderemos
-mais sobre essas verificações de coerência mais adiante neste capítulo.
+As caches L2 se conectam à cache compartilhada L3 usando uma rede em anel. Quando um pedido de comunicação entra na rede em anel, ele é encaminhado para o próximo nó na rede, onde é verificado se alcançou seu nó de destino. Esse processo continua de um nó para outro no anel, até que o nó de destino seja encontrado ou o pedido chegue a sua origem novamente (quando o destino não existe). A vantagem de uma rede em anel é que ela é um modo barato de conseguir alta largura de banda, com o custo de maior latência enquanto os pedidos saltam de um nó para outro. A rede em anel do Core i7 tem duas finalidades principais. Primeiro, ela oferece um modo de mover pedidos de memória e E/S entre as caches e processadores. Segundo, ela executa as verificações necessárias para garantir que cada processador esteja sempre tendo uma visão coerente da memória. Aprenderemos mais sobre essas verificações de coerência mais adiante neste capítulo.
 
 **• Multiprocessadores heterogêneos em um chip**
-Uma área de aplicação completamente diferente que utiliza multiprocessadores em um único chip é a de
-sistemas embutidos, em especial em equipamentos eletrônicos audiovisuais de consumo, como aparelhos de
-televisão, DVDs, filmadoras, consoles de jogos, telefones celulares e assim por diante. Esses sistemas possuem
-requisitos de desempenho exigentes e restrições rígidas. Embora tendo aparências diferentes, cada vez mais esses
-aparelhos são só pequenos computadores, com uma ou mais CPUs, memórias, controladores de E/S e alguns dispositivos de E/S próprios. Um telefone celular, por exemplo, é um mero PC com uma CPU, memória, teclado
+Uma área de aplicação completamente diferente que utiliza multiprocessadores em um único chip é a de sistemas embutidos, em especial em equipamentos eletrônicos audiovisuais de consumo, como aparelhos de televisão, DVDs, filmadoras, consoles de jogos, telefones celulares e assim por diante. Esses sistemas possuem
+requisitos de desempenho exigentes e restrições rígidas. Embora tendo aparências diferentes, cada vez mais esses aparelhos são só pequenos computadores, com uma ou mais CPUs, memórias, controladores de E/S e alguns dispositivos de E/S próprios. Um telefone celular, por exemplo, é um mero PC com uma CPU, memória, teclado
 diminuto, microfone, alto-falante e uma conexão de rede sem fio, dentro de um pequeno pacote.
 
-Considere, como exemplo, um aparelho portátil de DVD. O computador que está dentro dele tem de mani-
-pular as seguintes funções:
+Considere, como exemplo, um aparelho portátil de DVD. O computador que está dentro dele tem de manipular as seguintes funções:
 
-1. Controle de um servomecanismo barato, não confiável, para posicionamento do cabeçote.
+    1. Controle de um servomecanismo barato, não confiável, para posicionamento do cabeçote.
 
-2. Conversão de analógico para digital.
+    2. Conversão de analógico para digital.
 
-3. Correção de erros.
+    3. Correção de erros.
 
-4. Decriptação e gerenciamento de direitos digitais.
+    4. Decriptação e gerenciamento de direitos digitais.
 
-5. Descompressão de vídeo MPEG-2.
+    5. Descompressão de vídeo MPEG-2.
 
-6. Descompressão de áudio.
+    6. Descompressão de áudio.
 
-7. Codificação da saída para aparelhos de televisão NTSC, PAL ou SECAM.
+    7. Codificação da saída para aparelhos de televisão NTSC, PAL ou SECAM.
 
-Esse trabalho deve ser realizado em rígidas restrições de tempo real, qualidade de serviço, energia, dissipação
-de calor, tamanho, peso e preço.
+Esse trabalho deve ser realizado em rígidas restrições de tempo real, qualidade de serviço, energia, dissipação de calor, tamanho, peso e preço.
 
-Discos de CD, DVD e Blu-ray contêm uma longa espiral na qual estão as informações, como ilustrado na
-Figura 2.25 (para um CD). Nesta seção, discutiremos os DVDs, pois eles ainda são mais comuns do que os discos
-Blu-ray, mas estes são muito semelhantes aos DVDs, exceto por utilizarem codificação MPEG-4 em vez de MPEG-2.
-Com toda mídia ótica, o cabeçote de leitura deve percorrer a espiral com precisão à medida que o disco gira. O
-preço é mantido baixo pela utilização de um projeto mecânico relativamente simples e pelo rígido controle da
-posição do cabeçote em software. O sinal que sai do cabeçote é um sinal analógico que deve ser convertido para
-forma digital antes de ser processado. Após ser digitalizado, é preciso extensa correção de erros porque DVDs são
-prensados e contêm muitos erros, que devem ser corrigidos em software. O vídeo é comprimido usando o padrão
-internacional MPEG-2, que requer cálculos complexos para a descompressão (parecidos com transformadas de
-Fourier). O áudio é comprimido usando um modelo psicoacústico que também requer cálculos sofisticados para
-descompressão. Por fim, áudio e vídeo têm de ser entregues em uma forma adequada para reprodução em apare-
-lhos de televisão NTSC, PAL ou SECAM, dependendo do país para o qual o aparelho de DVD será despachado.
-Não é nenhuma surpresa que seja impossível fazer todo esse trabalho em tempo real, em software, com uma CPU
-barata de uso geral. Nesse caso, precisamos de um multiprocessador heterogêneo que contenha múltiplos núcleos,
-cada um especializado para uma tarefa particular. Um exemplo de aparelho de DVD é dado na Figura 8.12.
+Discos de CD, DVD e Blu-ray contêm uma longa espiral na qual estão as informações, como ilustrado na Figura 2.25 (para um CD). Nesta seção, discutiremos os DVDs, pois eles ainda são mais comuns do que os discos Blu-ray, mas estes são muito semelhantes aos DVDs, exceto por utilizarem codificação MPEG-4 em vez de MPEG-2.Com toda mídia ótica, o cabeçote de leitura deve percorrer a espiral com precisão à medida que o disco gira. O preço é mantido baixo pela utilização de um projeto mecânico relativamente simples e pelo rígido controle da posição do cabeçote em software. O sinal que sai do cabeçote é um sinal analógico que deve ser convertido para forma digital antes de ser processado. Após ser digitalizado, é preciso extensa correção de erros porque DVDs são prensados e contêm muitos erros, que devem ser corrigidos em software. O vídeo é comprimido usando o padrão internacional MPEG-2, que requer cálculos complexos para a descompressão (parecidos com transformadas de Fourier). O áudio é comprimido usando um modelo psicoacústico que também requer cálculos sofisticados para  descompressão. Por fim, áudio e vídeo têm de ser entregues em uma forma adequada para reprodução em aparelhos de televisão NTSC, PAL ou SECAM, dependendo do país para o qual o aparelho de DVD será despachado. Não é nenhuma surpresa que seja impossível fazer todo esse trabalho em tempo real, em software, com uma CPU barata de uso geral. Nesse caso, precisamos de um multiprocessador heterogêneo que contenha múltiplos núcleos, cada um especializado para uma tarefa particular. Um exemplo de aparelho de DVD é dado na Figura 8.12.
 
 **• Figura 8.12 - A estrutura lógica de um simples aparelho de DVD contém um multiprocessador heterogêneo com múltiplos núcleos para diferentes funções.**
 
@@ -984,62 +939,18 @@ cada um especializado para uma tarefa particular. Um exemplo de aparelho de DVD 
 
  - Conexão com Sistemas Operacionais: No Ubuntu, você consegue ver essa especialização ao usar a aceleração de hardware da sua GPU para processar vídeos, aliviando os núcleos principais da CPU.
 
-As funções dos núcleos na Figura 8.12 são todas diferentes, e cada uma é projetada com cuidado para ser muito
-boa no que faz pelo preço mais baixo possível. Por exemplo, o vídeo de DVD é comprimido usando um esquema
-conhecido como MPEG-2 (que quer dizer Motion Picture Experts Group – grupo de especialistas em filmes –, que
-o inventou). O sistema consiste em dividir cada quadro em blocos de pixels e fazer uma transformação complexa em
-cada um. Um quadro pode consistir inteiramente em blocos transformados ou especificar que certo bloco é igual a
-outro já encontrado no quadro anterior, exceto por um par de pixels que foram alterados, porém localizado com um
-afastamento de (Δx, Δy) em relação à posição corrente. Esse cálculo em software é extremamente lento, mas é possível
-construir uma máquina de decodificação MPEG-2 que pode efetuá-lo em hardware com bastante rapidez. De modo
-semelhante, a decodificação de áudio e a recodificação de sinal de áudio-vídeo composto para ficar de acordo com um
-dos padrões mundiais de televisão podem ser mais bem executadas por processadores dedicados em hardware. Essas
-observações não tardaram a gerar chips multiprocessadores heterogêneos que contêm múltiplos núcleos projetados
-para aplicações audiovisuais. Contudo, como o processador de controle é uma CPU programável de uso geral, o chip
-multiprocessador também pode ser usado em outras aplicações semelhantes, como um gravador de DVD.
+As funções dos núcleos na Figura 8.12 são todas diferentes, e cada uma é projetada com cuidado para ser muito boa no que faz pelo preço mais baixo possível. Por exemplo, o vídeo de DVD é comprimido usando um esquema conhecido como MPEG-2 (que quer dizer Motion Picture Experts Group – grupo de especialistas em filmes –, que o inventou). O sistema consiste em dividir cada quadro em blocos de pixels e fazer uma transformação complexa em cada um. Um quadro pode consistir inteiramente em blocos transformados ou especificar que certo bloco é igual a outro já encontrado no quadro anterior, exceto por um par de pixels que foram alterados, porém localizado com um afastamento de (Δx, Δy) em relação à posição corrente. Esse cálculo em software é extremamente lento, mas é possível
+construir uma máquina de decodificação MPEG-2 que pode efetuá-lo em hardware com bastante rapidez. De modo semelhante, a decodificação de áudio e a recodificação de sinal de áudio-vídeo composto para ficar de acordo com um dos padrões mundiais de televisão podem ser mais bem executadas por processadores dedicados em hardware. Essas observações não tardaram a gerar chips multiprocessadores heterogêneos que contêm múltiplos núcleos projetados para aplicações audiovisuais. Contudo, como o processador de controle é uma CPU programável de uso geral, o chip multiprocessador também pode ser usado em outras aplicações semelhantes, como um gravador de DVD.
 
-Outro dispositivo que requer um multiprocessador heterogêneo é o que está dentro de um telefone celular
-avançado. Os atuais às vezes têm máquinas fotográficas, videocâmeras, máquinas de jogos, browsers Web, leitores
-de e-mail e receptores de rádio por satélite, que usam a tecnologia de telefonia celular (CDMA ou GSM, dependendo
-do país) ou Internet sem fio (IEEE 802.11, também chamada WiFi); os futuros podem incluir todos esses. À medida
-que os dispositivos adquirem cada vez mais funcionalidade, com relógios que se transformam em mapas baseados
-em GPS e óculos que se transformam em rádios, a necessidade de multiprocessadores heterogêneos só aumentará.
+Outro dispositivo que requer um multiprocessador heterogêneo é o que está dentro de um telefone celular avançado. Os atuais às vezes têm máquinas fotográficas, videocâmeras, máquinas de jogos, browsers Web, leitores de e-mail e receptores de rádio por satélite, que usam a tecnologia de telefonia celular (CDMA ou GSM, dependendo do país) ou Internet sem fio (IEEE 802.11, também chamada WiFi); os futuros podem incluir todos esses. À medida que os dispositivos adquirem cada vez mais funcionalidade, com relógios que se transformam em mapas baseados em GPS e óculos que se transformam em rádios, a necessidade de multiprocessadores heterogêneos só aumentará.
 
-Dentro em pouco, os chips terão dezenas de bilhões de transistores. Chips como esses são grandes demais
-para que se projete uma porta e um fio por vez. O esforço humano requerido faria com que os chips ficassem
-obsoletos quando fossem terminados. A única maneira viável é usar núcleos (basicamente, bibliotecas) que con-
-tenham subconjuntos grandes o suficiente e então colocá-los e interconectá-los no chip conforme necessário.
-Então, os projetistas têm de determinar qual núcleo de CPU usar para o processador de controle e quais proces-
-sadores de uso especial acrescentar para ajudá-lo. Atribuir mais carga ao software que executa no processador de
-controle faz o sistema ficar mais lento, mas resulta em um chip menor (e mais barato). Ter vários processadores
-de uso especial para processamento de áudio e vídeo ocupa área do chip, aumentando o custo, mas resulta em
-desempenhos mais altos e uma taxa de clock mais baixa, o que significa menor consumo de energia e menos dis-
-sipação de calor. Assim, os projetistas de chips enfrentam cada vez mais esses compromissos macroscópicos em
-vez de se preocupar com onde vão colocar cada transistor.
+Dentro em pouco, os chips terão dezenas de bilhões de transistores. Chips como esses são grandes demais para que se projete uma porta e um fio por vez. O esforço humano requerido faria com que os chips ficassem obsoletos quando fossem terminados. A única maneira viável é usar núcleos (basicamente, bibliotecas) que contenham subconjuntos grandes o suficiente e então colocá-los e interconectá-los no chip conforme necessário. Então, os projetistas têm de determinar qual núcleo de CPU usar para o processador de controle e quais processadores de uso especial acrescentar para ajudá-lo. Atribuir mais carga ao software que executa no processador de controle faz o sistema ficar mais lento, mas resulta em um chip menor (e mais barato). Ter vários processadores de uso especial para processamento de áudio e vídeo ocupa área do chip, aumentando o custo, mas resulta em desempenhos mais altos e uma taxa de clock mais baixa, o que significa menor consumo de energia e menos dissipação de calor. Assim, os projetistas de chips enfrentam cada vez mais esses compromissos macroscópicos em vez de se preocupar com onde vão colocar cada transistor.
 
-Aplicações audiovisuais utilizam dados intensamente. Enormes quantidades de dados têm de ser processadas de
-modo muito rápido, portanto, o normal é que 50% a 75% da área do chip sejam dedicados à memória de uma forma
-ou outra, e a quantidade está crescendo. Neste caso, as questões de projeto são numerosas. Quantos níveis devem ser
-usados? As caches devem ser divididas ou unificadas? Qual deverá ser o tamanho de cada uma? Qual deverá ser a rapi-
-dez? Um pouco da memória também tem de ir para o chip? Ela deve ser SRAM ou SDRAM? As respostas para cada uma
-dessas perguntas têm importantes implicações para o desempenho, consumo de energia e dissipação de calor do chip.
+Aplicações audiovisuais utilizam dados intensamente. Enormes quantidades de dados têm de ser processadas de modo muito rápido, portanto, o normal é que 50% a 75% da área do chip sejam dedicados à memória de uma forma ou outra, e a quantidade está crescendo. Neste caso, as questões de projeto são numerosas. Quantos níveis devem ser usados? As caches devem ser divididas ou unificadas? Qual deverá ser o tamanho de cada uma? Qual deverá ser a rapidez? Um pouco da memória também tem de ir para o chip? Ela deve ser SRAM ou SDRAM? As respostas para cada uma dessas perguntas têm importantes implicações para o desempenho, consumo de energia e dissipação de calor do chip.
 
-Além do projeto de processadores e sistema de memória, outra questão de considerável consequência é o sis-
-tema de comunicação – como todos os núcleos se comunicam uns com os outros? No caso de sistemas pequenos,
-um único barramento costuma dar conta do negócio, mas para sistemas maiores ele logo se torna um gargalo.
-Muitas vezes, o problema pode ser resolvido migrando para múltiplos barramentos ou, talvez, para um anel que
-vai de um núcleo a outro. Nesse último caso, a arbitração é conduzida passando um pequeno pacote, denomina-
-do permissão, ao redor do anel. Para transmitir, primeiro um núcleo deve capturar a permissão. Ao concluir, ele
-devolve a permissão ao anel, de modo que ela possa continuar circulando. Esse protocolo evita colisões no anel.
+Além do projeto de processadores e sistema de memória, outra questão de considerável consequência é o sistema de comunicação – como todos os núcleos se comunicam uns com os outros? No caso de sistemas pequenos, um único barramento costuma dar conta do negócio, mas para sistemas maiores ele logo se torna um gargalo. Muitas vezes, o problema pode ser resolvido migrando para múltiplos barramentos ou, talvez, para um anel que vai de um núcleo a outro. Nesse último caso, a arbitração é conduzida passando um pequeno pacote, denominado permissão, ao redor do anel. Para transmitir, primeiro um núcleo deve capturar a permissão. Ao concluir, ele devolve a permissão ao anel, de modo que ela possa continuar circulando. Esse protocolo evita colisões no anel.
 
-Como exemplo de uma interconexão no chip, considere o CoreConnect da IBM, ilustrado na Figura 8.13.
-É uma arquitetura para conectar núcleos em um multiprocessador heterogêneo de um único chip. Trata-se de um
-projeto de sistema-em-um-chip especialmente completo. De certo modo, o CoreConnect é para multiprocessadores
-de chip único o que o barramento PCI foi para o Pentium – a cola que mantém juntas todas as partes. (Com os
-modernos sistemas Core i7, PCIe é a cola, mas é uma rede ponto a ponto, sem um barramento compartilhado, como
-PCI.) Contudo, ao contrário do barramento PCI, o CoreConnect foi projetado sem qualquer exigência de compa-
-tibilidade com equipamentos herdados ou protocolos e sem as restrições de barramentos de nível de placa, como
-limites ao número de pinos que o conector de borda pode ter.
+Como exemplo de uma interconexão no chip, considere o CoreConnect da IBM, ilustrado na Figura 8.13. É uma arquitetura para conectar núcleos em um multiprocessador heterogêneo de um único chip. Trata-se de um projeto de sistema-em-um-chip especialmente completo. De certo modo, o CoreConnect é para multiprocessadores de chip único o que o barramento PCI foi para o Pentium – a cola que mantém juntas todas as partes. (Com os modernos sistemas Core i7, PCIe é a cola, mas é uma rede ponto a ponto, sem um barramento compartilhado, como PCI.) Contudo, ao contrário do barramento PCI, o CoreConnect foi projetado sem qualquer exigência de compatibilidade com equipamentos herdados ou protocolos e sem as restrições de barramentos de nível de placa, como limites ao número de pinos que o conector de borda pode ter.
 
 **• Figura 8.13   Exemplo da arquitetura CoreConnect da IBM.**
 Este diagrama ilustra a organização de um sistema em chip (SoC) usando múltiplos barramentos interligados por uma ponte.
@@ -1096,22 +1007,12 @@ Grande parte dos computadores de hoje estão conectados a uma rede ou à Interne
 especiais de rede para lidar com o tráfego e muitos computadores de alta tecnologia agora têm um desses processadores. Nesta seção, antes de tudo, vamos dar uma breve introdução a redes e em seguida discutiremos como funcionam os processadores de rede.
 
 **• Introdução a redes**
-Redes de computadores podem ser de dois tipos gerais: redes locais, ou LANs (Local-Area Networks), que
-conectam vários computadores dentro de um edifício, campus, escritório ou residência, e redes de longa distân-
-cia ou WANs (Wide-Area Networks), que conectam computadores espalhados por uma grande área geográfica.
-A LAN mais popular é denominada Ethernet. A Ethernet original consistia em um cabo grosso no qual eram
-forçosamente inseridos os fios que vinham de cada computador, usando uma derivação conhecida pelo eufemis-
-mo conector vampiro. Ethernets modernas ligam os computadores a um switch central, como ilustrado no lado
-direito da Figura 8.14. A Ethernet original se arrastava a 3 Mbps, mas a primeira versão comercial foi de 10 Mbps.
-Ela não demorou muito a ser substituída pela Fast Ethernet a 100 Mbps e, em seguida, pela Gigabit Ethernet a
-1 Gbps. Já existe no mercado uma Ethernet de 10 gigabits e uma de 40 gigabits já está pronta para ser lançada.
+Redes de computadores podem ser de dois tipos gerais: redes locais, ou LANs (Local-Area Networks), que conectam vários computadores dentro de um edifício, campus, escritório ou residência, e redes de longa distância ou WANs (Wide-Area Networks), que conectam computadores espalhados por uma grande área geográfica.
+A LAN mais popular é denominada Ethernet. A Ethernet original consistia em um cabo grosso no qual eram forçosamente inseridos os fios que vinham de cada computador, usando uma derivação conhecida pelo eufemismo conector vampiro. Ethernets modernas ligam os computadores a um switch central, como ilustrado no lado
+direito da Figura 8.14. A Ethernet original se arrastava a 3 Mbps, mas a primeira versão comercial foi de 10 Mbps. Ela não demorou muito a ser substituída pela Fast Ethernet a 100 Mbps e, em seguida, pela Gigabit Ethernet a 1 Gbps. Já existe no mercado uma Ethernet de 10 gigabits e uma de 40 gigabits já está pronta para ser lançada.
 
-A organização das WANs é diferente. Elas consistem em computadores especializados denominados rotea-
-dores conectados por fios ou fibras óticas, como mostra a parte do meio da Figura 8.14. Blocos de dados denomi-
-nados pacotes, normalmente de 64 a cerca de 1.500 bytes, são movidos da máquina de origem e passam por um
-ou mais roteadores até alcançarem seu destino. Em cada salto, um pacote é armazenado na memória do roteador
-e então repassado ao próximo roteador ao longo do caminho, tão logo a linha de transmissão necessária esteja
-disponível. Essa técnica é denominada comutação de pacotes armazena-e-encaminha.
+A organização das WANs é diferente. Elas consistem em computadores especializados denominados roteadores conectados por fios ou fibras óticas, como mostra a parte do meio da Figura 8.14. Blocos de dados denominados pacotes, normalmente de 64 a cerca de 1.500 bytes, são movidos da máquina de origem e passam por um
+ou mais roteadores até alcançarem seu destino. Em cada salto, um pacote é armazenado na memória do roteador e então repassado ao próximo roteador ao longo do caminho, tão logo a linha de transmissão necessária esteja disponível. Essa técnica é denominada comutação de pacotes armazena-e-encaminha.
 
 **• Figura 8.14   Como os usuários são conectados a servidores na Internet.**
 Este diagrama ilustra o caminho físico de um pacote de dados desde o seu computador até o servidor de destino.
@@ -1325,3 +1226,223 @@ NVIDIA desenvolveu a linguagem de programação CUDA, a qual especifica o parale
 Com 512 núcleos CUDA, a GPU Fermi pararia sem uma largura de banda de memória significativa. Para fornecer essa largura de banda, a GPU Fermi implementa uma hierarquia de memória moderna, conforme ilustrado na Figura 8.18. Todos os SMs têm uma memória compartilhada dedicada e uma cache de dados nível 1 privada. A memória compartilhada dedicada é endereçada diretamente pelos núcleos CUDA, e oferece compartilhamento rápido de dados entre threads dentro de um único SM. A cache de nível 1 agiliza os acessos aos dados da DRAM. Para acomodar a grande variedade de uso dos dados do programa, os SMs podem ser configurados com memória compartilhada de 16 KB e cache nível 1 de 48 KB ou memória compartilhada de 48 KB e cache nível 1 de 16 KB. Todos os SMs compartilham uma única cache nível 2 de 768 KB. A cache nível 2 oferece acesso mais rápido aos dados da DRAM que não couberem nas de nível 1. A cache nível 2 também oferece compartilhamento entre SMs, embora esse modo seja muito mais lento do que o que ocorre dentro da memória compartilhada de um SM. Além da cache nível 2 está a DRAM, que mantém os dados restantes, imagens e texturas, usados por programas rodando na GPU Fermi. Programas eficientes tentarão evitar o acesso à DRAM a todo custo, pois um único acesso pode levar centenas de ciclos para concluir.
 
 **• Figura 8.18 - Hierarquia de memória da GPU Fermi.**
+
+       +---------------------------------------------+
+       |                  THREADS                    |
+       +---------------------------------------------+
+               |              |              |
+       +-------v-------+  +---v-----------+  +-------v-------+
+       |    Memória    |  |    Memória    |  |     Cache     |
+       | Compartilhada |  | Compartilhada |  |     L1 de     |
+       |    de 16 KB   |  | de 48 KB ou   |  |     16 KB     |
+       |               |  |   cache L1    |  |               |
+       +-------+-------+  +-------+-------+  +-------+-------+
+               |                  |                  |
+               +------------------v------------------+
+                                  |
+               +-------------------------------------+
+               |          CACHE L2 de 768 KB         |
+               +-------------------------------------+
+                                  |
+               +-------------------------------------+
+               |                 DRAM                |
+               +-------------------------------------+
+
+![alt text](image-125.png)
+
+**• Resumo Técnico para o seu eBook**
+
+ - Flexibilidade de Memória: O bloco central tracejado na figura original indica que os 64 KB de memória local podem ser configurados pelo programador: ou como 48 KB de Memória Compartilhada (gerenciada por software) e 16 KB de Cache L1 (gerenciada por hardware), ou o contrário.
+
+ - Localização dos Dados: A Memória Compartilhada e o Cache L1 residem dentro dos Multiprocessadores Streaming (SM), garantindo que as threads tenham acesso quase instantâneo aos dados mais usados.
+
+ - Interface com o Sistema: O Cache L2 de 768 KB é o ponto de encontro para todas as requisições de memória que não puderam ser resolvidas localmente, servindo de ponte para a DRAM (memória de vídeo principal).
+
+Para um programador esperto, a GPU Fermi representa, em termos de computação, uma das plataformas mais capazes que já foram criadas. Uma única GPU GTX 580 baseada em Fermi rodando a 772 MHz com 512 núcleos CUDA pode alcançar uma taxa de computação sustentada de 1,5 teraflop, consumindo 250 watts de potência. Essa estatística é ainda mais impressionante quando se considera que o preço de varejo de uma GPU GTX 580 é menor que 600 dólares. Por questão de comparação histórica, em 1990, o computador mais rápido do mundo, o Cray-2, tinha um desempenho de 0,002 teraflop e um preço (em dólares ajustados pela inflação) de 30 milhões de dólares. Ele também preenchia uma sala de tamanho modesto e vinha com um sistema de resfriamento líquido para dissipar os 150 kW de potência que consumia. O GTX 580 tem 750 vezes mais potência para 1/50.000 do preço, enquanto consome 1/600 dessa energia. Não é um mau negócio.
+
+## 8.2.3 Criptoprocessadores
+Uma terceira área na qual os coprocessadores são populares é segurança, em especial segurança em redes. Quando uma conexão é estabelecida entre um cliente e um servidor, em muitos casos eles devem primeiro se autenticar mutuamente. Então, é preciso estabelecer uma conexão segura e criptografada entre eles, para que os
+dados sejam transferidos com segurança, frustrando quaisquer bisbilhoteiros que poderiam estar invadindo a linha.
+
+O problema da segurança é que, para consegui-la, é preciso usar criptografia, a qual faz uso muito intensivo de computação. Há dois tipos gerais de criptografia, denominados criptografia de chave simétrica e criptografia de chave pública. A primeira é baseada na mistura completa de bits, algo equivalente a jogar uma mensagem dentro de um liquidificador. A última é baseada em multiplicação e exponenciação de grandes números (por exemplo, 1.024 bits) e consome enormes quantidades de tempo.
+
+Para tratar da computação necessária para criptografar os dados com segurança para transmissão ou armazenamento, várias empresas produziram coprocessadores criptográficos, às vezes na forma de placas de expansão para barramento PCI. Esses coprocessadores têm um hardware especial que os habilita a executar a criptografia necessária muito mais rápido do que poderia uma CPU comum. Infelizmente, uma discussão detalhada do modo de funcionamento dos criptoprocessadores exigiria, primeiro, explicar muita coisa sobre a criptografia em si, o que está fora do escopo deste livro. Se o leitor desejar mais informações sobre coprocessadores criptográficos, pode consultar Gaspar et al., 2010; Haghighizadeh et al., 2010; e Shoufan et al., 2011.
+
+## 8.3 Multiprocessadores de memória compartilhada
+Agora já vimos como se pode acrescentar paralelismo a chips únicos e a sistemas individuais adicionando um coprocessador. A próxima etapa é ver como múltiplas CPUs totalmente desenvolvidas podem ser combinadas para formar sistemas maiores. Sistemas com várias CPUs podem ser divididos em multiprocessadores e multicom-
+putadores. Após vermos com atenção o que esses termos de fato significam, estudaremos primeiro multiprocessadores e, em seguida, multicomputadores.
+
+## 8.3.1 Multiprocessadores versus multicomputadores
+Em qualquer sistema de computação paralelo, CPUs que trabalham em partes diferentes do mesmo serviço devem se comunicar umas com as outras para trocarinformações. O modo exato como elas devem fazer isso é assunto de muito debate na comunidade da arquitetura de computadores. Dois projetos distintos foram propostos e implementados: multiprocessadores e multicomputadores. A diferença fundamental entre os dois é a presença ou  ausência de memória compartilhada. Essa diferença interfere no modo como são projetados, construídos e programados, bem como em sua escala e preço.
+
+**• Multiprocessadores** 
+Um computador paralelo no qual todas as CPUs compartilham uma memória comum é denominado um multiprocessador, como indicado simbolicamente na Figura 8.19. Todos os processos que funcionam juntos em um multiprocessador podem compartilhar um único espaço de endereço virtual mapeado para a memória comum. Qualquer processo pode ler ou escrever uma palavra de memória apenas executando uma instrução LOAD ou STORE. Nada mais é preciso. O hardware faz o resto. Dois processos podem se comunicar pelo simples ato de um deles escrever dados para a memória e o outro os ler de volta.
+
+A capacidade de dois (ou mais) processos se comunicarem apenas lendo e escrevendo na memória é a razão por que os multiprocessadores são populares. É um modelo fácil de entender pelos programadores e é aplicável a uma ampla faixa de problemas. Considere, por exemplo, um programa que inspeciona uma imagem de mapa de bits
+e relaciona todos os objetos ali encontrados. Uma cópia da imagem é mantida na memória, como mostra a Figura 8.19(b). Cada uma das 16 CPUs executa um único processo, ao qual foi designada uma das 16 seções a analisar. Não obstante, cada processo tem acesso à imagem inteira, que é essencial, visto que alguns objetos podem ocupar várias seções. Se um processo descobrir que um de seus objetos se estende para além da fronteira de uma seção, ele apenas segue o objeto na próxima seção lendo as palavras dessa seção. Nesse exemplo, alguns objetos serão descobertos por vários processos, portanto, é preciso certa coordenação no final para determinar quantas casas, árvores e aviões há.
+
+Como todas as CPUs em um multiprocessador veem a mesma imagem de memória, há somente uma cópia do sistema operacional. Por conseguinte, há somente um mapa de páginas e uma tabela de processos. Quando um processo bloqueia, sua CPU salva seu estado nas tabelas do sistema operacional e então consulta essas tabelas
+para achar outro processo para executar. É essa imagem de único sistema que distingue um multiprocessador de um multicomputador, no qual cada computador tem sua própria cópia do sistema operacional.
+
+**• Figura 8.19 - (a) Multiprocessador com 16 CPUs que compartilham uma memória comum. (b) Imagem repartida em 16 seções, cada qual analisada por uma CPU diferente.**
+A Figura 8.19, que ilustra o conceito de multiprocessadores com memória compartilhada e a técnica de decomposição de tarefas.
+
+    (a) Multiprocessador com 16 CPUs          (b) Decomposição de Imagem 
+            em Memória Compartilhada                  (Processamento Paralelo)
+
+                [P] [P] [P] [P]                           [P] [P] [P] [P]
+                |   |   |   |                             |   |   |   |
+        [P]--+-----------------+--[P]             [P]--+-------------+--[P]
+             |                 |                       |  ✈ |   | ☼  |
+        [P]--|     MEMÓRIA     |--[P]             [P]--|----+---+----|--[P]
+             |  COMPARTILHADA  |                       |    |   | ☁  |
+        [P]--|                 |--[P]             [P]--|----+---+----|--[P]
+             |                 |                       | 🚶 | 🌳| 🏠 |
+        [P]--+-----------------+--[P]             [P]--+-------------+--[P]
+                |   |   |   |                             |   |   |   |
+                [P] [P] [P] [P]                           [P] [P] [P] [P]
+
+        (P = Unidade de Processamento / CPU)
+
+![alt text](image-126.png)
+
+**• Notas Técnicas para o seu eBook:**
+
+ - Modelo de Memória (a): Representa um sistema onde todas as 16 CPUs têm acesso direto a um único espaço de endereçamento global (Memória Compartilhada). Isso facilita a programação, pois as threads podem trocar dados simplesmente escrevendo em endereços de memória conhecidos.
+
+ - Paralelismo de Dados (b): Mostra uma aplicação prática onde uma imagem complexa é dividida em 16 seções independentes. Cada CPU processa uma "peça" do quebra-cabeça simultaneamente, o que reduz drasticamente o tempo total de execução comparado a um processador único.
+
+ - Aplicações Reais: Este é o princípio usado em algoritmos de renderização de vídeo e também no processamento de pacotes em larga escala, onde diferentes fluxos de dados podem ser analisados por núcleos distintos, como no hardware que vimos na Figura 8.16.
+
+Um multiprocessador, como todos os computadores, deve ter dispositivos de E/S, como discos, adaptadores de rede e outros equipamentos. Em alguns sistemas multiprocessadores, somente certas CPUs têm acesso aos dispositivos de E/S e, por isso, têm uma função de E/S especial. Em outros, cada CPU tem igual acesso a
+todo dispositivo de E/S. Quando cada CPU tem igual acesso a todos os módulos de memória e a todos os dispositivos de E/S e é tratada pelo sistema operacional como intercambiável com as outras, o sistema é denominado SMP (Symmetric MultiProcessor – multiprocessador simétrico).
+
+**• Multicomputadores**
+O segundo projeto possível para uma arquitetura paralela é um projeto no qual toda CPU tem sua própria memória privada, acessível somente a ela mesma e a nenhuma outra. Esse projeto é denominado multicomputador ou, às vezes, sistema de memória distribuída, e é ilustrado na Figura 8.20(a). O aspecto fundamental de um multicomputador que o distingue de um multiprocessador é que a CPU em um multicomputador tem sua própria memória local privada, a qual pode acessar apenas executando instruções LOAD e STORE, mas que nenhuma outra CPU pode acessar usando instruções LOAD e STORE. Assim, multiprocessadores têm um único espaço de endereço físico com- partilhado por todas as CPUs, ao passo que multicomputadores têm um espaço de endereço físico para cada CPU.
+
+**• Figura 8.20 - (a) Multicomputador com 16 CPUs, cada uma com sua própria memória privada. (b) Imagem de mapa de bits da figura 8.19 dividida entre as 16** memórias.
+
+    (a) Multicomputador com 16 CPUs           (b) Imagem de Mapa de Bits
+            e Memórias Privadas (M)                   Dividida entre as Memórias
+
+                [M] [M] [M] [M]                           [  ] [  ] [  ] [☼ ]
+                |   |   |   |                             |   |   |   | 
+                [P] [P] [P] [P]                           [P] [P] [P] [P]
+                |   |   |   |                             |   |   |   | 
+        [M]-[P]-+-----------+-[P]-[M]             [  ]-[P]-+-----------+-[P]-[  ]
+                |  REDE DE  |                             |           | 
+        [M]-[P]-| INTERCON. |--[P]-[M]           [  ]-[P]-|   REDE    |--[P]-[🧱]
+                |           |                             |           | 
+        [M]-[P]-|   TROCA   |--[P]-[M]           [🕊]-[P]-|           |--[P]-[🛣️]
+                | MENSAGENS |                             |           | 
+        [M]-[P]-+-----------+-[P]-[M]            [  ]-[P]-+-----------+-[P]-[🛤️]
+                |   |   |   |                             |   |   |   | 
+                [P] [P] [P] [P]                           [P] [P] [P] [P]
+                |   |   |   |                             |   |   |   | 
+                [M] [M] [M] [M]                           [🚶] [🌳] [🏠] [🏢]
+
+        (P = CPU | M = Memória Privada)
+
+![alt text](image-127.png)
+
+**• Notas Técnicas para o seu eBook:**
+
+ - Arquitetura de Memória Privada (a): Diferente dos multiprocessadores, aqui cada CPU (P) possui sua própria memória local (M) exclusiva. A comunicação entre os nós não ocorre por endereços globais, mas sim através de uma Rede de Interconexão que utiliza troca de mensagens (message passing).
+
+ - Distribuição do Mapa de Bits (b): Na prática de processamento de imagens, cada parte da figura (como o sol, a casa ou a árvore) é armazenada fisicamente em uma memória diferente. Se a CPU que processa a "casa" precisar de dados sobre o "sol", ela deve solicitar explicitamente via rede.
+
+ - Escalabilidade: Este modelo é a base para grandes clusters de servidores e sistemas de computação em nuvem, pois é mais fácil adicionar novos nós (CPU + Memória) sem criar gargalos no acesso a uma memória central única.
+
+Uma vez que as CPUs em um multicomputador não podem se comunicar apenas lendo e escrevendo na memória comum, elas precisam de um mecanismo de comunicação diferente. O que elas fazem é passar mensagens uma para outra usando a rede de interconexão. Entre os exemplos de multicomputadores podemos citar o IBM BlueGene/L, o Red Storm e o cluster Google.
+
+A ausência de memória compartilhada em hardware em um multicomputador tem importantes implicações para a estrutura do software. Ter um único espaço de endereço virtual do qual e para o qual todos os processos podem ler e escrever de e para toda a memória apenas executando instruções LOAD e STORE é impossível em um
+multicomputador. Por exemplo, se a CPU 0 (a que está no canto superior esquerdo) da Figura 8.19(b) descobrir que parte de seu objeto se estende até a seção designada à CPU 1, ainda assim ela continua a ler memória para acessar a cauda do avião. Por outro lado, se a CPU 0 da Figura 8.20(b) fizer a mesma descoberta, ela não pode simplesmente ler a memória da CPU. Em vez disso, ela precisa fazer algo bem diferente para obter os dados de que necessita.
+
+Em particular, ela tem de descobrir (de algum modo) qual CPU tem os dados de que precisa e enviar a essa CPU uma mensagem requisitando uma cópia dos dados. Em seguida, normalmente ela bloqueará até que a requisição seja atendida. Quando a mensagem chegar à CPU 1, o software ali presente tem de analisá-la e enviar os dados necessários. Quando a mensagem de resposta voltar à CPU 0, o software é desbloqueado e pode continuar a executar.
+
+Em um multicomputador, a comunicação entre processos costuma usar primitivas de software como send e receive. Isso dá ao software uma estrutura diferente e muito mais complicada do que para um multiprocessador. Também significa que subdividir os dados corretamente e posicioná-los em localizações ótimas é uma questão
+importante. Não é tão fundamental em um multiprocessador, visto que o posicionamento não afeta a correção ou a programabilidade, embora possa impactar o desempenho. Em suma, programar um multicomputador é muito mais difícil do que programar um multiprocessador.
+
+Nessas condições, por que alguém construiria multicomputadores, quando multiprocessadores são mais fáceis de programar? A resposta é fácil: é muito mais simples e mais barato construir grandes multicomputadores do que multiprocessadores com o mesmo número de CPUs. Executar uma memória compartilhada, ainda que seja para algumas centenas de CPUs, é uma empreitada substancial, ao passo que construir um multicomputador com 10 mil CPUs, ou mais, é direto. Mais adiante neste capítulo estudaremos um multicomputador com mais de 50 mil CPUs.
+
+Portanto, temos um dilema: multiprocessadores são difíceis de construir, mas fáceis de programar, enquanto multicomputadores são fáceis de construir, mas difíceis de programar. Essa observação gerou muito esforço para construir sistemas híbridos que são relativamente fáceis de construir e relativamente fáceis de programar. Esse trabalho levou à percepção de que a memória compartilhada pode ser executada de vários modos, cada qual com seu próprio conjunto de vantagens e desvantagens. Na verdade, grande parte da pesquisa atual na área de arquiteturas paralelas está relacionada à convergência entre arquiteturas de multiprocessador e multicomputador para formas híbridas que combinam as forças de cada uma. Nesse caso, o Santo Graal é achar projetos que sejam escaláveis, isto é, que continuem a funcionar bem à medida que mais e mais CPUs sejam adicionadas.
+
+Uma técnica para a construção de sistemas híbridos é baseada no fato de que sistemas de computação modernos não são monolíticos, mas construídos como uma série de camadas – o tema deste livro. Essa percepção abre a possibilidade de implementar memória compartilhada em qualquer uma das várias camadas, como ilustra a Figura 8.21. Na Figura 8.21(a), vemos a memória compartilhada executada pelo hardware como um verdadeiro multiprocessador. Nesse projeto, há uma única cópia do sistema operacional com um único conjunto de tabelas, em particular, a tabela de alocação de memória. Quando um processo precisa de mais memória, recorre ao sistema operacional, que então procura em sua tabela uma página livre e mapeia a página para o espaço de endereço do processo chamador. No que concerne ao sistema operacional, há uma única memória, e ele monitora em software qual processo possui qual página. Há muitos modos de implementar memória compartilhada em hardware, como veremos mais adiante.
+
+**• Figura 8.21 - Várias camadas onde a memória compartilhada pode ser implementada. (a) Hardware. (b) Sistema operacional. (c) Sistema de execução da linguagem.**
+    (a) Hardware             (b) Sistema Operacional   (c) Sistema de Execução
+                                                            da Linguagem
+
+     Máquina 1  Máquina 2      Máquina 1  Máquina 2      Máquina 1    Máquina 2
+    +---------++---------+    +---------++---------+    +---------+  +---------+
+    | Aplica. || Aplica. |    | Aplica. || Aplica. |    | Aplica. |  | Aplica. |
+    +---------++---------+    +---------++---------+    +---------+  +---------+
+    | Sist. de|| Sist. de|    | Sist. de|| Sist. de|    | Sist. de|  | Sist. de|
+    | Execuç. || Execuç. |    | Execuç. || Execuç. |    | Execuç. |==| Execuç. |
+    +---------++---------+    +---------++---------+    +---------+  +---------+
+    | Sistema || Sistema |    | Sistema || Sistema |    | Sistema |  | Sistema |
+    | Operac. || Operac. |    | Operac. || Operac. |    | Operac. |  | Operac. |
+    +---------++---------+    +---------++---------+    +---------+  +---------+
+    | Hardware|| Hardware|    | Hardware|| Hardware|    | Hardware|  | Hardware|
+    +----+----++----+----+    +----+----++----+----+    +---------+  +---------+
+         |          |              |          |              ^            ^
+    [ MEMÓRIA COMPART. ]      [ MEMÓRIA COMPART. ]      [ MEMÓRIA COMPARTILHADA ]
+
+![alt text](image-128.png)
+
+**• Análise Técnica para o eBook**
+
+ - Esta figura é fundamental para entender como diferentes arquiteturas de computação distribuída simulam um ambiente de memória única entre máquinas distintas:
+
+ - Implementação em Hardware (a): A memória compartilhada é física. Os processadores estão conectados diretamente ao mesmo barramento ou rede de memória, como vimos nos multiprocessadores da Figura 8.19.
+
+ - Implementação no Sistema Operacional (b): O kernel do SO gerencia a ilusão de memória compartilhada. Ele intercepta falhas de página e busca os dados em outras máquinas via rede, de forma transparente para a aplicação.
+
+ - Implementação no Sistema de Execução (c): Bibliotecas ou o próprio "runtime" da linguagem (como a JVM ou o runtime de C#) gerenciam a consistência dos dados. É comum em sistemas que utilizam objetos compartilhados em vez de endereços de memória brutos.
+
+Uma segunda possibilidade é usar hardware de multicomputador e fazer com que o sistema operacional simule memória compartilhada proporcionando um único espaço de endereço virtual de compartilhamento de páginas no âmbito do sistema inteiro. Nessa técnica, denominada DSM (Distributed Shared Memory – memória compartilhada distribuída) (Li e Hudak, 1989), cada página está localizada em uma das memórias da Figura 8.20(a). Cada máquina tem memória virtual e tabelas de páginas próprias. Quando uma CPU faz uma LOAD ou uma STORE em uma página que ela não tem, ocorre uma exceção para o sistema operacional. Este, então, localiza
+a página e solicita à CPU que a contém no momento que desmapeie a página e a envie pela interconexão de rede. Quando chega, a página é mapeada para dentro e a instrução que falhou é reiniciada. Na verdade, o sistema operacional está apenas atendendo faltas de páginas a partir de memórias remotas em vez de a partir de disco. Para o usuário, parece que a máquina tem memória compartilhada. Examinaremos a DSM mais adiante neste capítulo.
+
+Uma terceira possibilidade é fazer com que um sistema de execução em nível de usuário, possivelmente específico para uma linguagem, execute uma forma de memória compartilhada. Nessa abordagem, a linguagem de programação provê algum tipo de abstração de memória compartilhada, que então é realizada pelo compilador e
+pelo sistema de execução. Por exemplo, o modelo Linda é baseado na abstração de um espaço compartilhado de tuplas (registros de dados que contêm uma coleção de campos). Processos em qualquer máquina podem produzir entrada de uma tupla a partir do espaço compartilhado de tuplas ou produzir saída de uma tupla para o espaço compartilhado de tuplas. Como o acesso ao espaço de tuplas é todo controlado em software (pelo sistema de execução Linda), não é preciso nenhum hardware especial ou suporte de sistema operacional.
+
+Outro exemplo de memória compartilhada específica de linguagem executada pelo sistema de execução é o modelo Orca de objetos de dados compartilhados. Em Orca, os processos compartilham objetos genéricos em vez de apenas tuplas e podem executar neles métodos específicos de objetos. Quando um método muda o estado interno de um objeto, cabe ao sistema de execução garantir que todas as cópias do objeto em todas as máquinas sejam atualizadas simultaneamente. Mais uma vez, como objetos são um conceito estritamente de software, a implementação pode ser feita pelo sistema de execução sem ajuda do sistema operacional ou do hardware.
+Examinaremos ambos, Linda e Orca, mais adiante neste capítulo.
+
+**• Taxonomia de computadores paralelos**
+Agora, vamos voltar a nosso tópico principal, a arquitetura de computadores paralelos. Muitos tipos já foram propostos e construídos ao longo dos anos. Portanto, é natural perguntar se há alguma maneira de categorizá-los em uma taxonomia. Muitos pesquisadores tentaram, com resultados mistos (Flynn, 1972; e Treleaven, 1985). Infelizmente, o Carl von Linné1 da computação paralela ainda está para surgir. O esquema de Flynn, o único que é muito usado, é dado na Figura 8.22, e mesmo este é, na melhor das hipóteses, uma aproximação muito grosseira.
+
+**• Figura 8.22   Taxonomia de Flynn para computadores paralelos**
+
+    +---------------------+--------------- +-------------------------------------------+----------------------------------+
+    | Fluxo de Instruções | Fluxo de Dados | Nome                                      | Exemplos                         |
+    +---------------------+----------------+-------------------------------------------+----------------------------------+
+    | 1                   | 1              | SISD (Single Instruction, Single Data)    | Máquina clássica de Von Neumann  | 
+    +---------------------+----------------+----------------------------------------------+-------------------------------+
+    | 1                   | Múltiplos      | SIMD (Single Instruction, Multiple Data)  | Supercomputador vetorial,        |
+    |                     |                |                                           | processador de array             |
+    +---------------------+----------------+-------------------------------------------+----------------------------------+
+    | Múltiplos           | 1              | MISD (Multiple Instruction, Single Data)  | Possivelmente nenhum             |
+    +---------------------+----------------+-------------------------------------------+----------------------------------+
+    | Múltiplos           | Múltiplos      | MIMD (Multiple Instruction, Multiple Data)| Multiprocessador, multicomputador|
+    +---------------------+----------------+-------------------------------------------+----------------------------------+
+
+A classificação de Flynn é baseada em dois conceitos – fluxos de instruções e fluxos de dados. Um fluxo de instruções corresponde a um contador de programa. Um sistema com n CPUs tem n contadores de programa, por conseguinte, n fluxos de instruções.
+
+Um fluxo de dados consiste em um conjunto de operandos. Por exemplo, em um sistema de previsão do tempo, cada um de um grande número de sensores poderia emitir um fluxo de temperaturas em intervalos regulares.
+
+Os fluxos de instruções e de dados são, até certo ponto, independentes, portanto, existem quatro combinações, como relacionadas na Figura 8.22. SISD é apenas o clássico computador sequencial de Von Neumann. Ele tem um fluxo de instruções, um fluxo de dados e faz uma coisa por vez. Máquinas SIMD têm uma única unidade
+de controle que emite uma instrução por vez, mas elas têm múltiplas ULAs para executá-las em vários conjuntos de dados simultaneamente. O ILLIAC IV (Figura 2.7) é o protótipo de tais máquinas. Elas estão ficando cada vez mais raras, mas computadores convencionais às vezes têm algumas instruções SIMD para processamento
+de material audiovisual. As instruções SSE do Core i7 são SIMD. Não obstante, há uma nova área na qual algumas das ideias do mundo SIMD estão desempenhando um papel: processadores de fluxo. Essas máquinas são projetadas especificamente para tratar demandas de entrega de multimídia e podem se tornar importantes no futuro (Kapasi et al., 2003).
+
+As máquinas MISD são uma categoria um tanto estranha, com múltiplas instruções operando no mesmo dado. Não está claro se elas existem, embora haja quem considere MISD as máquinas com pipeline.
+
+Por fim, temos MIMD, que são apenas múltiplas CPUs independentes operando como parte de um sistema maior. A maioria dos processadores paralelos cai nessa categoria. Ambos, multiprocessadores e multicomputadores são máquinas MIMD.
+
+1 - Carl von Linné (1707–1778) foi o biólogo sueco que inventou o sistema usado hoje para classificar todas as plantas e animais em reino, filo,
+classe, ordem, família, gênero e espécie.
+
+A taxonomia de Flynn para aqui, mas nós a ampliamos na Figura 8.23. A SIMD foi subdividida em dois sub-grupos. O primeiro é para supercomputadores numéricos e outras máquinas que operam sobre vetores, efetuando a mesma operação em cada elemento do vetor. O segundo é para máquinas do tipo paralelo como ILLIAC IV, na
+qual uma unidade mestra de controle transmite instruções para muitas ULAs independentes.
+
+**• Figura 8.23   Taxonomia de computadores paralelos.**
