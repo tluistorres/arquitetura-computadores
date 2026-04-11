@@ -1223,3 +1223,525 @@ A taxonomia de Flynn para aqui, mas nós a ampliamos na Figura 8.23. A SIMD foi 
 qual uma unidade mestra de controle transmite instruções para muitas ULAs independentes.
 
 **• Figura 8.23   Taxonomia de computadores paralelos.**
+Este mapa mental organiza como os sistemas são classificados com base no fluxo de instruções e dados, além da forma como gerenciam a memória.
+
+    [ ARQUITETURAS DE COMPUTADOR PARALELO ]
+                                        |
+        +----------------+---------------+---------------+---------------+
+        |                |               |               |               |
+    [ SISD ]         [ SIMD ]        [ MISD ]        [ MIMD ]            |
+    (Von Neumann)        |               ?               |               |
+                +-------+-------+               +-------+-------+        |
+                |               |               |               |        |
+            Processador     Processador     Multiproces-    Multicompu-  |
+            de vetor        de array         sadores         tadores     |
+                                                |               |        |
+                                        +-------+-------+   +---+---+    |
+                                        |       |       |   |       |    |
+                                    [UMA]   [COMA]  [NUMA] [MPP]   [COW] |
+                                        |               |   |       |    |
+                                +--------+-------+      |   |       |    |
+                                |                |      |   |       |    |
+                        [Barramento]     [Comutado]   | [Grade][Hipercubo]
+                                |                |      |   |       |    |
+                                +-------+--------+-------+  +---+---+----+
+                                        |                       |
+                            [ MEMÓRIA COMPARTILHADA ]  [ PASSAGEM DE MENSAGEM ]
+
+![alt text](image-129.png)
+
+**• Síntese Técnica para o seu eBook:**
+
+A taxonomia de Flynn e suas derivações modernas permitem classificar quase todo o hardware que estudamos até aqui:
+
+ - MIMD (Multiple Instruction, Multiple Data): É a categoria mais relevante para o seu dia a dia. Ela se divide em:
+
+    - Multiprocessadores (Memória Compartilhada): Onde se encaixa o seu Core i7. Ele utiliza a arquitetura UMA (Uniform Memory Access) via barramento para que todos os núcleos acessem a RAM igualmente.
+
+    - Multicomputadores (Passagem de Mensagem): Onde se encaixam clusters e arquiteturas como COW (Cluster of Workstations) ou MPP (Massively Parallel Processors), similares ao que vimos na Figura 8.20.
+
+ - SIMD (Single Instruction, Multiple Data): Categoria onde as GPUs (como a Fermi da Figura 8.17) operam de forma dominante, aplicando uma única instrução a grandes blocos de dados vetoriais simultaneamente.
+
+ - NUMA (Non-Uniform Memory Access): Arquiteturas comuns em servidores de alta performance (como os da OCI) onde o tempo de acesso à memória depende da localização física do dado em relação ao processador.
+
+Em nossa taxonomia, a categoria MIMD foi subdividida em multiprocessadores (máquinas de memória
+compartilhada) e multicomputadores (máquinas de troca de mensagens). Existem três tipos de multiprocessado-
+res, distinguidos pelo modo como a memória compartilhada é neles implementada. Eles são denominados UMA
+(Uniform Memory Access – acesso uniforme à memória), NUMA (NonUniform Memory Access – acesso não
+uniforme à memória) e COMA (Cache Only Memory Access – acesso somente à memória cache). Essas cate-
+gorias existem porque, em grandes multiprocessadores, a memória costuma ser subdividida em vários módulos.
+A propriedade distintiva das máquinas UMA é que cada CPU tem o mesmo tempo de acesso a todos os módulos de
+memória. Ou seja, cada palavra de memória pode ser lida tão depressa quanto qualquer outra. Se isso for tecnica-
+mente impossível, a velocidade das referências mais rápidas é reduzida para que se compatibilizem com as mais
+lentas, portanto, os programadores não veem a diferença. É isso que “uniforme” significa nesse caso. Essa unifor-
+midade torna o desempenho previsível, um fator importante para escrever código eficiente.
+
+Por comparação, essa propriedade não é válida em um multiprocessador NUMA. Muitas vezes, há um módu-
+lo de memória próximo a cada CPU e acessá-lo é mais rápido do que acessar os distantes. O resultado é que,
+por questões de desempenho, o local onde o código e os dados são posicionados é importante. Máquinas COMA
+também são não uniformes, mas de um modo diferente. Estudaremos detalhadamente cada um desses tipos e
+suas subcategorias mais adiante.
+
+A outra categoria principal de máquinas MIMD consiste nos multicomputadores, que, diferente dos multi-
+processadores, não têm memória primária compartilhada no nível da arquitetura. Em outras palavras, o sistema
+operacional em uma CPU de multicomputador não pode acessar memória ligada a uma CPU diferente apenas executando uma instrução LOAD. Ela tem de enviar uma mensagem explícita e esperar uma resposta. A capacidade­
+do sistema operacional de ler uma palavra distante apenas executando uma LOAD é o que distingue multipro-
+cessadores de multicomputadores. Como mencionamos antes, mesmo em um multicomputador, programas do
+usuário podem ter a capacidade de acessar a memória remota usando instruções LOAD e STORE, mas essa ilusão
+é suportada pelo sistema operacional, e não pelo hardware. Essa diferença é sutil, mas muito importante. Como
+multicomputadores não têm acesso direto à memória remota, às vezes eles são denominados máquinas NORMA
+(NO Remote Memory Access – sem acesso à memória remota).
+
+Os multicomputadores podem ser divididos em duas categorias gerais. A primeira contém os MPPs
+(Massively Parallel Processors – processadores de paralelismo maciço), que são supercomputadores caros que
+consistem em muitas CPUs fortemente acopladas por uma rede de interconexão proprietária de alta velocidade.
+O IBM SP/3 é um exemplo bem conhecido no mercado.
+
+A outra categoria consiste em PCs ou estações de trabalho comuns, possivelmente montados em estantes e
+conectados por tecnologia de interconexão comercial, de prateleira. Em termos de lógica, não há muita diferença,
+mas supercomputadores enormes que custam muitos milhões de dólares são usados de modo diferente das redes
+de PCs montadas pelos usuários por uma fração do preço de um MPP. Essas máquinas caseiras são conhecidas
+por vários nomes, entre eles NOW (Network of Workstations – rede de estações de trabalho), COW (Cluster
+of Workstations – grupo de estações de trabalho), ou, às vezes, apenas cluster (grupo).
+
+## 8.3.2 Semântica da memória
+Ainda que todos os multiprocessadores apresentem às CPUs a imagem de um único espaço de endereço
+compartilhado, muitas vezes estão presentes muitos módulos de memória, cada um contendo alguma porção da
+memória física. As CPUs e memórias muitas vezes são conectadas por uma complexa rede de interconexão, como
+discutimos na Seção 8.1.2. Diversas CPUs podem estar tentando ler uma palavra de memória ao mesmo tempo
+em que várias outras CPUs estão tentando escrever a mesma palavra, e algumas das mensagens de requisição
+podem ser ultrapassadas por outras em trânsito e ser entregues em uma ordem diferente daquela em que foram
+emitidas. Além desse problema, há a existência de múltiplas cópias de alguns blocos de memória (por exemplo,
+em caches), o que pode resultar em caos com muita facilidade, a menos que sejam tomadas medidas rigorosas
+para evitá-lo. Nesta seção, veremos o que de fato significa memória compartilhada e como memórias podem reagir
+razoavelmente nessas circunstâncias.
+
+Um modo de ver a semântica da memória é como um contrato entre o software e o hardware de memória
+(Adve e Hill, 1990). Se o software concordar em obedecer a certas regras, a memória concorda em entregar
+certos resultados e, então, a discussão fica centrada em quais são essas regras. Elas são denominadas modelos
+de consistência e muitos modelos diferentes já foram propostos e executados.
+
+Para dar uma ideia do problema, suponha que a CPU 0 escreve o valor 1 em alguma palavra de memória e,
+um pouco mais tarde, a CPU 1 escreve o valor 2 para a mesma palavra. Agora, a CPU 2 lê a palavra e obtém o
+valor 1. O proprietário do computador deve levar sua máquina para consertar? Isso depende do que a memória
+prometeu (seu contrato).
+
+**• Consistência estrita**
+O modelo mais simples é o da consistência estrita. Nele, qualquer leitura para uma localização x sempre
+retorna o valor da escrita mais recente para x. Programadores adoram esse modelo, mas, na verdade, ele é efeti-
+vamente impossível de implementar de qualquer outro modo que não seja ter um único módulo de memória que
+apenas atende a todas as requisições segundo a política primeiro a chegar, primeiro a ser atendido, sem cache
+nem duplicação de dados. Essa implementação transformaria a memória em um imenso gargalo e, portanto, não
+é uma candidata séria, infelizmente.
+
+**• Consistência sequencial**
+O segundo melhor é um modelo denominado consistência sequencial (Lamport, 1979). Nesse caso, a ideia
+é que, na presença de múltiplas requisições de leitura (read) e escrita (write), o hardware escolhe (sem determi-
+nismo) alguma intercalação de todas as requisições, mas todas as CPUs veem a mesma ordem.
+
+Para entender o que isso significa, considere um exemplo. Suponha que a CPU 1 escreve o valor 100 para a
+palavra x, e 1 ns mais tarde a CPU 2 escreve o valor 200 para a palavra x. Agora, suponha que 1 ns após a segunda
+escrita ter sido emitida (mas não necessariamente ainda concluída), duas outras CPUs, 3 e 4, leem a palavra x
+duas vezes cada uma em rápida sucessão, conforme mostra a Figura 8.24(a). Três possíveis ordenações dos seis
+eventos (duas escritas e quatro leituras) são mostradas na Figura 8.24 (b)–(d), respectivamente. Na Figura 8.24(b),
+a CPU 3 obtém (200, 200) e a CPU 4 obtém (200, 200). Na Figura 8.24(c), elas obtêm (100, 200) e (200, 200),
+respectivamente. Na Figura 8.24(d), elas obtêm (100, 100) e (200, 100), respectivamente. Todas essas são válidas,
+bem como algumas outras possibilidades que não são mostradas. Observe que não existe um único valor “correto”.
+
+**• Figura 8.24 - (a) Duas CPUs escrevendo e duas CPUs lendo uma palavra de memória em comum. (b)–(d) Três modos possíveis de intercalar as duas escritas e as quatro leituras em relação ao tempo.**
+Este diagrama mostra o que acontece quando duas CPUs tentam escrever em uma mesma variável ($x$) e outras duas tentam ler esses valores simultaneamente.
+
+    (a) Cenário de Acesso                  (b)-(d) Sequências Possíveis
+            à Memória                                  no Tempo
+            
+                [CPU 2]                          (b)          (c)          (d)
+                    |                            W100         W100         W200
+            escrita 200                          W200       R3 = 100     R4 = 200
+                    v                          R3 = 200       W200         W100
+    [CPU 1] -> escrita 100 -> [ x ]            R3 = 200     R4 = 200     R3 = 100
+                                |              R4 = 200     R3 = 200     R4 = 100
+                            leitura 2x         R4 = 200     R4 = 200     R3 = 100
+                                v
+                            [CPU 3]          (W = Write/Escrita | R = Read/Leitura)
+                                &
+                            [CPU 4]
+
+**• Resumo Técnico para o eBookA**
+A Figura 8.24 é essencial para entender por que a ordem das operações importa em sistemas paralelos:
+
+ - O Problema (a): As CPUs 1 e 2 realizam operações de escrita (valores 100 e 200), enquanto as CPUs 3 e 4 tentam ler o valor de $x$ duas vezes cada.
+ 
+ - Intercalação no Tempo (b, c, d):
+ 
+    - Sequência (b): Ambas as escritas terminam antes das leituras. As CPUs 3 e 4 leem o último valor gravado (200).
+    
+    - Sequência (c): Uma leitura ocorre entre as duas escritas. A CPU 3 vê o valor 100 primeiro e depois o 200.
+    
+    - Sequência (d): A ordem das escritas é invertida em relação ao tempo. As leituras finais resultam em 100.
+    
+ - Consistência Sequencial: Este exemplo demonstra que, sem mecanismos de sincronização (como locks ou barreiras), o resultado final de um programa paralelo pode variar a cada execução, dependendo de qual CPU "chega primeiro" à memória.
+
+![alt text](image-130.png)
+
+Contudo – e essa é a essência da consistência sequencial –, não importa o que aconteça, uma memória
+sequencialmente consistente nunca permitirá que a CPU 3 obtenha (100, 200) enquanto a CPU 4 obtém (200,
+100). Se isso ocorresse, significaria que, de acordo com a CPU 3, a escrita de 100 pela CPU 1 concluiu após a
+escrita de 200 pela CPU 2. Tudo bem. Mas também significaria que, de acordo com a CPU 4, a escrita de 200
+pela CPU 2 concluiu antes da escrita de 100 pela CPU 1. Em si, esse resultado também é possível. O problema é
+que a consistência sequencial garante uma única ordenação global de todas as escritas, que é visível para todas as
+CPUs. Se a CPU 3 observar que 100 foi escrito primeiro, então a CPU 4 também deve ver essa ordem.
+
+Embora a consistência sequencial não seja uma regra tão poderosa quanto a estrita, ainda é muito útil.
+Na verdade, ela diz que, quando múltiplos eventos acontecem concorrentemente, há alguma ordem verdadeira na
+qual eles ocorrem, talvez determinada pela temporização e pelo acaso, mas existe uma ordenação verdadeira e
+todos os processadores observam essa mesma ordem. Embora essa afirmativa talvez pareça óbvia, a seguir discu-
+tiremos modelos de consistência que nem isso garantem.
+
+**• Consistência de processador**
+Um modelo de consistência menos rigoroso, mas que é mais fácil de implementar em grandes multiproces-
+sadores, é a consistência de processador (Goodman, 1989). Ele tem duas propriedades:
+
+1. Escritas por qualquer CPU são vistas por todas as CPUs na ordem em que foram emitidas.
+
+2. Para cada palavra de memória, todas as CPUs veem todas as escritas para ela na mesma ordem.
+
+Esses dois pontos são importantes. O primeiro diz que, se a CPU 1 emitir escritas com valores 1A, 1B e 1C para
+alguma localização de memória nessa sequência, então todos os outros processadores as veem nessa ordem também.
+
+Em outras palavras, qualquer outro processador em um laço restrito que observasse 1A, 1B e 1C lendo as pala-
+vras escritas nunca verá o valor escrito por 1B e depois o escrito por 1A, e assim por diante. O segundo ponto é
+necessário para exigir que toda palavra de memória tenha um valor não ambíguo após várias CPUs escreverem
+para ela e, por fim, pararem. Todos têm de concordar sobre qual veio por último.
+
+Mesmo com essas restrições, o projetista tem muita flexibilidade. Considere o que acontece se a CPU 2 emitir
+escritas 2A, 2B e 2C concorrentemente com as três escritas da CPU 1. Outras CPUs que estão ocupadas lendo a
+memória observarão alguma intercalação de seis escritas, tal como 1A, 1B, 2A, 2B, 1C, 2C ou 2A, 1A, 2B, 2C, 1B,
+1C ou muitas outras. A consistência de processador não garante que toda CPU vê a mesma ordenação, diferente
+da consistência sequencial, que dá essa garantia. Assim, é perfeitamente legítimo que o hardware se comporte de
+tal maneira que algumas CPUs veem a primeira ordenação mencionada, algumas veem a segunda e algumas veem
+ainda outras. O que é garantido é que nenhuma CPU verá a sequência na qual 1B vem antes de 1A e assim por
+diante. A ordem com que cada CPU faz suas escritas é observada em todos os lugares.
+
+Vale a pena notar que alguns autores definem consistência de processador de modo diferente e não requerem
+a segunda condição.
+
+**• Consistência fraca**
+Nosso próximo modelo, a consistência fraca, nem mesmo garante que escritas de uma única CPU sejam
+vistas em ordem (Dubois et al., 1986). Em uma memória fracamente consistente, uma CPU poderia ver 1A antes
+de 1B e outra CPU poderia ver 1A depois de 1B. Contudo, para colocar alguma ordem no caos, tais memórias
+têm variáveis de sincronização ou uma operação de sincronização. Quando uma sincronização é executada, todas
+as escritas pendentes são terminadas e nenhuma nova é iniciada até que todas as antigas – e a própria sincroni-
+zação – estejam concluídas. Na verdade, uma sincronização “descarrega o pipeline” e leva a memória a um estado
+estável sem nenhuma operação pendente. Operações de sincronização são, em si, sequencialmente consistentes,
+isto é, quando múltiplas CPUs as emitem, alguma ordem é escolhida, mas todas as CPUs veem a mesma ordem.
+
+Em consistência fraca, o tempo é dividido em épocas bem definidas delimitadas pelas sincronizações
+(sequencialmente consistentes), como ilustra a Figura 8.25. Nenhuma ordem relativa é garantida para 1A e 1B e
+diferentes CPUs podem ver as duas escritas em ordens diferentes, isto é, uma CPU pode ver 1A e então 1B e outra
+CPU pode ver 1B e então 1A. Essa situação é permitida. Contudo, todas as CPUs veem 1B antes de 1C porque a
+primeira operação de sincronização força 1A, 1B e 2A a concluírem antes que 1C, 2B, 3A ou 3B tenham permissão
+de iniciar. Assim, realizando operações de sincronização, o software pode impor alguma ordem na sequência de
+eventos, embora não a custo zero, visto que descarregar o pipeline de memória toma algum tempo e, portanto,
+atrasa o processamento da máquina. Fazer isso com frequência pode ser um problema.
+
+**• Figura 8.25   A memória fracamente consistente usa operações de sincronização para dividir o tempo em épocas sequenciais.**
+Este diagrama demonstra como o tempo é dividido em épocas sequenciais para garantir que todas as CPUs tenham uma visão coerente da memória em momentos específicos.
+
+    ESCRITA
+                 / t  \
+    CPU A       1A 1B |  1C      |  1D 1E   |  1F
+                      |          |          |
+    CPU B      2A     |  2B      |  2C      |  2D
+                      |          |          |
+    CPU C             |  3A 3B   |  3C      |
+                      |          |          |
+               -------+----------+----------+-------> TEMPO
+                      |          |          |
+                    PONTO DE   PONTO DE   PONTO DE
+                SINCRONIZACAO SINCRONIZACAO SINCRONIZACAO
+
+![alt text](image-131.png)
+
+**• Resumo Técnico para o eBook**
+A consistência fraca é uma estratégia de otimização comum em sistemas de alto desempenho, como os multiprocessadores heterogêneos:
+
+ - Épocas Sequenciais: Em vez de tentar manter a memória atualizada para todos a cada instrução (o que seria muito lento), o sistema permite que as CPUs trabalhem de forma independente entre os Pontos de Sincronização.
+
+ - Operações de Sincronização: Quando uma CPU atinge um ponto de sincronização, ela força a propagação de todas as suas escritas pendentes e atualiza suas leituras. Isso garante que, após o ponto, todas as CPUs concordem com o estado atual da memória compartilhada.
+
+ - Exemplo de Fluxo: Na figura, as operações 1A e 1B da CPU A só precisam ser visíveis para as outras CPUs após o primeiro traço vertical (Sincronização).
+
+**• Consistência de liberação**
+A consistência fraca tem o problema de ser bastante ineficiente porque deve encerrar todas as operações
+de memória pendentes e deter todas as novas até que as operações correntes tenham terminado. A consistência de
+liberação melhora as coisas adotando um modelo semelhante ao das seções críticas (Gharachorloo et al., 1990).
+A ideia que fundamenta esse modelo é que, quando um processo sai de uma região crítica não é necessário forçar
+todas as escritas a concluírem imediatamente. Basta assegurar que elas estejam encerradas antes que qualquer
+processo entre naquela região crítica outra vez.
+
+Nesse modelo, a operação de sincronização oferecida pela consistência fraca é subdividida em duas opera-
+ções diferentes. Para ler ou escrever uma variável de dados compartilhada, uma CPU (isto é, seu software) deve
+realizar, primeiro, uma operação acquire na variável de sincronização para obter acesso exclusivo aos dados com-
+partilhados. Então, a CPU pode usá-los como quiser, lendo e escrevendo à vontade. Ao concluir, a CPU realiza
+uma operação release na variável de sincronização para indicar que terminou. A release não obriga as escritas
+pendentes a concluir, mas ela própria não conclui até que as escritas emitidas antes estejam concluídas. Além do
+mais, novas operações de memória não são impedidas de iniciar imediatamente.
+
+Quando a próxima operação acquire é emitida, é feita uma verificação para ver se todas as operações release
+anteriores foram concluídas. Se não foram, acquire é detida até que todas tenham concluído (e, portanto, que
+todas as escritas realizadas antes delas estejam concluídas). Desse modo, se a acquire seguinte ocorrer em um
+tempo longo o suficiente após a release mais recente, ela não tem de esperar antes de iniciar e pode entrar na
+região crítica sem demora. Se a acquire seguinte ocorrer logo após uma release, a acquire, e todas as instruções
+após ela, serão retardadas até todas as releases pendentes serem concluídas, garantindo assim que as variáveis na
+seção crítica tenham sido atualizadas. Esse esquema é um pouco mais complicado do que consistência fraca, mas
+tem a significativa vantagem de não atrasar instruções com tanta frequência para manter consistência.
+
+A consistência de memória não é um assunto encerrado. Os pesquisadores ainda estão propondo novos
+modelos (Naeem et al., 2011; Sorin et al., 2011; e Tu et al., 2010).
+
+## 8.3.3 Arquiteturas de multiprocessadores simétricos UMA
+Os multiprocessadores mais simples são baseados em um único barramento, como ilustrado na Figura
+8.26(a). Duas ou mais CPUs e um ou mais módulos de memória, todos usam o mesmo barramento para comuni-
+cação. Quando uma CPU quer ler uma palavra de memória, ela primeiro verifica se o barramento está ocupado.
+Se estiver ocioso, a CPU coloca nele o endereço da palavra que ela quer, ativa alguns sinais de controle e espera
+até que a memória coloque a palavra desejada no barramento.
+
+Se o barramento estiver ocupado quando uma CPU quiser ler ou escrever na memória, a CPU apenas espera
+até que ele fique ocioso. E é aqui que está o problema desse projeto. Com duas ou três CPUs, a contenção pelo
+barramento será administrável; com 32 ou 64, será insuportável. O sistema ficará totalmente limitado pela largura
+de banda do barramento e a maioria das CPUs restará ociosa na maior parte do tempo.
+
+**• Figura 8.26   Três multiprocessadores baseados em barramento. (a) Sem cache. (b) Com cache. (c) Com cache e memórias privadas.**
+Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no barramento e melhorar o desempenho local das CPUs.
+
+    (a) Sem Cache            (b) Com Cache            (c) Com Cache e
+                                                            Memórias Privadas
+
+        +-----+  +-----+         +-----+  +-----+         +-----+  +-----+
+        | CPU |  | CPU |         | CPU |  | CPU |         | Mem.|  | Mem.|
+        +--+--+  +--+--+         +--+--+  +--+--+         | Priv|  | Priv|
+        |        |               |Cache|  |Cache|         +--+--+  +--+--+
+        |        |               +--+--+  +--+--+            |        |
+        +--+--------+--+      +-----+--+--+-----+--+      +--+--+  +--+--+
+        |   MEMÓRIA    |      |      MEMÓRIA       |      | CPU |  | CPU |
+        | COMPARTILHADA|      |   COMPARTILHADA    |      +--+--+  +--+--+
+        +------+-------+      +---------+----------+      |Cache|  |Cache|
+            |                          |                  +--+--+  +--+--+
+            |                          |                     |        |
+    [==== BARRAMENTO ====]   [==== BARRAMENTO ====]   [==== BARRAMENTO ====]
+            |                        |                    |
+        +---+---+                +---+---+            +---+---+
+        |   M   |                |   M   |            |   M   |
+        +-------+                +-------+            +-------+
+
+    (M = Módulo de Memória Global/Compartilhada)
+
+![alt text](image-132.png)
+
+**• Notas Técnicas para o eBook:**
+
+ - Configuração (a) - Sem Cache: Todas as instruções e dados devem ser buscados na memória compartilhada através do barramento. Isso gera um gargalo severo, pois o barramento fica rapidamente saturado com o tráfego de múltiplas CPUs.
+
+ - Configuração (b) - Com Cache: Cada CPU possui um cache local para armazenar os dados e instruções mais usados. Isso reduz drasticamente a necessidade de acessar o barramento, mas introduz o problema da coerência de cache (garantir que todas as CPUs vejam a versão mais recente de um dado compartilhado).
+
+ - Configuração (c) - Cache e Memória Privada: Além do cache, cada CPU possui uma memória privada para dados que nunca precisam ser compartilhados (como a pilha do sistema ou variáveis locais). Isso otimiza ainda mais o uso do barramento, deixando-o livre apenas para a comunicação essencial entre os nós.
+
+A solução para esse problema é acrescentar uma cache a cada CPU, como retratado na Figura 8.26(b). A cache
+pode estar dentro do chip da CPU, próxima ao chip da CPU, na placa do processador ou alguma combinação de
+todas as três. Uma vez que agora muitas leituras podem ser satisfeitas pela cache local, haverá muito menos tráfego
+no barramento e o sistema pode suportar mais CPUs. Assim, nesse caso, fazer cache é um grande ganho. Porém,
+como veremos em breve, manter as caches consistentes entre si não é trivial.
+
+Ainda outra possibilidade é o projeto da Figura 8.26(c), no qual cada CPU tem não só uma cache, mas tam-
+bém uma memória local e privada que ela acessa por um barramento dedicado (privado). Para fazer a utilização
+ideal dessa configuração, o compilador deve colocar nas memórias privadas todo o texto de programa, todas as
+cadeias, constantes e outros dados somente de leitura, pilhas e variáveis locais. Então, a memória compartilhada
+só é usada para variáveis compartilhadas que podem ser escritas. Na maioria dos casos, esse posicionamento cui-
+dadoso reduzirá muito o tráfego no barramento, mas requer cooperação ativa do compilador.
+
+**• Caches de escuta**
+Embora os argumentos de desempenho que acabamos de apresentar decerto sejam verdadeiros, atenuamos
+um problema fundamental um pouco depressa demais. Suponha que a memória seja sequencialmente consisten-
+te. O que acontece se a CPU 1 tiver uma linha em sua cache e então a CPU 2 tentar ler uma palavra na mesma
+linha? Na ausência de quaisquer regras especiais, também ela obteria uma cópia em sua cache. Em princípio, é
+aceitável fazer duas vezes a cache de uma mesma linha. Agora, suponha que a CPU 1 modifique a linha e então,
+imediatamente após, a CPU 2 leia sua cópia da linha a partir de sua cache. Ela obterá dados velhos, violando
+assim o contrato entre o software e a memória. O programa que está executando na CPU 2 não ficará satisfeito.
+
+Esse problema, conhecido como coerência de cache ou consistência de cache, é extremamente sério. Sem
+uma solução, não se pode usar a cache e os multiprocessadores baseados em barramento ficariam limitados a duas
+ou três CPUs. Como consequência de sua importância, muitas soluções foram propostas ao longo dos anos (por
+exemplo, Goodman, 1983; e Papamarcos e Patel, 1984). Embora todos esses algoritmos de cache, denominados
+protocolos de coerência de cache, apresentem diferenças em detalhes, todos eles impedem que versões diferentes
+da mesma linha de cache apareçam simultaneamente em duas ou mais caches.
+
+Em todas as soluções, o controlador de cache é projetado especialmente para permitir que ele escute o bar-
+ramento monitorando todas as requisições de barramento de outras CPUs e caches e execute alguma ação em
+certos casos. Esses dispositivos são denominados caches de escuta ou, às vezes, caches de espia, porque “espiam”
+o barramento. O conjunto de regras executado pelas caches, CPUs e memória para impedir que diferentes versões
+dos dados apareçam em múltiplas caches forma o protocolo de coerência de cache. A unidade de transferência
+e armazenamento de uma cache é denominada uma linha de cache e seu comprimento típico é 32 ou 64 bytes.
+
+O protocolo de coerência de cache mais simples de todos é denominado escrita direta. Ele pode ser mais
+bem entendido distinguindo os quatro casos mostrados na Figura 8.27. Quando uma CPU tenta ler uma palavra
+que não está em sua cache (isto é, há uma ausência da cache para leitura), seu controlador de cache carrega nela a
+linha que contém aquela palavra. A linha é fornecida pela memória, que, nesse protocolo, está sempre atualizada.
+Leituras subsequentes (isto é, presenças na cache para leitura) podem ser satisfeitas pela cache.
+
+**•  Figura 8.27 - Protocolo de coerência de cache de escrita direta. Os retângulos vazios indicam que nenhuma ação foi realizada.**
+
+                    +---------------+
+                    |  Ação         |
+                    +---------------+
+                           |
+                           |
+                           v
+           +---------------+-------------------------------+
+           |         Requisição local                      |
+           +---------------+-------------------------------+
+                           |
+                           |
+                           v
+           +---------------+----------------------------------------------------+
+           |  Ausência da cache para leitura  |  Presença na cache para leitura |
+           +---------------+-------------------------------+--------------------+
+                           |                               |
+                           |                               |
+                           v                               v
+           +---------------+                       +---------------+
+           | Busque dados  |                       | Use dados da  |
+           | da memória    |                       | cache local   |
+           +---------------+                       +---------------+
+                           |
+                           |
+                           v
+           +---------------+----------------------------------------------------+
+           |  Ausência da cache para escrita  |  Presença na cache para escrita |
+           +---------------+---------------------------------------+------------+
+                           |                                       |
+                           |                                       |
+                           v                                       v
+           +---------------+                       +---------------+
+           | Atualize dados|                       | Atualize cache|
+           | na memória    |                       | e memória     |
+           +---------------+                       +---------------+
+                           |
+                           |
+                           v
+           +---------------+
+           |  Requisição   |
+           |  remota       |
+           +---------------+
+                           |
+                           |
+                           v
+           +-----------------+
+           | Invalide entrada|
+           | de cache        |
+           +-----------------+
+
+Quando há uma ausência da cache para escrita, a palavra que foi modificada é escrita para a memória princi-
+pal. A linha que contém a palavra referenciada não é carregada na cache. Quando há uma presença na cache para
+escrita, a cache é atualizada e, além disso, a palavra é escrita diretamente para a memória principal. A essência
+desse protocolo é que todas as operações de escrita resultam na escrita da palavra diretamente para a memória
+para mantê-la atualizada o tempo todo.
+
+Agora, vamos observar todas essas ações de novo, mas, desta vez, do ponto de vista da escuta, mostrado
+na coluna à direita da Figura 8.27. Vamos dar nome de cache 1 à que realiza as ações e de cache 2 à de escuta.
+Quando a cache 1 encontra uma ausência da cache para leitura, ela faz uma requisição ao barramento para buscar
+uma linha da memória. A cache 2 vê isso, porém nada faz. Quando a cache 1 encontra uma presença na cache para
+leitura, a requisição é satisfeita localmente e não ocorre nenhuma requisição ao barramento, portanto, a cache 2
+não está ciente das presenças na cache para leitura da cache 1.
+
+Escritas são mais interessantes. Se a CPU 1 fizer uma escrita, a cache 1 fará uma requisição de escrita no
+barramento, tanto quando houver ausência da cache, como quando houver presença nela. Em todas as escritas a
+cache 2 verifica se ela tem a palavra que está sendo escrita. Se não tiver, de seu ponto de vista isso é uma requi-
+sição/ausência da cache remota e ela nada faz. (Para esclarecer um ponto sutil, note que, na Figura 8.27, uma
+ausência da cache remota significa que a palavra não está presente na cache de escuta; não importa se ela estava
+ou não na cache do originador. Assim, uma única requisição pode ser uma presença na cache localmente e uma
+ausência da cache na cache de escuta, e vice-versa.)
+
+Agora, suponha que a cache 1 escreva uma palavra que está presente na cache da cache 2 (requisição
+remota/presença na cache para escrita). Se a cache 2 nada fizer, terá dados velhos, portanto, ela marca como
+inválida a entrada na cache que contém a palavra recém-modificada. Na verdade, ela remove o item da cache.
+Como todas as caches escutam todas as requisições ao barramento, sempre que uma palavra for escrita, o efeito
+líquido é atualizá-la na cache do originador, atualizá-la na memória e extraí-la de todas as outras. Desse modo,
+são evitadas versões inconsistentes.
+
+É claro que a CPU da cache 2 está livre para ler a mesma palavra já no ciclo seguinte. Nesse caso, a cache
+2 lerá a palavra da memória, que está atualizada. Nesse ponto, cache 1, cache 2 e a memória, todas terão cópias
+idênticas da palavra. Se qualquer das CPUs fizer uma escrita agora, a cache da outra será purgada e a memória
+será atualizada.
+
+Muitas variações desse protocolo básico são possíveis. Por exemplo, em uma presença na cache para escrita, a
+cache de escuta em geral invalida sua entrada que contém a palavra que está sendo escrita. Como alternativa, pode-
+ria aceitar o novo valor e atualizar sua cache em vez de marcá-la como inválida. Em termos de conceito, atualizar a
+cache é o mesmo que invalidá-la, seguida por uma leitura da palavra na memória. Em todos os protocolos de cache
+deve ser feita uma escolha entre uma estratégia de atualização e uma estratégia de invalidação. Esses protocolos
+funcionam de maneira diferente em cargas diferentes. Mensagens de atualização carregam cargas úteis e, por isso,
+são maiores do que as de invalidação, mas podem evitar futuras ausências da cache.
+
+Outra variante é carregar a cache de escuta quando houver ausência da cache para escrita. A correção do
+algoritmo não é afetada pelo carregamento, só o desempenho. A questão é: “Qual é a probabilidade de uma
+palavra recém-escrita ser escrita de novo em pouco tempo?”. Se for alta, há algo a dizer em favor de carregar a
+cache quando houver ausência desta para escrita, conhecida como política de alocação de escrita. Se for baixa, é
+melhor não atualizar quando houver ausência da cache para escrita. Se a palavra for lida dentro de pouco tempo,
+de qualquer modo ela será carregada pela ausência da cache para leitura; ganha-se pouco por carregá-la quando
+houver uma ausência da cache para escrita.
+
+Como acontece com muitas soluções simples, essa é ineficiente. Cada operação de escrita vai até a
+memória passando pelo barramento, portanto, mesmo com uma modesta quantidade de CPUs, o barramento
+se tornará um gargalo. Para manter o tráfego dentro de limites, foram inventados outros protocolos de cache.
+Uma propriedade que todos eles têm é que nem todas as escritas vão direto para a memória. Em vez disso, quando uma linha de cache é modificada, um bit é marcado dentro da cache, comunicando que a linha está
+correta, mas a memória não está. A certa altura, essa linha suja terá de ser escrita de volta na memória,
+porém, possivelmente depois que forem feitas muitas escritas nela. Esse tipo de protocolo é conhecido como
+protocolo de escrita retroativa (write-back).
+
+**• O protocolo MESI de coerência de cache**
+Um protocolo popular de coerência de cache de escrita retroativa é denominado MESI, representando as
+iniciais dos nomes dos quatro estados (M, E, S e I) que ele utiliza (Papamarcos e Patel, 1984). Ele é baseado no
+antigo protocolo escreve uma vez (write-once) (Goodman, 1983). O protocolo MESI é usado pelo Core i7 e por
+muitas outras CPUs para espiar o barramento. Cada entrada de cache pode estar em um dos quatro estados:
+
+1. Inválido – A entrada da cache não contém dados válidos.
+
+2. Compartilhado (shared) – múltiplas caches podem conter a linha; a memória está atualizada.
+
+3. Exclusivo – nenhuma outra cache contém a linha; a memória está atualizada.
+
+4. Modificado – a entrada é válida; a memória é inválida; não existem cópias.
+
+Quando a CPU é iniciada pela primeira vez, todas as entradas de cache são marcadas como inválidas. Na
+primeira vez que a memória é lida, a linha referenciada é buscada na cache da CPU que está lendo a memória e
+marcada como no estado E (exclusivo), uma vez que ela é a única cópia dentro de uma cache, como ilustrado
+na Figura 8.28(a) para o caso da CPU 1 que está lendo a linha A. Leituras subsequentes por aquela CPU usam
+a entrada que está na cache e não passam pelo barramento. Outra CPU também pode buscar a mesma linha e
+colocá-la na cache, mas, por causa da escuta, o portador original (CPU 1) vê que não está mais sozinho e anuncia
+no barramento que ele também tem uma cópia. Ambas as cópias são marcadas como estado S (compartilhado),
+conforme mostra a Figura 8.28(b). Em outras palavras, o estado S significa que a linha está em uma ou em mais
+caches para leitura e a memória está atualizada. Leituras subsequentes por uma CPU para uma linha que ela colo-
+cou em cache no estado S não usam o barramento e não provocam mudança de estado.
+
+Agora, considere o que acontece se a CPU 2 escrever para a linha de cache que ela está mantendo no
+estado S. Ela emite um sinal de invalidação no barramento, informando a todas as outras CPUs para descar-
+tar suas cópias. A cópia que está em cache agora passa para o estado M (modificado), como mostra a Figura
+8.28(c). A linha não é escrita para a memória. Vale a pena observar que, se uma linha estiver no estado E
+quando for escrita, nenhum sinal é necessário para invalidar outras caches, porque todos sabem que não
+existe nenhuma outra cópia.
+
+Em seguida, considere o que acontece se a CPU 3 ler a linha. A CPU 2, que agora possui a linha, sabe
+que a cópia na memória não é válida, portanto, ela ativa um sinal no barramento informando à CPU 3 que
+faça o favor de esperar enquanto ela escreve sua linha de volta para a memória. Quanto a CPU 2 concluir, a
+CPU 3 busca uma cópia e a linha é marcada como compartilhada em ambas as caches, como mostra a Figura
+8.28(d). Após isso, a CPU 2 escreve a linha de novo, que invalida a cópia que está na cache da CPU 3, con-
+forme mostra a Figura 8.28(e).
+
+Por fim, a CPU 1 escreve uma palavra na linha. A CPU 2 vê que uma escrita está sendo tentada e ativa um
+sinal de barramento dizendo à CPU 1 fazer o favor de esperar enquanto ela escreve sua linha de volta na memó-
+ria. Quando termina, a CPU 2 marca sua própria cópia como inválida, já que sabe que outra CPU está prestes a
+modificá-la. Nesse ponto, temos a situação em que uma CPU está escrevendo uma linha que não está na cache.
+Se a política de alocação de escrita estiver em uso, a linha será carregada na cache e marcada como em estado M,
+como ilustra a Figura 8.28(f). Se política de alocação de escrita não estiver em uso, a escrita irá diretamente até
+a memória e a linha não ficará em cache em lugar algum.
+
+**• Figura 8.28 - Protocolo MESI de coerência de cache.**
