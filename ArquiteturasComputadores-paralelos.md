@@ -2559,3 +2559,480 @@ quantidade de memória para produzir um nó mais poderoso do que o BlueGene/P, d
 menor deles será necessária e a comunicação entre eles será mais rápida.
 
 **• Figura 8.42 - Comparação entre BlueGene/P e Red Storm.**
+Este comparativo destaca as diferenças fundamentais de arquitetura: enquanto o BlueGene/P foca em densidade extrema de núcleos simples, o Red Storm utiliza processadores mais potentes em menor quantidade.
+
+    +-----------------------+--------------------------+--------------------------+
+    |         ITEM          |        BLUEGENE/P        |        RED STORM         |
+    +-----------------------+--------------------------+--------------------------+
+    | CPU                   | PowerPC (32 bits)        | Opteron (64 bits)        |
+    | Clock                 | 850 MHz                  | 2,4 GHz                  |
+    | CPUs de Cálculo       | 294.912                  | 20.736                   |
+    | CPUs / Placa          | 128                      | 8                        |
+    | CPUs / Gabinete       | 4.096                    | 192                      |
+    | Gabinetes de Cálculo  | 72                       | 108                      |
+    | Teraflops/s           | 1.000                    | 124                      |
+    | Memória / CPU         | 512 MB                   | 2 - 4 GB                 |
+    | Memória Total         | 144 TB                   | 10 TB                    |
+    | Roteador              | PowerPC                  | Seastar                  |
+    | Num. de Roteadores    | 73.728                   | 10.368                   |
+    | Interconexão          | Toros 3D (72x32x32)      | Toros 3D (27x16x24)      |
+    | Outras Redes          | Gigabit Ethernet         | Fast Ethernet            |
+    | Particionável?        | Não                      | Sim                      |
+    | S.O. (Cálculo)        | Proprietário             | Proprietário             |
+    | S.O. (E/S)            | Linux                    | Linux                    |
+    | Fabricante            | IBM                      | Cray Research            |
+    | Custo Elevado?        | Sim                      | Sim                      |
+    +-----------------------+--------------------------+--------------------------+
+
+**• Observações para o seu eBook:**
+
+ - Poder de Processamento: Note que o BlueGene/P atinge o marco de 1 Petaflop (1.000 Teraflops) usando uma massa gigantesca de núcleos PowerPC, enquanto o Red Storm prioriza o desempenho individual de cada núcleo Opteron.
+
+ - Eficiência de Memória: O Red Storm oferece até 8x mais memória por CPU (4 GB vs 512 MB), o que é vital para aplicações que processam grandes conjuntos de dados localmente antes da troca de mensagens.
+
+ - Flexibilidade: O Red Storm permite ser particionado, o que explica a divisão física que vimos na planta do sistema entre áreas confidenciais e não-confidenciais.
+
+As consequências dessas decisões se refletiram no empacotamento. Como a IBM construiu um chip espe-
+cial combinando processador e roteador, conseguiu uma densidade de empacotamento mais alta: 4.096 CPUs/
+gabinete. Como o Sandia preferiu um chip de CPU de prateleira, sem modificação, e 2–4 GB de RAM por nó, ele
+só conseguiu colocar 192 processadores de cálculo em um gabinete. O resultado é que o Red Storm ocupa mais
+espaço e consome mais energia do que o BlueGene/P.
+
+No mundo exótico da computação de laboratório de âmbito nacional, o importante é o desempenho. Nesse
+aspecto, o BlueGene/P ganha, 1.000 TF/s contra 124 TF/s, mas o Red Storm foi projetado para ser expansível;
+portanto, acrescentando mais Opterons ao problema, o Sandia provavelmente conseguiria elevar seu desempenho
+de forma significativa. A IBM poderia responder aumentando um pouco o clock (850 MHz não significa forçar
+muito a tecnologia existente). Em suma, os supercomputadores MPP ainda não chegaram nem perto de quaisquer
+limites da física e continuarão crescendo por muitos anos.
+
+## 8.4.3 Computação de cluster
+O outro estilo de multicomputador é o computador de cluster (Anderson et al., 1995; Martin et al., 1997).
+Em geral, consiste em centenas de milhares de PCs ou estações de trabalho conectadas por uma placa de rede dis-
+ponível no mercado. A diferença entre um MPP e um cluster é análoga à diferença entre um mainframe e um PC.
+Ambos têm uma CPU, ambos têm RAM, ambos têm discos, ambos têm um sistema operacional e assim por diante.
+
+Porém, os do mainframe são mais rápidos (exceto talvez o sistema operacional). No entanto, em termos qualita-
+tivos, eles são considerados diferentes e são usados e gerenciados de modo diferente. Essa mesma diferença vale
+para MPPs em comparação com clusters.
+
+Historicamente, o elemento fundamental que tornava os MPPs especiais era sua interconexão de alta veloci-
+dade, mas o recente lançamento de interconexões de alta velocidade comerciais, de prateleira, começou a fechar
+essa lacuna. Levando tudo em conta, é provável que os clusters empurrem os MPPs para nichos cada vez meno-
+res, exatamente como os PCs transformaram os mainframes em especialidades esotéricas. O principal nicho para
+MPPs são supercomputadores de alto preço, para os quais o desempenho de pico é tudo o que interessa e, se você
+precisar perguntar o preço, é porque não pode bancar um deles.
+
+Embora existam muitos tipos de clusters, há duas espécies que dominam: o centralizado e o descentralizado.
+O centralizado é um cluster de estações de trabalho ou PCs montado em uma grande estante em uma única sala.
+Às vezes, eles são empacotados de um modo bem mais compacto do que o usual para reduzir o tamanho físico
+e o comprimento dos cabos. Em geral, as máquinas são homogêneas e não têm periféricos, a não ser cartões de
+rede e, possivelmente, discos. Gordon Bell, o projetista do PDP-11 e do VAX, denominou essas máquinas estações
+de trabalho sem cabeça (porque não têm donos). Ficamos tentados a denominá-las COWs (vacas) sem cabeça,
+mas ficamos com medo que esse termo ferisse a suscetibilidade de muitas vacas sagradas, portanto, desistimos.
+
+Clusters descentralizados consistem em estações de trabalho ou PCs espalhados por um prédio ou campus.
+Grande parte deles fica ociosa por muitas horas no dia, em especial à noite. Costumam ser conectados por uma
+LAN. Em geral, são heterogêneos e têm um conjunto completo de periféricos, embora ter um cluster com 1.024
+mouses na verdade não é muito melhor do que ter um cluster sem mouse algum. O mais importante é que muitos
+deles têm proprietários que têm um apego emocional às suas máquinas e tendem a olhar com desconfiança algum
+astrônomo que queira simular o big bang nelas. Usar estações de trabalho ociosas para formar um cluster sempre
+significa dispor de algum meio de migrar tarefas para fora das máquinas quando seus donos as reivindicarem. A
+migração é possível, mas aumenta a complexidade do software.
+
+De modo geral, os clusters são conjuntos pequenos, na faixa de uma dúzia a talvez 500 PCs. Contudo, tam-
+bém é possível construir clusters muito grandes com PCs de prateleira. O Google fez isso de modo interessante,
+que veremos agora.
+
+**• Google**
+Google é um sistema de busca popular para achar informações na Internet. Embora sua popularidade venha,
+em parte, de sua interface simples e tempo de resposta rápido, seu projeto não é nada simples. Do ponto de vista
+do Google, o problema é que ele tem de achar, indexar e armazenar toda a World Wide Web (estimada em 40
+bilhões de páginas), ser capaz de pesquisar a coisa toda em menos de 0,5 segundo e manipular milhares de con-
+sultas/segundo que vêm do mundo inteiro, 24 horas por dia. Ademais, ele não pode parar nunca, nem mesmo em
+face de terremotos, queda de energia elétrica, queda de redes de telecomunicações, falhas de hardware e bugs de
+software. E, é claro, tem de fazer tudo isso do modo mais barato possível. Montar um clone do Google definiti-
+vamente não é um exercício para o leitor.
+
+Como o Google consegue? Para começar, ele opera várias centrais de dados no mundo inteiro. Além de essa
+técnica proporcionar backups no caso de alguma delas ser engolida por um terremoto, quando o <www.google.
+com> é consultado, o endereço IP do remetente é inspecionado e é fornecido o endereço da central de dados mais
+próxima. E é para lá que o browser envia a consulta.
+
+Cada central de dados tem, no mínimo, uma conexão de fibra ótica OC-48 (2,488 Gbps) com a Internet,
+pela qual recebe consultas e envia respostas, bem como uma conexão de backup OC-12 (622 Mbps) com outro
+provedor de telecomunicações diferente, caso o primário falhe. Há fontes de energia ininterruptas e geradores
+de emergência a diesel em todas as centrais de dados para manter o espetáculo em cena durante quedas de
+energia. Por conseguinte, quando acontece um grande desastre natural, o desempenho sofrerá, mas o Google
+continuará funcionando.
+
+Para entender melhor por que o Google escolheu essa arquitetura, é bom descrever de modo resumido como
+uma consulta é processada assim que chega à sua central de dados designada. Após chegar à central de dados
+(etapa 1 na Figura 8.43), o balanceador de carga roteia a consulta para um dos muitos manipuladores de consultas
+(2) e para o revisor ortográfico (3) e um servidor de anúncios publicitários (4) em paralelo. Então, as palavras
+procuradas são pesquisadas nos servidores de índice (5) em paralelo. Esses servidores contêm uma entrada para
+cada palavra na Web. Cada entrada relaciona todos os documentos (páginas Web, arquivos PDF, apresentações
+PowerPoint etc.) que contêm a palavra, organizados por relevância da página. A relevância da página é determi-
+nada por uma fórmula complicada (e secreta), mas o número de referências para uma página e suas respectivas
+relevâncias desempenha um papel importante.
+
+**• Figura 8.43 - Processamento de uma consulta no Google.**
+Este diagrama é o exemplo perfeito de como um multicomputador massivo (como os que vimos nas Figuras 8.36 e 8.41) organiza o fluxo de dados para responder em milissegundos.
+
+O processo é uma coreografia entre balanceadores de carga, servidores de consulta e bancos de dados distribuídos.
+
+    (1) USUÁRIO (Consulta)
+                    |
+            +--------v----------+
+            |  BALANCEADOR DE   |
+            |      CARGA        |
+            +--------|----------+
+                (2)  |
+            +--------v----------+      (3)    +-----------+
+            |   MANIPULADOR DE  |------------>| REVISOR   |
+            |     CONSULTAS     |<------------| ORTOGRÁF. |
+            +--------|----------+      (9)    +-----------+
+            (4) |    ^ (10)
+                |    |                 (5,7)   +-----------+
+            +-----v--|----------+  ----------->| SERV. DE  |
+            |    SERVIDOR DE    |  <-----------| ÍNDICE    |
+            |     ANÚNCIOS      |      (6,8)   +-----------+
+            +-------------------+
+                                    (11) RESPOSTA FINAL
+
+![alt text](image-143.png)
+
+**• Etapas do Processamento (Para o seu eBook):**
+
+ 1. Entrada e Equilíbrio: A consulta chega e o Balanceador de Carga a direciona para um dos muitos Manipuladores de Consultas disponíveis no cluster.
+
+ 2. Refinamento: O manipulador envia a consulta para o Revisor Ortográfico (etapa 3) para sugestões de correção.
+
+ 3. Busca Paralela: O manipulador consulta simultaneamente os Servidores de Índice (para localizar documentos) e os Servidores de Documentos (para extrair os snippets de texto).
+
+ 4. Monetização: Em paralelo, o Servidor de Anúncios seleciona publicidade relevante para a busca.
+
+ 5. Assembleia: O manipulador reúne todos os resultados, ordena-os e envia a resposta final ao usuário (etapa 11).
+
+ara obter maior desempenho, o índice é subdividido em partes denominadas fragmentos que podem ser
+pesquisadas em paralelo. Ao menos em termos conceituais, o fragmento 1 contém todas as palavras no índice,
+cada uma delas acompanhada pelos IDs dos n documentos de importância mais alta que contêm aquela palavra. O
+fragmento 2 contém todas as palavras e os IDs dos n documentos de importância mais alta seguintes e assim por
+diante. À medida que a Web cresce, cada um desses fragmentos pode ser subdividido mais tarde, com as primei-
+ras k palavras em um conjunto de fragmentos, as próximas k palavras em um segundo conjunto de fragmentos e
+assim por diante, de modo a conseguir cada vez mais paralelismo na busca.
+
+Os servidores de índice retornam um conjunto de identificadores de documentos (6), que então são combina-
+dos de acordo com as propriedades booleanas da consulta. Por exemplo, se a pesquisa for para +digital +capivara
++dança, então só os identificadores de documentos que aparecem em todos os três conjuntos são usados para a
+próxima etapa. Nessa etapa (7), os próprios documentos são referenciados para extrair seus títulos, URL e pedaços
+de texto que cercam os termos de pesquisa. Os servidores de documentos contêm muitas cópias de toda a Web em
+cada central de dados, que hoje são centenas de terabytes. Os documentos também são divididos em fragmentos
+para melhorar a pesquisa paralela. Embora o processamento de consultas não exija a leitura da Web inteira (ou até
+mesmo a leitura das dezenas de terabytes nos servidores de índice), ter de processar 100 MB por pesquisa é normal.
+
+Quando os resultados são devolvidos ao manipulador de consultas (8), as páginas encontradas são reunidas
+e classificadas por importância. Se forem detectados potenciais erros de ortografia (9), eles são anunciados, e
+anúncios publicitários relevantes (10) são adicionados. Apresentar propaganda de anunciantes interessados em
+comprar termos de consulta específicos (por exemplo, “hotel” ou “filmadora”) é o modo como o Google ganha
+seu dinheiro. Por fim, os resultados são formatados em HTML (HyperText Markup Language – linguagem de
+marcação de hipertexto) e enviados ao usuário como uma página Web.
+
+Munidos dessas informações básicas, agora podemos examinar a arquitetura do Google. A maioria das
+empresas, quando confrontadas com um imenso banco de dados, taxa de transmissão maciça e a necessidade de
+alta confiabilidade, compraria o equipamento maior, mais rápido e mais confiável existente no mercado. O Google
+fez exatamente o oposto. Comprou PCs baratos, de desempenho modesto. Muitos deles. E, com eles, montou o
+maior cluster de prateleira do mundo. O princípio diretor dessa decisão foi simples: otimizar preço/desempenho.
+
+A lógica que fundamentou essa decisão está na economia: PCs normais são muito baratos. Servidores de alta
+tecnologia não são, e grandes multiprocessadores, menos ainda. Assim, conquanto um servidor de alta tecnologia
+pudesse ter duas ou três vezes o desempenho de um PC desktop comum, normalmente seu preço seria 5 a 10
+vezes mais alto, o que não é eficiente em termos de custo.
+
+Claro que PCs baratos falham mais do que servidores de topo de linha, mas os últimos também falham,
+portanto, o software do Google tinha de ser projetado para funcionar com hardware que falhava, não importando
+qual equipamento estivesse usando. Uma vez escrito o software tolerante a falhas, na verdade não importava que a
+taxa de falha fosse 0,5% por ano ou 2% por ano, elas teriam de ser tratadas. A experiência do Google diz que cerca
+de 2% dos PCs falham a cada ano. Mais da metade das falhas se deve a discos defeituosos, seguidos por fontes de
+energia e chips de RAM. Uma vez construídas, as CPUs nunca falham. Na verdade, a maior fonte de quedas não
+é o hardware; é o software. A primeira reação a uma queda é apenas reinicializar, o que muitas vezes resolve o
+problema (o equivalente eletrônico de um médico dizer: “Tome duas aspirinas e vá para a cama”).
+
+Um típico PC moderno do Google consiste em um processador Intel de 2 GHz, 4 GB de RAM e um disco de
+cerca de 2 TB, o tipo de máquina que uma avó compraria para verificar seu e-mail de vez em quando. O único
+item especializado é um chip Ethernet. Não exatamente um chip de última geração, mas um muito barato. Os PCs
+são acondicionados em caixas de 1 unidade de altura (cerca de 5 cm de espessura) e empilhados em grupos de
+40 em estantes de 50 centímetros, uma pilha na frente e uma atrás, para um total de 80 PCs por estante. Os PCs
+que estão em uma estante são conectados por Ethernet comutada e o switch está dentro da estante. As estantes em
+uma central de dados também são conectadas por Ethernet comutada, com dois switches redundantes por central
+de dados usados para sobreviver a falhas de switches .
+
+O layout de uma típica central de dados Google é ilustrado na Figura 8.44. A fibra OC-48 de alta largura de
+banda de entrada é roteada para cada um de dois switches Ethernet de 128 portas. De modo semelhante, a fibra
+OC-12 de backup também é roteada para cada um dos dois switches. As fibras de entrada usam cartões especiais
+de entrada e não ocupam qualquer uma das 128 portas Ethernet.
+
+Quatro enlaces Ethernet saem de cada estante: dois para o switch da esquerda e dois para o da direita. Nessa
+configuração, o sistema pode sobreviver à falha de qualquer dos dois switches. Uma vez que cada estante tem
+quatro conexões com o switch (dois dos 40 PCs da frente e dois dos 40 PCs de trás), é preciso quatro falhas de
+enlace ou duas falhas de enlace e uma de switch para tirar uma estante de linha. Com um par de switches de 128
+portas e quatro enlaces de cada estante, até 64 estantes podem ser suportadas. Com 80 PCs por estante, uma cen-
+tral de dados pode ter até 5.120 PCs. Mas, é claro, as estantes não têm de conter exatamente 80 PCs e os switches
+podem ser maiores ou menores do que 128 portas; esses dados são apenas valores típicos de um cluster Google.
+
+A densidade de energia também é uma questão fundamental. Um PC típico utiliza 120 watts, ou cerca de
+10 kW por estante. Uma estante precisa de cerca de 3 m2 para que o pessoal de manutenção possa instalar e remo-
+ver PCs e para que o condicionamento de ar funcione. Esses parâmetros dão uma densidade de energia de mais
+de 3.000 watts/m2. A maioria das centrais de dados é projetada para 600–1.200 watts/m2, portanto, são necessárias
+medidas especiais para refrigerar as estantes.
+
+**• Figura 8.44 - Cluster Google típico.**
+A Figura 8.44 detalha a organização física de um Cluster típico do Google, mostrando como milhares de computadores comuns são transformados em uma superestrutura através de redes de alta velocidade.
+
+O cluster utiliza redundância em múltiplos níveis, com switches de alta densidade conectando centenas de estantes de servidores.
+
+    [ FIBRA OC-12 ]             [ FIBRA OC-48 ]
+                |                           |
+        +--------*---------------------------*--------+
+        |                                            |
+    +---v-------------+                        +-----v-----------+
+    | Switch Gigabit  |                        | Switch Gigabit  |
+    | Ethernet        |                        | Ethernet        |
+    | (128 portas)    |                        | (128 portas)    |
+    +---*--*--*--*----+                        +---*--*--*--*----+
+        |  |  |  | \                          /  |  |  |  |
+        |  |  |  |  \       LINKS GIGABIT    /   |  |  |  |
+        |  |  |  |   \       DUPLOS         /    |  |  |  |
+        |  |  |  |    \                    /     |  |  |  |
+    [ESTANTE 1]   [ESTANTE 2]        [ESTANTE 3]   [ESTANTE N]
+    (80 PCs)      (80 PCs)           (80 PCs)      (80 PCs)
+
+![alt text](image-144.png)
+
+**• Detalhes de Implementação para o eBook:**
+
+ - Redundância de Switch: Cada estante de servidores é conectada a dois switches Gigabit Ethernet diferentes por meio de links duplos. Isso garante que, se um switch falhar, o tráfego de dados continue fluindo sem interrupções.
+
+ - Densidade de Processamento: O Google organiza seus servidores em estantes (racks), onde cada estante contém cerca de 80 PCs. Multiplicando isso pelo número de portas dos switches, um único cluster pode gerenciar milhares de nós de processamento.
+
+ - Conectividade de Backbone: Os switches principais são alimentados por conexões de fibra óptica de altíssima velocidade (OC-12 e OC-48), que conectam o cluster ao restante da infraestrutura global da empresa.
+
+O Google aprendeu três coisas sobre implementar servidores Web maciçamente paralelos, que é bom repetir:
+
+    1. Componentes falham, portanto, planeje a falha.
+    2. Duplique tudo para manter a vazão e a disponibilidade.
+
+    3. Otimize preço/desempenho.
+
+O primeiro item diz que você precisa ter software tolerante a falhas. Mesmo com o melhor dos equipamentos,
+se você tiver um número maciço de componentes, algum falhará e o software tem de ser capaz de tratar o erro. Quer
+você tenha uma falha por semana ou duas, com sistemas desse tamanho o software tem de ser capaz de tratá-las.
+
+O segundo item indica que ambos, hardware e software, têm de ter alto grau de redundância. Além de melho-
+rar as propriedades de tolerância a falhas, isso também melhora a vazão. No caso do Google, os PCs, discos, cabos e
+switches são todos replicados muitas vezes. Além do mais, o índice e os documentos são subdivididos em fragmen-
+tos e estes são muito replicados em cada central de dados, e as próprias centrais de dados também são replicadas.
+
+O terceiro item é uma consequência dos dois primeiros. Se o sistema foi projetado corretamente para lidar
+com falhas, comprar componentes caros como RAIDs com discos SCSI é um erro. Até eles falharão, mas gastar dez
+vezes mais para reduzir a taxa de falhas à metade é uma má ideia. Melhor comprar dez vezes mais em hardware e
+tratar as falhas quando elas ocorrerem. No mínimo, ter mais hardware resultará em melhor desempenho quando
+tudo estiver funcionando.
+
+Se quiser mais informações sobre o Google, veja Barroso et al., 2003; e Ghemawat et al., 2003.
+
+## 8.4.4Software de comunicação para multicomputadores
+Programar um multicomputador requer software especial, quase sempre bibliotecas, para manipular a comu-
+nicação e a sincronização entre processos. Nesta seção, vamos falar um pouco sobre esse software. Na maioria
+das vezes, os mesmos pacotes de software executam em MPPs e clusters, portanto, é fácil portar aplicações entre
+plataformas.
+
+Sistemas de troca de mensagens têm dois ou mais processos que executam independentemente um do outro.
+Por exemplo, um processo pode produzir alguns dados e um, ou outros mais, podem consumi-los. Não há qual-
+quer garantia de que, quando o remetente tiver mais dados, os receptores estarão prontos para ele, pois cada um
+executa seu próprio programa.
+
+A maioria dos sistemas de troca de mensagens fornece duas primitivas (em geral, chamadas de biblioteca),
+send e receive, mas diversos tipos de semânticas são possíveis. As três variantes principais são:
+
+    1. Troca síncrona de mensagens.
+    2. Troca de mensagens por buffers.
+    3. Troca de mensagens sem bloqueio.
+
+Na troca síncrona de mensagens, se o remetente executa um send e o receptor ainda não executou um
+receive, o remetente é bloqueado (suspenso) até que o receptor execute um receive, quando então a mensagem é
+copiada. Quando o remetente obtiver de novo o controle após a chamada, ele sabe que a mensagem foi enviada
+e corretamente recebida. Esse método é o que tem a semântica mais simples e não requer operação alguma de
+buffer. Porém, uma séria desvantagem é que o remetente permanece bloqueado até que o receptor tenha adquirido
+a mensagem e reconhecido seu recebimento.
+
+Na troca de mensagens com buffer, quando uma mensagem é enviada antes de o receptor estar pronto, ela
+é colocada em algum buffer, por exemplo, em uma caixa de correio, até que o receptor a retire dali. Assim, nesse
+tipo de troca, um remetente pode continuar após um send, ainda que o receptor esteja ocupado com alguma outra
+coisa. Visto que a mensagem já foi enviada, o remetente está livre para reutilizar de imediato o buffer de mensagens.
+Esse esquema reduz o tempo que o remetente tem de esperar. Basicamente, tão logo ele tenha enviado a mensagem,
+poderá continuar. Todavia, agora, o remetente não tem nenhuma garantia de que a mensagem foi corretamente rece-
+bida. Ainda que a comunicação seja confiável, o receptor pode ter sofrido uma avaria antes de receber a mensagem.
+
+Na troca de mensagens sem bloqueio, o remetente tem permissão para continuar imediatamente após fazer
+a chamada. A biblioteca apenas diz ao sistema operacional para fazer a chamada mais tarde, quando tiver tempo.
+Por conseguinte, o remetente mal fica bloqueado. A desvantagem desse método é que, quando o remetente conti-
+nua após a send, talvez não possa reutilizar o buffer de mensagens porque a mensagem pode não ter sido enviada
+ainda. Ele precisa descobrir, de alguma forma, quando pode utilizar novamente o buffer. Uma ideia é fazer com
+que o remetente pergunte ao sistema. Outra é obter uma interrupção quando o buffer estiver disponível. Nenhuma
+delas simplifica o software.
+
+Logo adiante, vamos discutir brevemente um sistema popular de troca de mensagens disponível em muitos
+multicomputadores: a MPI.
+
+**•  MPI – Interface de troca de mensagens**
+Durante muitos anos, o pacote de comunicação mais popular para multicomputadores foi a PVM (Parallel
+Virtual Machine – máquina virtual paralela) (Geist et al., 1994; e Sunderram, 1990). Contudo, nos últimos anos ele
+vem sendo substituído em grande parte pela MPI (Message-Passing Interface – interface de troca de mensagens). A
+
+MPI é muito mais rica e mais complexa do que a PVM, tem muito mais chamadas de biblioteca, muito mais opções
+e muito mais parâmetros por chamada. A versão original da MPI, agora denominada MPI-1, foi ampliada pela MPI-2
+em 1997. Mais adiante, daremos uma introdução muito sucinta à MPI-1 (que contém todos os aspectos básicos) e em seguida comentaremos um pouco o que foi adicionado na MPI-2. Se o leitor quiser mais informações sobre MPI,
+pode consultar Gropp et al., 1994; e Snir et al., 1996.
+
+A MPI-1 não lida com criação nem gerenciamento de processo, como a PVM. Cabe ao usuário criar proces-
+sos usando chamadas locais de sistema. Uma vez criados, os processos são organizados em grupos estáticos de
+processos, que não são alterados. É com esses grupos que a MPI trabalha.
+
+A MPI é baseada em quatro conceitos principais: comunicadores, tipos de dados de mensagens, operações de
+comunicação e topologias virtuais. Um comunicador é um grupo de processos mais um contexto. Um contexto é
+um rótulo que identifica algo, como uma fase de execução. Quando mensagens são enviadas e recebidas, o con-
+texto pode ser usado para impedir que mensagens não relacionadas interfiram umas com as outras.
+
+Mensagens têm tipos e muitos tipos de dados são suportados, entre eles caracteres, números inteiros lon-
+gos, normais e curtos, números de ponto flutuante de precisão simples e de precisão dupla, e assim por diante.
+Também é possível construir outros tipos derivados desses.
+
+A MPI suporta um extenso conjunto de operações de comunicação. A mais básica é usada para enviar mensagens, como a seguir:
+
+    **MPI_Send(buffer, quant, tipo_dado, destino, rótulo, comunicador)**
+
+Essa chamada envia ao destino um buffer com um número quant de itens do tipo de dados especificado. O campo rótulo rotula a mensagem de modo que o receptor possa dizer que só quer receber uma mensagem com aquele rótulo. O último campo informa em qual grupo de processos está o destinatário (o campo destino é apenas um índice para a lista de processos do grupo especificado). A chamada correspondente para receber uma mensagem é:
+
+    **MPI_Recv(&buffer, quant, tipo_dado, origem, rótulo, comunicador, &status)**
+
+que anuncia que o receptor está procurando uma mensagem de certo tipo vinda de certa origem com certo rótulo.
+
+A MPI suporta quatro modos básicos de comunicação. O modo 1 é síncrono, no qual o remetente não pode começar a enviar até que o receptor tenha chamado MPI_Recv. O modo 2 usa buffer e, com ele, a restrição que acabamos de citar não é válida. O modo 3 é o padrão, que é dependente da implementação e pode ser síncrono
+ou com buffer. O modo 4 é o modo pronto, no qual o remetente declara que o receptor está disponível (como no modo síncrono), mas não faz qualquer verificação. Cada uma dessas primitivas vem em uma versão com ou sem bloqueio, o que resulta em oito primitivas no total. A recepção tem só duas variantes: com e sem bloqueio.
+
+A MPI suporta comunicação coletiva, incluindo broadcast, espalha/reúne, permuta total, agregação e barreira. Seja qual for a forma de comunicação coletiva, todos os processos em um grupo devem fazer a chamada e com argumentos compatíveis. Não fazer isso é um erro. Uma forma típica de comunicação coletiva são processos organizados em uma árvore, na qual os valores se propagam das folhas para a raiz, passando por algum processamento a cada etapa, por exemplo, somar valores ou apanhar o valor máximo.
+
+Um conceito básico em MPI é a topologia virtual, na qual os processos podem ser organizados em topologia de árvore, anel, grade, toro ou outra, pelo usuário e por aplicação. Essa organização proporciona um meio de nomear caminhos de comunicação e facilita a comunicação.
+
+A MPI-2 adiciona processos dinâmicos, acesso à memória remota, comunicação coletiva sem bloqueio,
+suporte para E/S escalável, processamento em tempo real e muitas outras novas características que fogem do esco-
+po deste livro. Durante anos, foi travada uma batalha na comunidade científica entre os defensores da MPI e da
+PVM. O lado da PVM afirmava que a PVM era mais fácil de aprender e mais simples de usar. O lado da MPI dizia
+que a MPI faz mais e também destacava que ela é um padrão formal, apoiada por um comitê de padronização e um
+documento oficial de definição. O lado da PVM concordou, mas declarou que a falta de uma burocracia completa
+de padronização não é necessariamente uma desvantagem. Depois de muita discussão, parece que a MPI venceu.
+
+## 8.4.5 Escalonamento
+Programadores de MPI podem criar jobs com facilidade requisitando várias CPUs e executando durante
+períodos substanciais de tempo. Quando várias requisições independentes estão disponíveis vindas de diferentes usuários, cada uma necessitando de um número diferente de CPUs por períodos de tempo diferentes, o cluster
+precisa de um escalonador para determinar qual job é executado e quando.
+
+No modelo mais simples, o escalonador de jobs requer que cada um especifique quantas CPUs necessita.
+Então, os jobs são executados em estrita ordem FIFO, como mostra a Figura 8.45(a). Nesse modelo, após um job
+ser iniciado, verifica-se se há número suficiente de CPUs disponíveis para iniciar o próximo job que está na fila
+de entrada. Se houver, este é iniciado e assim por diante. Caso contrário, o sistema espera até que mais CPUs
+fiquem disponíveis. A propósito, embora tenhamos sugerido que esse cluster tem oito CPUs, ele poderia perfei-
+tamente ter 128 CPUs que são alocadas em unidades de 16 (o que resulta em oito grupos de CPUs) ou alguma
+outra combinação.
+
+**• Figura 8.45 - Escalonamento de um cluster. (a) FIFO. (b) Sem bloqueio de cabeça de fila. (c) Lajotas. As áreas sombreadas indicam CPUs ociosas.**
+O diagrama mostra como diferentes algoritmos gerenciam o tempo e o uso de CPUs em um grupo de processadores, onde as áreas vazias (sombreadas no original) representam ociosidade.
+
+    (a) FIFO (First-In, First-Out)    (b) SEM BLOQUEIO DE CABEÇA   (c) LAJOTAS (Tiling)
+                                            DE FILO (Backfilling)
+        Grupo de CPUs                     Grupo de CPUs              Grupo de CPUs
+        |0|1|2|3|4|5|6|7|                 |0|1|2|3|4|5|6|7|          |0|1|2|3|4|5|6|7|
+    T +---+-------+-----+             T +---+-------+-----+      T +---+-------+-----+
+    E | 1 |       |     |             E | 1 |   4   |  7  |      E | 1 |   4   |  7  |
+    M +---+-------+-----+             M +-----------+     |      M +-----------+     |
+    P |     2     |     |             P |     3     |     |      P |     3     |     |
+    O +-------+---+-----+             O +-------+---+-----+      O +-------+---+-----+
+      |   3   | 5 |     |               |   5   | 9 |     |        |   6   | 5 |     |
+      +-------+---+-----+               +-------+---+-----+        +-------+---+-----+
+
+![alt text](image-145.png)
+
+**• Análise das Estratégias para o eBook:**
+
+ - FIFO (a): As tarefas são executadas na ordem em que chegam. O grande problema aqui é a ociosidade: se a tarefa 1 é pequena mas a tarefa 2 exige muitas CPUs que ainda não estão vagas, o sistema fica parado esperando, mesmo havendo processadores livres para outras tarefas menores.
+
+ - Sem Bloqueio de Cabeça de Fila / Backfilling (b): Se a tarefa no topo da fila não pode ser executada por falta de recursos, o escalonador "pula" para tarefas menores (como a 4 e a 7) que caibam nos espaços vazios, desde que isso não atrase a tarefa principal.
+
+ - Lajotas / Escalonamento de Grupo (c): Tenta organizar as tarefas como blocos encaixados (lajotas) para maximizar a densidade de uso das CPUs em cada intervalo de tempo, minimizando fragmentação e espera.
+
+Um algoritmo de escalonamento melhor evita bloqueio de cabeça de fila saltando jobs que não cabem e
+escolhendo o primeiro que couber. Sempre que um job termina, uma fila de jobs remanescentes é verificada em
+ordem FIFO. Esse algoritmo resulta na Figura 8.45(b).
+
+Um algoritmo de escalonamento ainda mais sofisticado requer que cada job apresentado especifique seu for-
+mato, isto é, quantas CPUs ele quer durante quantos minutos. Com essa informação, o escalonador de jobs pode
+tentar montar um esquema em lajotas com o tempo da CPU. Esse esquema é especialmente eficaz quando os jobs
+são apresentados durante o dia para execução à noite, de modo que o escalonador tem todas as informações sobre
+os jobs com antecedência e pode executá-los na melhor ordem, como ilustrado na Figura 8.45(c).
+## 8.4.6 Memória compartilhada no nível de aplicação
+Algo que deve ficar claro por nossos exemplos é que os multicomputadores podem ser ampliados para tama-
+nhos maiores do que os multiprocessadores. Essa realidade levou ao desenvolvimento de sistemas de troca de
+mensagens como a MPI. Muitos programadores não apreciam esse modelo e gostariam de ter a ilusão de memória
+compartilhada, ainda que ela não estivesse realmente ali. Atingir esse objetivo seria o melhor de ambos os mun-
+dos: hardware grande e barato (pelo menos, por nó), além de facilidade de programação. Esse é Santo Graal da
+computação paralela.
+
+Muitos pesquisadores concluíram que, embora a capacidade de ampliação da memória compartilhada no
+nível da arquitetura não seja boa, pode haver outros modos de alcançar o mesmo objetivo. Pela Figura 8.21, vemos que há outros níveis nos quais uma memória compartilhada pode ser introduzida. Nas seções seguintes,
+examinaremos alguns modos pelos quais a memória compartilhada pode ser introduzida em um multicomputa-
+dor no modelo de programação, sem estar presente no nível do hardware.
+
+**• Memória compartilhada distribuída**
+Uma classe de sistema de memória compartilhada no nível de aplicação é o sistema baseado em páginas.
+É conhecido pelo nome DSM (Distributed Shared Memory – memória compartilhada distribuída). A ideia é
+simples: um conjunto de CPUs em um multicomputador compartilha um espaço de endereço virtual paginado.
+Na versão mais simples, cada página é mantida na RAM de exatamente uma CPU. Na Figura 8.46(a), vemos um
+espaço de endereço virtual compartilhado que consiste em 16 páginas, distribuídas por quatro CPUs.
+
+Quando uma CPU referencia uma página em sua própria RAM local, a escrita ou leitura apenas ocorre, sem
+mais demora. Contudo, quando referencia uma página em uma memória remota, obtém uma falta de página.
+Só que, em vez de a página faltante ser trazida do disco, o sistema de execução ou o sistema operacional envia
+uma mensagem ao nó que contém a página ordenando que ele a desmapeie e a envie. Após a página chegar, ela
+é mapeada e a instrução que falta é reiniciada, exatamente como uma falta de página normal. Na Figura 8.46(b),
+vemos a situação após a CPU 0 ter sofrido uma falta na página 10: ela é movida da CPU 1 para a CPU 0.
+
+**• Figura 8.46 - Espaço de endereço virtual que consiste em 16 páginas distribuídas por quatro nós de um multicomputador. (a) Situação inicial. (b) Após a CPU 0 referenciar a página 10. (c) Após a CPU 1 referenciar a página 10, neste caso considerando que ela é uma página somente de leitura.**
+A imagem demonstra como 16 páginas de memória virtual são distribuídas entre quatro nós independentes, cada um com sua própria CPU e memória física.
+
+    ESPAÇO DE ENDEREÇAMENTO GLOBAL (16 PÁGINAS)
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+        v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
+        +-------+  +-------+  +-------+  +-------+
+        | CPU 0 |  | CPU 1 |  | CPU 2 |  | CPU 3 |
+        |-------|  |-------|  |-------|  |-------|
+        | Págs: |  | Págs: |  | Págs: |  | Págs: |
+        | 0,2,5 |  | 1,3,6 |  | 4,7,11|  | 13,15 |
+        | 9     |  | 8,10  |  | 12,14 |  |       |
+        +-------+  +-------+  +-------+  +-------+
+            |          |          |          |
+        ================= REDE ===================
+
+![alt text](image-146.png)
+
+**• Dinâmica de Funcionamento (Casos A, B e C):**
+
+ - (a) Situação Inicial: As páginas estão distribuídas estaticamente. Por exemplo, a página 10 reside originalmente na memória física da CPU 1.
+
+ - (b) Referência à Página Remota (Escrita): Se a CPU 0 tenta acessar a página 10, ocorre uma falta de página (page fault). O sistema operacional então move a página 10 da CPU 1 para a CPU 0 através da rede. Agora, a CPU 0 possui a posse exclusiva para escrita.
+
+ - (c) Replicação para Leitura: Se a página for configurada como somente leitura, o sistema pode simplesmente replicá-la. Assim, tanto a CPU 0 quanto a CPU 1 podem manter cópias locais da página 10 simultaneamente, reduzindo o tráfego na rede.
+
+
