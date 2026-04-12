@@ -1264,89 +1264,37 @@ A taxonomia de Flynn e suas derivações modernas permitem classificar quase tod
 
  - NUMA (Non-Uniform Memory Access): Arquiteturas comuns em servidores de alta performance (como os da OCI) onde o tempo de acesso à memória depende da localização física do dado em relação ao processador.
 
-Em nossa taxonomia, a categoria MIMD foi subdividida em multiprocessadores (máquinas de memória
-compartilhada) e multicomputadores (máquinas de troca de mensagens). Existem três tipos de multiprocessado-
-res, distinguidos pelo modo como a memória compartilhada é neles implementada. Eles são denominados UMA
-(Uniform Memory Access – acesso uniforme à memória), NUMA (NonUniform Memory Access – acesso não
-uniforme à memória) e COMA (Cache Only Memory Access – acesso somente à memória cache). Essas cate-
-gorias existem porque, em grandes multiprocessadores, a memória costuma ser subdividida em vários módulos.
-A propriedade distintiva das máquinas UMA é que cada CPU tem o mesmo tempo de acesso a todos os módulos de
-memória. Ou seja, cada palavra de memória pode ser lida tão depressa quanto qualquer outra. Se isso for tecnica-
-mente impossível, a velocidade das referências mais rápidas é reduzida para que se compatibilizem com as mais
-lentas, portanto, os programadores não veem a diferença. É isso que “uniforme” significa nesse caso. Essa unifor-
-midade torna o desempenho previsível, um fator importante para escrever código eficiente.
+Em nossa taxonomia, a categoria MIMD foi subdividida em multiprocessadores (máquinas de memória compartilhada) e multicomputadores (máquinas de troca de mensagens). Existem três tipos de multiprocessadores, distinguidos pelo modo como a memória compartilhada é neles implementada. Eles são denominados UMA
+(Uniform Memory Access – acesso uniforme à memória), NUMA (NonUniform Memory Access – acesso não uniforme à memória) e COMA (Cache Only Memory Access – acesso somente à memória cache). Essas categorias existem porque, em grandes multiprocessadores, a memória costuma ser subdividida em vários módulos. A propriedade distintiva das máquinas UMA é que cada CPU tem o mesmo tempo de acesso a todos os módulos de memória. Ou seja, cada palavra de memória pode ser lida tão depressa quanto qualquer outra. Se isso for tecnicamente impossível, a velocidade das referências mais rápidas é reduzida para que se compatibilizem com as mais lentas, portanto, os programadores não veem a diferença. É isso que “uniforme” significa nesse caso. Essa uniformidade torna o desempenho previsível, um fator importante para escrever código eficiente.
 
-Por comparação, essa propriedade não é válida em um multiprocessador NUMA. Muitas vezes, há um módu-
-lo de memória próximo a cada CPU e acessá-lo é mais rápido do que acessar os distantes. O resultado é que,
-por questões de desempenho, o local onde o código e os dados são posicionados é importante. Máquinas COMA
-também são não uniformes, mas de um modo diferente. Estudaremos detalhadamente cada um desses tipos e
-suas subcategorias mais adiante.
+Por comparação, essa propriedade não é válida em um multiprocessador NUMA. Muitas vezes, há um módulo de memória próximo a cada CPU e acessá-lo é mais rápido do que acessar os distantes. O resultado é que, por questões de desempenho, o local onde o código e os dados são posicionados é importante. Máquinas COMA também são não uniformes, mas de um modo diferente. Estudaremos detalhadamente cada um desses tipos e suas subcategorias mais adiante.
 
-A outra categoria principal de máquinas MIMD consiste nos multicomputadores, que, diferente dos multi-
-processadores, não têm memória primária compartilhada no nível da arquitetura. Em outras palavras, o sistema
-operacional em uma CPU de multicomputador não pode acessar memória ligada a uma CPU diferente apenas executando uma instrução LOAD. Ela tem de enviar uma mensagem explícita e esperar uma resposta. A capacidade­
-do sistema operacional de ler uma palavra distante apenas executando uma LOAD é o que distingue multipro-
-cessadores de multicomputadores. Como mencionamos antes, mesmo em um multicomputador, programas do
-usuário podem ter a capacidade de acessar a memória remota usando instruções LOAD e STORE, mas essa ilusão
-é suportada pelo sistema operacional, e não pelo hardware. Essa diferença é sutil, mas muito importante. Como
-multicomputadores não têm acesso direto à memória remota, às vezes eles são denominados máquinas NORMA
-(NO Remote Memory Access – sem acesso à memória remota).
+A outra categoria principal de máquinas MIMD consiste nos multicomputadores, que, diferente dos multiprocessadores, não têm memória primária compartilhada no nível da arquitetura. Em outras palavras, o sistema operacional em uma CPU de multicomputador não pode acessar memória ligada a uma CPU diferente apenas executando uma instrução LOAD. Ela tem de enviar uma mensagem explícita e esperar uma resposta. A capacidade­ do sistema operacional de ler uma palavra distante apenas executando uma LOAD é o que distingue multiprocessadores de multicomputadores. Como mencionamos antes, mesmo em um multicomputador, programas do
+usuário podem ter a capacidade de acessar a memória remota usando instruções LOAD e STORE, mas essa ilusão é suportada pelo sistema operacional, e não pelo hardware. Essa diferença é sutil, mas muito importante. Como multicomputadores não têm acesso direto à memória remota, às vezes eles são denominados máquinas NORMA (NO Remote Memory Access – sem acesso à memória remota).
 
-Os multicomputadores podem ser divididos em duas categorias gerais. A primeira contém os MPPs
-(Massively Parallel Processors – processadores de paralelismo maciço), que são supercomputadores caros que
-consistem em muitas CPUs fortemente acopladas por uma rede de interconexão proprietária de alta velocidade.
+Os multicomputadores podem ser divididos em duas categorias gerais. A primeira contém os MPPs (Massively Parallel Processors – processadores de paralelismo maciço), que são supercomputadores caros que consistem em muitas CPUs fortemente acopladas por uma rede de interconexão proprietária de alta velocidade.
 O IBM SP/3 é um exemplo bem conhecido no mercado.
 
-A outra categoria consiste em PCs ou estações de trabalho comuns, possivelmente montados em estantes e
-conectados por tecnologia de interconexão comercial, de prateleira. Em termos de lógica, não há muita diferença,
-mas supercomputadores enormes que custam muitos milhões de dólares são usados de modo diferente das redes
-de PCs montadas pelos usuários por uma fração do preço de um MPP. Essas máquinas caseiras são conhecidas
-por vários nomes, entre eles NOW (Network of Workstations – rede de estações de trabalho), COW (Cluster
-of Workstations – grupo de estações de trabalho), ou, às vezes, apenas cluster (grupo).
+A outra categoria consiste em PCs ou estações de trabalho comuns, possivelmente montados em estantes e conectados por tecnologia de interconexão comercial, de prateleira. Em termos de lógica, não há muita diferença, mas supercomputadores enormes que custam muitos milhões de dólares são usados de modo diferente das redes de PCs montadas pelos usuários por uma fração do preço de um MPP. Essas máquinas caseiras são conhecidas por vários nomes, entre eles NOW (Network of Workstations – rede de estações de trabalho), COW (Cluster of Workstations – grupo de estações de trabalho), ou, às vezes, apenas cluster (grupo).
 
 ## 8.3.2 Semântica da memória
-Ainda que todos os multiprocessadores apresentem às CPUs a imagem de um único espaço de endereço
-compartilhado, muitas vezes estão presentes muitos módulos de memória, cada um contendo alguma porção da
-memória física. As CPUs e memórias muitas vezes são conectadas por uma complexa rede de interconexão, como
-discutimos na Seção 8.1.2. Diversas CPUs podem estar tentando ler uma palavra de memória ao mesmo tempo
-em que várias outras CPUs estão tentando escrever a mesma palavra, e algumas das mensagens de requisição
-podem ser ultrapassadas por outras em trânsito e ser entregues em uma ordem diferente daquela em que foram
-emitidas. Além desse problema, há a existência de múltiplas cópias de alguns blocos de memória (por exemplo,
-em caches), o que pode resultar em caos com muita facilidade, a menos que sejam tomadas medidas rigorosas
-para evitá-lo. Nesta seção, veremos o que de fato significa memória compartilhada e como memórias podem reagir
-razoavelmente nessas circunstâncias.
+Ainda que todos os multiprocessadores apresentem às CPUs a imagem de um único espaço de endereço compartilhado, muitas vezes estão presentes muitos módulos de memória, cada um contendo alguma porção da memória física. As CPUs e memórias muitas vezes são conectadas por uma complexa rede de interconexão, como
+discutimos na Seção 8.1.2. Diversas CPUs podem estar tentando ler uma palavra de memória ao mesmo tempo em que várias outras CPUs estão tentando escrever a mesma palavra, e algumas das mensagens de requisição podem ser ultrapassadas por outras em trânsito e ser entregues em uma ordem diferente daquela em que foram
+emitidas. Além desse problema, há a existência de múltiplas cópias de alguns blocos de memória (por exemplo, em caches), o que pode resultar em caos com muita facilidade, a menos que sejam tomadas medidas rigorosas para evitá-lo. Nesta seção, veremos o que de fato significa memória compartilhada e como memórias podem reagir razoavelmente nessas circunstâncias.
 
-Um modo de ver a semântica da memória é como um contrato entre o software e o hardware de memória
-(Adve e Hill, 1990). Se o software concordar em obedecer a certas regras, a memória concorda em entregar
-certos resultados e, então, a discussão fica centrada em quais são essas regras. Elas são denominadas modelos
+Um modo de ver a semântica da memória é como um contrato entre o software e o hardware de memória (Adve e Hill, 1990). Se o software concordar em obedecer a certas regras, a memória concorda em entregar certos resultados e, então, a discussão fica centrada em quais são essas regras. Elas são denominadas modelos
 de consistência e muitos modelos diferentes já foram propostos e executados.
 
-Para dar uma ideia do problema, suponha que a CPU 0 escreve o valor 1 em alguma palavra de memória e,
-um pouco mais tarde, a CPU 1 escreve o valor 2 para a mesma palavra. Agora, a CPU 2 lê a palavra e obtém o
-valor 1. O proprietário do computador deve levar sua máquina para consertar? Isso depende do que a memória
+Para dar uma ideia do problema, suponha que a CPU 0 escreve o valor 1 em alguma palavra de memória e, um pouco mais tarde, a CPU 1 escreve o valor 2 para a mesma palavra. Agora, a CPU 2 lê a palavra e obtém o valor 1. O proprietário do computador deve levar sua máquina para consertar? Isso depende do que a memória
 prometeu (seu contrato).
 
 **• Consistência estrita**
-O modelo mais simples é o da consistência estrita. Nele, qualquer leitura para uma localização x sempre
-retorna o valor da escrita mais recente para x. Programadores adoram esse modelo, mas, na verdade, ele é efeti-
-vamente impossível de implementar de qualquer outro modo que não seja ter um único módulo de memória que
-apenas atende a todas as requisições segundo a política primeiro a chegar, primeiro a ser atendido, sem cache
-nem duplicação de dados. Essa implementação transformaria a memória em um imenso gargalo e, portanto, não
-é uma candidata séria, infelizmente.
+O modelo mais simples é o da consistência estrita. Nele, qualquer leitura para uma localização x sempre retorna o valor da escrita mais recente para x. Programadores adoram esse modelo, mas, na verdade, ele é efetivamente impossível de implementar de qualquer outro modo que não seja ter um único módulo de memória que apenas atende a todas as requisições segundo a política primeiro a chegar, primeiro a ser atendido, sem cache nem duplicação de dados. Essa implementação transformaria a memória em um imenso gargalo e, portanto, não é uma candidata séria, infelizmente.
 
 **• Consistência sequencial**
-O segundo melhor é um modelo denominado consistência sequencial (Lamport, 1979). Nesse caso, a ideia
-é que, na presença de múltiplas requisições de leitura (read) e escrita (write), o hardware escolhe (sem determi-
-nismo) alguma intercalação de todas as requisições, mas todas as CPUs veem a mesma ordem.
+O segundo melhor é um modelo denominado consistência sequencial (Lamport, 1979). Nesse caso, a ideia é que, na presença de múltiplas requisições de leitura (read) e escrita (write), o hardware escolhe (sem determinismo) alguma intercalação de todas as requisições, mas todas as CPUs veem a mesma ordem.
 
-Para entender o que isso significa, considere um exemplo. Suponha que a CPU 1 escreve o valor 100 para a
-palavra x, e 1 ns mais tarde a CPU 2 escreve o valor 200 para a palavra x. Agora, suponha que 1 ns após a segunda
-escrita ter sido emitida (mas não necessariamente ainda concluída), duas outras CPUs, 3 e 4, leem a palavra x
-duas vezes cada uma em rápida sucessão, conforme mostra a Figura 8.24(a). Três possíveis ordenações dos seis
-eventos (duas escritas e quatro leituras) são mostradas na Figura 8.24 (b)–(d), respectivamente. Na Figura 8.24(b),
-a CPU 3 obtém (200, 200) e a CPU 4 obtém (200, 200). Na Figura 8.24(c), elas obtêm (100, 200) e (200, 200),
-respectivamente. Na Figura 8.24(d), elas obtêm (100, 100) e (200, 100), respectivamente. Todas essas são válidas,
-bem como algumas outras possibilidades que não são mostradas. Observe que não existe um único valor “correto”.
+Para entender o que isso significa, considere um exemplo. Suponha que a CPU 1 escreve o valor 100 para a palavra x, e 1 ns mais tarde a CPU 2 escreve o valor 200 para a palavra x. Agora, suponha que 1 ns após a segunda escrita ter sido emitida (mas não necessariamente ainda concluída), duas outras CPUs, 3 e 4, leem a palavra x duas vezes cada uma em rápida sucessão, conforme mostra a Figura 8.24(a). Três possíveis ordenações dos seis eventos (duas escritas e quatro leituras)são mostradas na Figura 8.24 (b)–(d), respectivamente. Na Figura 8.24(b), a CPU 3 obtém (200, 200) e a CPU 4 obtém (200, 200). Na Figura 8.24(c), elas obtêm (100, 200) e (200, 200), respectivamente. Na Figura 8.24(d), elas obtêm (100, 100) e (200, 100), respectivamente. Todas essas são válidas, bem como algumas outras possibilidades que não são mostradas. Observe que não existe um único valor “correto”.
 
 **• Figura 8.24 - (a) Duas CPUs escrevendo e duas CPUs lendo uma palavra de memória em comum. (b)–(d) Três modos possíveis de intercalar as duas escritas e as quatro leituras em relação ao tempo.**
 Este diagrama mostra o que acontece quando duas CPUs tentam escrever em uma mesma variável ($x$) e outras duas tentam ler esses valores simultaneamente.
@@ -1383,66 +1331,32 @@ A Figura 8.24 é essencial para entender por que a ordem das operações importa
 
 ![alt text](image-130.png)
 
-Contudo – e essa é a essência da consistência sequencial –, não importa o que aconteça, uma memória
-sequencialmente consistente nunca permitirá que a CPU 3 obtenha (100, 200) enquanto a CPU 4 obtém (200,
-100). Se isso ocorresse, significaria que, de acordo com a CPU 3, a escrita de 100 pela CPU 1 concluiu após a
-escrita de 200 pela CPU 2. Tudo bem. Mas também significaria que, de acordo com a CPU 4, a escrita de 200
-pela CPU 2 concluiu antes da escrita de 100 pela CPU 1. Em si, esse resultado também é possível. O problema é
-que a consistência sequencial garante uma única ordenação global de todas as escritas, que é visível para todas as
-CPUs. Se a CPU 3 observar que 100 foi escrito primeiro, então a CPU 4 também deve ver essa ordem.
+Contudo – e essa é a essência da consistência sequencial –, não importa o que aconteça, uma memória sequencialmente consistente nunca permitirá que a CPU 3 obtenha (100, 200) enquanto a CPU 4 obtém (200, 100). Se isso ocorresse, significaria que, de acordo com a CPU 3, a escrita de 100 pela CPU 1 concluiu após a
+escrita de 200 pela CPU 2. Tudo bem. Mas também significaria que, de acordo com a CPU 4, a escrita de 200 pela CPU 2 concluiu antes da escrita de 100 pela CPU 1. Em si, esse resultado também é possível. O problema é que a consistência sequencial garante uma única ordenação global de todas as escritas, que é visível para todas as CPUs. Se a CPU 3 observar que 100 foi escrito primeiro, então a CPU 4 também deve ver essa ordem.
 
-Embora a consistência sequencial não seja uma regra tão poderosa quanto a estrita, ainda é muito útil.
-Na verdade, ela diz que, quando múltiplos eventos acontecem concorrentemente, há alguma ordem verdadeira na
-qual eles ocorrem, talvez determinada pela temporização e pelo acaso, mas existe uma ordenação verdadeira e
-todos os processadores observam essa mesma ordem. Embora essa afirmativa talvez pareça óbvia, a seguir discu-
-tiremos modelos de consistência que nem isso garantem.
+Embora a consistência sequencial não seja uma regra tão poderosa quanto a estrita, ainda é muito útil. Na verdade, ela diz que, quando múltiplos eventos acontecem concorrentemente, há alguma ordem verdadeira na qual eles ocorrem, talvez determinada pela temporização e pelo acaso, mas existe uma ordenação verdadeira e todos os processadores observam essa mesma ordem. Embora essa afirmativa talvez pareça óbvia, a seguir discutiremos modelos de consistência que nem isso garantem.
 
 **• Consistência de processador**
-Um modelo de consistência menos rigoroso, mas que é mais fácil de implementar em grandes multiproces-
-sadores, é a consistência de processador (Goodman, 1989). Ele tem duas propriedades:
+Um modelo de consistência menos rigoroso, mas que é mais fácil de implementar em grandes multiprocessadores, é a consistência de processador (Goodman, 1989). Ele tem duas propriedades:
 
-1. Escritas por qualquer CPU são vistas por todas as CPUs na ordem em que foram emitidas.
+    1. Escritas por qualquer CPU são vistas por todas as CPUs na ordem em que foram emitidas.
 
-2. Para cada palavra de memória, todas as CPUs veem todas as escritas para ela na mesma ordem.
+    2. Para cada palavra de memória, todas as CPUs veem todas as escritas para ela na mesma ordem.
 
-Esses dois pontos são importantes. O primeiro diz que, se a CPU 1 emitir escritas com valores 1A, 1B e 1C para
-alguma localização de memória nessa sequência, então todos os outros processadores as veem nessa ordem também.
+Esses dois pontos são importantes. O primeiro diz que, se a CPU 1 emitir escritas com valores 1A, 1B e 1C para alguma localização de memória nessa sequência, então todos os outros processadores as veem nessa ordem também.
 
-Em outras palavras, qualquer outro processador em um laço restrito que observasse 1A, 1B e 1C lendo as pala-
-vras escritas nunca verá o valor escrito por 1B e depois o escrito por 1A, e assim por diante. O segundo ponto é
-necessário para exigir que toda palavra de memória tenha um valor não ambíguo após várias CPUs escreverem
-para ela e, por fim, pararem. Todos têm de concordar sobre qual veio por último.
+Em outras palavras, qualquer outro processador em um laço restrito que observasse 1A, 1B e 1C lendo as palavras escritas nunca verá o valor escrito por 1B e depois o escrito por 1A, e assim por diante. O segundo ponto é necessário para exigir que toda palavra de memória tenha um valor não ambíguo após várias CPUs escreverem para ela e, por fim, pararem. Todos têm de concordar sobre qual veio por último.
 
-Mesmo com essas restrições, o projetista tem muita flexibilidade. Considere o que acontece se a CPU 2 emitir
-escritas 2A, 2B e 2C concorrentemente com as três escritas da CPU 1. Outras CPUs que estão ocupadas lendo a
-memória observarão alguma intercalação de seis escritas, tal como 1A, 1B, 2A, 2B, 1C, 2C ou 2A, 1A, 2B, 2C, 1B,
-1C ou muitas outras. A consistência de processador não garante que toda CPU vê a mesma ordenação, diferente
-da consistência sequencial, que dá essa garantia. Assim, é perfeitamente legítimo que o hardware se comporte de
-tal maneira que algumas CPUs veem a primeira ordenação mencionada, algumas veem a segunda e algumas veem
-ainda outras. O que é garantido é que nenhuma CPU verá a sequência na qual 1B vem antes de 1A e assim por
-diante. A ordem com que cada CPU faz suas escritas é observada em todos os lugares.
+Mesmo com essas restrições, o projetista tem muita flexibilidade. Considere o que acontece se a CPU 2 emitir escritas 2A, 2B e 2C concorrentemente com as três escritas da CPU 1. Outras CPUs que estão ocupadas lendo a memória observarão alguma intercalação de seis escritas, tal como 1A, 1B, 2A, 2B, 1C, 2C ou 2A, 1A, 2B, 2C, 1B, 1C ou muitas outras. A consistência de processador não garante que toda CPU vê a mesma ordenação, diferente da consistência sequencial, que dá essa garantia. Assim, é perfeitamente legítimo que o hardware se comporte de tal maneira que algumas CPUs veem a primeira ordenação mencionada, algumas veem a segunda e algumas veem ainda outras. O que é garantido é que nenhuma CPU verá a sequência na qual 1B vem antes de 1A e assim por diante. A ordem com que cada CPU faz suas escritas é observada em todos os lugares.
 
-Vale a pena notar que alguns autores definem consistência de processador de modo diferente e não requerem
-a segunda condição.
+Vale a pena notar que alguns autores definem consistência de processador de modo diferente e não requerem a segunda condição.
 
 **• Consistência fraca**
-Nosso próximo modelo, a consistência fraca, nem mesmo garante que escritas de uma única CPU sejam
-vistas em ordem (Dubois et al., 1986). Em uma memória fracamente consistente, uma CPU poderia ver 1A antes
-de 1B e outra CPU poderia ver 1A depois de 1B. Contudo, para colocar alguma ordem no caos, tais memórias
-têm variáveis de sincronização ou uma operação de sincronização. Quando uma sincronização é executada, todas
-as escritas pendentes são terminadas e nenhuma nova é iniciada até que todas as antigas – e a própria sincroni-
-zação – estejam concluídas. Na verdade, uma sincronização “descarrega o pipeline” e leva a memória a um estado
-estável sem nenhuma operação pendente. Operações de sincronização são, em si, sequencialmente consistentes,
-isto é, quando múltiplas CPUs as emitem, alguma ordem é escolhida, mas todas as CPUs veem a mesma ordem.
+Nosso próximo modelo, a consistência fraca, nem mesmo garante que escritas de uma única CPU sejam vistas em ordem (Dubois et al., 1986). Em uma memória fracamente consistente, uma CPU poderia ver 1A antes de 1B e outra CPU poderia ver 1A depois de 1B. Contudo, para colocar alguma ordem no caos, tais memórias
+têm variáveis de sincronização ou uma operação de sincronização. Quando uma sincronização é executada, todas as escritas pendentes são terminadas e nenhuma nova é iniciada até que todas as antigas – e a própria sincronização – estejam concluídas. Na verdade, uma sincronização “descarrega o pipeline” e leva a memória a um estado estável sem nenhuma operação pendente. Operações de sincronização são, em si, sequencialmente consistentes, isto é, quando múltiplas CPUs as emitem, alguma ordem é escolhida, mas todas as CPUs veem a mesma ordem.
 
-Em consistência fraca, o tempo é dividido em épocas bem definidas delimitadas pelas sincronizações
-(sequencialmente consistentes), como ilustra a Figura 8.25. Nenhuma ordem relativa é garantida para 1A e 1B e
-diferentes CPUs podem ver as duas escritas em ordens diferentes, isto é, uma CPU pode ver 1A e então 1B e outra
-CPU pode ver 1B e então 1A. Essa situação é permitida. Contudo, todas as CPUs veem 1B antes de 1C porque a
-primeira operação de sincronização força 1A, 1B e 2A a concluírem antes que 1C, 2B, 3A ou 3B tenham permissão
-de iniciar. Assim, realizando operações de sincronização, o software pode impor alguma ordem na sequência de
-eventos, embora não a custo zero, visto que descarregar o pipeline de memória toma algum tempo e, portanto,
-atrasa o processamento da máquina. Fazer isso com frequência pode ser um problema.
+Em consistência fraca, o tempo é dividido em épocas bem definidas delimitadas pelas sincronizações (sequencialmente consistentes), como ilustra a Figura 8.25. Nenhuma ordem relativa é garantida para 1A e 1B e diferentes CPUs podem ver as duas escritas em ordens diferentes, isto é, uma CPU pode ver 1A e então 1B e outra
+CPU pode ver 1B e então 1A. Essa situação é permitida. Contudo, todas as CPUs veem 1B antes de 1C porque a primeira operação de sincronização força 1A, 1B e 2A a concluírem antes que 1C, 2B, 3A ou 3B tenham permissão de iniciar. Assim, realizando operações de sincronização, o software pode impor alguma ordem na sequência de eventos, embora não a custo zero, visto que descarregar o pipeline de memória toma algum tempo e, portanto, atrasa o processamento da máquina. Fazer isso com frequência pode ser um problema.
 
 **• Figura 8.25   A memória fracamente consistente usa operações de sincronização para dividir o tempo em épocas sequenciais.**
 Este diagrama demonstra como o tempo é dividido em épocas sequenciais para garantir que todas as CPUs tenham uma visão coerente da memória em momentos específicos.
@@ -1472,44 +1386,18 @@ A consistência fraca é uma estratégia de otimização comum em sistemas de al
  - Exemplo de Fluxo: Na figura, as operações 1A e 1B da CPU A só precisam ser visíveis para as outras CPUs após o primeiro traço vertical (Sincronização).
 
 **• Consistência de liberação**
-A consistência fraca tem o problema de ser bastante ineficiente porque deve encerrar todas as operações
-de memória pendentes e deter todas as novas até que as operações correntes tenham terminado. A consistência de
-liberação melhora as coisas adotando um modelo semelhante ao das seções críticas (Gharachorloo et al., 1990).
-A ideia que fundamenta esse modelo é que, quando um processo sai de uma região crítica não é necessário forçar
-todas as escritas a concluírem imediatamente. Basta assegurar que elas estejam encerradas antes que qualquer
-processo entre naquela região crítica outra vez.
+A consistência fraca tem o problema de ser bastante ineficiente porque deve encerrar todas as operações de memória pendentes e deter todas as novas até que as operações correntes tenham terminado. A consistência de liberação melhora as coisas adotando um modelo semelhante ao das seções críticas (Gharachorloo et al., 1990). A ideia que fundamenta esse modelo é que, quando um processo sai de uma região crítica não é necessário forçar todas as escritas a concluírem imediatamente. Basta assegurar que elas estejam encerradas antes que qualquer processo entre naquela região crítica outra vez.
 
-Nesse modelo, a operação de sincronização oferecida pela consistência fraca é subdividida em duas opera-
-ções diferentes. Para ler ou escrever uma variável de dados compartilhada, uma CPU (isto é, seu software) deve
-realizar, primeiro, uma operação acquire na variável de sincronização para obter acesso exclusivo aos dados com-
-partilhados. Então, a CPU pode usá-los como quiser, lendo e escrevendo à vontade. Ao concluir, a CPU realiza
-uma operação release na variável de sincronização para indicar que terminou. A release não obriga as escritas
-pendentes a concluir, mas ela própria não conclui até que as escritas emitidas antes estejam concluídas. Além do
-mais, novas operações de memória não são impedidas de iniciar imediatamente.
+Nesse modelo, a operação de sincronização oferecida pela consistência fraca é subdividida em duas operações diferentes. Para ler ou escrever uma variável de dados compartilhada, uma CPU (isto é, seu software) deve realizar, primeiro, uma operação acquire na variável de sincronização para obter acesso exclusivo aos dados compartilhados. Então, a CPU pode usá-los como quiser, lendo e escrevendo à vontade. Ao concluir, a CPU realiza uma operação release na variável de sincronização para indicar que terminou. A release não obriga as escritas pendentes a concluir, mas ela própria não conclui até que as escritas emitidas antes estejam concluídas. Além do mais, novas operações de memória não são impedidas de iniciar imediatamente.
 
-Quando a próxima operação acquire é emitida, é feita uma verificação para ver se todas as operações release
-anteriores foram concluídas. Se não foram, acquire é detida até que todas tenham concluído (e, portanto, que
-todas as escritas realizadas antes delas estejam concluídas). Desse modo, se a acquire seguinte ocorrer em um
-tempo longo o suficiente após a release mais recente, ela não tem de esperar antes de iniciar e pode entrar na
-região crítica sem demora. Se a acquire seguinte ocorrer logo após uma release, a acquire, e todas as instruções
-após ela, serão retardadas até todas as releases pendentes serem concluídas, garantindo assim que as variáveis na
-seção crítica tenham sido atualizadas. Esse esquema é um pouco mais complicado do que consistência fraca, mas
-tem a significativa vantagem de não atrasar instruções com tanta frequência para manter consistência.
+Quando a próxima operação acquire é emitida, é feita uma verificação para ver se todas as operações release anteriores foram concluídas. Se não foram, acquire é detida até que todas tenham concluído (e, portanto, que todas as escritas realizadas antes delas estejam concluídas). Desse modo, se a acquire seguinte ocorrer em um tempo longo o suficiente após a release mais recente, ela não tem de esperar antes de iniciar e pode entrar na região crítica sem demora. Se a acquire seguinte ocorrer logo após uma release, a acquire, e todas as instruções após ela, serão retardadas até todas as releases pendentes serem concluídas, garantindo assim que as variáveis na seção crítica tenham sido atualizadas. Esse esquema é um pouco mais complicado do que consistência fraca, mas tem a significativa vantagem de não atrasar instruções com tanta frequência para manter consistência.
 
-A consistência de memória não é um assunto encerrado. Os pesquisadores ainda estão propondo novos
-modelos (Naeem et al., 2011; Sorin et al., 2011; e Tu et al., 2010).
+A consistência de memória não é um assunto encerrado. Os pesquisadores ainda estão propondo novos modelos (Naeem et al., 2011; Sorin et al., 2011; e Tu et al., 2010).
 
 ## 8.3.3 Arquiteturas de multiprocessadores simétricos UMA
-Os multiprocessadores mais simples são baseados em um único barramento, como ilustrado na Figura
-8.26(a). Duas ou mais CPUs e um ou mais módulos de memória, todos usam o mesmo barramento para comuni-
-cação. Quando uma CPU quer ler uma palavra de memória, ela primeiro verifica se o barramento está ocupado.
-Se estiver ocioso, a CPU coloca nele o endereço da palavra que ela quer, ativa alguns sinais de controle e espera
-até que a memória coloque a palavra desejada no barramento.
+Os multiprocessadores mais simples são baseados em um único barramento, como ilustrado na Figura 8.26(a). Duas ou mais CPUs e um ou mais módulos de memória, todos usam o mesmo barramento para comunicação. Quando uma CPU quer ler uma palavra de memória, ela primeiro verifica se o barramento está ocupado. Se estiver ocioso, a CPU coloca nele o endereço da palavra que ela quer, ativa alguns sinais de controle e espera até que a memória coloque a palavra desejada no barramento.
 
-Se o barramento estiver ocupado quando uma CPU quiser ler ou escrever na memória, a CPU apenas espera
-até que ele fique ocioso. E é aqui que está o problema desse projeto. Com duas ou três CPUs, a contenção pelo
-barramento será administrável; com 32 ou 64, será insuportável. O sistema ficará totalmente limitado pela largura
-de banda do barramento e a maioria das CPUs restará ociosa na maior parte do tempo.
+Se o barramento estiver ocupado quando uma CPU quiser ler ou escrever na memória, a CPU apenas espera até que ele fique ocioso. E é aqui que está o problema desse projeto. Com duas ou três CPUs, a contenção pelo barramento será administrável; com 32 ou 64, será insuportável. O sistema ficará totalmente limitado pela largura de banda do barramento e a maioria das CPUs restará ociosa na maior parte do tempo.
 
 **• Figura 8.26   Três multiprocessadores baseados em barramento. (a) Sem cache. (b) Com cache. (c) Com cache e memórias privadas.**
 Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no barramento e melhorar o desempenho local das CPUs.
@@ -1529,10 +1417,10 @@ Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no bar
             |                          |                  +--+--+  +--+--+
             |                          |                     |        |
     [==== BARRAMENTO ====]   [==== BARRAMENTO ====]   [==== BARRAMENTO ====]
-            |                        |                    |
-        +---+---+                +---+---+            +---+---+
-        |   M   |                |   M   |            |   M   |
-        +-------+                +-------+            +-------+
+             |                          |                       |
+         +---+---+                  +---+---+               +---+---+
+         |   M   |                  |   M   |               |   M   |
+         +-------+                  +-------+               +-------+
 
     (M = Módulo de Memória Global/Compartilhada)
 
@@ -1546,47 +1434,20 @@ Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no bar
 
  - Configuração (c) - Cache e Memória Privada: Além do cache, cada CPU possui uma memória privada para dados que nunca precisam ser compartilhados (como a pilha do sistema ou variáveis locais). Isso otimiza ainda mais o uso do barramento, deixando-o livre apenas para a comunicação essencial entre os nós.
 
-A solução para esse problema é acrescentar uma cache a cada CPU, como retratado na Figura 8.26(b). A cache
-pode estar dentro do chip da CPU, próxima ao chip da CPU, na placa do processador ou alguma combinação de
-todas as três. Uma vez que agora muitas leituras podem ser satisfeitas pela cache local, haverá muito menos tráfego
-no barramento e o sistema pode suportar mais CPUs. Assim, nesse caso, fazer cache é um grande ganho. Porém,
-como veremos em breve, manter as caches consistentes entre si não é trivial.
+A solução para esse problema é acrescentar uma cache a cada CPU, como retratado na Figura 8.26(b). A cache pode estar dentro do chip da CPU, próxima ao chip da CPU, na placa do processador ou alguma combinação de todas as três. Uma vez que agora muitas leituras podem ser satisfeitas pela cache local, haverá muito menos tráfego no barramento e o sistema pode suportar mais CPUs. Assim, nesse caso, fazer cache é um grande ganho. Porém, como veremos em breve, manter as caches consistentes entre si não é trivial.
 
-Ainda outra possibilidade é o projeto da Figura 8.26(c), no qual cada CPU tem não só uma cache, mas tam-
-bém uma memória local e privada que ela acessa por um barramento dedicado (privado). Para fazer a utilização
-ideal dessa configuração, o compilador deve colocar nas memórias privadas todo o texto de programa, todas as
-cadeias, constantes e outros dados somente de leitura, pilhas e variáveis locais. Então, a memória compartilhada
-só é usada para variáveis compartilhadas que podem ser escritas. Na maioria dos casos, esse posicionamento cui-
-dadoso reduzirá muito o tráfego no barramento, mas requer cooperação ativa do compilador.
+Ainda outra possibilidade é o projeto da Figura 8.26(c), no qual cada CPU tem não só uma cache, mas também uma memória local e privada que ela acessa por um barramento dedicado (privado). Para fazer a utilização ideal dessa configuração, o compilador deve colocar nas memórias privadas todo o texto de programa, todas as cadeias, constantes e outros dados somente de leitura, pilhas e variáveis locais. Então, a memória compartilhada só é usada para variáveis compartilhadas que podem ser escritas. Na maioria dos casos, esse posicionamento cui- dadoso reduzirá muito o tráfego no barramento, mas requer cooperação ativa do compilador.
 
 **• Caches de escuta**
-Embora os argumentos de desempenho que acabamos de apresentar decerto sejam verdadeiros, atenuamos
-um problema fundamental um pouco depressa demais. Suponha que a memória seja sequencialmente consisten-
-te. O que acontece se a CPU 1 tiver uma linha em sua cache e então a CPU 2 tentar ler uma palavra na mesma
-linha? Na ausência de quaisquer regras especiais, também ela obteria uma cópia em sua cache. Em princípio, é
-aceitável fazer duas vezes a cache de uma mesma linha. Agora, suponha que a CPU 1 modifique a linha e então,
-imediatamente após, a CPU 2 leia sua cópia da linha a partir de sua cache. Ela obterá dados velhos, violando
+Embora os argumentos de desempenho que acabamos de apresentar decerto sejam verdadeiros, atenuamos um problema fundamental um pouco depressa demais. Suponha que a memória seja sequencialmente consistente. O que acontece se a CPU 1 tiver uma linha em sua cache e então a CPU 2 tentar ler uma palavra na mesma linha? Na ausência de quaisquer regras especiais, também ela obteria uma cópia em sua cache. Em princípio, é aceitável fazer duas vezes a cache de uma mesma linha. Agora, suponha que a CPU 1 modifique a linha e então, imediatamente após, a CPU 2 leia sua cópia da linha a partir de sua cache. Ela obterá dados velhos, violando
 assim o contrato entre o software e a memória. O programa que está executando na CPU 2 não ficará satisfeito.
 
-Esse problema, conhecido como coerência de cache ou consistência de cache, é extremamente sério. Sem
-uma solução, não se pode usar a cache e os multiprocessadores baseados em barramento ficariam limitados a duas
-ou três CPUs. Como consequência de sua importância, muitas soluções foram propostas ao longo dos anos (por
-exemplo, Goodman, 1983; e Papamarcos e Patel, 1984). Embora todos esses algoritmos de cache, denominados
-protocolos de coerência de cache, apresentem diferenças em detalhes, todos eles impedem que versões diferentes
-da mesma linha de cache apareçam simultaneamente em duas ou mais caches.
+Esse problema, conhecido como coerência de cache ou consistência de cache, é extremamente sério. Sem uma solução, não se pode usar a cache e os multiprocessadores baseados em barramento ficariam limitados a duas ou três CPUs. Como consequência de sua importância, muitas soluções foram propostas ao longo dos anos (por exemplo, Goodman, 1983; e Papamarcos e Patel, 1984). Embora todos esses algoritmos de cache, denominados protocolos de coerência de cache,apresentem diferenças em detalhes, todos eles impedem que versões diferentes da mesma linha de cache apareçam simultaneamente em duas ou mais caches.
 
-Em todas as soluções, o controlador de cache é projetado especialmente para permitir que ele escute o bar-
-ramento monitorando todas as requisições de barramento de outras CPUs e caches e execute alguma ação em
-certos casos. Esses dispositivos são denominados caches de escuta ou, às vezes, caches de espia, porque “espiam”
-o barramento. O conjunto de regras executado pelas caches, CPUs e memória para impedir que diferentes versões
-dos dados apareçam em múltiplas caches forma o protocolo de coerência de cache. A unidade de transferência
-e armazenamento de uma cache é denominada uma linha de cache e seu comprimento típico é 32 ou 64 bytes.
+Em todas as soluções, o controlador de cache é projetado especialmente para permitir que ele escute o barramento monitorando todas as requisições de barramento de outras CPUs e caches e execute alguma ação em certos casos. Esses dispositivos são denominados caches de escuta ou, às vezes, caches de espia, porque “espiam”
+o barramento. O conjunto de regras executado pelas caches, CPUs e memória para impedir que diferentes versões dos dados apareçam em múltiplas caches forma o protocolo de coerência de cache. A unidade de transferência e armazenamento de uma cache é denominada uma linha de cache e seu comprimento típico é 32 ou 64 bytes.
 
-O protocolo de coerência de cache mais simples de todos é denominado escrita direta. Ele pode ser mais
-bem entendido distinguindo os quatro casos mostrados na Figura 8.27. Quando uma CPU tenta ler uma palavra
-que não está em sua cache (isto é, há uma ausência da cache para leitura), seu controlador de cache carrega nela a
-linha que contém aquela palavra. A linha é fornecida pela memória, que, nesse protocolo, está sempre atualizada.
-Leituras subsequentes (isto é, presenças na cache para leitura) podem ser satisfeitas pela cache.
+O protocolo de coerência de cache mais simples de todos é denominado escrita direta. Ele pode ser mais bem entendido distinguindo os quatro casos mostrados na Figura 8.27. Quando uma CPU tenta ler uma palavra que não está em sua cache (isto é, há uma ausência da cache para leitura), seu controlador de cache carrega nela a linha que contém aquela palavra. A linha é fornecida pela memória, que, nesse protocolo, está sempre atualizada. Leituras subsequentes (isto é, presenças na cache para leitura) podem ser satisfeitas pela cache.
 
 **•  Figura 8.27 - Protocolo de coerência de cache de escrita direta. Os retângulos vazios indicam que nenhuma ação foi realizada.**
 
@@ -1640,109 +1501,45 @@ Leituras subsequentes (isto é, presenças na cache para leitura) podem ser sati
            | de cache        |
            +-----------------+
 
-Quando há uma ausência da cache para escrita, a palavra que foi modificada é escrita para a memória princi-
-pal. A linha que contém a palavra referenciada não é carregada na cache. Quando há uma presença na cache para
-escrita, a cache é atualizada e, além disso, a palavra é escrita diretamente para a memória principal. A essência
-desse protocolo é que todas as operações de escrita resultam na escrita da palavra diretamente para a memória
-para mantê-la atualizada o tempo todo.
+Quando há uma ausência da cache para escrita, a palavra que foi modificada é escrita para a memória principal. A linha que contém a palavra referenciada não é carregada na cache. Quando há uma presença na cache para escrita, a cache é atualizada e, além disso, a palavra é escrita diretamente para a memória principal. A essência desse protocolo é que todas as operações de escrita resultam na escrita da palavra diretamente para a memória para mantê-la atualizada o tempo todo.
 
-Agora, vamos observar todas essas ações de novo, mas, desta vez, do ponto de vista da escuta, mostrado
-na coluna à direita da Figura 8.27. Vamos dar nome de cache 1 à que realiza as ações e de cache 2 à de escuta.
-Quando a cache 1 encontra uma ausência da cache para leitura, ela faz uma requisição ao barramento para buscar
-uma linha da memória. A cache 2 vê isso, porém nada faz. Quando a cache 1 encontra uma presença na cache para
-leitura, a requisição é satisfeita localmente e não ocorre nenhuma requisição ao barramento, portanto, a cache 2
-não está ciente das presenças na cache para leitura da cache 1.
+Agora, vamos observar todas essas ações de novo, mas, desta vez, do ponto de vista da escuta, mostrado na coluna à direita da Figura 8.27. Vamos dar nome de cache 1 à que realiza as ações e de cache 2 à de escuta. Quando a cache 1 encontra uma ausência da cache para leitura, ela faz uma requisição ao barramento para buscar uma linha da memória. A cache 2 vê isso, porém nada faz. Quando a cache 1 encontra uma presença na cache para leitura, a requisição é satisfeita localmente e não ocorre nenhuma requisição ao barramento, portanto, a cache 2 não está ciente das presenças na cache para leitura da cache 1.
 
-Escritas são mais interessantes. Se a CPU 1 fizer uma escrita, a cache 1 fará uma requisição de escrita no
-barramento, tanto quando houver ausência da cache, como quando houver presença nela. Em todas as escritas a
-cache 2 verifica se ela tem a palavra que está sendo escrita. Se não tiver, de seu ponto de vista isso é uma requi-
-sição/ausência da cache remota e ela nada faz. (Para esclarecer um ponto sutil, note que, na Figura 8.27, uma
-ausência da cache remota significa que a palavra não está presente na cache de escuta; não importa se ela estava
-ou não na cache do originador. Assim, uma única requisição pode ser uma presença na cache localmente e uma
-ausência da cache na cache de escuta, e vice-versa.)
+Escritas são mais interessantes. Se a CPU 1 fizer uma escrita, a cache 1 fará uma requisição de escrita no barramento, tanto quando houver ausência da cache, como quando houver presença nela. Em todas as escritas a cache 2 verifica se ela tem a palavra que está sendo escrita. Se não tiver, de seu ponto de vista isso é uma requisição/ausência da cache remota e ela nada faz. (Para esclarecer um ponto sutil, note que, na Figura 8.27, uma ausência da cache remota significa que a palavra não está presente na cache de escuta; não importa se ela estava ou não na cache do originador. Assim, uma única requisição pode ser uma presença na cache localmente e uma ausência da cache na cache de escuta, e vice-versa.)
 
-Agora, suponha que a cache 1 escreva uma palavra que está presente na cache da cache 2 (requisição
-remota/presença na cache para escrita). Se a cache 2 nada fizer, terá dados velhos, portanto, ela marca como
-inválida a entrada na cache que contém a palavra recém-modificada. Na verdade, ela remove o item da cache.
-Como todas as caches escutam todas as requisições ao barramento, sempre que uma palavra for escrita, o efeito
-líquido é atualizá-la na cache do originador, atualizá-la na memória e extraí-la de todas as outras. Desse modo,
-são evitadas versões inconsistentes.
+Agora, suponha que a cache 1 escreva uma palavra que está presente na cache da cache 2 (requisição remota/presença na cache para escrita). Se a cache 2 nada fizer, terá dados velhos, portanto, ela marca como inválida a entrada na cache que contém a palavra recém-modificada. Na verdade, ela remove o item da cache.
+Como todas as caches escutam todas as requisições ao barramento, sempre que uma palavra for escrita, o efeito líquido é atualizá-la na cache do originador, atualizá-la na memória e extraí-la de todas as outras. Desse modo, são evitadas versões inconsistentes.
 
-É claro que a CPU da cache 2 está livre para ler a mesma palavra já no ciclo seguinte. Nesse caso, a cache
-2 lerá a palavra da memória, que está atualizada. Nesse ponto, cache 1, cache 2 e a memória, todas terão cópias
-idênticas da palavra. Se qualquer das CPUs fizer uma escrita agora, a cache da outra será purgada e a memória
+É claro que a CPU da cache 2 está livre para ler a mesma palavra já no ciclo seguinte. Nesse caso, a cache 2 lerá a palavra da memória, que está atualizada. Nesse ponto, cache 1, cache 2 e a memória, todas terão cópias idênticas da palavra. Se qualquer das CPUs fizer uma escrita agora, a cache da outra será purgada e a memória
 será atualizada.
 
-Muitas variações desse protocolo básico são possíveis. Por exemplo, em uma presença na cache para escrita, a
-cache de escuta em geral invalida sua entrada que contém a palavra que está sendo escrita. Como alternativa, pode-
-ria aceitar o novo valor e atualizar sua cache em vez de marcá-la como inválida. Em termos de conceito, atualizar a
-cache é o mesmo que invalidá-la, seguida por uma leitura da palavra na memória. Em todos os protocolos de cache
-deve ser feita uma escolha entre uma estratégia de atualização e uma estratégia de invalidação. Esses protocolos
-funcionam de maneira diferente em cargas diferentes. Mensagens de atualização carregam cargas úteis e, por isso,
-são maiores do que as de invalidação, mas podem evitar futuras ausências da cache.
+Muitas variações desse protocolo básico são possíveis. Por exemplo, em uma presença na cache para escrita, a cache de escuta em geral invalida sua entrada que contém a palavra que está sendo escrita. Como alternativa, poderia aceitar o novo valor e atualizar sua cache em vez de marcá-la como inválida. Em termos de conceito, atualizar a cache é o mesmo que invalidá-la, seguida por uma leitura da palavra na memória. Em todos os protocolos de cache deve ser feita uma escolha entre uma estratégia de atualização e uma estratégia de invalidação. Esses protocolos funcionam de maneira diferente em cargas diferentes. Mensagens de atualização carregam cargas úteis e, por isso, são maiores do que as de invalidação, mas podem evitar futuras ausências da cache.
 
-Outra variante é carregar a cache de escuta quando houver ausência da cache para escrita. A correção do
-algoritmo não é afetada pelo carregamento, só o desempenho. A questão é: “Qual é a probabilidade de uma
-palavra recém-escrita ser escrita de novo em pouco tempo?”. Se for alta, há algo a dizer em favor de carregar a
-cache quando houver ausência desta para escrita, conhecida como política de alocação de escrita. Se for baixa, é
-melhor não atualizar quando houver ausência da cache para escrita. Se a palavra for lida dentro de pouco tempo,
-de qualquer modo ela será carregada pela ausência da cache para leitura; ganha-se pouco por carregá-la quando
-houver uma ausência da cache para escrita.
+Outra variante é carregar a cache de escuta quando houver ausência da cache para escrita. A correção do algoritmo não é afetada pelo carregamento, só o desempenho. A questão é: “Qual é a probabilidade de uma palavra recém-escrita ser escrita de novo em pouco tempo?”. Se for alta, há algo a dizer em favor de carregar a cache quando houver ausência desta para escrita, conhecida como política de alocação de escrita. Se for baixa, é melhor não atualizar quando houver ausência da cache para escrita. Se a palavra for lida dentro de pouco tempo, de qualquer modo ela será carregada pela ausência da cache para leitura; ganha-se pouco por carregá-la quando houver uma ausência da cache para escrita.
 
-Como acontece com muitas soluções simples, essa é ineficiente. Cada operação de escrita vai até a
-memória passando pelo barramento, portanto, mesmo com uma modesta quantidade de CPUs, o barramento
-se tornará um gargalo. Para manter o tráfego dentro de limites, foram inventados outros protocolos de cache.
-Uma propriedade que todos eles têm é que nem todas as escritas vão direto para a memória. Em vez disso, quando uma linha de cache é modificada, um bit é marcado dentro da cache, comunicando que a linha está
-correta, mas a memória não está. A certa altura, essa linha suja terá de ser escrita de volta na memória,
-porém, possivelmente depois que forem feitas muitas escritas nela. Esse tipo de protocolo é conhecido como
-protocolo de escrita retroativa (write-back).
+Como acontece com muitas soluções simples, essa é ineficiente. Cada operação de escrita vai até a memória passando pelo barramento, portanto, mesmo com uma modesta quantidade de CPUs, o barramento se tornará um gargalo. Para manter o tráfego dentro de limites, foram inventados outros protocolos de cache.
+Uma propriedade que todos eles têm é que nem todas as escritas vão direto para a memória. Em vez disso, quando uma linha de cache é modificada, um bit é marcado dentro da cache, comunicando que a linha está correta, mas a memória não está. A certa altura, essa linha suja terá de ser escrita de volta na memória, porém, possivelmente depois que forem feitas muitas escritas nela. Esse tipo de protocolo é conhecido como protocolo de escrita retroativa (write-back).
 
 **• O protocolo MESI de coerência de cache**
-Um protocolo popular de coerência de cache de escrita retroativa é denominado MESI, representando as
-iniciais dos nomes dos quatro estados (M, E, S e I) que ele utiliza (Papamarcos e Patel, 1984). Ele é baseado no
-antigo protocolo escreve uma vez (write-once) (Goodman, 1983). O protocolo MESI é usado pelo Core i7 e por
+Um protocolo popular de coerência de cache de escrita retroativa é denominado MESI, representando as iniciais dos nomes dos quatro estados (M, E, S e I) que ele utiliza (Papamarcos e Patel, 1984). Ele é baseado no antigo protocolo escreve uma vez (write-once) (Goodman, 1983). O protocolo MESI é usado pelo Core i7 e por
 muitas outras CPUs para espiar o barramento. Cada entrada de cache pode estar em um dos quatro estados:
 
-1. Inválido – A entrada da cache não contém dados válidos.
+    1. Inválido – A entrada da cache não contém dados válidos.
 
-2. Compartilhado (shared) – múltiplas caches podem conter a linha; a memória está atualizada.
+    2. Compartilhado (shared) – múltiplas caches podem conter a linha; a memória está atualizada.
 
-3. Exclusivo – nenhuma outra cache contém a linha; a memória está atualizada.
+    3. Exclusivo – nenhuma outra cache contém a linha; a memória está atualizada.
 
-4. Modificado – a entrada é válida; a memória é inválida; não existem cópias.
+    4. Modificado – a entrada é válida; a memória é inválida; não existem cópias.
 
-Quando a CPU é iniciada pela primeira vez, todas as entradas de cache são marcadas como inválidas. Na
-primeira vez que a memória é lida, a linha referenciada é buscada na cache da CPU que está lendo a memória e
-marcada como no estado E (exclusivo), uma vez que ela é a única cópia dentro de uma cache, como ilustrado
-na Figura 8.28(a) para o caso da CPU 1 que está lendo a linha A. Leituras subsequentes por aquela CPU usam
-a entrada que está na cache e não passam pelo barramento. Outra CPU também pode buscar a mesma linha e
-colocá-la na cache, mas, por causa da escuta, o portador original (CPU 1) vê que não está mais sozinho e anuncia
-no barramento que ele também tem uma cópia. Ambas as cópias são marcadas como estado S (compartilhado),
-conforme mostra a Figura 8.28(b). Em outras palavras, o estado S significa que a linha está em uma ou em mais
-caches para leitura e a memória está atualizada. Leituras subsequentes por uma CPU para uma linha que ela colo-
-cou em cache no estado S não usam o barramento e não provocam mudança de estado.
+Quando a CPU é iniciada pela primeira vez, todas as entradas de cache são marcadas como inválidas. Na primeira vez que a memória é lida, a linha referenciada é buscada na cache da CPU que está lendo a memória e marcada como no estado E (exclusivo), uma vez que ela é a única cópia dentro de uma cache, como ilustrado
+na Figura 8.28(a) para o caso da CPU 1 que está lendo a linha A. Leituras subsequentes por aquela CPU usam a entrada que está na cache e não passam pelo barramento. Outra CPU também pode buscar a mesma linha e colocá-la na cache, mas, por causa da escuta, o portador original (CPU 1) vê que não está mais sozinho e anuncia no barramento que ele também tem uma cópia. Ambas as cópias são marcadas como estado S (compartilhado), conforme mostra a Figura 8.28(b). Em outras palavras, o estado S significa que a linha está em uma ou em mais caches para leitura e a memória está atualizada. Leituras subsequentes por uma CPU para uma linha que ela colocou em cache no estado S não usam o barramento e não provocam mudança de estado.
 
-Agora, considere o que acontece se a CPU 2 escrever para a linha de cache que ela está mantendo no
-estado S. Ela emite um sinal de invalidação no barramento, informando a todas as outras CPUs para descar-
-tar suas cópias. A cópia que está em cache agora passa para o estado M (modificado), como mostra a Figura
-8.28(c). A linha não é escrita para a memória. Vale a pena observar que, se uma linha estiver no estado E
-quando for escrita, nenhum sinal é necessário para invalidar outras caches, porque todos sabem que não
-existe nenhuma outra cópia.
+Agora, considere o que acontece se a CPU 2 escrever para a linha de cache que ela está mantendo no estado S. Ela emite um sinal de invalidação no barramento, informando a todas as outras CPUs para descartar suas cópias. A cópia que está em cache agora passa para o estado M (modificado), como mostra a Figura 8.28(c). A linha não é escrita para a memória. Vale a pena observar que, se uma linha estiver no estado E quando for escrita, nenhum sinal é necessário para invalidar outras caches, porque todos sabem que não existe nenhuma outra cópia.
 
-Em seguida, considere o que acontece se a CPU 3 ler a linha. A CPU 2, que agora possui a linha, sabe
-que a cópia na memória não é válida, portanto, ela ativa um sinal no barramento informando à CPU 3 que
-faça o favor de esperar enquanto ela escreve sua linha de volta para a memória. Quanto a CPU 2 concluir, a
-CPU 3 busca uma cópia e a linha é marcada como compartilhada em ambas as caches, como mostra a Figura
-8.28(d). Após isso, a CPU 2 escreve a linha de novo, que invalida a cópia que está na cache da CPU 3, con-
-forme mostra a Figura 8.28(e).
+Em seguida, considere o que acontece se a CPU 3 ler a linha. A CPU 2, que agora possui a linha, sabe que a cópia na memória não é válida, portanto, ela ativa um sinal no barramento informando à CPU 3 que faça o favor de esperar enquanto ela escreve sua linha de volta para a memória. Quanto a CPU 2 concluir, a CPU 3 busca uma cópia e a linha é marcada como compartilhada em ambas as caches, como mostra a Figura 8.28(d). Após isso, a CPU 2 escreve a linha de novo, que invalida a cópia que está na cache da CPU 3, conforme mostra a Figura 8.28(e).
 
-Por fim, a CPU 1 escreve uma palavra na linha. A CPU 2 vê que uma escrita está sendo tentada e ativa um
-sinal de barramento dizendo à CPU 1 fazer o favor de esperar enquanto ela escreve sua linha de volta na memó-
-ria. Quando termina, a CPU 2 marca sua própria cópia como inválida, já que sabe que outra CPU está prestes a
-modificá-la. Nesse ponto, temos a situação em que uma CPU está escrevendo uma linha que não está na cache.
-Se a política de alocação de escrita estiver em uso, a linha será carregada na cache e marcada como em estado M,
-como ilustra a Figura 8.28(f). Se política de alocação de escrita não estiver em uso, a escrita irá diretamente até
-a memória e a linha não ficará em cache em lugar algum.
+Por fim, a CPU 1 escreve uma palavra na linha. A CPU 2 vê que uma escrita está sendo tentada e ativa um sinal de barramento dizendo à CPU 1 fazer o favor de esperar enquanto ela escreve sua linha de volta na memória. Quando termina, a CPU 2 marca sua própria cópia como inválida, já que sabe que outra CPU está prestes a modificá-la. Nesse ponto, temos a situação em que uma CPU está escrevendo uma linha que não está na cache. Se a política de alocação de escrita estiver em uso, a linha será carregada na cache e marcada como em estado M, como ilustra a Figura 8.28(f). Se política de alocação de escrita não estiver em uso, a escrita irá diretamente até a memória e a linha não ficará em cache em lugar algum.
 
 **• Figura 8.28 - Protocolo MESI de coerência de cache.**
 
@@ -1796,19 +1593,10 @@ a memória e a linha não ficará em cache em lugar algum.
 
 
 **• Multiprocessadores UMA que usam switches crossbar**
-Mesmo com todas as possíveis otimizações, a utilização de um único barramento limita o tamanho do
-multiprocessador UMA a cerca de 16 ou 32 CPUs. Para passar disso é preciso um tipo diferente de rede de inter-
-conexão. O circuito mais simples para conectar n CPUs a k memórias é o switch crossbar mostrado na Figura
-8.28. Switches crossbar são utilizados há décadas em centrais de comutação telefônica para conectar um grupo
-de linhas de entrada a um conjunto de linhas de saída de um modo arbitrário.
+Mesmo com todas as possíveis otimizações, a utilização de um único barramento limita o tamanho do multiprocessador UMA a cerca de 16 ou 32 CPUs. Para passar disso é preciso um tipo diferente de rede de interconexão. O circuito mais simples para conectar n CPUs a k memórias é o switch crossbar mostrado na Figura
+8.28. Switches crossbar são utilizados há décadas em centrais de comutação telefônica para conectar um grupo de linhas de entrada a um conjunto de linhas de saída de um modo arbitrário.
 
-Em cada intersecção de uma linha horizontal (de entrada) com uma linha vertical (de saída) está um ponto
-de cruzamento. Um ponto de cruzamento é um pequeno switch que pode ser aberto ou fechado eletricamente,
-dependendo de as linhas horizontal e vertical deverem ser ou não ser conectadas. Na Figura 8.29(a), vemos três
-pontos de cruzamento fechados simultaneamente, o que permite conexões entre os pares (CPU, memória) (001,
-000), (101, 101) e (110, 010) ao mesmo tempo. Muitas outras combinações também são possíveis. Na verdade, o
-número de combinações é igual ao número de modos diferentes em que oito torres podem ser posicionadas com
-segurança sobre um tabuleiro de xadrez.
+Em cada intersecção de uma linha horizontal (de entrada) com uma linha vertical (de saída) está um ponto de cruzamento. Um ponto de cruzamento é um pequeno switch que pode ser aberto ou fechado eletricamente, dependendo de as linhas horizontal e vertical deverem ser ou não ser conectadas. Na Figura 8.29(a), vemos três pontos de cruzamento fechados simultaneamente, o que permite conexões entre os pares (CPU, memória) (001,000), (101, 101) e (110, 010) ao mesmo tempo. Muitas outras combinações também são possíveis. Na verdade, o número de combinações é igual ao número de modos diferentes em que oito torres podem ser posicionadas com segurança sobre um tabuleiro de xadrez.
 
 **• Figura 8.29 - (a) Switch crossbar 8 × 8. (b) Ponto de cruzamento aberto. (c) Ponto de cruzamento fechado.**
 Esta arquitetura permite que várias CPUs acessem diferentes módulos de memória simultaneamente sem gerar conflitos no barramento.
@@ -1851,25 +1639,12 @@ Esta arquitetura permite que várias CPUs acessem diferentes módulos de memóri
  
  - Custo e Escalabilidade: O número de pontos de cruzamento cresce de forma quadrática ($n^2$). Para 8 CPUs e 8 Memórias, temos 64 pontos; para 1000 de cada, seriam 1.000.000 de pontos, o que torna essa arquitetura cara para sistemas muito grandes.
 
-Uma das propriedades mais interessantes do switch crossbar é que ele é uma rede sem bloqueio, o que
-significa que a nenhuma CPU é negada a conexão de que necessita porque algum ponto de cruzamento ou linha já
-está ocupado (considerando que o módulo de memória em si esteja disponível). Além do mais, não é preciso plane-
-jamento antecipado. Ainda que já estejam estabelecidas sete conexões arbitrárias, sempre é possível conectar a CPU
-restante à memória restante. Mais adiante, veremos esquemas de interconexão que não têm essas propriedades.
+Uma das propriedades mais interessantes do switch crossbar é que ele é uma rede sem bloqueio, o que significa que a nenhuma CPU é negada a conexão de que necessita porque algum ponto de cruzamento ou linha já está ocupado (considerando que o módulo de memória em si esteja disponível). Além do mais, não é preciso planejamento antecipado. Ainda que já estejam estabelecidas sete conexões arbitrárias, sempre é possível conectar a CPU restante à memória restante. Mais adiante, veremos esquemas de interconexão que não têm essas propriedades.
 
-Uma das piores propriedades do switch crossbar é o fato de que o número de pontos de cruzamento
-cresce com n2. O projeto de switches crossbar é viável para sistemas de tamanho médio. Discutiremos um
-desses projetos, o Sun Fire E25K, mais adiante neste capítulo. Contudo, com mil CPUs e mil módulos de
-memória, precisamos de um milhão de pontos de cruzamento. Um switch crossbar desse tamanho não é viável.
-Precisamos de algo bem diferente.
+Uma das piores propriedades do switch crossbar é o fato de que o número de pontos de cruzamento cresce com n2. O projeto de switches crossbar é viável para sistemas de tamanho médio. Discutiremos um desses projetos, o Sun Fire E25K, mais adiante neste capítulo. Contudo, com mil CPUs e mil módulos de memória, precisamos de um milhão de pontos de cruzamento. Um switch crossbar desse tamanho não é viável. Precisamos de algo bem diferente.
 
 **• Multiprocessadores UMA que usam redes de comutação multiestágios**
-Esse “algo bem diferente” pode ser baseado no modesto switch 2 × 2 mostrado na Figura 8.30(a). Ele tem
-duas entradas e duas saídas. Mensagens que chegam a qualquer uma das linhas de entrada podem ser comutadas para qualquer das linhas de saída. Para a finalidade que pretendemos aqui, as mensagens conterão até quatro par-
-tes, conforme mostra a Figura 8.30(b). O campo Módulo informa qual memória usar. O campo Endereço especifi-
-ca um endereço dentro de um módulo. O campo Opcode dá a operação, como READ ou WRITE. Por fim, o campo
-opcional Valor pode conter um operando, como uma palavra de 32 bits a ser escrita em uma operação WRITE.
-O switch inspeciona o campo Módulo e o utiliza para determinar se a mensagem deve ser enviada por X ou por Y.
+Esse “algo bem diferente” pode ser baseado no modesto switch 2 × 2 mostrado na Figura 8.30(a). Ele tem duas entradas e duas saídas. Mensagens que chegam a qualquer uma das linhas de entrada podem ser comutadas para qualquer das linhas de saída. Para a finalidade que pretendemos aqui, as mensagens conterão até quatro partes, conforme mostra a Figura 8.30(b). O campo Módulo informa qual memória usar. O campo Endereço especifica um endereço dentro de um módulo. O campo Opcode dá a operação, como READ ou WRITE. Por fim, o campo opcional Valor pode conter um operando, como uma palavra de 32 bits a ser escrita em uma operação WRITE. O switch inspeciona o campo Módulo e o utiliza para determinar se a mensagem deve ser enviada por X ou por Y.
 
 **• Figura 8.30 - (a) Switch 2 × 2. (b) Formato de mensagem.**
 
@@ -1896,23 +1671,13 @@ O switch inspeciona o campo Módulo e o utiliza para determinar se a mensagem de
 | Rede Ômega          | Alta                | Moderado (n/2 log2 n)| Médio (bloqueante)       |
 +---------------------+---------------------+----------------------+--------------------------+
 
-Nossos switches 2 × 2 podem ser organizados de muitos modos para construir redes de comutação multies-
-tágios maiores. Uma possibilidade é a rede ômega, classe econômica, sem supérfluos, ilustrada na Figura 8.31.
-Nesse caso, conectamos oito CPUs a oito memórias usando 12 switches. De modo mais geral, para n CPUs e n
-memórias precisaríamos de log2 n estágios, com n/2 switches cada, para um total de (n/2)log2 n switches, o que é
-muito melhor do que n2 pontos de cruzamento, em especial para valores grandes de n.
+Nossos switches 2 × 2 podem ser organizados de muitos modos para construir redes de comutação multiestágios maiores. Uma possibilidade é a rede ômega, classe econômica, sem supérfluos, ilustrada na Figura 8.31. Nesse caso, conectamos oito CPUs a oito memórias usando 12 switches. De modo mais geral, para n CPUs e n
+memórias precisaríamos de log2 n estágios, com n/2 switches cada, para um total de (n/2)log2 n switches, o que é muito melhor do que n2 pontos de cruzamento, em especial para valores grandes de n.
 
-O padrão de fiação da rede ômega costuma ser denominado embaralhamento perfeito, pois a mistura dos
-sinais em cada estágio é parecida com um baralho que é cortado ao meio e então embaralhado carta por carta. Para
-ver como a rede ômega funciona, suponha que a CPU 011 queira ler uma palavra do módulo de memória 110.
-A CPU envia uma mensagem READ ao switch 1D que contém 110 no campo Módulo. O switch pega o primeiro
-bit de 110, isto é, o da extrema esquerda, e o utiliza para o roteamento. Um 0 roteia para a saída superior e um 1
-roteia para a inferior. Como esse bit é um 1, a mensagem é roteada para 2D por meio da saída inferior.
+O padrão de fiação da rede ômega costuma ser denominado embaralhamento perfeito, pois a mistura dos sinais em cada estágio é parecida com um baralho que é cortado ao meio e então embaralhado carta por carta. Para ver como a rede ômega funciona, suponha que a CPU 011 queira ler uma palavra do módulo de memória 110.
+A CPU envia uma mensagem READ ao switch 1D que contém 110 no campo Módulo. O switch pega o primeiro bit de 110, isto é, o da extrema esquerda, e o utiliza para o roteamento. Um 0 roteia para a saída superior e um 1 roteia para a inferior. Como esse bit é um 1, a mensagem é roteada para 2D por meio da saída inferior.
 
-Todos os switches do segundo estágio, incluindo 2D, usam o segundo bit para roteamento. Esse bit também
-é um 1, portanto, a mensagem agora é repassada para 3D por meio da saída inferior. Nesse ponto, o terceiro bit é
-testado e verifica-se que é 0. Por conseguinte, a mensagem sai pela saída superior e chega à memória 110, como
-desejado. O caminho percorrido por essa mensagem é marcado pela letra a na Figura 8.31.
+Todos os switches do segundo estágio, incluindo 2D, usam o segundo bit para roteamento. Esse bit também é um 1, portanto, a mensagem agora é repassada para 3D por meio da saída inferior. Nesse ponto, o terceiro bit é testado e verifica-se que é 0. Por conseguinte, a mensagem sai pela saída superior e chega à memória 110, como desejado. O caminho percorrido por essa mensagem é marcado pela letra a na Figura 8.31.
 
 **• Figura 8.31   Rede de comutação ômega.**
 
@@ -1945,44 +1710,21 @@ Diferente do Crossbar, que requer n^2 switches, a Rede Ômega é mais econômica
 
 - Conflitos de Bloqueio: Uma característica importante é que ela é bloqueante. Isso significa que, mesmo que duas CPUs queiram acessar memórias diferentes, elas podem "disputar" o mesmo switch interno, o que exige que uma espere a outra liberar o caminho.
 
-À medida que a mensagem percorre a rede de comutação, os bits da extremidade esquerda do módulo já não
-são mais necessários. Eles podem muito bem ser usados para registrar ali o número da linha de entrada, de modo
-que a resposta possa encontrar seu caminho de volta. Para o caminho a, as linhas de entrada são 0 (entrada supe-
-rior para 1D), 1 (entrada inferior para 2D) e 1 (entrada inferior para 3D), respectivamente. A resposta é roteada
-de volta usando 011, só que, desta vez, ela é lida da direita para a esquerda.
+À medida que a mensagem percorre a rede de comutação, os bits da extremidade esquerda do módulo já não são mais necessários. Eles podem muito bem ser usados para registrar ali o número da linha de entrada, de modo que a resposta possa encontrar seu caminho de volta. Para o caminho a, as linhas de entrada são 0 (entrada superior para 1D), 1 (entrada inferior para 2D) e 1 (entrada inferior para 3D), respectivamente. A resposta é roteada de volta usando 011, só que, desta vez, ela é lida da direita para a esquerda.
 
-Ao mesmo tempo em que tudo isso está acontecendo, a CPU 001 quer escrever uma palavra para o módulo
-de memória 001. Nesse caso, acontece um processo análogo e a mensagem é roteada pelas saídas superior, supe-
-rior e inferior, respectivamente, marcadas com a letra b. Quando chega, seu campo Módulo lê 001, que representa
-o caminho que ela tomou. Uma vez que essas duas requisições não usam nenhum dos mesmos switches, linhas
-ou módulos de memória, elas podem prosseguir em paralelo.
+Ao mesmo tempo em que tudo isso está acontecendo, a CPU 001 quer escrever uma palavra para o módulo de memória 001. Nesse caso, acontece um processo análogo e a mensagem é roteada pelas saídas superior, superior e inferior, respectivamente, marcadas com a letra b. Quando chega, seu campo Módulo lê 001, que representa
+o caminho que ela tomou. Uma vez que essas duas requisições não usam nenhum dos mesmos switches, linhas ou módulos de memória, elas podem prosseguir em paralelo.
 
-Agora, considere o que aconteceria se a CPU 000 quisesse acessar simultaneamente o módulo de memória
-000. Sua requisição entraria em conflito com a requisição da CPU 001 no switch 3A. Uma delas teria de esperar.
-Diferente do switch crossbar, a rede ômega é uma rede com bloqueio. Nem todos os conjuntos de requisições
-podem ser processados ao mesmo tempo. Podem ocorrer conflitos pela utilização de um fio ou de um switch, bem
-como entre requisições para a memória e respostas da memória.
+Agora, considere o que aconteceria se a CPU 000 quisesse acessar simultaneamente o módulo de memória 000. Sua requisição entraria em conflito com a requisição da CPU 001 no switch 3A. Uma delas teria de esperar. Diferente do switch crossbar, a rede ômega é uma rede com bloqueio. Nem todos os conjuntos de requisições
+podem ser processados ao mesmo tempo. Podem ocorrer conflitos pela utilização de um fio ou de um switch, bem como entre requisições para a memória e respostas da memória.
 
-É claramente desejável espalhar as referências à memória de maneira uniforme pelos módulos. Uma técnica
-comum é usar os bits de ordem baixa como o número de módulo. Considere, por exemplo, um espaço de ende-
-reço por bytes para um computador que acessa principalmente palavras de 32 bits. Os 2 bits de ordem baixa em
-geral serão 00, mas os 3 bits seguintes estarão uniformemente distribuídos. Usando esses 3 bits como o número
-de módulo, palavras endereçadas consecutivamente estarão em módulos consecutivos. Um sistema de memória
-no qual palavras consecutivas estão em módulos consecutivos é denominado intercalado. Memórias intercaladas
-maximizam o paralelismo porque grande parte das referências à memória é para endereços consecutivos. Também
-é possível projetar redes de comutação que não são bloqueantes e oferecem múltiplos caminhos de cada CPU a
-cada módulo de memória, para distribuir melhor o tráfego.
+É claramente desejável espalhar as referências à memória de maneira uniforme pelos módulos. Uma técnica comum é usar os bits de ordem baixa como o número de módulo. Considere, por exemplo, um espaço de endereço por bytes para um computador que acessa principalmente palavras de 32 bits. Os 2 bits de ordem baixa em
+geral serão 00, mas os 3 bits seguintes estarão uniformemente distribuídos. Usando esses 3 bits como o número de módulo, palavras endereçadas consecutivamente estarão em módulos consecutivos. Um sistema de memória no qual palavras consecutivas estão em módulos consecutivos é denominado intercalado. Memórias intercaladas maximizam o paralelismo porque grande parte das referências à memória é para endereços consecutivos. Também é possível projetar redes de comutação que não são bloqueantes e oferecem múltiplos caminhos de cada CPU a cada módulo de memória, para distribuir melhor o tráfego.
 
 ## 8.3.4 Multiprocessadores NUMA
-A esta altura, deve estar claro que multiprocessadores UMA de um único barramento em geral são limita-
-dos a não mais do que algumas dezenas de CPUs e que multiprocessadores crossbar ou comutados precisam de
-muito hardware (caro) e não são assim tão maiores. Para chegar a mais de cem CPUs, alguma coisa tem de ser
-abandonada. Em geral, o que se abandona é a ideia de que todos os módulos de memória tenham o mesmo tempo
-de acesso. Essa concessão leva à ideia de multiprocessadores NUMA (NonUniform Memory Access – acesso
-não uniforme à memória). Como seus primos UMA, eles fornecem um único espaço de endereço para todas as
-CPUs, porém, diferentemente das máquinas UMA, o acesso a módulos de memória locais é mais rápido do que o
-acesso a módulos remotos. Assim, todos os programas UMA executarão sem alteração em máquinas NUMA, mas
-o desempenho será pior do que em uma máquina UMA à mesma velocidade de clock.
+A esta altura, deve estar claro que multiprocessadores UMA de um único barramento em geral são limitados a não mais do que algumas dezenas de CPUs e que multiprocessadores crossbar ou comutados precisam de muito hardware (caro) e não são assim tão maiores. Para chegar a mais de cem CPUs, alguma coisa tem de ser
+abandonada. Em geral, o que se abandona é a ideia de que todos os módulos de memória tenham o mesmo tempo de acesso. Essa concessão leva à ideia de multiprocessadores NUMA (NonUniform Memory Access – acesso não uniforme à memória). Como seus primos UMA, eles fornecem um único espaço de endereço para todas as
+CPUs, porém, diferentemente das máquinas UMA, o acesso a módulos de memória locais é mais rápido do que o acesso a módulos remotos. Assim, todos os programas UMA executarão sem alteração em máquinas NUMA, mas o desempenho será pior do que em uma máquina UMA à mesma velocidade de clock.
 
 Todas as máquinas NUMA têm três características fundamentais que, juntas, as distinguem de outros mul-
 tiprocessadores:
@@ -1993,35 +1735,23 @@ tiprocessadores:
 
 3. O acesso à memória remota é mais lento do que o acesso à memória local.
 
-Quando o tempo de acesso à memória remota não é oculto (porque não há cache), o sistema é denomi-
-nado NC-NUMA. Quando estão presentes caches coerentes, ele é denominado CC-NUMA (ao menos pelo pes-
-soal do hardware). O pessoal do software costuma denominá-lo DSM de hardware, porque ele é em essência
-o mesmo que memória compartilhada distribuída por software, mas implementada pelo hardware usando uma
-página de tamanho pequeno.
+Quando o tempo de acesso à memória remota não é oculto (porque não há cache), o sistema é denominado NC-NUMA. Quando estão presentes caches coerentes, ele é denominado CC-NUMA (ao menos pelo pessoal do hardware). O pessoal do software costuma denominá-lo DSM de hardware, porque ele é em essência o mesmo que memória compartilhada distribuída por software, mas implementada pelo hardware usando uma página de tamanho pequeno.
 
-Umas das primeiras máquinas NC-NUMA (embora o nome ainda não tivesse sido cunhado) foi a Carnegie­
-‑Mellon Cm*, ilustrada de forma simplificada na Figura 8.32 (Swan et al., 1977). Ela consistia em uma coleção de
-CPUs LSI-11, cada uma com alguma memória endereçada por meio de um barramento local. (A LSI-11 era uma
-versão de chip único do DEC PDP-11, um minicomputador popular na década de 1970.) Ademais, os sistemas
-LSI-11 eram conectados por um barramento de sistema. Quando uma requisição de memória entrava em uma
-MMU, especialmente modificada, era feita uma verificação para ver se a palavra necessária estava na memória
-local. Se estivesse, era enviada uma requisição pelo barramento local para obter a palavra. Se não, a requisição
-era roteada pelo barramento de sistema até o sistema que continha a palavra, que, então, respondia. É claro que
-a última demorava muito mais do que a primeira. Embora um programa pudesse ser executado com facilidade a
-partir da memória remota, isso levava dez vezes mais tempo do que se o mesmo programa fosse executado a partir
-da memória local.
+Umas das primeiras máquinas NC-NUMA (embora o nome ainda não tivesse sido cunhado) foi a Carnegie­‑Mellon Cm*, ilustrada de forma simplificada na Figura 8.32 (Swan et al., 1977). Ela consistia em uma coleção de CPUs LSI-11, cada uma com alguma memória endereçada por meio de um barramento local. (A LSI-11 era uma
+versão de chip único do DEC PDP-11, um minicomputador popular na década de 1970.) Ademais, os sistemas LSI-11 eram conectados por um barramento de sistema. Quando uma requisição de memória entrava em uma MMU, especialmente modificada, era feita uma verificação para ver se a palavra necessária estava na memória
+local. Se estivesse, era enviada uma requisição pelo barramento local para obter a palavra. Se não, a requisição era roteada pelo barramento de sistema até o sistema que continha a palavra, que, então, respondia. É claro que a última demorava muito mais do que a primeira. Embora um programa pudesse ser executado com facilidade a partir da memória remota, isso levava dez vezes mais tempo do que se o mesmo programa fosse executado a partir da memória local.
 
 
 **• Figura 8.32   Máquina NUMA com dois níveis de barramentos. O Cm* foi o primeiro multiprocessador a usar esse projeto.**
 Diferente das arquiteturas de acesso uniforme, o modelo NUMA (Non-Uniform Memory Access) organiza o sistema em nós locais para reduzir o congestionamento do barramento principal.
 
-           [ CPU ]       [ CPU ]       [ CPU ]       [ CPU ]
+           [ CPU ]       [ CPU ]       [ CPU ]        [ CPU ]
               |             |             |             |
-           +-------+     +-------+     +-------+     +-------+
-           |  MMU  |     |  MMU  |     |  MMU  |     |  MMU  |
-           +-------+     +-------+     +-------+     +-------+
-               |             |             |             |
-         ------+------ ------+------  ------+------  ------+------
+           +-------+     +-------+     +-------+      +-------+
+           |  MMU  |     |  MMU  |     |  MMU  |      |  MMU  |
+           +-------+     +-------+     +-------+      +-------+
+               |             |             |              |
+         ------+------ ------+------  ------+------  -----+-------
         | Barramento|  | Barramento|  | Barramento|  | Barramento|
         |   Local   |  |   Local   |  |   Local   |  |   Local   |
         ------+------  ------+------  ------+------  ------+------
@@ -2029,8 +1759,8 @@ Diferente das arquiteturas de acesso uniforme, o modelo NUMA (Non-Uniform Memory
           +-------+     +-------+       +-------+     +-------+
           |Memória|     |Memória|       |Memória|     |Memória|
           +-------+     +-------+       +-------+     +-------+
-              |             |             |             |
-        ------+-------------+-------------+-------------+-------
+              |             |               |             |
+        ------+-------------+---------------+-------------+-----
         |                BARRAMENTO DO SISTEMA                 |
         --------------------------------------------------------
 
@@ -2044,53 +1774,23 @@ Diferente das arquiteturas de acesso uniforme, o modelo NUMA (Non-Uniform Memory
 
  - O papel da MMU: A Unidade de Gerenciamento de Memória (MMU) decide se a requisição pode ser resolvida localmente ou se deve ser enviada para o barramento global.
 
-A coerência de memória é garantida em uma máquina NC-NUMA porque não há cache presente. Cada pala-
-vra de memória reside em exatamente um local, portanto, não há perigo de uma cópia ter dados velhos: não há
-cópias. Claro que agora é muito importante saber que página está em qual memória, porque a penalidade sobre
-o desempenho no caso de ela estar no lugar errado é muito grande. Por conseguinte, máquinas NC-NUMA usam
-software elaborado para mover páginas de um lado para outro de modo a maximizar o desempenho.
+A coerência de memória é garantida em uma máquina NC-NUMA porque não há cache presente. Cada palavra de memória reside em exatamente um local, portanto, não há perigo de uma cópia ter dados velhos: não há cópias. Claro que agora é muito importante saber que página está em qual memória, porque a penalidade sobre
+o desempenho no caso de ela estar no lugar errado é muito grande. Por conseguinte, máquinas NC-NUMA usam software elaborado para mover páginas de um lado para outro de modo a maximizar o desempenho.
 
-Em geral, há um processo residente denominado scanner de páginas que executa com intervalo de poucos
-segundos. Sua tarefa é examinar a estatística de utilização e mover páginas de um lado para outro na tentativa
-de melhorar o desempenho. Se a página parece estar no lugar errado, o scanner a desmapeia de modo que a
-próxima referência a ela causará uma falta de página. Quando ocorre a falta, é tomada uma decisão sobre onde
-colocá-la, possivelmente em uma memória diferente daquela em que estava antes. Para evitar paginação excessi-
-va (thrashing), costuma haver alguma regra afirmando que, uma vez posicionada, a página é congelada no lugar
-durante algum tempo ΔT. Vários algoritmos foram estudados, mas a conclusão é que nenhum funciona melhor
-em todas as circunstâncias (LaRowe e Ellis, 1991). O melhor desempenho depende da aplicação.
+Em geral, há um processo residente denominado scanner de páginas que executa com intervalo de poucos segundos. Sua tarefa é examinar a estatística de utilização e mover páginas de um lado para outro na tentativa de melhorar o desempenho. Se a página parece estar no lugar errado, o scanner a desmapeia de modo que a
+próxima referência a ela causará uma falta de página. Quando ocorre a falta, é tomada uma decisão sobre onde colocá-la, possivelmente em uma memória diferente daquela em que estava antes. Para evitar paginação excessiva (thrashing), costuma haver alguma regra afirmando que, uma vez posicionada, a página é congelada no lugar durante algum tempo ΔT. Vários algoritmos foram estudados, mas a conclusão é que nenhum funciona melhor em todas as circunstâncias (LaRowe e Ellis, 1991). O melhor desempenho depende da aplicação.
 
 **• Multiprocessadores NUMA com coerência de cache**
-Projetos de multiprocessadores como o da Figura 8.32 não se prestam muito bem à ampliação, porque não
-fazem cache. Ter de ir até a memória remota toda vez que uma palavra de memória não local for acessada é um
-grande empecilho ao desempenho. Contudo, se for adicionado cache, então é preciso adicionar também coerência
-de cache. Um modo de proporcionar coerência é escutar o barramento de sistema. Tecnicamente, não é difícil
-fazer isso, mas, se for ultrapassado certo número de CPUs, torna-se inviável. Para construir multiprocessadores
-grandes de fato é preciso usar uma técnica fundamentalmente diferente.
+Projetos de multiprocessadores como o da Figura 8.32 não se prestam muito bem à ampliação, porque não fazem cache. Ter de ir até a memória remota toda vez que uma palavra de memória não local for acessada é um grande empecilho ao desempenho. Contudo, se for adicionado cache, então é preciso adicionar também coerência
+de cache. Um modo de proporcionar coerência é escutar o barramento de sistema. Tecnicamente, não é difícil fazer isso, mas, se for ultrapassado certo número de CPUs, torna-se inviável. Para construir multiprocessadores grandes de fato é preciso usar uma técnica fundamentalmente diferente.
 
-Hoje, a abordagem mais popular para construir multiprocessadores CC-NUMA (Cache Coherent NUMA –
-NUMA com coerência de cache) de grande porte é o multiprocessador baseado em diretório. A ideia é manter
-um banco de dados que informa onde está cada linha de cache e em que estado ela está. Quando uma linha de
-cache é referenciada, o banco de dados é pesquisado para descobrir onde ela está e se está limpa ou suja (modi-
-ficada). Como é preciso pesquisar esse banco de dados a cada instrução que referenciar a memória, ele tem de
-ser mantido em hardware extremamente rápido de uso especial, que pode responder em uma fração de um ciclo
-de barramento.
+Hoje, a abordagem mais popular para construir multiprocessadores CC-NUMA (Cache Coherent NUMA – NUMA com coerência de cache) de grande porte é o multiprocessador baseado em diretório. A ideia é manter um banco de dados que informa onde está cada linha de cache e em que estado ela está. Quando uma linha de
+cache é referenciada, o banco de dados é pesquisado para descobrir onde ela está e se está limpa ou suja (modificada). Como é preciso pesquisar esse banco de dados a cada instrução que referenciar a memória, ele tem de ser mantido em hardware extremamente rápido de uso especial, que pode responder em uma fração de um ciclo de barramento.
 
-Para tornar um pouco mais concreta a ideia de um multiprocessador baseado em diretório, vamos considerar
-o exemplo simples (hipotético) de um sistema de 256 nós, cada qual consistindo em uma CPU e 16 MB de RAM
-conectados à CPU por um barramento local. A memória total é 232 bytes, dividida em 226 linhas de cache de 64
-bytes cada. A memória é alocada estaticamente entre os nós, com 0–16M no nó 0, 16–32M no nó 1 e assim por
-diante. Os nós são conectados por uma rede de interconexão, como mostra a Figura 8.33(a). A rede de intercone-
-xão poderia ser uma grade, um hipercubo ou outra topologia. Cada nó também contém as entradas de diretório
-para as 218 linhas de cache de 64 bytes abrangendo sua memória de 224 bytes. Por enquanto, vamos considerar que
-uma linha pode ser contida, no máximo, em uma cache.
+Para tornar um pouco mais concreta a ideia de um multiprocessador baseado em diretório, vamos considerar o exemplo simples (hipotético) de um sistema de 256 nós, cada qual consistindo em uma CPU e 16 MB de RAM conectados à CPU por um barramento local. A memória total é 232 bytes, dividida em 226 linhas de cache de 64
+bytes cada. A memória é alocada estaticamente entre os nós, com 0–16M no nó 0, 16–32M no nó 1 e assim por diante. Os nós são conectados por uma rede de interconexão, como mostra a Figura 8.33(a). A rede de interconexão poderia ser uma grade, um hipercubo ou outra topologia. Cada nó também contém as entradas de diretório para as 218 linhas de cache de 64 bytes abrangendo sua memória de 224 bytes. Por enquanto, vamos considerar que uma linha pode ser contida, no máximo, em uma cache.
 
-Para ver como o diretório funciona, vamos acompanhar uma instrução LOAD da CPU 20 que referencia
-uma linha que está em cache. Primeiro, a CPU que está emitindo a instrução a apresenta à sua MMU (unidade de
-gerenciamento de memória), que a traduz para um endereço físico, por exemplo, 0x24000108. A MMU subdivide
-esse endereço nas três partes mostradas na Figura 8.33(b). Em decimal, essas três partes são nó 36, linha 4 e des-
-locamento 8. A MMU vê que a palavra de memória referenciada é do nó 36, e não do nó 20, portanto, envia uma
-mensagem de requisição pela rede de interconexão ao nó nativo da linha, 36, perguntando se sua linha 4 está em
-cache e, se sim, onde está.
+Para ver como o diretório funciona, vamos acompanhar uma instrução LOAD da CPU 20 que referencia uma linha que está em cache. Primeiro, a CPU que está emitindo a instrução a apresenta à sua MMU (unidade de gerenciamento de memória), que a traduz para um endereço físico, por exemplo, 0x24000108. A MMU subdivide esse endereço nas três partes mostradas na Figura 8.33(b). Em decimal, essas três partes são nó 36, linha 4 e deslocamento 8. A MMU vê que a palavra de memória referenciada é do nó 36, e não do nó 20, portanto, envia uma mensagem de requisição pela rede de interconexão ao nó nativo da linha, 36, perguntando se sua linha 4 está em cache e, se sim, onde está.
 
 **• Figura 8.33 - (a) Multiprocessador de 256 nós baseado em diretório. (b) Divisão de um endereço de memória de 32 bits em campos. (c) Diretório no nó 36.**
 Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutarem" o barramento (o que causaria um congestionamento imenso), cada nó gerencia quem tem acesso aos seus próprios dados através de um diretório local.
@@ -2113,7 +1813,7 @@ Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutare
       +---------+            +---------+            +---------+
            |                      |                      |
     -------+----------------------+----------+-----------+-------
-    |                REDE DE INTERCONEXÃO (Malha, Hipercubo, etc.)  |
+    |      REDE DE INTERCONEXÃO (Malha, Hipercubo, etc.)        |
     -------------------------------------------------------------
 
     (b) Divisão do Endereço (32 bits)
@@ -2159,104 +1859,58 @@ Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutare
 
  - Escalabilidade: Este mecanismo evita o tráfego desnecessário na Rede de Interconexão (Figura 8.33-a), permitindo que o sistema funcione de forma eficiente mesmo com centenas de processadores.
 
-Quando a requisição chega ao nó 36 pela rede de interconexão, ela é roteada para o hardware de diretório.
-O hardware indexa para sua tabela de 218 entradas, uma para cada linha de cache, e extrai a entrada 4. Pela Figura
-8.33(c), vemos que a linha não está em cache, portanto, o hardware busca a linha 4 na RAM local, a envia de volta
-ao nó 20 e atualiza a entrada de diretório 4 para indicar que a linha agora está em cache no nó 20.
+Quando a requisição chega ao nó 36 pela rede de interconexão, ela é roteada para o hardware de diretório. O hardware indexa para sua tabela de 218 entradas, uma para cada linha de cache, e extrai a entrada 4. Pela Figura 8.33(c), vemos que a linha não está em cache, portanto, o hardware busca a linha 4 na RAM local, a envia de volta ao nó 20 e atualiza a entrada de diretório 4 para indicar que a linha agora está em cache no nó 20.
 
-Agora, vamos considerar uma segunda requisição, desta vez perguntando sobre a linha 2 do nó 36. Pela
-Figura 8.33(c), vemos que essa linha está em cache no nó 82. Nesse ponto, o hardware poderia atualizar a entrada
-de diretório 2 para informar que a linha agora está no nó 20 e então enviar uma mensagem ao nó 82 instruindo-o
-a passar a linha para o nó 20 e invalidar sua cache. Note que, mesmo um “multiprocessador de memória compar-
-tilhada”, por assim dizer, tem uma grande atividade oculta de troca de mensagens.
+Agora, vamos considerar uma segunda requisição, desta vez perguntando sobre a linha 2 do nó 36. Pela Figura 8.33(c), vemos que essa linha está em cache no nó 82. Nesse ponto, o hardware poderia atualizar a entrada de diretório 2 para informar que a linha agora está no nó 20 e então enviar uma mensagem ao nó 82 instruindo-o a passar a linha para o nó 20 e invalidar sua cache. Note que, mesmo um “multiprocessador de memória compartilhada”, por assim dizer, tem uma grande atividade oculta de troca de mensagens.
 
-A propósito, vamos calcular quanta memória está sendo tomada pelos diretórios. Cada nó tem 16 MB de
-RAM e 218 entradas de 9 bits para monitorar aquela RAM. Assim, o overhead do diretório é de cerca de 9 × 218 bits
-divididos por 16 MB, ou mais ou menos 1,76%, o que, em geral, é aceitável (embora tenha de ser memória de alta
-velocidade, o que aumenta o custo). Mesmo com linhas de 32 bytes, o overhead seria de apenas 4%. Com linhas
-de cache de 128 bytes, ele estaria abaixo de 1%.
+A propósito, vamos calcular quanta memória está sendo tomada pelos diretórios. Cada nó tem 16 MB de RAM e 218 entradas de 9 bits para monitorar aquela RAM. Assim, o overhead do diretório é de cerca de 9 × 218 bits divididos por 16 MB, ou mais ou menos 1,76%, o que, em geral, é aceitável (embora tenha de ser memória de alta velocidade, o que aumenta o custo). Mesmo com linhas de 32 bytes, o overhead seria de apenas 4%. Com linhas de cache de 128 bytes, ele estaria abaixo de 1%.
 
-Uma limitação óbvia desse projeto é que uma linha só pode ser colocada em cache em um único nó. Para per-
-mitir cache de linhas em vários nós, precisaríamos de algum modo de localizar todas, por exemplo, para invalidá-
--las ou atualizá-las em uma escrita. Há várias opções para permitir cache em vários nós ao mesmo tempo.
+Uma limitação óbvia desse projeto é que uma linha só pode ser colocada em cache em um único nó. Para permitir cache de linhas em vários nós, precisaríamos de algum modo de localizar todas, por exemplo, para invalidá-las ou atualizá-las em uma escrita. Há várias opções para permitir cache em vários nós ao mesmo tempo.
 
-Uma possibilidade é dar a cada entrada de diretório k campos para especificar outros nós, permitindo assim
-o caching de cada linha em até k nós. Uma segunda possibilidade é substituir o número do nó em nosso projeto
-simples por um mapa de bits, com um bit por nó. Nessa opção, não há nenhum limite à quantidade de cópias que
-pode haver, mas há um substancial aumento no overhead. Um diretório com 256 bits para cada linha de cache de
-64 bytes (512 bits) implica um overhead de mais de 50%. Uma terceira possibilidade é manter um campo de 8
-bits em cada entrada de diretório e usá-lo como o cabeçalho de uma lista encadeada que enfileira todas as cópias
-da linha de cache. Essa estratégia requer armazenamento extra em cada nó para ponteiros da lista encadeada e
-também demanda percorrer uma lista encadeada para achar todas as cópias quando isso for necessário. Cada
-possibilidade tem suas próprias vantagens e desvantagens, e todas as três têm sido usadas em sistemas reais.
+Uma possibilidade é dar a cada entrada de diretório k campos para especificar outros nós, permitindo assim o caching de cada linha em até k nós. Uma segunda possibilidade é substituir o número do nó em nosso projeto simples por um mapa de bits, com um bit por nó. Nessa opção, não há nenhum limite à quantidade de cópias que pode haver, mas há um substancial aumento no overhead. Um diretório com 256 bits para cada linha de cache de 64 bytes (512 bits) implica um overhead de mais de 50%. Uma terceira possibilidade é manter um campo de 8 bits em cada entrada de diretório e usá-lo como o cabeçalho de uma lista encadeada que enfileira todas as cópias da linha de cache. Essa estratégia requer armazenamento extra em cada nó para ponteiros da lista encadeada e também demanda percorrer uma lista encadeada para achar todas as cópias quando isso for necessário. Cada possibilidade tem suas próprias vantagens e desvantagens, e todas as três têm sido usadas em sistemas reais.
 
-Outra melhoria do projeto de diretório é monitorar se a linha de cache está limpa (memória residente está
-atualizada) ou suja (memória residente não está atualizada). Se chegar uma requisição de leitura para uma linha
-de cache limpa, o nó nativo pode cumprir a requisição de memória sem ter de repassá-la para uma cache. Contudo,
-uma requisição de leitura para uma linha de cache suja deve ser passada para o nó que contém a linha de cache
-porque somente ele tem uma cópia válida. Se for permitida apenas uma cópia de cache, como na Figura 8.33, não
-há vantagem real alguma em monitorar sua limpeza, porque qualquer nova requisição exige que seja enviada uma
-mensagem à cópia existente para invalidá-la.
+Outra melhoria do projeto de diretório é monitorar se a linha de cache está limpa (memória residente está atualizada) ou suja (memória residente não está atualizada). Se chegar uma requisição de leitura para uma linha de cache limpa, o nó nativo pode cumprir a requisição de memória sem ter de repassá-la para uma cache. Contudo, uma requisição de leitura para uma linha de cache suja deve ser passada para o nó que contém a linha de cache porque somente ele tem uma cópia válida. Se for permitida apenas uma cópia de cache, como na Figura 8.33, não há vantagem real alguma em monitorar sua limpeza, porque qualquer nova requisição exige que seja enviada uma mensagem à cópia existente para invalidá-la.
 
-Claro que monitorar se cada linha de cache está limpa ou suja implica que, quando uma linha de cache é
-modificada, o nó nativo tem de ser informado, mesmo se existir somente uma cópia de cache. Se existirem várias
-cópias, modificar uma delas requer que o resto seja invalidado, portanto, é preciso algum protocolo para evitar
-condições de disputa. Por exemplo, para modificar uma linha de cache compartilhada, um dos portadores poderia
-ter de requisitar acesso exclusivo antes de modificá-la. Tal requisição faria com que todas as outras cópias fossem
-invalidadas antes da concessão da permissão. Outras otimizações de desempenho para máquinas CC-NUMA são
-discutidas em Cheng e Carter, 2008.
+Claro que monitorar se cada linha de cache está limpa ou suja implica que, quando uma linha de cache é modificada, o nó nativo tem de ser informado, mesmo se existir somente uma cópia de cache. Se existirem várias cópias, modificar uma delas requer que o resto seja invalidado, portanto, é preciso algum protocolo para evitar condições de disputa. Por exemplo, para modificar uma linha de cache compartilhada, um dos portadores poderia ter de requisitar acesso exclusivo antes de modificá-la. Tal requisição faria com que todas as outras cópias fossem invalidadas antes da concessão da permissão. Outras otimizações de desempenho para máquinas CC-NUMA são discutidas em Cheng e Carter, 2008.
 
 **• O multiprocessador NUMA Sun Fire E25K**
-Como exemplo de um multiprocessador NUMA de memória compartilhada, vamos estudar a família Sun
-Fire da Sun Microsystems. Embora essa família contenha vários modelos, focalizaremos o E25K, que tem 72 chips
-de CPU UltraSPARC IV. Uma UltraSPARC IV é, basicamente, um par de processadores UltraSPARC III que com-
-partilham uma cache e memória. O E15K é, em essência, o mesmo sistema, exceto que tem um uniprocessador
-em vez de chips de CPU com processadores duais. Existem membros menores também, mas, de nosso ponto de
-vista, o interessante é como funcionam os que têm o maior número de CPUs.
+Como exemplo de um multiprocessador NUMA de memória compartilhada, vamos estudar a família Sun Fire da Sun Microsystems. Embora essa família contenha vários modelos, focalizaremos o E25K, que tem 72 chips de CPU UltraSPARC IV. Uma UltraSPARC IV é, basicamente, um par de processadores UltraSPARC III que com-
+partilham uma cache e memória. O E15K é, em essência, o mesmo sistema, exceto que tem um uniprocessador em vez de chips de CPU com processadores duais. Existem membros menores também, mas, de nosso ponto de vista, o interessante é como funcionam os que têm o maior número de CPUs.
 
-O sistema E25K consiste em até 18 conjuntos de placas, cada conjunto composto por uma placa CPU-memória,
-uma placa de E/S com quatro conectores PCI e uma placa de expansão que acopla a placa CPU-memória à placa de
-E/S e une o par ao plano central, que suporta as placas e contém a lógica de comutação. Cada placa CPU-memória
-contém quatro chips de CPU e quatro módulos de RAM de 8 GB. Por conseguinte, cada placa CPU-memória no
-E25K contém oito CPUs e 32 GB de RAM (quatro CPUs e quatro 32 GB de RAM no E15K). Assim, um E25K com-
-pleto contém 144 CPUs, 576 GB de RAM e 72 conectores PCI. Ele é ilustrado na Figura 8.34. O interessante é que
-o número 18 foi escolhido por causa de limitações de empacotamento: um sistema com 18 conjuntos de placas era
-o maior que podia passar inteiro por uma porta. Enquanto programadores só pensam em 0s e 1s, engenheiros têm
-de se preocupar com questões como se o produto consegue passar pela porta e entrar no prédio do cliente.
+O sistema E25K consiste em até 18 conjuntos de placas, cada conjunto composto por uma placa CPU-memória, uma placa de E/S com quatro conectores PCI e uma placa de expansão que acopla a placa CPU-memória à placa de E/S e une o par ao plano central, que suporta as placas e contém a lógica de comutação. Cada placa CPU-memória contém quatro chips de CPU e quatro módulos de RAM de 8 GB. Por conseguinte, cada placa CPU-memória no E25K contém oito CPUs e 32 GB de RAM (quatro CPUs e quatro 32 GB de RAM no E15K). Assim, um E25K completo contém 144 CPUs, 576 GB de RAM e 72 conectores PCI. Ele é ilustrado na Figura 8.34. O interessante é que o número 18 foi escolhido por causa de limitações de empacotamento: um sistema com 18 conjuntos de placas era o maior que podia passar inteiro por uma porta. Enquanto programadores só pensam em 0s e 1s, engenheiros têm de se preocupar com questões como se o produto consegue passar pela porta e entrar no prédio do cliente.
 
 **• Figura 8.34 - Multiprocessador E25K da Sun Microsystems.
 
 ![alt text](image-137.png)
 
-O plano central é composto de um conjunto de três switches crossbar 18 × 18 para conectar os 18 conjuntos
-de placas. Um switch crossbar é para as linhas de endereço, um é para respostas e um é para transferência de
-dados. Além das 18 placas de expansão, o plano central também tem um conjunto de placas de controle de sis-
-tema ligado a ele. Esse conjunto tem uma única CPU, mas também interfaces com CD-ROM, fita, linhas seriais e
-outros dispositivos periféricos necessários para inicializar, manter e controlar o sistema.
+O plano central é composto de um conjunto de três switches crossbar 18 × 18 para conectar os 18 conjuntos de placas. Um switch crossbar é para as linhas de endereço, um é para respostas e um é para transferência de dados. Além das 18 placas de expansão, o plano central também tem um conjunto de placas de controle de sistema ligado a ele. Esse conjunto tem uma única CPU, mas também interfaces com CD-ROM, fita, linhas seriais e outros dispositivos periféricos necessários para inicializar, manter e controlar o sistema.
 
-O coração de qualquer multiprocessador é o subsistema de memória. Como conectar 144 CPUs à memória
-distribuída? Os modos diretos – um grande barramento de escuta compartilhado ou um switch crossbar 144 ×
-72 – não funcionam bem. O primeiro falha porque o barramento é um gargalo e o último falha porque é muito
-difícil e muito caro construir o switch. Por isso, grandes multiprocessadores como o E25K são obrigados a usar
-um subsistema de memória mais complexo.
+O coração de qualquer multiprocessador é o subsistema de memória. Como conectar 144 CPUs à memória distribuída? Os modos diretos – um grande barramento de escuta compartilhado ou um switch crossbar 144 × 72 – não funcionam bem. O primeiro falha porque o barramento é um gargalo e o último falha porque é muito
+difícil e muito caro construir o switch. Por isso, grandes multiprocessadores como o E25K são obrigados a usar um subsistema de memória mais complexo.
 
-No nível do conjunto de placas é usada lógica de escuta, de modo que todas as CPUs locais podem
-verificar todas as requisições de memória que vêm do conjunto de placas para referências a blocos que estão
-em suas caches no momento. Assim, quando uma CPU necessita de uma palavra da memória, primeiro ela
-converte o endereço virtual para um endereço físico e verifica sua própria cache. (Endereços físicos têm 43
-bits, mas restrições de empacotamento limitam a memória a 576 GB.) Se o bloco de cache de que ela necessita estiver em sua própria cache, a palavra é devolvida. Caso contrário, a lógica de escuta verifica se há uma cópia
-daquela palavra disponível em algum outro lugar do conjunto de placas. Se houver, a requisição é cumprida.
-Se não houver, a requisição é passada adiante por meio do switch crossbar 18 × 18 de endereço como des-
-creveremos mais adiante. A lógica de escuta só pode fazer uma escuta por ciclo de clock. O clock do sistema
-funciona a 150 MHz, portanto, é possível realizar 150 milhões de escutas/segundo por conjunto de placas ou
-2,7 bilhões de escutas/segundo no âmbito do sistema.
+No nível do conjunto de placas é usada lógica de escuta, de modo que todas as CPUs locais podem verificar todas as requisições de memória que vêm do conjunto de placas para referências a blocos que estão em suas caches no momento. Assim, quando uma CPU necessita de uma palavra da memória, primeiro ela converte o endereço virtual para um endereço físico e verifica sua própria cache. (Endereços físicos têm 43 bits, mas restrições de empacotamento limitam a memória a 576 GB.) Se o bloco de cache de que ela necessita estiver em sua própria cache, a palavra é devolvida. Caso contrário, a lógica de escuta verifica se há uma cópia
+daquela palavra disponível em algum outro lugar do conjunto de placas. Se houver, a requisição é cumprida. Se não houver, a requisição é passada adiante por meio do switch crossbar 18 × 18 de endereço como descreveremos mais adiante. A lógica de escuta só pode fazer uma escuta por ciclo de clock. O clock do sistema
+funciona a 150 MHz, portanto, é possível realizar 150 milhões de escutas/segundo por conjunto de placas ou 2,7 bilhões de escutas/segundo no âmbito do sistema.
 
-Embora em termos lógicos a lógica de escuta seja um barramento, como retratado na Figura 8.34, em termos
-físicos ela é uma árvore de dispositivos, cujos comandos são repassados para cima e para baixo dela. Quando uma
-CPU ou uma placa PCI produzem um endereço, este vai até um repetidor de endereços por meio de uma conexão
-ponto a ponto, como mostra a Figura 8.35. Os dois repetidores convergem para a placa de expansão, onde os
-endereços são enviados de volta árvore abaixo para cada dispositivo para verificar presenças. Esse arranjo é usado
-para evitar ter um barramento que envolva três placas.
+Embora em termos lógicos a lógica de escuta seja um barramento, como retratado na Figura 8.34, em termos físicos ela é uma árvore de dispositivos, cujos comandos são repassados para cima e para baixo dela. Quando uma CPU ou uma placa PCI produzem um endereço, este vai até um repetidor de endereços por meio de uma conexão ponto a ponto, como mostra a Figura 8.35. Os dois repetidores convergem para a placa de expansão, onde os endereços são enviados de volta árvore abaixo para cada dispositivo para verificar presenças. Esse arranjo é usado para evitar ter um barramento que envolva três placas.
+
+- **Conectando 144 CPUs à Memória Distribuída**
+
+Para conectar 144 CPUs à memória distribuída, é necessário um subsistema de memória mais complexo, pois os modos diretos (barramento compartilhado ou switch crossbar) não são viáveis.
+
+Algumas opções incluem:
+
+ - Rede de Interconexão Hierárquica: uma rede de interconexão hierárquica, com vários níveis de switches e barramentos, pode ser usada para conectar os processadores à memória distribuída.
+ 
+ - Rede de Interconexão em Malha: uma rede de interconexão em malha, com cada processador conectado a seus vizinhos, pode ser usada para conectar os processadores à memória distribuída.
+ 
+ - Rede de Interconexão em Árvore: uma rede de interconexão em árvore, com cada processador conectado a um nó da árvore, pode ser usada para conectar os processadores à memória distribuída.
+ 
+ Exemplos de Computadores que Usam essa Arquitetura
+ 
+ - Sun Enterprise 25K (E25K): um servidor de alta escalabilidade da Sun Microsystems, que usa uma arquitetura de multiprocessador com memória distribuída.
+ 
+ - IBM pSeries: uma linha de servidores de alta escalabilidade da IBM, que usa uma arquitetura de multiprocessador com memória distribuída.
 
 **• Figura 8.35 - O Sun Fire E25K usa uma interconexão de quatro níveis. As linhas tracejadas são caminhos de endereços. As linhas cheias são caminhos de dados.**
 Este diagrama mostra o fluxo entre o Nível 0 (componentes físicos) até o Nível 3 (barramento central de alta velocidade).
@@ -2300,29 +1954,11 @@ Este diagrama mostra o fluxo entre o Nível 0 (componentes físicos) até o Nív
  
  - Eficiência Local (Nível 0): O switch 5 X 5 permite que duas CPUs acessem suas memórias locais sem precisar incomodar o restante do sistema, o que é a base da eficiência NUMA.
 
-Transferências de dados usam uma interconexão de quatro níveis como ilustrado na Figura 8.35. Esse
-projeto foi escolhido por causa de seu alto desempenho. No nível 0, pares de chips de CPU e memórias são
-conectados por um pequeno switch crossbar que também tem uma conexão com o nível 1. Os dois grupos
-de pares CPU-memória são conectados por um segundo switch crossbar no nível 1. Os switches crossbar são
-ASICs fabricados por especificação. Para todos eles, todas as entradas estão disponíveis nas linhas, bem como
-nas colunas, embora nem todas as combinações sejam usadas (ou nem mesmo façam sentido). Toda a lógica
-de comutação nas placas é construída a partir de crossbars 3 × 3.
+Transferências de dados usam uma interconexão de quatro níveis como ilustrado na Figura 8.35. Esse projeto foi escolhido por causa de seu alto desempenho. No nível 0, pares de chips de CPU e memórias são conectados por um pequeno switch crossbar que também tem uma conexão com o nível 1. Os dois grupos de pares CPU-memória são conectados por um segundo switch crossbar no nível 1. Os switches crossbar são ASICs fabricados por especificação. Para todos eles, todas as entradas estão disponíveis nas linhas, bem como nas colunas, embora nem todas as combinações sejam usadas (ou nem mesmo façam sentido). Toda a lógica de comutação nas placas é construída a partir de crossbars 3 × 3.
 
-Cada conjunto de placas consiste em três placas: a CPU-memória, a placa de E/S e a de expansão, que conecta
-as outras duas. A interconexão de nível 2 é outro switch crossbar 3 × 3 (na placa de expansão) que une a memória
-propriamente dita às portas de E/S (que são de mapeamento de memória em todas as UltraSPARCs). Todas as
-transferências de dados de ou para o conjunto de placas, seja para memória ou para uma porta de E/S, passam
-pelo switch de nível 2. Por fim, dados que têm de ser transferidos de ou para uma placa remota passam por um switch crossbar 18 × 18 de dados no nível 3. Transferências de dados são feitas 32 bytes por vez, portanto, leva
-dois ciclos de clock para transferir 64 bytes, que é a unidade de transferência normal.
+Cada conjunto de placas consiste em três placas: a CPU-memória, a placa de E/S e a de expansão, que conecta as outras duas. A interconexão de nível 2 é outro switch crossbar 3 × 3 (na placa de expansão) que une a memória propriamente dita às portas de E/S (que são de mapeamento de memória em todas as UltraSPARCs). Todas as transferências de dados de ou para o conjunto de placas, seja para memória ou para uma porta de E/S, passam pelo switch de nível 2. Por fim, dados que têm de ser transferidos de ou para uma placa remota passam por um switch crossbar 18 × 18 de dados no nível 3. Transferências de dados são feitas 32 bytes por vez, portanto, leva dois ciclos de clock para transferir 64 bytes, que é a unidade de transferência normal.
 
-Agora que já vimos como os componentes são organizados, vamos voltar nossa atenção ao modo como a
-memória compartilhada opera. No nível mais baixo, os 576 GB de memória são divididos em 229 blocos de 64
-bytes cada. Esses blocos são as unidades atômicas do sistema de memória. Cada bloco tem uma placa nativa onde
-ele reside quando não está em uso em algum outro lugar. A maioria fica em sua placa nativa por grande parte
-do tempo. Contudo, quando uma CPU precisa de um bloco de memória, seja de sua própria placa ou de uma
-das 17 placas remotas, primeiro ela requisita uma cópia para sua própria cache e então acessa a cópia na cache.
-Embora cada chip de CPU no E25K contenha duas CPUs, elas compartilham uma única cache física e, por isso,
-compartilham todos os blocos nela contidos.
+Agora que já vimos como os componentes são organizados, vamos voltar nossa atenção ao modo como a memória compartilhada opera. No nível mais baixo, os 576 GB de memória são divididos em 229 blocos de 64 bytes cada. Esses blocos são as unidades atômicas do sistema de memória. Cada bloco tem uma placa nativa onde ele reside quando não está em uso em algum outro lugar. A maioria fica em sua placa nativa por grande parte do tempo. Contudo, quando uma CPU precisa de um bloco de memória, seja de sua própria placa ou de uma das 17 placas remotas, primeiro ela requisita uma cópia para sua própria cache e então acessa a cópia na cache. Embora cada chip de CPU no E25K contenha duas CPUs, elas compartilham uma única cache física e, por isso, compartilham todos os blocos nela contidos.
 Cada bloco de memória e linha de cache de cada chip de CPU pode estar em um de três estados:
 
     1. Acesso exclusivo (para escrita).
@@ -2331,154 +1967,61 @@ Cada bloco de memória e linha de cache de cada chip de CPU pode estar em um de 
 
     3. Inválido (isto é, vazio).
 
-Quando uma CPU precisa ler ou escrever uma palavra de memória, ela primeiro verifica sua própria cache.
-Se não encontrar a palavra ali, ela emite uma requisição local para o endereço físico, que é transmitida somente
-em seu próprio conjunto de placas. Se uma cache do conjunto de placas tiver a linha necessária, a lógica de escuta
-detecta a presença e cumpre a requisição. Se a linha estiver em modo exclusivo, ela é transferida ao requisitante
-e a cópia original é marcada como inválida. Se estiver em modo compartilhado, a cache não responde, visto que
-a memória sempre responde quando uma linha de cache estiver limpa.
+Quando uma CPU precisa ler ou escrever uma palavra de memória, ela primeiro verifica sua própria cache. Se não encontrar a palavra ali, ela emite uma requisição local para o endereço físico, que é transmitida somente em seu próprio conjunto de placas. Se uma cache do conjunto de placas tiver a linha necessária, a lógica de escuta detecta a presença e cumpre a requisição. Se a linha estiver em modo exclusivo, ela é transferida ao requisitante e a cópia original é marcada como inválida. Se estiver em modo compartilhado, a cache não responde, visto que a memória sempre responde quando uma linha de cache estiver limpa.
 
-Se a lógica de escuta não puder encontrar a linha de cache ou se a linha estiver presente e compartilhada,
-ela envia uma requisição pelo plano central à placa-mãe perguntando onde está o bloco de memória. O estado de
-cada bloco de memória é armazenado nos bits ECC do bloco, portanto, a placa-mãe pode determinar de imediato
-seu estado. Se o bloco não estiver compartilhado ou estiver compartilhado com uma ou mais placas remotas, a
-memória residente estará atualizada e a requisição pode ser atendida a partir da memória da placa-mãe. Nesse
-caso, uma cópia da linha de cache é transmitida pelo switch crossbar de dados em dois ciclos de clock e acabará
-chegando à CPU requisitante.
+Se a lógica de escuta não puder encontrar a linha de cache ou se a linha estiver presente e compartilhada, ela envia uma requisição pelo plano central à placa-mãe perguntando onde está o bloco de memória. O estado de cada bloco de memória é armazenado nos bits ECC do bloco, portanto, a placa-mãe pode determinar de imediato seu estado. Se o bloco não estiver compartilhado ou estiver compartilhado com uma ou mais placas remotas, a memória residente estará atualizada e a requisição pode ser atendida a partir da memória da placa-mãe. Nesse caso, uma cópia da linha de cache é transmitida pelo switch crossbar de dados em dois ciclos de clock e acabará chegando à CPU requisitante.
 
-Se a requisição era para leitura, é feita uma entrada no diretório na placa-mãe anotando que um novo
-cliente está compartilhando a linha de cache e a transação está concluída. Contudo, se a requisição for para
-escrita, uma mensagem de invalidação tem de ser enviada a todas as outras placas (se houver alguma) que
+Se a requisição era para leitura, é feita uma entrada no diretório na placa-mãe anotando que um novo cliente está compartilhando a linha de cache e a transação está concluída. Contudo, se a requisição for para escrita, uma mensagem de invalidação tem de ser enviada a todas as outras placas (se houver alguma) que
 contiverem uma cópia dela. Assim, a placa que faz a requisição de escrita acaba ficando com a única cópia.
 
-Agora, considere o caso em que o bloco requisitado está em estado exclusivo localizado em uma placa dife-
-rente. Quando a placa-mãe obtém a requisição, ela consulta a localização da placa remota no diretório e envia ao
-requisitante uma mensagem informando onde está a linha de cache. Agora, o requisitante envia a requisição para
-o conjunto de placas correto. Quando esta chega, a placa devolve a linha de cache. Se fosse uma requisição de
-leitura, a linha seria marcada como compartilhada e uma cópia enviada de volta à placa-mãe. Se fosse uma requi-
-sição de escrita, o respondedor invalidaria sua cópia para que o novo requisitante tivesse uma cópia exclusiva.
+Agora, considere o caso em que o bloco requisitado está em estado exclusivo localizado em uma placa diferente. Quando a placa-mãe obtém a requisição, ela consulta a localização da placa remota no diretório e envia ao requisitante uma mensagem informando onde está a linha de cache. Agora, o requisitante envia a requisição para o conjunto de placas correto. Quando esta chega, a placa devolve a linha de cache. Se fosse uma requisição de leitura, a linha seria marcada como compartilhada e uma cópia enviada de volta à placa-mãe. Se fosse uma requisição de escrita, o respondedor invalidaria sua cópia para que o novo requisitante tivesse uma cópia exclusiva.
 
-Uma vez que cada placa tem 229 blocos de memória, na pior das hipóteses o diretório precisaria de 229 entra-
-das para monitorar todos eles. Como o diretório é muito menor do que 229, poderia acontecer de não haver espaço
-(que é pesquisado associativamente) para algumas entradas. Nesse caso, o diretório de origem tem de localizar o
-bloco transmitindo uma requisição de bloco de origem a todas as outras 17 placas. O switch crossbar de resposta
-desempenha um papel na coerência do diretório e protocolo de atualização dirigindo grande parte do tráfego no
-sentido inverso de volta ao remetente. A subdivisão do protocolo de tráfego em dois barramentos (de endereço e
-de resposta) e um terceiro barramento de dados aumenta a vazão do sistema.
+Uma vez que cada placa tem 229 blocos de memória, na pior das hipóteses o diretório precisaria de 229 entradas para monitorar todos eles. Como o diretório é muito menor do que 229, poderia acontecer de não haver espaço (que é pesquisado associativamente) para algumas entradas. Nesse caso, o diretório de origem tem de localizar o bloco transmitindo uma requisição de bloco de origem a todas as outras 17 placas. O switch crossbar de resposta desempenha um papel na coerência do diretório e protocolo de atualização dirigindo grande parte do tráfego no sentido inverso de volta ao remetente. A subdivisão do protocolo de tráfego em dois barramentos (de endereço e de resposta) e um terceiro barramento de dados aumenta a vazão do sistema.
 
-Por distribuir a carga entre múltiplos dispositivos em placas diferentes, o Sun Fire E25K pode atingir desem-
-penho muito alto. Além dos 2,7 bilhões de escutas/segundo que já mencionamos, o plano central pode tratar até nove transferências simultâneas, com nove placas enviando e nove recebendo. Uma vez que o switch crossbar para
-dados tem 32 bytes de largura, 288 bytes podem ser movidos através do plano central a cada ciclo de clock. A uma
-taxa de clock de 150 MHz, isso dá uma largura de banda agregada de pico de 40 GB/s quando todos os acessos
-forem remotos. Se o software puder posicionar páginas de modo a assegurar que a maioria dos acessos seja local,
-então a largura de banda do sistema pode ser consideravelmente maior do que 40 GB/s.
+Por distribuir a carga entre múltiplos dispositivos em placas diferentes, o Sun Fire E25K pode atingir desempenho muito alto. Além dos 2,7 bilhões de escutas/segundo que já mencionamos, o plano central pode tratar até nove transferências simultâneas, com nove placas enviando e nove recebendo. Uma vez que o switch crossbar para dados tem 32 bytes de largura, 288 bytes podem ser movidos através do plano central a cada ciclo de clock. A uma taxa de clock de 150 MHz, isso dá uma largura de banda agregada de pico de 40 GB/s quando todos os acessos forem remotos. Se o software puder posicionar páginas de modo a assegurar que a maioria dos acessos seja local, então a largura de banda do sistema pode ser consideravelmente maior do que 40 GB/s.
 
-Se o leitor quiser mais informações técnicas sobre o Sun Fire, veja Charlesworth, 2002; e Charlesworth, 2001.
-Em 2009, a Oracle comprou a Sun Microsystems, continuando com o desenvolvimento de servidores
-baseados em SPARC. O SPARC Enterprise M9000 é o sucessor do E25K. O M9000 incorpora processadores
-SPARC quad-core mais velozes, além de memória adicional e conectores PCIe. Um servidor M9000 totalmente
-equipado contém 256 processadores SPARC, 4 TB de DRAM e 128 interfaces de E/S PCIe.
+Se o leitor quiser mais informações técnicas sobre o Sun Fire, veja Charlesworth, 2002; e Charlesworth, 2001. Em 2009, a Oracle comprou a Sun Microsystems, continuando com o desenvolvimento de servidores baseados em SPARC. O SPARC Enterprise M9000 é o sucessor do E25K. O M9000 incorpora processadores SPARC quad-core mais velozes, além de memória adicional e conectores PCIe. Um servidor M9000 totalmente equipado contém 256 processadores SPARC, 4 TB de DRAM e 128 interfaces de E/S PCIe.
 
 ## 8.3.5 Multiprocessadores COMA
-Uma desvantagem das máquinas NUMA e CC-NUMA é que referências à memória remota são muito mais
-lentas do que referências à memória local. Em CC-NUMA, essa diferença em desempenho está oculta, até certo
-ponto, pela atividade de cache. Não obstante, se a quantidade de dados remotos necessários for muito maior do
+Uma desvantagem das máquinas NUMA e CC-NUMA é que referências à memória remota são muito mais lentas do que referências à memória local. Em CC-NUMA, essa diferença em desempenho está oculta, até certo ponto, pela atividade de cache. Não obstante, se a quantidade de dados remotos necessários for muito maior do
 que a capacidade da cache, ausências desta ocorrerão constantemente e o desempenho será medíocre.
 
-Assim, temos uma situação em que máquinas UMA têm excelente desempenho, mas seu tamanho é limitado
-e elas são muito caras. Máquinas NC-NUMA podem ser ampliadas para tamanhos um pouco maiores, mas reque-
-rem posicionamento de páginas manual ou semiautomático, muitas vezes com resultados mistos. O problema é
-que é difícil prever quais páginas serão necessárias em que lugares e, de qualquer modo, páginas costumam ser
-uma unidade muito grande para mover de um lado para outro. Máquinas CC-NUMA, como o Sun Fire E25K,
-podem experimentar mau desempenho se muitas CPUs precisarem de grandes quantidades de dados remotos.
+Assim, temos uma situação em que máquinas UMA têm excelente desempenho, mas seu tamanho é limitado e elas são muito caras. Máquinas NC-NUMA podem ser ampliadas para tamanhos um pouco maiores, mas requerem posicionamento de páginas manual ou semiautomático, muitas vezes com resultados mistos. O problema é que é difícil prever quais páginas serão necessárias em que lugares e, de qualquer modo, páginas costumam ser uma unidade muito grande para mover de um lado para outro. Máquinas CC-NUMA, como o Sun Fire E25K, podem experimentar mau desempenho se muitas CPUs precisarem de grandes quantidades de dados remotos.
 Levando tudo isso em conta, cada um desses projetos tem sérias limitações.
 
-Um tipo alternativo de multiprocessador tenta contornar todos esses problemas usando a memória principal
-de cada CPU como uma cache. Nesse projeto, denominado COMA (Cache Only Memory Access – acesso somente
-à memória cache), as páginas não têm máquinas nativas fixas, como acontece em máquinas NUMA e CC-NUMA.
-Na verdade, as páginas não têm qualquer significado.
+Um tipo alternativo de multiprocessador tenta contornar todos esses problemas usando a memória principal de cada CPU como uma cache. Nesse projeto, denominado COMA (Cache Only Memory Access – acesso somente à memória cache), as páginas não têm máquinas nativas fixas, como acontece em máquinas NUMA e CC-NUMA. Na verdade, as páginas não têm qualquer significado.
 
-Em vez disso, o espaço de endereço físico é subdividido em linhas de cache, que migram pelo sistema por
-demanda. Blocos não têm máquinas nativas. Como nômades em alguns países do Terceiro Mundo, seu lar é onde
-eles estão naquele momento. Uma memória que apenas atrai linhas conforme necessário é denominada memória
-de atração. Usar a RAM principal com uma grande cache aumenta muito a taxa de presença na cache e, por con-
-seguinte, o desempenho.
-Infelizmente, como sempre, não existe almoço grátis. Sistemas COMA introduzem dois novos problemas:
+Em vez disso, o espaço de endereço físico é subdividido em linhas de cache, que migram pelo sistema por demanda. Blocos não têm máquinas nativas. Como nômades em alguns países do Terceiro Mundo, seu lar é onde eles estão naquele momento. Uma memória que apenas atrai linhas conforme necessário é denominada memória
+de atração. Usar a RAM principal com uma grande cache aumenta muito a taxa de presença na cache e, por conseguinte, o desempenho. Infelizmente, como sempre, não existe almoço grátis. Sistemas COMA introduzem dois novos problemas:
 
     1. Como as linhas de cache são localizadas?
 
     2. Quando uma linha é expurgada da memória, o que acontece se ela for a última cópia?
 
-O primeiro problema está relacionado ao fato de que, após a MMU ter traduzido um endereço virtual para
-um endereço físico, se a linha não estiver na cache verdadeira de hardware, não existe uma maneira fácil de dizer
-se ela está na memória principal. O hardware de paginação não ajuda nada nesse caso, porque cada página é
-composta de muitas linhas de cache individuais que vagueiam de modo independente. Além do mais, ainda que
-se saiba que uma linha não está na memória principal, onde ela está então? Não podemos perguntar à máquina
-“lar” porque essa máquina não existe.
+O primeiro problema está relacionado ao fato de que, após a MMU ter traduzido um endereço virtual para um endereço físico, se a linha não estiver na cache verdadeira de hardware, não existe uma maneira fácil de dizer se ela está na memória principal. O hardware de paginação não ajuda nada nesse caso, porque cada página é composta de muitas linhas de cache individuais que vagueiam de modo independente. Além do mais, ainda que se saiba que uma linha não está na memória principal, onde ela está então? Não podemos perguntar à máquina “lar” porque essa máquina não existe.
 
-Foram propostas algumas soluções para o problema da localização. Para ver se uma linha de cache está na
-memória principal, poderia ser adicionado novo hardware para monitorar o rótulo de cada linha em cache. Então,
-a MMU poderia comparar o rótulo da linha necessária com os rótulos de todas as linhas de cache na memória em
-busca de uma presença na cache. Essa solução precisa de hardware adicional.
+Foram propostas algumas soluções para o problema da localização. Para ver se uma linha de cache está na memória principal, poderia ser adicionado novo hardware para monitorar o rótulo de cada linha em cache. Então, a MMU poderia comparar o rótulo da linha necessária com os rótulos de todas as linhas de cache na memória em busca de uma presença na cache. Essa solução precisa de hardware adicional.
 
-Uma solução um pouco diferente é mapear páginas inteiras, mas não exigir que todas as linhas de cache este-
-jam presentes. Nessa solução, o hardware precisaria de um mapa de bits por página, que desse um único bit por
-linha de cache indicando a presença ou ausência da linha. Nesse projeto, denominado COMA simples, se a linha
-de cache estiver presente, ela deve estar na posição correta em sua página, mas, se não estiver presente, qualquer
-tentativa de usá-la causa uma exceção para permitir que o software vá achá-la e trazê-la para dentro.
+Uma solução um pouco diferente é mapear páginas inteiras, mas não exigir que todas as linhas de cache estejam presentes. Nessa solução, o hardware precisaria de um mapa de bits por página, que desse um único bit por linha de cache indicando a presença ou ausência da linha. Nesse projeto, denominado COMA simples, se a linha de cache estiver presente, ela deve estar na posição correta em sua página, mas, se não estiver presente, qualquer tentativa de usá-la causa uma exceção para permitir que o software vá achá-la e trazê-la para dentro.
 
-Isso resulta em procurar linhas que são de fato remotas. Uma solução é dar a cada página uma máquina de
-residência em termos do lugar onde está a entrada de diretório, mas não daquele onde estão os dados. Então,
-uma mensagem pode ser enviada à máquina nativa para, no mínimo, localizar a linha de cache. Outros esquemas
-envolvem organizar memória como uma árvore e procurar de baixo para cima até encontrar a linha.
+Isso resulta em procurar linhas que são de fato remotas. Uma solução é dar a cada página uma máquina de residência em termos do lugar onde está a entrada de diretório, mas não daquele onde estão os dados. Então, uma mensagem pode ser enviada à máquina nativa para, no mínimo, localizar a linha de cache. Outros esquemas envolvem organizar memória como uma árvore e procurar de baixo para cima até encontrar a linha.
 
-O segundo problema na lista que acabamos de citar está relacionado com a não remoção da última cópia.
-Como em CC-NUMA, uma linha de cache pode estar em vários nós ao mesmo tempo. Quando ocorre uma ausên-
-cia da cache, uma linha deve ser buscada, o que costuma significar que uma linha deve ser descartada. O que
+O segundo problema na lista que acabamos de citar está relacionado com a não remoção da última cópia. Como em CC-NUMA, uma linha de cache pode estar em vários nós ao mesmo tempo. Quando ocorre uma ausência da cache, uma linha deve ser buscada, o que costuma significar que uma linha deve ser descartada. O que
 acontece se, por acaso, a linha escolhida for a última cópia? Nesse caso, ela não pode ser descartada.
 
-Uma solução é voltar ao diretório e verificar se há outras cópias. Se houver, a linha pode ser descartada com
-segurança. Caso contrário, ela tem de ser migrada para algum outro lugar. Outra solução é identificar uma cópia
-de cada linha de cache como a cópia mestra e nunca jogá-la fora. Essa solução evita ter de verificar o diretório.
-Levando tudo em conta, COMA promete melhor desempenho do que CC-NUMA, mas poucas máquinas COMA
-foram construídas, portanto, é preciso mais experiência. As duas primeiras máquinas COMA construídas foram
-a KSR-1 (Burkhardt et al.,1992) e a Data Diffusion Machine (Hagersten et al., 1992). Artigos mais recentes sobre
-COMA são Vu et al., 2008; e Zhang e Jesshope, 2008.
+Uma solução é voltar ao diretório e verificar se há outras cópias. Se houver, a linha pode ser descartada com segurança. Caso contrário, ela tem de ser migrada para algum outro lugar. Outra solução é identificar uma cópia de cada linha de cache como a cópia mestra e nunca jogá-la fora. Essa solução evita ter de verificar o diretório. Levando tudo em conta, COMA promete melhor desempenho do que CC-NUMA, mas poucas máquinas COMA foram construídas, portanto, é preciso mais experiência. As duas primeiras máquinas COMA construídas foram a KSR-1 (Burkhardt et al.,1992) e a Data Diffusion Machine (Hagersten et al., 1992). Artigos mais recentes sobre COMA são Vu et al., 2008; e Zhang e Jesshope, 2008.
 
 ## 8.4 Multicomputadores de troca de mensagens
-Como vimos na Figura 8.23, os dois tipos de processadores paralelos MIMD são multiprocessadores e mul-
-ticomputadores. Na seção anterior, estudamos os multiprocessadores. Vimos que eles aparecem para o sistema
-operacional como se tivessem memória compartilhada que pode ser acessada usando instruções comuns LOAD e
-STORE. Essa memória compartilhada pode ser executada de várias maneiras, como vimos, incluindo barramentos
-de escuta, crossbar de dados, redes de comutação multiestágios e vários esquemas baseados em diretório. Não obs-
-tante, programas escritos para um multiprocessador podem acessar qualquer localização na memória sem nada
-saber sobre a topologia interna ou o esquema de implementação. Essa ilusão é que torna os multiprocessadores
-tão atraentes e é a razão de os programadores gostarem desse modelo de programação.
+Como vimos na Figura 8.23, os dois tipos de processadores paralelos MIMD são multiprocessadores e multicomputadores. Na seção anterior, estudamos os multiprocessadores. Vimos que eles aparecem para o sistema operacional como se tivessem memória compartilhada que pode ser acessada usando instruções comuns LOAD e STORE. Essa memória compartilhada pode ser executada de várias maneiras, como vimos, incluindo barramentos de escuta, crossbar de dados, redes de comutação multiestágios e vários esquemas baseados em diretório. Não obstante, programas escritos para um multiprocessador podem acessar qualquer localização na memória sem nada saber sobre a topologia interna ou o esquema de implementação. Essa ilusão é que torna os multiprocessadores tão atraentes e é a razão de os programadores gostarem desse modelo de programação.
 
-Por outro lado, os multiprocessadores também têm suas limitações, e é por isso que os multicomputadores
-também são importantes. Antes de tudo, multiprocessadores não podem ser ampliados para grandes tamanhos.
-Vimos a enorme quantidade de hardware que a Sun teve de usar para aumentar o número de CPUs do E25K
-para 72. Por comparação, logo adiante estudaremos um multicomputador que tem 65.536 CPUs. Ainda faltam
-muitos anos para que alguém construa um multiprocessador comercial com 65.536 nós e, então, já estarão em
-uso multicomputadores com milhões de nós.
+Por outro lado, os multiprocessadores também têm suas limitações, e é por isso que os multicomputadores também são importantes. Antes de tudo, multiprocessadores não podem ser ampliados para grandes tamanhos. Vimos a enorme quantidade de hardware que a Sun teve de usar para aumentar o número de CPUs do E25K para 72. Por comparação, logo adiante estudaremos um multicomputador que tem 65.536 CPUs. Ainda faltam muitos anos para que alguém construa um multiprocessador comercial com 65.536 nós e, então, já estarão em uso multicomputadores com milhões de nós.
 
-Ademais, a contenção pela memória em um multiprocessador pode afetar seriamente o desempenho. Se cem
-CPUs estiverem tentando ler e escrever as mesmas variáveis constantemente, a contenção pelas várias memórias,
-barramentos e diretórios pode resultar em um enorme impacto no desempenho.
+Ademais, a contenção pela memória em um multiprocessador pode afetar seriamente o desempenho. Se cem CPUs estiverem tentando ler e escrever as mesmas variáveis constantemente, a contenção pelas várias memórias, barramentos e diretórios pode resultar em um enorme impacto no desempenho.
 
-Como consequência desses e de outros fatores, há um grande interesse em construir e usar computadores
-paralelos nos quais cada CPU tem sua própria memória privada, que não pode ser acessada diretamente por qual-
-quer outra CPU. Eles são os multicomputadores. Programas em CPUs de multicomputadores interagem usando
-primitivas como send e receive para trocar mensagens explicitamente, porque uma não pode chegar até a memó-
-ria da outra com instruções LOAD e STORE. Essa diferença muda completamente o modelo de programação.
+Como consequência desses e de outros fatores, há um grande interesse em construir e usar computadores paralelos nos quais cada CPU tem sua própria memória privada, que não pode ser acessada diretamente por qualquer outra CPU. Eles são os multicomputadores. Programas em CPUs de multicomputadores interagem usando
+primitivas como send e receive para trocar mensagens explicitamente, porque uma não pode chegar até a memória da outra com instruções LOAD e STORE. Essa diferença muda completamente o modelo de programação.
 
-Cada nó em um multicomputador consiste em uma ou algumas CPUs, alguma RAM (decerto comparti-
-lhada só entre as CPUs que estão naquele nó), um disco e/ou outros dispositivos de E/S e um processador de
-comunicação. Os processadores de comunicação estão conectados por uma rede de intercomunicação de alta velocidade dos tipos que discutimos na Seção 8.3.3. São usadas muitas topologias, esquemas de comutação
-e algoritmos de roteamento diferentes. O que todos os multicomputadores têm em comum é que, quando
-um programa de aplicação executa a primitiva send, o processador de comunicação é notificado e trans-
-mite um bloco de dados de usuário à máquina de destino, possivelmente após pedir e obter permissão. Um
-multicomputador genérico é mostrado na Figura 8.36.
+Cada nó em um multicomputador consiste em uma ou algumas CPUs, alguma RAM (decerto compartilhada só entre as CPUs que estão naquele nó), um disco e/ou outros dispositivos de E/S e um processador de comunicação. Os processadores de comunicação estão conectados por uma rede de intercomunicação de alta velocidade dos tipos que discutimos na Seção 8.3.3. São usadas muitas topologias, esquemas de comutação e algoritmos de roteamento diferentes. O que todos os multicomputadores têm em comum é que, quando um programa de aplicação executa a primitiva send, o processador de comunicação é notificado e transmite um bloco de dados de usuário à máquina de destino, possivelmente após pedir e obter permissão. Um multicomputador genérico é mostrado na Figura 8.36.
 
 **• Figura 8.36 - Multicomputador genérico.**
 Neste modelo, o segredo da escalabilidade está na independência de cada nó e na eficiência do processador de comunicação dedicado.
@@ -2517,18 +2060,502 @@ Neste modelo, o segredo da escalabilidade está na independência de cada nó e 
  - Rede Global: Diferente do barramento do sistema em máquinas NUMA, esta rede é projetada exclusivamente para o tráfego de mensagens entre processos distantes.
 
 ## 8.4.1 Redes de interconexão
-Na Figura 8.36, vemos que multicomputadores são mantidos juntos por redes de interconexão. Agora,
-chegou a hora de examiná-las mais de perto. O interessante é que multiprocessadores e multicomputadores são
-surpreendentemente similares nesse aspecto, porque os primeiros muitas vezes têm vários módulos de memória
-que também devem se interconectar uns com os outros e com as CPUs. Assim, o material nesta seção com fre-
-quência se aplica a ambos os tipos de sistemas.
+Na Figura 8.36, vemos que multicomputadores são mantidos juntos por redes de interconexão. Agora, chegou a hora de examiná-las mais de perto. O interessante é que multiprocessadores e multicomputadores são surpreendentemente similares nesse aspecto, porque os primeiros muitas vezes têm vários módulos de memória
+que também devem se interconectar uns com os outros e com as CPUs. Assim, o material nesta seção com frequência se aplica a ambos os tipos de sistemas.
 
-A razão fundamental por que redes de interconexão de multiprocessadores e multicomputadores são seme-
-lhantes é que, no fundo, ambos usam troca de mensagens. Até mesmo em uma máquina com uma única CPU,
-quando o processador quer ler ou escrever uma palavra, sua ação típica é ativar certas linhas no barramento e
-esperar por uma resposta. Fundamentalmente, essa ação é como trocar mensagens: o iniciador envia uma requisi-
-ção e espera uma resposta. Em grandes multiprocessadores, a comunicação entre CPUs e memória remota quase
-sempre consiste em a CPU enviar à memória uma mensagem explícita, denominada pacote, requisitando alguns
-dados, e a memória que devolve um pacote de resposta.
+A razão fundamental por que redes de interconexão de multiprocessadores e multicomputadores são semelhantes é que, no fundo, ambos usam troca de mensagens. Até mesmo em uma máquina com uma única CPU, quando o processador quer ler ou escrever uma palavra, sua ação típica é ativar certas linhas no barramento e esperar por uma resposta. Fundamentalmente, essa ação é como trocar mensagens: o iniciador envia uma requisição e espera uma resposta. Em grandes multiprocessadores, a comunicação entre CPUs e memória remota quase sempre consiste em a CPU enviar à memória uma mensagem explícita, denominada pacote, requisitando alguns dados, e a memória que devolve um pacote de resposta.
 
 **• Topologia**
+A topologia de uma rede de interconexão descreve como os enlaces e os computadores são organizados, por
+exemplo, como um anel ou uma grade. Projetos topológicos podem ser modelados como grafos, com os enlaces
+representados por arcos e os switches por nós, como mostra a Figura 8.37. Cada nó em uma rede de interconexão
+(ou em seu grafo) tem algum número de enlaces conectados a ele. Matemáticos denominam o número de enlaces
+de grau do nó; engenheiros o denominam fanout. Em geral, quanto maior o fanout, mais opções de roteamento
+há e maior é a tolerância à falha, isto é, a capacidade de continuar funcionando se um enlace falhar, fazendo um
+roteamento que contorna esse enlace. Se cada nó tiver k arcos e a fiação for executada de modo correto, é possível
+projetar a rede de modo que ela se mantenha totalmente conectada, mesmo que k – 1 enlaces falhem.
+
+Outra propriedade de uma rede de interconexão (ou de seu grafo) é o seu diâmetro. Se medirmos a distân-
+cia entre dois nós pelo número de arcos que têm de ser percorridos para chegar de um ao outro, o diâmetro de
+um grafo é a distância entre os dois nós que estão mais afastados (isto é, que têm a maior distância entre eles).
+
+O diâmetro de uma rede de interconexão está relacionado ao pior atraso que pode ocorrer quando se enviam
+pacotes entre CPUs ou de CPU para memória, porque cada salto por um enlace toma uma quantidade finita de
+tempo. Quanto menor for o diâmetro, melhor será o desempenho no pior caso. Também importante é a distância
+média entre dois nós, pois ela está relacionada com o tempo médio de trânsito do pacote.
+
+**• Figura 8.37 - Várias topologias. Os pontos grossos representam switches. As CPUs e as memórias não são mostradas. (a) Estrela. (b) Malha de interconexão completa. (c) Árvore. (d) Anel. (e) Grade. (f) Toro duplo. (g) Cubo. (h) Hipercubo 4D.**
+Estas formas definem como os switches (pontos grossos na imagem original) conectam as CPUs e memórias do sistema.
+
+    (a) ESTRELA                       (b) MALHA COMPLETA          (d) ANEL
+          \   /                       _____                         ---
+        --- * ---                    /| X |\                       /   \
+          /   \                     |_|___|_|                     |     |
+                                     \/ X \/                       \   /
+                                      -----                         ---
+
+    (c) ÁRVORE                        (e) GRADE (2D)              (g) CUBO (3D)
+             * *---*---* *-------*
+            / \                       |   |   |                   /|      /|
+           * * *---*---* *-------*  |
+          / \ / \                     |   |   |                   | |     | |
+          * * * *---*---* | *-----|-*
+                                                                  |/      |/
+                                                                   *-------*
+
+    (f) TORO DUPLO                    (h) HIPERCUBO 4D
+        (Grade com                       (Cubo dentro 
+        bordas ligadas)                  de outro cubo)
+
+![alt text](image-140.png)
+
+**• Análise Técnica para o eBook:
+
+ - Estrela (a): Simples, mas o switch central é um ponto único de falha e gargalo.
+ 
+ - Malha Completa (b): Oferece a menor latência possível, mas o custo de cabeamento cresce exponencialmente com o número de nós.
+ 
+ - Árvore (c): Comum em redes organizadas hierarquicamente; o tráfego nos níveis superiores tende a ser maior.
+ 
+ - Grade e Toro (e, f): Muito utilizadas em supercomputadores reais por serem fáceis de montar fisicamente em racks.
+ 
+ - Hipercubo (h): Uma topologia altamente eficiente onde cada nó tem $n$ conexões em um sistema de 2^n nós, garantindo que o "caminho mais longo" entre dois pontos seja curto.
+
+Ainda outra propriedade importante de uma rede de interconexão é sua capacidade de transmissão, isto é,
+quantos dados ela pode mover por segundo. Uma medida útil dessa capacidade é a largura de banda de bisseção.
+Para calcular essa quantidade, temos primeiro que dividir (conceitualmente) a rede em duas partes iguais (em
+termos do número de nós), porém não conectadas, removendo um conjunto de arcos de seu grafo. Então, calcu-
+lamos a largura de banda total dos arcos que foram removidos. Pode haver muitos tipos diferentes de partição de
+rede em duas partes iguais. A largura de banda de bisseção é a mínima de todas as possíveis partições. A signifi-
+cância desse número é que, se ela for, por exemplo, 800 bits/s, então, se houver muita comunicação entre as duas
+metades, a vazão total pode ser limitada a apenas 800 bits/s, no pior caso. Muitos projetistas acham que a largura de banda de bisseção é a métrica mais importante de uma rede de interconexão. Muitas redes de interconexão são
+projetadas com o objetivo de maximizar a largura de banda de bisseção.
+
+Redes de interconexão podem ser caracterizadas por sua dimensionalidade. Para nossas finalidades, a
+dimensionalidade é determinada pelo número de opções que há para chegar da origem ao destino. Se nunca hou-
+ver alguma opção, isto é, se houver somente um caminho entre a origem e o destino, a rede tem dimensão zero.
+Se houver uma dimensão na qual possa ser feita uma opção, por exemplo, ir para o oeste ou ir para o leste, a rede
+é unidimensional. Se houver dois eixos de modo que um pacote possa ir para o leste ou para o oeste ou, como
+alternativa, possa ir para o norte ou para o sul, a rede é bidimensional e assim por diante.
+
+Várias topologias são mostradas na Figura 8.37. São mostrados apenas os enlaces (linhas) e os switches
+(pontos). As memórias e CPUs (não mostradas) em geral estariam ligadas aos switches por interfaces. Na Figura
+8.37(a), temos uma configuração de dimensão zero em estrela, na qual as CPUs e memórias estariam ligadas aos
+nós externos e o nó central só faria a comutação. Embora seja um projeto simples, no caso de um grande sistema
+é provável que o switch central seja um importante gargalo. Ademais, da perspectiva da tolerância à falha, esse
+projeto é ruim, uma vez que uma única falha no switch central destrói completamente o sistema.
+
+Na Figura 8.37(b), temos outro projeto de dimensão zero que está na outra extremidade do espectro, uma
+interconexão total. Nesse caso, cada nó tem uma conexão direta para cada outro nó. Esse projeto maximiza a
+largura de banda de bisseção, minimiza o diâmetro e tem altíssima tolerância à falha (pode perder quaisquer seis
+enlaces e a rede ainda continuar totalmente conectada). Infelizmente, o número de enlaces requerido para k nós
+é k(k – 1)/2, o que logo sai do controle para um k grande.
+
+Outra topologia é a árvore, ilustrada na Figura 8.37(c). Um problema com esse projeto é que a largura de
+banda de bisseção é igual à capacidade do enlace. Como em geral haverá muito tráfego perto do topo da árvore,
+os poucos nós do topo se tornarão gargalos. Um modo de contornar esse problema é aumentar a largura de
+bisseção dando mais largura de banda aos enlaces que estão mais em cima. Por exemplo, os enlaces dos níveis
+mais baixos poderiam ter uma capacidade b, o próximo nível poderia ter uma capacidade 2b e os enlaces do
+nível superior poderiam ter 4b cada um. Esse projeto é denominado árvore gorda e foi usado em multicompu-
+tadores comerciais, como os CM-5 da Thinking Machines, que não existem mais.
+
+O anel da Figura 8.37(d) é uma topologia unidimensional pela nossa definição, porque cada pacote envia-
+do tem uma opção de ir para a direita ou para a esquerda. A grade ou malha da Figura 8.37(e) é um projeto
+bidimensional que tem sido usado em muitos sistemas comerciais. É de alta regularidade, fácil de ampliar
+para tamanhos maiores e tem um diâmetro que aumenta apenas com a raiz quadrada do número de nós. Uma
+variante da grade é o toro duplo da Figura 8.37(f), que é uma grade cujas extremidades são conectadas. Além
+de ser mais tolerante à falha do que a grade, seu diâmetro também é menor, porque as arestas opostas agora
+podem se comunicar em somente dois saltos.
+
+Outra topologia popular é o toro tridimensional. Nesse caso, a topologia consiste em uma estrutura 3D com
+nós nos pontos (i, j, k) onde todas as coordenadas são números inteiros na faixa de (1, 1, 1) a (l, m, n). Cada nó
+tem seis vizinhos, dois ao longo de cada eixo. Os nós nas extremidades têm enlaces que fazem a volta completa
+até a extremidade oposta, exatamente como os toros 2D.
+
+O cubo da Figura 8.37(g) é uma topologia tridimensional regular. Ilustramos um cubo 2 × 2 × 2, mas no caso
+geral ele poderia ser um cubo k × k × k. Na Figura 8.37(h), temos um cubo quadridimensional construído com
+dois cubos tridimensionais com os nós correspondentes conectados. Poderíamos fazer um cubo pentadimensional
+clonando a estrutura da Figura 8.37(h) e conectando os nós correspondentes para formar um bloco de quatro
+cubos. Para ir a seis dimensões, poderíamos replicar o bloco de quatro cubos e interconectar os nós correspon-
+dentes e assim por diante. Um cubo n dimensional formado dessa maneira é denominado hipercubo. Muitos
+computadores paralelos usam essa topologia porque o diâmetro cresce linearmente com a dimensionalidade. Em
+outras palavras, o diâmetro é o logaritmo de base 2 do número de nós, portanto, por exemplo, um hipercubo
+decadimensional tem 1.024 nós, mas um diâmetro de apenas 10, o que lhe confere excelentes propriedades de
+atraso. Note que, por comparação, 1.024 nós organizados como uma grade 32 × 32 têm um diâmetro de 62,
+mais do que seis vezes pior do que o hipercubo. O preço pago pelo diâmetro menor é que o fanout e, por isso, o número de enlaces (e o custo), é muito maior para o hipercubo. Ainda assim, o hipercubo é uma escolha
+comum para sistemas de alto desempenho.
+
+Há vários formatos e tamanhos de multicomputadores, portanto, é difícil dar uma taxonomia clara para eles.
+Não obstante, há dois “estilos” que se destacam: os MPPs e os clusters. Estudaremos cada um por vez.
+
+## 8.4.2 MPPs – processadores maciçamente paralelos
+A primeira categoria consiste nos MPPs (Massively Parallel Processors – processadores maciçamente paralelos), que são imensos supercomputadores de muitos milhões de dólares. Eles são usados em ciências, em engenharia e na indústria para cálculos muito grandes, para tratar números muito grandes de transações por
+segundo ou para data warehousing (armazenamento e gerenciamento de imensos bancos de dados). De início, os MPPs eram usados principalmente como supercomputadores científicos, mas, agora, a maioria deles é usada em ambientes comerciais. Em certo sentido, essas máquinas são as sucessoras dos poderosos mainframes da década de 1960 (embora a conexão seja tênue, como se um paleontólogo declarasse que um bando de pardais são os descendentes do Tyrannosaurus Rex). Em grande proporção, os MPPs substituíram máquinas SIMD, supercomputadores vetoriais e processadores matriciais do topo da cadeia alimentar digital.
+
+A maioria dessas máquinas usa CPUs padronizadas como seus processadores. Opções populares são o Pentium da Intel, a UltraSPARC da Sun e o PowerPC da IBM. O que destaca os MPPs é a utilização que fazem de uma rede de interconexão proprietária de desempenho muito alto, projetada para mover mensagens com baixa latência e a alta largura de banda. Esses dois aspectos são importantes porque a grande maioria de todas as mensagens é de pequeno tamanho (bem abaixo de 256 bytes), mas grande parte do tráfego total é causada por grandes mensagens (mais de 8 KB). Os MPPs também vêm com extensivos softwares e bibliotecas proprietárias.
+
+Outro ponto que caracteriza os MPPs é sua enorme capacidade de E/S. Problemas grandes o suficiente para justificar a utilização de MPPs invariavelmente têm quantidades maciças de dados a processar, muitas vezes da ordem de terabytes. Esses dados devem ser distribuídos entre muitos discos e precisam ser movidos pela máquina a grande velocidade.
+
+Por fim, outra questão específica dos MPPs é sua atenção com a tolerância à falha. Com milhares de CPUs, várias falhas por semana são inevitáveis. Abortar uma execução de 18 horas porque uma CPU falhou é inaceitável, em especial quando se espera ter uma falha dessas toda semana. Assim, grandes MPPs sempre têm hardware e software especiais para monitorar o sistema, detectar falhas e recuperar-se delas facilmente.
+
+Embora fosse interessante estudar os princípios gerais do projeto MPP agora, na verdade não há muitos princípios. No fim das contas, um MPP é uma coleção de nós de computação mais ou menos padronizados, conectados por uma interconexão muito rápida dos tipos que já estudamos. Portanto, em vez disso, vamos estudar agora
+dois exemplos de MPPs: BlueGene/P e Red Storm.
+
+**• BlueGene**
+Como um primeiro exemplo de um processador maciçamente paralelo, examinaremos agora o sistema BlueGene da IBM. A IBM concebeu esse projeto em 1999 como um supercomputador maciçamente paralelo para resolver problemas com grandes quantidades de cálculos em áreas das ciências da vida, entre outras. Por exemplo, biólogos acreditam que a estrutura tridimensional de uma proteína determina sua funcionalidade, porém, calcular a estrutura 3D de uma pequena proteína a partir das leis da física levou anos nos supercomputadores daquela época. O número de proteínas encontradas nos seres humanos é de mais de meio milhão e muitas delas
+são muito grandes; sabe-se que seu desdobramento errado é responsável por certas doenças como a fibrose cística. É claro que determinar a estrutura tridimensional de todas as proteínas humanas exigiria aumentar em muitas ordens de grandeza a capacidade mundial de computação e modelar o desdobramento de proteínas é apenas um dos problemas para cujo tratamento o BlueGene foi projetado. Desafios de igual complexidade em dinâmica molecular, modelagem do clima, astronomia e até mesmo modelagem financeira também requerem melhorias em supercomputação de muitas ordens de grandeza.
+
+A IBM achou que havia mercado suficiente para a supercomputação maciça e investiu 100 milhões de dólares no projeto e construção do BlueGene. Em novembro de 2001, o Livermore National Laboratory, comandado pelo Departamento de Energia dos Estados Unidos, entrou como parceiro e primeiro cliente para a primeira versão da família BlueGene, denominada BlueGene/L. Em 2007, a IBM implantou a segunda geração do supercomputador BlueGene, denominada BlueGene/P, que detalhamos aqui. A meta do projeto BlueGene não era apenas fabricar o MPP mais rápido do mundo, mas também produzir o mais eficiente em termos de teraflops/dólar, teraflops/watt e teraflops/m3. Por essa razão, a IBM rejeitou a filosofia que fundamentava os MPPs anteriores, que era utilizar os componentes mais rápidos que o dinheiro pudesse comprar. Em vez disso, tomou a decisão de produzir um componente com um sistema-em-um-chip que executaria a uma velocidade modesta e com baixo consumo de energia, de modo a produzir a maior máquina possível com alta densidade de empacotamento. O primeiro BlueGene/P foi entregue a uma universidade da Alemanha
+em novembro de 2007. O sistema continha 65.536 processadores e era capaz de oferecer 167 teraflops/s. Quando implantado, ele foi o computador mais rápido da Europa e o sexto mais rápido do mundo. O sistema também era considerado um dos supercomputadores mais eficientes em termos de potência de computação do mundo, capaz de produzir 371 megaflops/W, tornando sua eficiência de potência quase o dobro daquela de seu predecessor, o BlueGene/L. A primeira implantação do BlueGene/P foi atualizada em 2009 para incluir 294.912 processadores, dando-lhe um impulso computacional de 1 petaflop/s.
+
+O coração do sistema BlueGene/P é o chip especial de nó ilustrado na Figura 8.38. Ele consiste em quatro núcleos de PowerPC 450 executando a 850 MHz. O PowerPC 450 é um processador superescalar de emissão dual com pipeline, popular em sistemas embutidos. Cada núcleo tem um par de unidades de ponto flutuante de emissão
+dual que, juntas, podem emitir quatro instruções de ponto flutuante por ciclo de clock. As unidades de ponto flutuante foram aumentadas com uma quantidade de instruções do tipo SIMD que às vezes são úteis em cálculos científicos sobre matrizes. Embora não seja nenhum preguiçoso em matéria de desempenho, esse chip claramente não é um multiprocessador de topo de linha.
+
+**• Figura 8.38 - Chip de processador sob especificação BlueGene/P.**
+Este chip é um exemplo fascinante de como múltiplos núcleos, caches e interfaces de rede de alto desempenho são integrados em um único componente para formar supercomputadores.
+
+O BlueGene/P utiliza uma organização interna focada em paralelismo massivo, integrando núcleos PowerPC com unidades de ponto flutuante (FPU) e uma hierarquia complexa de caches.
+
+    NORTE (Interface para Toros 3D)         PARA CIMA
+                |                                    |
+    +----------*------------------------------------*----------+
+    | CHIP ESPECIAL (BlueGene/P)                               |
+    |                                                          |
+    |  +-------+   +----------+   +----------+   +----------+  |
+    |  |  FPU  |   | Núcleo   |   | Cache L2 |   |          |--|--> LESTE
+    |  +-------+   | PowerPC  |   +----------+   | Cache L3 |  |
+    |  |  FPU  |   |   450    |---|  Escuta  |---|   4 MB   |  |
+    |  +-------+   +----------+   +----------+   |          |--|--> PARA DRAM
+    |                                   |        |          |  |     DDR2
+    |  +-------+   +----------+   +-----+----+   +----------+  |
+    |  |  FPU  |   | Núcleo   |   | Switch de|         X       |  |
+    |  +-------+   | PowerPC  |---| Multiplex|   +----------+  |
+    |  |  FPU  |   |   450    |   +-----+----+   |          |  |
+    |  +-------+   +----------+         |        | Cache L3 |  |
+    |                                   |        |   4 MB   |--|--> PARA DRAM
+    |  +-------+   +----------+   +----------+   |          |  |     DDR2
+    |  |  FPU  |   | Núcleo   |   | Cache L2 |---|          |--|--> BAIXO
+    |  +-------+   | PowerPC  |   +----------+   |          |  |
+    |  |  FPU  |   |   450    |---|  Escuta  |   +----------+  |
+    |  +-------+   +----------+   +----------+                 |
+    |                                                          |
+    +---*----------*----------*----------*----------*----------+
+        |          |          |          |          |
+    COLETIVO   BARREIRA     SUL     ETHERNET 10Gb  PARA BAIXO
+
+**• Destaques Técnicos para o eBook:**
+
+ - Núcleos e FPUs: Cada chip contém quatro núcleos PowerPC 450, cada um apoiado por duas Unidades de Ponto Flutuante (FPU) para acelerar cálculos científicos pesados.
+
+ - Hierarquia de Cache e Escuta: O chip utiliza um mecanismo de Escuta (Snooping) entre as caches L2 para manter a coerência interna dos dados entre os quatro núcleos. Além disso, possui 8 MB de cache L3 compartilhada (dividida em dois blocos de 4 MB).
+
+ - Interfaces de Rede Integradas: Diferente de processadores comuns, o BlueGene/P já traz no chip as interfaces para Toros 3D, Ethernet de 10 Gb e redes de suporte (Coletivo/Barreira). Isso permite que milhares desses chips sejam conectados diretamente para formar uma malha de multicomputadores.
+
+Há três níveis de cache presentes no chip. O primeiro nível consiste em uma cache L1 dividida com 32 KB
+para instruções e 32 KB para dados. O segundo é uma cache unificada de 2 KB. Na verdade, as caches L2 são
+buffers de busca antecipada, em vez de caches verdadeiras. Elas escutam uma à outra e mantêm consistência de
+cache. O terceiro nível é uma cache compartilhada com 4 MB que alimenta dados para as caches L2. Os quatro
+processadores compartilham acesso aos dois módulos de cache L3 de 4 MB. Há coerência entre as caches L1 nas
+quatro CPUs. Assim, quando uma parte compartilhada da memória reside em mais de uma cache, os acessos a esse
+armazenamento por um processador serão imediatamente visíveis aos outros três processadores. Uma referência
+à memória que encontrar uma ausência da cache L1, mas obtiver uma presença na L2, leva cerca de 11 ciclos de
+clock. Uma ausência da cache L2 que encontra uma presença na L3 leva cerca de 28 ciclos. Por fim, uma ausência
+da cache L3, que tem de ir até a DRAM principal, leva cerca de 75 ciclos.
+
+As quatro CPUs são conectadas por meio de um barramento com alta largura de banda a uma rede de toros
+3D, que exige seis conexões: para cima, para baixo, norte, sul, leste e oeste. Além disso, cada processador tem
+uma porta para a rede coletiva, usada para a transmissão de dados a todos os processadores. A porta de barreira
+é usada para agilizar as operações de sincronização, dando a cada processador acesso rápido a uma rede de sin-
+cronização especializada.
+
+No próximo nível acima, a IBM projetou um cartão especial que contém dois dos chips mostrados na Figura
+8.38 junto com 2 GB de DRAM DDR2. O chip e o cartão são mostrados na Figura 8.39(a)–(b), respectivamente.
+
+Os cartões são montados em placas de encaixe, com 32 cartões por placa para um total de 32 chips (e, assim,
+128 CPUs) por placa. Visto que cada cartão contém 2 GB de DRAM, as placas contêm 64 GB por peça. Uma placa
+é ilustrada na Figura 8.39(c). No nível seguinte, 32 dessas placas são conectadas em um gabinete, preenchendo
+um único gabinete com 4.096 CPUs. Um gabinete é ilustrado na Figura 8.39(d).
+
+Por fim, um sistema completo, que consiste em 72 gabinetes com 294.912 CPUs, é retratado na Figura
+8.39(e). Um PowerPC 450 pode emitir até 6 instruções/ciclo, de modo que um sistema BlueGene/P completo
+poderia emitir até 1.769.472 instruções por ciclo. A 850 MHz, isso dá ao sistema um desempenho possível de
+1.504 petaflops/s. Porém, concorrências de dados, latência da memória e falta de paralelismo juntos conspiram
+para garantir que a vazão real do sistema seja muito menor. Programas reais rodando no BlueGene/P têm demons-
+trado taxas de desempenho de até 1 petaflop/s.
+
+**• Figura 8.39 - BlueGene/P. (a) Chip. (b) Cartão. (c) Placa. (d) Gabinete. (e) Sistema.**
+Esta progressão demonstra como pequenas unidades de processamento são combinadas para atingir o nível de Petascale.
+
+    (a) CHIP             (b) CARTÃO            (c) PLACA
+    [ 4 CPUs ]           [ 1 Chip ]            [ 32 Cartões ]
+    [ Cache L3 ]  --->   [ 2 GB RAM ]   --->   [ 128 CPUs ]
+    [ 8 MB ]             [ 4 CPUs ]            [ 64 GB RAM ]
+
+            |                    |                     |
+            v                    v                     v
+
+    (d) GABINETE         (e) SISTEMA COMPLETO
+    [ 32 Placas ]        [ 72 Gabinetes ]
+    [ 4.096 CPUs ] --->  [ 294.912 CPUs ]
+    [ 2 TB RAM ]         [ 144 TB RAM ]
+
+![alt text](image-141.png)
+
+**• Resumo de Dados para o seu eBook**
+Organizei os números em uma tabela comparativa para facilitar a visualização do poder computacional conforme o sistema cresce:
+
+    +---------+-------------+---------------+----------------+
+    | Nível   | Unidade Base| Total de CPUs | Memória Total  |
+    +---------+-------------+---------------+----------------+
+    | Chip    | 1 Unidade   | 4             | 8 MB (Cache L3)|
+    +---------+-------------+---------------+----------------+
+    | Cartão  | 1 Chip      | 4             | 2 GB (DRAM)    |
+    +---------+-------------+---------------+----------------+
+    | Placa   | 32 Cartões  | 128           | 64 GB          |
+    +---------+-------------+---------------+----------------+
+    | Gabinete| 32 Placas   | 4.096         | 2 TB           |
+    +---------+-------------+---------------+----------------+
+    | Sistema | 72 Gabinetes| 294.912       | 144 TB         |
+    +---------+-------------+---------------+----------------+
+
+O sistema é um multicomputador no sentido de que nenhuma CPU tem acesso direto a qualquer memória, ex­­-
+ceto aos 2 GB em seu próprio cartão. Embora as CPUs dentro de um chip de processador tenham memória­
+compartilhada, os processadores no nível de cartão, gabinete e sistema não compartilham a mesma memória. Além
+disso, não há paginação por demanda porque não há discos locais a partir dos quais paginar. Em vez disso, o
+sistema tem 1.152 nós de E/S, que estão conectados a discos e a outros dispositivos periféricos.
+
+Levando tudo em conta, embora o sistema seja extremamente grande, também é muito direto, com pouca
+tecnologia nova, exceto na área de empacotamento de alta densidade. A decisão de mantê-lo simples não foi
+acidental, uma vez que uma das metas principais era alta confiabilidade e disponibilidade. Por conseguinte,
+uma grande quantidade de cuidadosa engenharia foi dedicada às fontes de energia, ventiladores, resfriamento
+e cabeamento, tendo como objetivo um tempo médio entre falhas de pelo menos dez dias.
+
+Para conectar todos os chips é preciso uma interconexão de alto desempenho, que possa ser ampliada. O
+projeto usado é um toro tridimensional que mede 72 × 32 × 32. Como consequência, cada CPU precisa de apenas
+seis conexões com a rede de toro, duas para outras CPUs que, em termos lógicos, estão acima e abaixo dela, ao
+norte e ao sul dela, a leste e a oeste dela. Essas seis conexões são denominadas leste, oeste, norte, sul, para cima e
+para baixo, respectivamente, na Figura 8.38. Em termos físicos, cada gabinete de 1.024 nós é um toro de 8 × 8 ×
+16. Pares de gabinetes vizinhos formam um toro de 8 × 8 × 32. Quatro pares de gabinetes na mesma linha formam
+um toro de 8 × 32 × 32. Por fim, todas as 9 linhas formam um toro de 72 × 32 × 32.
+
+Portanto, todos os enlaces são ponto a ponto e funcionam a 3,4 Gbps. Uma vez que cada um dos 73.728 nós
+tem três enlaces para nós de números “mais altos”, um em cada dimensão, a largura de banda total do sistema
+é 752 terabits/s. O conteúdo de informação deste livro é de cerca de 300 milhões de bits, incluindo toda a arte
+em formato PostScript encapsulado, portanto, o BlueGene/P poderia mover 2,5 milhões de cópias deste livro por
+segundo. Para onde elas iriam e quem as desejaria fica como exercício para o leitor.
+
+A comunicação no toro 3D é feita na forma de roteamento por atalho virtual. Essa técnica é um pouco pare-
+cida com a comutação de pacotes armazena e reenvia, exceto que os pacotes não são armazenados inteiros antes
+de serem reenviados. Tão logo um byte chegue a um nó, ele pode ser repassado para o nó seguinte ao longo do
+caminho, antes mesmo de o pacote inteiro ter chegado. Ambos os tipos de roteamento são possíveis: o dinâmico
+(adaptativo) e o determinístico (fixo). Uma pequena quantidade de hardware de uso especial no chip é usada
+para implementar o atalho virtual.
+
+Além do toro 3D principal usado para transporte de dados, há outras quatro redes de comunicação presentes.
+A segunda é uma rede combinada em forma de árvore. Muitas das operações realizadas em sistemas de alto grau
+de paralelismo tais como o BlueGene/P requerem participação de todos os nós. Por exemplo, considere achar o
+valor mínimo de um conjunto de 65.536 valores, um contido em cada nó. A rede combinada junta todos os nós
+em uma árvore e, sempre que dois nós enviarem seus respectivos valores a um nó de nível mais alto, ela seleciona
+o menor deles e o encaminha para cima. Desse modo, a quantidade de tráfego que chega à raiz é bem menor do
+que a que chegaria se todos os 65.536 nós enviassem uma mensagem para lá.
+
+A terceira rede é a rede de barreiras, usada para implementar barreiras globais e interrupções. Alguns algorit-
+mos funcionam em fases, sendo que cada nó deve esperar até que todos os outros tenham concluído a fase antes
+de iniciar a seguinte. A rede de barreira permite que o software defina as fases e forneça um meio de suspender
+todas as CPUs de cálculo que chegarem ao final de uma fase até que todas as outras também tenham chegado ao
+final, quando então todas são liberadas. Interrupções também usam essa rede.
+
+Tanto a quarta quanto a quinta rede usam gigabit Ethernet. Uma delas conecta os nós de E/S aos servidores
+de arquivo, que são externos ao BlueGene/P, e à Internet. A outra é usada para depurar o sistema.
+
+Cada um dos nós de CPU executa um pequeno núcleo especial, que suporta um único usuário e um único
+processo. Esse processo tem no máximo quatro threads, cada um executando em cada uma das CPUs no nó. Essa
+estrutura simples foi projetada para alto desempenho e alta confiabilidade.
+
+Para confiabilidade adicional, o software de aplicação pode chamar um procedimento de biblioteca para
+fazer um ponto de verificação. Tão logo todas as mensagens pendentes tenham sido liberadas pela rede, pode-se
+criar e armazenar um ponto de verificação global de modo que, no evento de uma falha do sistema, a tarefa pode ser reiniciada a partir do ponto de verificação, em vez de a partir do início. Os nós de E/S executam um sistema
+operacional Linux tradicional e suportam múltiplos processos.
+
+Continua o trabalho de desenvolvimento do sistema BlueGene da próxima geração, denominado BlueGene/Q.
+Esse sistema deverá estar disponível em 2012, e terá 18 processadores por chip de computação, que também pos-
+sui multithreading simultâneo. Esses dois recursos deverão aumentar bastante o número de instruções por ciclo
+que o sistema pode executar. O sistema deverá alcançar velocidades de 20 petaflops/s. Para obter mais informa-
+ções sobre o BlueGene, veja Adiga et al., 2002; Alam et al., 2008; Almasi et al., 2003a, 2003b; Blumrich et al.,
+2005; e IBM, 2008.
+
+**• Red Storm**
+Como nosso segundo exemplo de um MPP, vamos considerar a máquina Red Storm (também denominada
+Martelo de Thor) do Sandia National Laboratory. O Sandia é operado pela Lockheed Martin e executa trabalhos
+confidenciais e não confidenciais para o Departamento de Energia dos Estados Unidos. Parte do trabalho confi-
+dencial está relacionada ao projeto e à simulação de armas nucleares, que exige alta capacidade de cálculos.
+
+O Sandia está nesse ramo há muito tempo e produziu muitos supercomputadores de tecnologia de ponta ao
+longo dos anos. Durante décadas, deu preferência a supercomputadores vetoriais, mas, com o tempo, a tecnologia
+e a economia tornaram os MPPs mais econômicos em termos de custo. Em 2002, o MPP existente na época, deno-
+minado ASCI Red, estava ficando um pouco enferrujado. Embora tivesse 9.460 nós, coletivamente eles tinham
+meros 1,2 TB de RAM e 12,5 TB de espaço de disco, e o sistema mal conseguia produzir 3 teraflops/s. Portanto,
+no verão de 2002, o Sandia escolheu a Cray Research, uma fabricante de supercomputadores há muito tempo no
+mercado, para construir um substituto para o ASCI Red.
+
+O substituto foi entregue em agosto de 2004, um ciclo de projeto e execução excepcionalmente curto para
+uma máquina de tão grande porte. A razão de o computador conseguir ser projetado e entregue com tamanha
+rapidez é que o Red Storm usa quase que só peças de prateleira, exceto para um dos chips especialmente monta-
+dos, usado para roteamento. Em 2006, o sistema foi atualizado com novos processadores; detalhamos aqui essa
+versão do Red Storm.
+
+A CPU escolhida para o Red Storm foi a AMD Opteron dual-core a 2,4 GHz. A Opteron tem diversas carac-
+terísticas fundamentais que influenciaram a escolha. A primeira é que ela tem três modos operacionais. No modo
+herdado, ela executa programas binários padrão Pentium sem modificação. No modo de compatibilidade, o sis-
+tema operacional executa em modo 64 bits e pode endereçar 264 bytes de memória, mas programas de aplicação
+executam em modo 32 bits. Por fim, em modo 64 bits, a máquina inteira é de 64 bits e todos os programas podem
+endereçar todo o espaço de endereço de 64 bits. Em modo 64 bits, é possível misturar e combinar software: pro-
+gramas de 32 bits e programas de 64 bits podem executar ao mesmo tempo, o que permite um fácil caminho de
+atualização.
+
+A segunda característica fundamental que a Opteron tem é sua atenção ao problema da largura de banda
+da memória. Nos últimos anos, as CPUs estão ficando cada vez mais rápidas e a memória não consegue acom-
+panhá-las, o que resulta em grande penalidade quando há uma ausência da cache de nível 2. A AMD integrou o
+controlador de memória na Opteron, de modo que ela pode executar à velocidade do clock do processador em
+vez de à velocidade do barramento de memória, o que melhora o desempenho da memória. O controlador pode
+manusear oito DIMMS de 4 GB cada, para um total máximo de memória de 32 GB por Opteron. No sistema Red
+Storm, cada Opteron tem apenas 2–4 GB. Contudo, à medida que a memória fica mais barata, não há dúvida de
+que mais será adicionada no futuro. Utilizando Opterons dual-core, o sistema foi capaz de duplicar a potência
+bruta de computação.
+
+Cada Opteron tem seu próprio processador de rede dedicado, denominado Seastar, fabricado pela IBM.
+O Seastar é um componente crítico, uma vez que quase todo o tráfego entre os processadores passa pela rede
+Seastar. Sem a interconexão de alta velocidade oferecida por esses chips fabricados especialmente, o sistema
+logo ficaria atolado em dados.
+
+Embora as Opterons estejam disponíveis no comércio como mercadoria de prateleira, o empacotamento do
+Red Storm é fabricado por encomenda. Cada placa Red Storm contém quatro Opterons, 4 GB de RAM, quatro
+Seastars, um processador RAS (Reliability, Availability, and Service – confiabilidade, disponibilidade e serviço) e
+um chip Ethernet de 100 Mbps, como ilustra a Figura 8.40.
+
+**•  Figura 8.40 - Pacote de componentes do Red Storm.**
+Figura 8.40, que apresenta os componentes do sistema Red Storm. Assim como o BlueGene/P, ele utiliza uma estratégia de empilhamento modular para atingir alto desempenho.
+
+O Red Storm organiza seus processadores em conjuntos de placas que são inseridas em gabinetes refrigerados, focando em uma interconexão robusta entre os nós.
+
+    ESTRUTURA DA PLACA                       GABINETE
+    +--------------------------+          +-----------------------+
+    | [M] [M] [M] [M]  SDRAM   |          |      Porta-cartões    |
+    |  |   |   |   |   2-4 GB  |          |       (Superior)      |
+    | [C] [C] [C] [C] Opteron  |          +-----------------------+
+    |  |   |   |   |           |  ----->  |      Porta-cartões    |
+    | [S] [S] [S] [S] Seastar  |          |        (Médio)        |
+    |                          |          +-----------------------+
+    | [RAS]  [Ethernet 100M]   |          |      Porta-cartões    |
+    +--------------------------+          |       (Inferior)      |
+        (Conjunto de 8 placas)            +-----------------------+
+
+    LEGENDA: [M] Memória | [C] CPU | [S] Chip de Interconexão (Seastar)
+
+![alt text](image-142.png)
+
+**• Detalhes Técnicos para o eBook**
+
+ - Processadores Opteron: Diferente do BlueGene/P que utiliza PowerPC, o Red Storm utiliza CPUs AMD Opteron. Cada CPU é acompanhada por sua própria memória SDRAM de 2 a 4 GB.
+
+ - Chip Seastar: Este é o componente vital para a comunicação. Cada processador possui um chip Seastar dedicado que gerencia a rede de interconexão, permitindo que o sistema escale de forma eficiente.
+
+ - Modularidade: O sistema é montado em conjuntos de 8 placas, que preenchem compartimentos chamados "porta-cartões" dentro de grandes gabinetes.
+
+ - Gerenciamento: A placa inclui um módulo RAS (Reliability, Availability, and Serviceability) e interface Ethernet de 100 Mbps para monitoramento e controle do sistema.
+
+Um conjunto de oito placas é conectado a um painel traseiro e inserido em uma porta-cartões. Cada gabinete
+contém três porta-cartões para um total de 96 Opterons, mais as fontes de energia e ventiladores necessários. O
+sistema completo consiste em 108 gabinetes para nós de cálculo, o que dá um total de 10.368 Opterons (20.736
+processadores) com 10 TB de SDRAM. Cada CPU só tem acesso à sua própria SDRAM. Não há nenhuma memória
+compartilhada. A capacidade teórica de computação do sistema é de 41 teraflops/s.
+
+A interconexão entre as CPUs Opteron é feita pelos roteadores Seastar, um roteador por CPU Opteron. Elas são
+conectadas em um toro 3D de tamanho 27 × 16 × 24 com um Seastar em cada ponto da malha. Cada Seastar tem
+sete enlaces bidirecionais de 24 Gbps nas direções norte, leste, sul, oeste, para baixo, para cima e para a Opteron. O
+tempo de trânsito entre pontos adjacentes da malha é de 2 microssegundos, e pelo conjunto inteiro de nós é de ape-
+nas 5 microssegundos. Uma segunda rede que usa uma Ethernet de 100 Mbps é usada para serviço e manutenção.
+
+Além dos 108 gabinetes de cálculo, o sistema também contém 16 gabinetes para processadores de E/S
+e de serviço. Cada um desses gabinetes contém 32 Opterons. Essas 512 CPUs são divididas: 256 para E/S e
+256 para serviço. O resto do espaço é para discos, que são organizados como RAID 3 e RAID 5, cada um com
+um drive de paridade e um sobressalente de entrada automática. O espaço total de disco é 240 TB. A largura
+de banda sustentada em disco é 50 GB/s.
+
+O sistema é repartido em seções confidencial e não confidencial, com switches entre as partes, de modo que
+podem ser acopladas ou desacopladas mecanicamente. Um total de 2.688 CPUs de cálculo está sempre na seção con-
+fidencial e outras 2.688 sempre na seção não confidencial. As restantes 4.992 CPUs de cálculo podem ser comutadas
+para qualquer seção, como demonstra a Figura 8.41. Cada uma das 2.688 Opterons confidenciais tem 4 GB de RAM;
+todas as outras têm 2 GB cada. O trabalho aparentemente confidencial utiliza mais memória. Os processadores de
+E/S e de serviço são subdivididos entre as duas partes.
+
+O conjunto inteiro está abrigado em um novo edifício de 2.000 m2 especialmente construído. O edifício
+e o local foram projetados de modo que o sistema possa ser ampliado para até 30 mil Opterons no futuro, se
+for necessário. Os nós de cálculo consomem 1,6 megawatt de energia; os discos consomem mais um megawatt.
+Somando os ventiladores e os aparelhos de ar condicionado, o pacote todo usa 3,5 MW.
+
+**• Figura 8.41 - Sistema Red Storm visto de cima.**
+O sistema é dividido em grandes blocos de gabinetes interconectados, totalizando milhares de processadores e uma capacidade massiva de armazenamento.
+
+    PLANTA BAIXA DO SISTEMA RED STORM
+    +-----------------------------------------------------------+
+    | [ ARMAZENAMENTO ]       [ ARMAZENAMENTO ]       [ SW ]    |
+    |     120 TB                    120 TB                      |
+    +-----------------------------------------------------------+
+    |      (28)              (52)              (28)             |
+    |   Gabinete          Gabinete          Gabinete            |
+    | Confidencial       Comutável      Não-Confidencial        |
+    |      |                 |                 |                |
+    | (2.688 CPUs)      (4.992 CPUs)      (2.688 CPUs)          |
+    +-----------------------------------------------------------+
+    |      |                 |                 |                |
+    |  Nó de E/S        Nó de Cálculo     Nó de Cálculo         |
+    |  e Serviço                                                |
+    +-----------------------------------------------------------+
+
+**• Detalhes Estruturais para o eBook:**
+
+ - Zonamento de Segurança: O Red Storm é projetado com uma separação clara entre gabinetes confidenciais (2.688 Opterons) e não confidenciais (2.688 Opterons), permitindo a execução de tarefas com diferentes níveis de sensibilidade no mesmo sistema.
+
+ - Núcleo de Processamento: No centro, encontram-se 52 gabinetes comutáveis com 4.992 processadores, que podem ser alocados conforme a demanda de cálculo.
+
+ - Capacidade de Armazenamento: O sistema conta com duas unidades de armazenamento de 120 TB cada, posicionadas nas extremidades para servir aos nós de E/S e serviço.
+
+ - Escala Total: Somando os blocos, o sistema opera com mais de 10.000 processadores AMD Opteron, todos interconectados pela malha de alta performance que vimos anteriormente.
+
+O hardware e o software do computador custaram 90 milhões de dólares. O edifício e o sistema de refrigera-
+ção custaram mais 9 milhões, portanto, o custo total ficou um pouco abaixo de 100 milhões de dólares, embora
+uma parte dessa quantia seja custo de engenharia não recorrente. Se você quiser encomendar um clone exato,
+60 milhões de dólares seria um bom número para pensar. A Cray pretende vender versões menores do sistema a
+outros governos e a clientes comerciais sob o nome X3T.
+
+Os nós de cálculo executam um núcleo leve denominado catamount. Os nós de E/S e serviço executam o
+Linux normal com uma pequena adição para suportar MPI (discutida mais adiante neste capítulo). Os nós RAS
+executam um Linux simplificado. Há muito software ASCI Red disponível para usar no Red Storm, incluindo
+alocadores de CPU, escalonadores, bibliotecas MPI, bibliotecas matemáticas, bem como programas de aplicação.
+
+Com um sistema tão grande, conseguir alta confiabilidade é essencial. Cada placa tem um processador RAS
+para fazer manutenção do sistema e também há facilidades especiais de hardware. A meta é um MTBF (Mean
+Time Between Failures – tempo médio entre falhas) de 50 horas. O ASCI Red tinha MTBF para o hardware de
+900 horas, mas era atormentado por uma queda de sistema operacional a cada 40 horas. Embora o novo hardware
+seja muito mais confiável do que o antigo, o ponto fraco continua sendo o software.
+Se quiser mais informações sobre o Red Storm, consulte Brightwell et al., 2005, 2010.
+
+**• Uma comparação entre BlueGene/P e Red Storm**
+Red Storm e BlueGene/P são comparáveis sob certos aspectos, porém diferentes sob outros, portanto, é
+interessante colocar alguns desses parâmetros fundamentais lado a lado, como apresentado na Figura 8.42.
+
+As duas máquinas foram construídas na mesma época, portanto, suas diferenças não se devem à tecnolo-
+gia, mas às diferentes visões dos projetistas e, até certo ponto, às diferenças entre os fabricantes, IBM e Cray.
+O BlueGene/P foi projetado desde o início como uma máquina comercial, que a IBM espera vender em grandes
+quantidades às empresas de biotecnologia, farmacêuticas e outras. O Red Storm foi construído sob contrato espe-
+cial com o Sandia, embora a Cray também planeje construir uma versão menor para venda.
+
+A visão da IBM é clara: combinar núcleos existentes para construir um chip especial que possa ser produ-
+zido em massa a baixo custo, executar a baixa velocidade e ser interligado em números muito grandes usando
+uma rede de comunicação de velocidade modesta. A visão do Sandia é igualmente clara, mas diferente: usar uma
+poderosa CPU de 64 bits de prateleira, projetar um chip de roteador muito rápido e acrescentar uma grande
+quantidade de memória para produzir um nó mais poderoso do que o BlueGene/P, de modo que uma quantidade
+menor deles será necessária e a comunicação entre eles será mais rápida.
+
+**• Figura 8.42 - Comparação entre BlueGene/P e Red Storm.**
