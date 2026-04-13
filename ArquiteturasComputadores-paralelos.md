@@ -2066,22 +2066,12 @@ que também devem se interconectar uns com os outros e com as CPUs. Assim, o mat
 A razão fundamental por que redes de interconexão de multiprocessadores e multicomputadores são semelhantes é que, no fundo, ambos usam troca de mensagens. Até mesmo em uma máquina com uma única CPU, quando o processador quer ler ou escrever uma palavra, sua ação típica é ativar certas linhas no barramento e esperar por uma resposta. Fundamentalmente, essa ação é como trocar mensagens: o iniciador envia uma requisição e espera uma resposta. Em grandes multiprocessadores, a comunicação entre CPUs e memória remota quase sempre consiste em a CPU enviar à memória uma mensagem explícita, denominada pacote, requisitando alguns dados, e a memória que devolve um pacote de resposta.
 
 **• Topologia**
-A topologia de uma rede de interconexão descreve como os enlaces e os computadores são organizados, por
-exemplo, como um anel ou uma grade. Projetos topológicos podem ser modelados como grafos, com os enlaces
-representados por arcos e os switches por nós, como mostra a Figura 8.37. Cada nó em uma rede de interconexão
-(ou em seu grafo) tem algum número de enlaces conectados a ele. Matemáticos denominam o número de enlaces
-de grau do nó; engenheiros o denominam fanout. Em geral, quanto maior o fanout, mais opções de roteamento
-há e maior é a tolerância à falha, isto é, a capacidade de continuar funcionando se um enlace falhar, fazendo um
-roteamento que contorna esse enlace. Se cada nó tiver k arcos e a fiação for executada de modo correto, é possível
-projetar a rede de modo que ela se mantenha totalmente conectada, mesmo que k – 1 enlaces falhem.
+A topologia de uma rede de interconexão descreve como os enlaces e os computadores são organizados, por exemplo, como um anel ou uma grade. Projetos topológicos podem ser modelados como grafos, com os enlaces representados por arcos e os switches por nós, como mostra a Figura 8.37. Cada nó em uma rede de interconexão
+(ou em seu grafo) tem algum número de enlaces conectados a ele. Matemáticos denominam o número de enlaces de grau do nó; engenheiros o denominam fanout. Em geral, quanto maior o fanout, mais opções de roteamento há e maior é a tolerância à falha, isto é, a capacidade de continuar funcionando se um enlace falhar, fazendo um roteamento que contorna esse enlace. Se cada nó tiver k arcos e a fiação for executada de modo correto, é possível projetar a rede de modo que ela se mantenha totalmente conectada, mesmo que k – 1 enlaces falhem.
 
-Outra propriedade de uma rede de interconexão (ou de seu grafo) é o seu diâmetro. Se medirmos a distân-
-cia entre dois nós pelo número de arcos que têm de ser percorridos para chegar de um ao outro, o diâmetro de
-um grafo é a distância entre os dois nós que estão mais afastados (isto é, que têm a maior distância entre eles).
+Outra propriedade de uma rede de interconexão (ou de seu grafo) é o seu diâmetro. Se medirmos a distância entre dois nós pelo número de arcos que têm de ser percorridos para chegar de um ao outro, o diâmetro de um grafo é a distância entre os dois nós que estão mais afastados (isto é, que têm a maior distância entre eles).
 
-O diâmetro de uma rede de interconexão está relacionado ao pior atraso que pode ocorrer quando se enviam
-pacotes entre CPUs ou de CPU para memória, porque cada salto por um enlace toma uma quantidade finita de
-tempo. Quanto menor for o diâmetro, melhor será o desempenho no pior caso. Também importante é a distância
+O diâmetro de uma rede de interconexão está relacionado ao pior atraso que pode ocorrer quando se enviam pacotes entre CPUs ou de CPU para memória, porque cada salto por um enlace toma uma quantidade finita de tempo. Quanto menor for o diâmetro, melhor será o desempenho no pior caso. Também importante é a distância
 média entre dois nós, pois ela está relacionada com o tempo médio de trânsito do pacote.
 
 **• Figura 8.37 - Várias topologias. Os pontos grossos representam switches. As CPUs e as memórias não são mostradas. (a) Estrela. (b) Malha de interconexão completa. (c) Árvore. (d) Anel. (e) Grade. (f) Toro duplo. (g) Cubo. (h) Hipercubo 4D.**
@@ -2121,72 +2111,32 @@ Estas formas definem como os switches (pontos grossos na imagem original) conect
  
  - Hipercubo (h): Uma topologia altamente eficiente onde cada nó tem $n$ conexões em um sistema de 2^n nós, garantindo que o "caminho mais longo" entre dois pontos seja curto.
 
-Ainda outra propriedade importante de uma rede de interconexão é sua capacidade de transmissão, isto é,
-quantos dados ela pode mover por segundo. Uma medida útil dessa capacidade é a largura de banda de bisseção.
-Para calcular essa quantidade, temos primeiro que dividir (conceitualmente) a rede em duas partes iguais (em
-termos do número de nós), porém não conectadas, removendo um conjunto de arcos de seu grafo. Então, calcu-
-lamos a largura de banda total dos arcos que foram removidos. Pode haver muitos tipos diferentes de partição de
-rede em duas partes iguais. A largura de banda de bisseção é a mínima de todas as possíveis partições. A signifi-
-cância desse número é que, se ela for, por exemplo, 800 bits/s, então, se houver muita comunicação entre as duas
-metades, a vazão total pode ser limitada a apenas 800 bits/s, no pior caso. Muitos projetistas acham que a largura de banda de bisseção é a métrica mais importante de uma rede de interconexão. Muitas redes de interconexão são
-projetadas com o objetivo de maximizar a largura de banda de bisseção.
+Ainda outra propriedade importante de uma rede de interconexão é sua capacidade de transmissão, isto é, quantos dados ela pode mover por segundo. Uma medida útil dessa capacidade é a largura de banda de bisseção. Para calcular essa quantidade, temos primeiro que dividir (conceitualmente) a rede em duas partes iguais (em termos do número de nós), porém não conectadas, removendo um conjunto de arcos de seu grafo. Então, calculamos a largura de banda total dos arcos que foram removidos. Pode haver muitos tipos diferentes de partição de rede em duas partes iguais. A largura de banda de bisseção é a mínima de todas as possíveis partições. A significância desse número é que, se ela for, por exemplo, 800 bits/s, então, se houver muita comunicação entre as duas metades, a vazão total pode ser limitada a apenas 800 bits/s, no pior caso. Muitos projetistas acham que a largura de banda de bisseção é a métrica mais importante de uma rede de interconexão. Muitas redes de interconexão são projetadas com o objetivo de maximizar a largura de banda de bisseção.
 
-Redes de interconexão podem ser caracterizadas por sua dimensionalidade. Para nossas finalidades, a
-dimensionalidade é determinada pelo número de opções que há para chegar da origem ao destino. Se nunca hou-
-ver alguma opção, isto é, se houver somente um caminho entre a origem e o destino, a rede tem dimensão zero.
-Se houver uma dimensão na qual possa ser feita uma opção, por exemplo, ir para o oeste ou ir para o leste, a rede
-é unidimensional. Se houver dois eixos de modo que um pacote possa ir para o leste ou para o oeste ou, como
-alternativa, possa ir para o norte ou para o sul, a rede é bidimensional e assim por diante.
+Redes de interconexão podem ser caracterizadas por sua dimensionalidade. Para nossas finalidades, a dimensionalidade é determinada pelo número de opções que há para chegar da origem ao destino. Se nunca houver alguma opção, isto é, se houver somente um caminho entre a origem e o destino, a rede tem dimensão zero.
+Se houver uma dimensão na qual possa ser feita uma opção, por exemplo, ir para o oeste ou ir para o leste, a rede é unidimensional. Se houver dois eixos de modo que um pacote possa ir para o leste ou para o oeste ou, como alternativa, possa ir para o norte ou para o sul, a rede é bidimensional e assim por diante.
 
-Várias topologias são mostradas na Figura 8.37. São mostrados apenas os enlaces (linhas) e os switches
-(pontos). As memórias e CPUs (não mostradas) em geral estariam ligadas aos switches por interfaces. Na Figura
-8.37(a), temos uma configuração de dimensão zero em estrela, na qual as CPUs e memórias estariam ligadas aos
-nós externos e o nó central só faria a comutação. Embora seja um projeto simples, no caso de um grande sistema
-é provável que o switch central seja um importante gargalo. Ademais, da perspectiva da tolerância à falha, esse
-projeto é ruim, uma vez que uma única falha no switch central destrói completamente o sistema.
+Várias topologias são mostradas na Figura 8.37. São mostrados apenas os enlaces (linhas) e os switches (pontos). As memórias e CPUs (não mostradas) em geral estariam ligadas aos switches por interfaces. Na Figura 8.37(a), temos uma configuração de dimensão zero em estrela, na qual as CPUs e memórias estariam ligadas aos nós externos e o nó central só faria a comutação. Embora seja um projeto simples, no caso de um grande sistema é provável que o switch central seja um importante gargalo. Ademais, da perspectiva da tolerância à falha, esse projeto é ruim, uma vez que uma única falha no switch central destrói completamente o sistema.
 
-Na Figura 8.37(b), temos outro projeto de dimensão zero que está na outra extremidade do espectro, uma
-interconexão total. Nesse caso, cada nó tem uma conexão direta para cada outro nó. Esse projeto maximiza a
-largura de banda de bisseção, minimiza o diâmetro e tem altíssima tolerância à falha (pode perder quaisquer seis
-enlaces e a rede ainda continuar totalmente conectada). Infelizmente, o número de enlaces requerido para k nós
-é k(k – 1)/2, o que logo sai do controle para um k grande.
+Na Figura 8.37(b), temos outro projeto de dimensão zero que está na outra extremidade do espectro, uma interconexão total. Nesse caso, cada nó tem uma conexão direta para cada outro nó. Esse projeto maximiza a largura de banda de bisseção, minimiza o diâmetro e tem altíssima tolerância à falha (pode perder quaisquer seis enlaces e a rede ainda continuar totalmente conectada). Infelizmente, o número de enlaces requerido para k nós é k(k – 1)/2, o que logo sai do controle para um k grande.
 
-Outra topologia é a árvore, ilustrada na Figura 8.37(c). Um problema com esse projeto é que a largura de
-banda de bisseção é igual à capacidade do enlace. Como em geral haverá muito tráfego perto do topo da árvore,
-os poucos nós do topo se tornarão gargalos. Um modo de contornar esse problema é aumentar a largura de
-bisseção dando mais largura de banda aos enlaces que estão mais em cima. Por exemplo, os enlaces dos níveis
-mais baixos poderiam ter uma capacidade b, o próximo nível poderia ter uma capacidade 2b e os enlaces do
-nível superior poderiam ter 4b cada um. Esse projeto é denominado árvore gorda e foi usado em multicompu-
+Outra topologia é a árvore, ilustrada na Figura 8.37(c). Um problema com esse projeto é que a largura de banda de bisseção é igual à capacidade do enlace. Como em geral haverá muito tráfego perto do topo da árvore, os poucos nós do topo se tornarão gargalos. Um modo de contornar esse problema é aumentar a largura de
+bisseção dando mais largura de banda aos enlaces que estão mais em cima. Por exemplo, os enlaces dos níveis mais baixos poderiam ter uma capacidade b, o próximo nível poderia ter uma capacidade 2b e os enlaces do nível superior poderiam ter 4b cada um. Esse projeto é denominado árvore gorda e foi usado em multicompu-
 tadores comerciais, como os CM-5 da Thinking Machines, que não existem mais.
 
-O anel da Figura 8.37(d) é uma topologia unidimensional pela nossa definição, porque cada pacote envia-
-do tem uma opção de ir para a direita ou para a esquerda. A grade ou malha da Figura 8.37(e) é um projeto
-bidimensional que tem sido usado em muitos sistemas comerciais. É de alta regularidade, fácil de ampliar
-para tamanhos maiores e tem um diâmetro que aumenta apenas com a raiz quadrada do número de nós. Uma
-variante da grade é o toro duplo da Figura 8.37(f), que é uma grade cujas extremidades são conectadas. Além
-de ser mais tolerante à falha do que a grade, seu diâmetro também é menor, porque as arestas opostas agora
+O anel da Figura 8.37(d) é uma topologia unidimensional pela nossa definição, porque cada pacote enviado tem uma opção de ir para a direita ou para a esquerda. A grade ou malha da Figura 8.37(e) é um projeto bidimensional que tem sido usado em muitos sistemas comerciais. É de alta regularidade, fácil de ampliar
+para tamanhos maiores e tem um diâmetro que aumenta apenas com a raiz quadrada do número de nós. Uma variante da grade é o toro duplo da Figura 8.37(f), que é uma grade cujas extremidades são conectadas. Além de ser mais tolerante à falha do que a grade, seu diâmetro também é menor, porque as arestas opostas agora
 podem se comunicar em somente dois saltos.
 
-Outra topologia popular é o toro tridimensional. Nesse caso, a topologia consiste em uma estrutura 3D com
-nós nos pontos (i, j, k) onde todas as coordenadas são números inteiros na faixa de (1, 1, 1) a (l, m, n). Cada nó
-tem seis vizinhos, dois ao longo de cada eixo. Os nós nas extremidades têm enlaces que fazem a volta completa
-até a extremidade oposta, exatamente como os toros 2D.
+Outra topologia popular é o toro tridimensional. Nesse caso, a topologia consiste em uma estrutura 3D com nós nos pontos (i, j, k) onde todas as coordenadas são números inteiros na faixa de (1, 1, 1) a (l, m, n). Cada nó tem seis vizinhos, dois ao longo de cada eixo. Os nós nas extremidades têm enlaces que fazem a volta completa até a extremidade oposta, exatamente como os toros 2D.
 
-O cubo da Figura 8.37(g) é uma topologia tridimensional regular. Ilustramos um cubo 2 × 2 × 2, mas no caso
-geral ele poderia ser um cubo k × k × k. Na Figura 8.37(h), temos um cubo quadridimensional construído com
-dois cubos tridimensionais com os nós correspondentes conectados. Poderíamos fazer um cubo pentadimensional
-clonando a estrutura da Figura 8.37(h) e conectando os nós correspondentes para formar um bloco de quatro
-cubos. Para ir a seis dimensões, poderíamos replicar o bloco de quatro cubos e interconectar os nós correspon-
-dentes e assim por diante. Um cubo n dimensional formado dessa maneira é denominado hipercubo. Muitos
-computadores paralelos usam essa topologia porque o diâmetro cresce linearmente com a dimensionalidade. Em
-outras palavras, o diâmetro é o logaritmo de base 2 do número de nós, portanto, por exemplo, um hipercubo
-decadimensional tem 1.024 nós, mas um diâmetro de apenas 10, o que lhe confere excelentes propriedades de
-atraso. Note que, por comparação, 1.024 nós organizados como uma grade 32 × 32 têm um diâmetro de 62,
-mais do que seis vezes pior do que o hipercubo. O preço pago pelo diâmetro menor é que o fanout e, por isso, o número de enlaces (e o custo), é muito maior para o hipercubo. Ainda assim, o hipercubo é uma escolha
+O cubo da Figura 8.37(g) é uma topologia tridimensional regular. Ilustramos um cubo 2 × 2 × 2, mas no caso geral ele poderia ser um cubo k × k × k. Na Figura 8.37(h), temos um cubo quadridimensional construído com dois cubos tridimensionais com os nós correspondentes conectados. Poderíamos fazer um cubo pentadimensional
+clonando a estrutura da Figura 8.37(h) e conectando os nós correspondentes para formar um bloco de quatro cubos. Para ir a seis dimensões, poderíamos replicar o bloco de quatro cubos e interconectar os nós correspondentes e assim por diante. Um cubo n dimensional formado dessa maneira é denominado hipercubo. Muitos
+computadores paralelos usam essa topologia porque o diâmetro cresce linearmente com a dimensionalidade. Em outras palavras, o diâmetro é o logaritmo de base 2 do número de nós, portanto, por exemplo, um hipercubo decadimensional tem 1.024 nós, mas um diâmetro de apenas 10, o que lhe confere excelentes propriedades de
+atraso. Note que, por comparação, 1.024 nós organizados como uma grade 32 × 32 têm um diâmetro de 62, mais do que seis vezes pior do que o hipercubo. O preço pago pelo diâmetro menor é que o fanout e, por isso, o número de enlaces (e o custo), é muito maior para o hipercubo. Ainda assim, o hipercubo é uma escolha
 comum para sistemas de alto desempenho.
 
-Há vários formatos e tamanhos de multicomputadores, portanto, é difícil dar uma taxonomia clara para eles.
-Não obstante, há dois “estilos” que se destacam: os MPPs e os clusters. Estudaremos cada um por vez.
+Há vários formatos e tamanhos de multicomputadores, portanto, é difícil dar uma taxonomia clara para eles. Não obstante, há dois “estilos” que se destacam: os MPPs e os clusters. Estudaremos cada um por vez.
 
 ## 8.4.2 MPPs – processadores maciçamente paralelos
 A primeira categoria consiste nos MPPs (Massively Parallel Processors – processadores maciçamente paralelos), que são imensos supercomputadores de muitos milhões de dólares. Eles são usados em ciências, em engenharia e na indústria para cálculos muito grandes, para tratar números muito grandes de transações por
@@ -2251,37 +2201,15 @@ O BlueGene/P utiliza uma organização interna focada em paralelismo massivo, in
 
  - Interfaces de Rede Integradas: Diferente de processadores comuns, o BlueGene/P já traz no chip as interfaces para Toros 3D, Ethernet de 10 Gb e redes de suporte (Coletivo/Barreira). Isso permite que milhares desses chips sejam conectados diretamente para formar uma malha de multicomputadores.
 
-Há três níveis de cache presentes no chip. O primeiro nível consiste em uma cache L1 dividida com 32 KB
-para instruções e 32 KB para dados. O segundo é uma cache unificada de 2 KB. Na verdade, as caches L2 são
-buffers de busca antecipada, em vez de caches verdadeiras. Elas escutam uma à outra e mantêm consistência de
-cache. O terceiro nível é uma cache compartilhada com 4 MB que alimenta dados para as caches L2. Os quatro
-processadores compartilham acesso aos dois módulos de cache L3 de 4 MB. Há coerência entre as caches L1 nas
-quatro CPUs. Assim, quando uma parte compartilhada da memória reside em mais de uma cache, os acessos a esse
-armazenamento por um processador serão imediatamente visíveis aos outros três processadores. Uma referência
-à memória que encontrar uma ausência da cache L1, mas obtiver uma presença na L2, leva cerca de 11 ciclos de
-clock. Uma ausência da cache L2 que encontra uma presença na L3 leva cerca de 28 ciclos. Por fim, uma ausência
-da cache L3, que tem de ir até a DRAM principal, leva cerca de 75 ciclos.
+Há três níveis de cache presentes no chip. O primeiro nível consiste em uma cache L1 dividida com 32 KB para instruções e 32 KB para dados. O segundo é uma cache unificada de 2 KB. Na verdade, as caches L2 são buffers de busca antecipada, em vez de caches verdadeiras. Elas escutam uma à outra e mantêm consistência de cache. O terceiro nível é uma cache compartilhada com 4 MB que alimenta dados para as caches L2. Os quatro processadores compartilham acesso aos dois módulos de cache L3 de 4 MB. Há coerência entre as caches L1 nas quatro CPUs. Assim, quando uma parte compartilhada da memória reside em mais de uma cache, os acessos a esse armazenamento por um processador serão imediatamente visíveis aos outros três processadores. Uma referência à memória que encontrar uma ausência da cache L1, mas obtiver uma presença na L2, leva cerca de 11 ciclos de clock. Uma ausência da cache L2 que encontra uma presença na L3 leva cerca de 28 ciclos. Por fim, uma ausência da cache L3, que tem de ir até a DRAM principal, leva cerca de 75 ciclos.
 
-As quatro CPUs são conectadas por meio de um barramento com alta largura de banda a uma rede de toros
-3D, que exige seis conexões: para cima, para baixo, norte, sul, leste e oeste. Além disso, cada processador tem
-uma porta para a rede coletiva, usada para a transmissão de dados a todos os processadores. A porta de barreira
-é usada para agilizar as operações de sincronização, dando a cada processador acesso rápido a uma rede de sin-
-cronização especializada.
+As quatro CPUs são conectadas por meio de um barramento com alta largura de banda a uma rede de toros 3D, que exige seis conexões: para cima, para baixo, norte, sul, leste e oeste. Além disso, cada processador tem uma porta para a rede coletiva, usada para a transmissão de dados a todos os processadores. A porta de barreira é usada para agilizar as operações de sincronização, dando a cada processador acesso rápido a uma rede de sincronização especializada.
 
-No próximo nível acima, a IBM projetou um cartão especial que contém dois dos chips mostrados na Figura
-8.38 junto com 2 GB de DRAM DDR2. O chip e o cartão são mostrados na Figura 8.39(a)–(b), respectivamente.
+No próximo nível acima, a IBM projetou um cartão especial que contém dois dos chips mostrados na Figura 8.38 junto com 2 GB de DRAM DDR2. O chip e o cartão são mostrados na Figura 8.39(a)–(b), respectivamente.
 
-Os cartões são montados em placas de encaixe, com 32 cartões por placa para um total de 32 chips (e, assim,
-128 CPUs) por placa. Visto que cada cartão contém 2 GB de DRAM, as placas contêm 64 GB por peça. Uma placa
-é ilustrada na Figura 8.39(c). No nível seguinte, 32 dessas placas são conectadas em um gabinete, preenchendo
-um único gabinete com 4.096 CPUs. Um gabinete é ilustrado na Figura 8.39(d).
+Os cartões são montados em placas de encaixe, com 32 cartões por placa para um total de 32 chips (e, assim, 128 CPUs) por placa. Visto que cada cartão contém 2 GB de DRAM, as placas contêm 64 GB por peça. Uma placa é ilustrada na Figura 8.39(c). No nível seguinte, 32 dessas placas são conectadas em um gabinete, preenchendo um único gabinete com 4.096 CPUs. Um gabinete é ilustrado na Figura 8.39(d).
 
-Por fim, um sistema completo, que consiste em 72 gabinetes com 294.912 CPUs, é retratado na Figura
-8.39(e). Um PowerPC 450 pode emitir até 6 instruções/ciclo, de modo que um sistema BlueGene/P completo
-poderia emitir até 1.769.472 instruções por ciclo. A 850 MHz, isso dá ao sistema um desempenho possível de
-1.504 petaflops/s. Porém, concorrências de dados, latência da memória e falta de paralelismo juntos conspiram
-para garantir que a vazão real do sistema seja muito menor. Programas reais rodando no BlueGene/P têm demons-
-trado taxas de desempenho de até 1 petaflop/s.
+Por fim, um sistema completo, que consiste em 72 gabinetes com 294.912 CPUs, é retratado na Figura 8.39(e). Um PowerPC 450 pode emitir até 6 instruções/ciclo, de modo que um sistema BlueGene/P completo poderia emitir até 1.769.472 instruções por ciclo. A 850 MHz, isso dá ao sistema um desempenho possível de 1.504 petaflops/s. Porém, concorrências de dados, latência da memória e falta de paralelismo juntos conspiram para garantir que a vazão real do sistema seja muito menor. Programas reais rodando no BlueGene/P têm demonstrado taxas de desempenho de até 1 petaflop/s.
 
 **• Figura 8.39 - BlueGene/P. (a) Chip. (b) Cartão. (c) Placa. (d) Gabinete. (e) Sistema.**
 Esta progressão demonstra como pequenas unidades de processamento são combinadas para atingir o nível de Petascale.
@@ -2318,119 +2246,50 @@ Organizei os números em uma tabela comparativa para facilitar a visualização 
     | Sistema | 72 Gabinetes| 294.912       | 144 TB         |
     +---------+-------------+---------------+----------------+
 
-O sistema é um multicomputador no sentido de que nenhuma CPU tem acesso direto a qualquer memória, ex­­-
-ceto aos 2 GB em seu próprio cartão. Embora as CPUs dentro de um chip de processador tenham memória­
-compartilhada, os processadores no nível de cartão, gabinete e sistema não compartilham a mesma memória. Além
-disso, não há paginação por demanda porque não há discos locais a partir dos quais paginar. Em vez disso, o
-sistema tem 1.152 nós de E/S, que estão conectados a discos e a outros dispositivos periféricos.
+O sistema é um multicomputador no sentido de que nenhuma CPU tem acesso direto a qualquer memória, ex­­ceto aos 2 GB em seu próprio cartão. Embora as CPUs dentro de um chip de processador tenham memória­ compartilhada, os processadores no nível de cartão, gabinete e sistema não compartilham a mesma memória. Além
+disso, não há paginação por demanda porque não há discos locais a partir dos quais paginar. Em vez disso, o sistema tem 1.152 nós de E/S, que estão conectados a discos e a outros dispositivos periféricos.
 
-Levando tudo em conta, embora o sistema seja extremamente grande, também é muito direto, com pouca
-tecnologia nova, exceto na área de empacotamento de alta densidade. A decisão de mantê-lo simples não foi
-acidental, uma vez que uma das metas principais era alta confiabilidade e disponibilidade. Por conseguinte,
-uma grande quantidade de cuidadosa engenharia foi dedicada às fontes de energia, ventiladores, resfriamento
-e cabeamento, tendo como objetivo um tempo médio entre falhas de pelo menos dez dias.
+Levando tudo em conta, embora o sistema seja extremamente grande, também é muito direto, com pouca tecnologia nova, exceto na área de empacotamento de alta densidade. A decisão de mantê-lo simples não foi acidental, uma vez que uma das metas principais era alta confiabilidade e disponibilidade. Por conseguinte,
+uma grande quantidade de cuidadosa engenharia foi dedicada às fontes de energia, ventiladores, resfriamento e cabeamento, tendo como objetivo um tempo médio entre falhas de pelo menos dez dias.
 
-Para conectar todos os chips é preciso uma interconexão de alto desempenho, que possa ser ampliada. O
-projeto usado é um toro tridimensional que mede 72 × 32 × 32. Como consequência, cada CPU precisa de apenas
-seis conexões com a rede de toro, duas para outras CPUs que, em termos lógicos, estão acima e abaixo dela, ao
-norte e ao sul dela, a leste e a oeste dela. Essas seis conexões são denominadas leste, oeste, norte, sul, para cima e
-para baixo, respectivamente, na Figura 8.38. Em termos físicos, cada gabinete de 1.024 nós é um toro de 8 × 8 ×
-16. Pares de gabinetes vizinhos formam um toro de 8 × 8 × 32. Quatro pares de gabinetes na mesma linha formam
-um toro de 8 × 32 × 32. Por fim, todas as 9 linhas formam um toro de 72 × 32 × 32.
+Para conectar todos os chips é preciso uma interconexão de alto desempenho, que possa ser ampliada. O projeto usado é um toro tridimensional que mede 72 × 32 × 32. Como consequência, cada CPU precisa de apenas seis conexões com a rede de toro, duas para outras CPUs que, em termos lógicos, estão acima e abaixo dela, ao
+norte e ao sul dela, a leste e a oeste dela. Essas seis conexões são denominadas leste, oeste, norte, sul, para cima e para baixo, respectivamente, na Figura 8.38. Em termos físicos, cada gabinete de 1.024 nós é um toro de 8 × 8 × 16. Pares de gabinetes vizinhos formam um toro de 8 × 8 × 32. Quatro pares de gabinetes na mesma linha formam um toro de 8 × 32 × 32. Por fim, todas as 9 linhas formam um toro de 72 × 32 × 32.
 
-Portanto, todos os enlaces são ponto a ponto e funcionam a 3,4 Gbps. Uma vez que cada um dos 73.728 nós
-tem três enlaces para nós de números “mais altos”, um em cada dimensão, a largura de banda total do sistema
-é 752 terabits/s. O conteúdo de informação deste livro é de cerca de 300 milhões de bits, incluindo toda a arte
-em formato PostScript encapsulado, portanto, o BlueGene/P poderia mover 2,5 milhões de cópias deste livro por
-segundo. Para onde elas iriam e quem as desejaria fica como exercício para o leitor.
+Portanto, todos os enlaces são ponto a ponto e funcionam a 3,4 Gbps. Uma vez que cada um dos 73.728 nós tem três enlaces para nós de números “mais altos”, um em cada dimensão, a largura de banda total do sistema é 752 terabits/s. O conteúdo de informação deste livro é de cerca de 300 milhões de bits, incluindo toda a arte em formato PostScript encapsulado, portanto, o BlueGene/P poderia mover 2,5 milhões de cópias deste livro por segundo. Para onde elas iriam e quem as desejaria fica como exercício para o leitor.
 
-A comunicação no toro 3D é feita na forma de roteamento por atalho virtual. Essa técnica é um pouco pare-
-cida com a comutação de pacotes armazena e reenvia, exceto que os pacotes não são armazenados inteiros antes
-de serem reenviados. Tão logo um byte chegue a um nó, ele pode ser repassado para o nó seguinte ao longo do
-caminho, antes mesmo de o pacote inteiro ter chegado. Ambos os tipos de roteamento são possíveis: o dinâmico
-(adaptativo) e o determinístico (fixo). Uma pequena quantidade de hardware de uso especial no chip é usada
-para implementar o atalho virtual.
+A comunicação no toro 3D é feita na forma de roteamento por atalho virtual. Essa técnica é um pouco parecida com a comutação de pacotes armazena e reenvia, exceto que os pacotes não são armazenados inteiros antes de serem reenviados. Tão logo um byte chegue a um nó, ele pode ser repassado para o nó seguinte ao longo do caminho, antes mesmo de o pacote inteiro ter chegado. Ambos os tipos de roteamento são possíveis: o dinâmico (adaptativo) e o determinístico (fixo). Uma pequena quantidade de hardware de uso especial no chip é usada para implementar o atalho virtual.
 
-Além do toro 3D principal usado para transporte de dados, há outras quatro redes de comunicação presentes.
-A segunda é uma rede combinada em forma de árvore. Muitas das operações realizadas em sistemas de alto grau
-de paralelismo tais como o BlueGene/P requerem participação de todos os nós. Por exemplo, considere achar o
-valor mínimo de um conjunto de 65.536 valores, um contido em cada nó. A rede combinada junta todos os nós
-em uma árvore e, sempre que dois nós enviarem seus respectivos valores a um nó de nível mais alto, ela seleciona
-o menor deles e o encaminha para cima. Desse modo, a quantidade de tráfego que chega à raiz é bem menor do
-que a que chegaria se todos os 65.536 nós enviassem uma mensagem para lá.
+Além do toro 3D principal usado para transporte de dados, há outras quatro redes de comunicação presentes. A segunda é uma rede combinada em forma de árvore. Muitas das operações realizadas em sistemas de alto grau de paralelismo tais como o BlueGene/P requerem participação de todos os nós. Por exemplo, considere achar o valor mínimo de um conjunto de 65.536 valores, um contido em cada nó. A rede combinada junta todos os nós em uma árvore e, sempre que dois nós enviarem seus respectivos valores a um nó de nível mais alto, ela seleciona o menor deles e o encaminha para cima. Desse modo, a quantidade de tráfego que chega à raiz é bem menor do que a que chegaria se todos os 65.536 nós enviassem uma mensagem para lá.
 
-A terceira rede é a rede de barreiras, usada para implementar barreiras globais e interrupções. Alguns algorit-
-mos funcionam em fases, sendo que cada nó deve esperar até que todos os outros tenham concluído a fase antes
-de iniciar a seguinte. A rede de barreira permite que o software defina as fases e forneça um meio de suspender
-todas as CPUs de cálculo que chegarem ao final de uma fase até que todas as outras também tenham chegado ao
-final, quando então todas são liberadas. Interrupções também usam essa rede.
+A terceira rede é a rede de barreiras, usada para implementar barreiras globais e interrupções. Alguns algoritmos funcionam em fases, sendo que cada nó deve esperar até que todos os outros tenham concluído a fase antes de iniciar a seguinte. A rede de barreira permite que o software defina as fases e forneça um meio de suspender todas as CPUs de cálculo que chegarem ao final de uma fase até que todas as outras também tenham chegado ao final, quando então todas são liberadas. Interrupções também usam essa rede.
 
-Tanto a quarta quanto a quinta rede usam gigabit Ethernet. Uma delas conecta os nós de E/S aos servidores
-de arquivo, que são externos ao BlueGene/P, e à Internet. A outra é usada para depurar o sistema.
+Tanto a quarta quanto a quinta rede usam gigabit Ethernet. Uma delas conecta os nós de E/S aos servidores de arquivo, que são externos ao BlueGene/P, e à Internet. A outra é usada para depurar o sistema.
 
-Cada um dos nós de CPU executa um pequeno núcleo especial, que suporta um único usuário e um único
-processo. Esse processo tem no máximo quatro threads, cada um executando em cada uma das CPUs no nó. Essa
-estrutura simples foi projetada para alto desempenho e alta confiabilidade.
+Cada um dos nós de CPU executa um pequeno núcleo especial, que suporta um único usuário e um único processo. Esse processo tem no máximo quatro threads, cada um executando em cada uma das CPUs no nó. Essa estrutura simples foi projetada para alto desempenho e alta confiabilidade.
 
-Para confiabilidade adicional, o software de aplicação pode chamar um procedimento de biblioteca para
-fazer um ponto de verificação. Tão logo todas as mensagens pendentes tenham sido liberadas pela rede, pode-se
-criar e armazenar um ponto de verificação global de modo que, no evento de uma falha do sistema, a tarefa pode ser reiniciada a partir do ponto de verificação, em vez de a partir do início. Os nós de E/S executam um sistema
-operacional Linux tradicional e suportam múltiplos processos.
+Para confiabilidade adicional, o software de aplicação pode chamar um procedimento de biblioteca para fazer um ponto de verificação. Tão logo todas as mensagens pendentes tenham sido liberadas pela rede, pode-se criar e armazenar um ponto de verificação global de modo que, no evento de uma falha do sistema, a tarefa pode ser reiniciada a partir do ponto de verificação, em vez de a partir do início. Os nós de E/S executam um sistema operacional Linux tradicional e suportam múltiplos processos.
 
-Continua o trabalho de desenvolvimento do sistema BlueGene da próxima geração, denominado BlueGene/Q.
-Esse sistema deverá estar disponível em 2012, e terá 18 processadores por chip de computação, que também pos-
-sui multithreading simultâneo. Esses dois recursos deverão aumentar bastante o número de instruções por ciclo
-que o sistema pode executar. O sistema deverá alcançar velocidades de 20 petaflops/s. Para obter mais informa-
-ções sobre o BlueGene, veja Adiga et al., 2002; Alam et al., 2008; Almasi et al., 2003a, 2003b; Blumrich et al.,
-2005; e IBM, 2008.
+Continua o trabalho de desenvolvimento do sistema BlueGene da próxima geração, denominado BlueGene/Q. Esse sistema deverá estar disponível em 2012, e terá 18 processadores por chip de computação, que também possui multithreading simultâneo. Esses dois recursos deverão aumentar bastante o número de instruções por ciclo
+que o sistema pode executar. O sistema deverá alcançar velocidades de 20 petaflops/s. Para obter mais informações sobre o BlueGene, veja Adiga et al., 2002; Alam et al., 2008; Almasi et al., 2003a, 2003b; Blumrich et al., 2005; e IBM, 2008.
 
 **• Red Storm**
-Como nosso segundo exemplo de um MPP, vamos considerar a máquina Red Storm (também denominada
-Martelo de Thor) do Sandia National Laboratory. O Sandia é operado pela Lockheed Martin e executa trabalhos
-confidenciais e não confidenciais para o Departamento de Energia dos Estados Unidos. Parte do trabalho confi-
-dencial está relacionada ao projeto e à simulação de armas nucleares, que exige alta capacidade de cálculos.
+Como nosso segundo exemplo de um MPP, vamos considerar a máquina Red Storm (também denominada Martelo de Thor) do Sandia National Laboratory. O Sandia é operado pela Lockheed Martin e executa trabalhos confidenciais e não confidenciais para o Departamento de Energia dos Estados Unidos. Parte do trabalho confidencial está relacionada ao projeto e à simulação de armas nucleares, que exige alta capacidade de cálculos.
 
-O Sandia está nesse ramo há muito tempo e produziu muitos supercomputadores de tecnologia de ponta ao
-longo dos anos. Durante décadas, deu preferência a supercomputadores vetoriais, mas, com o tempo, a tecnologia
-e a economia tornaram os MPPs mais econômicos em termos de custo. Em 2002, o MPP existente na época, deno-
-minado ASCI Red, estava ficando um pouco enferrujado. Embora tivesse 9.460 nós, coletivamente eles tinham
-meros 1,2 TB de RAM e 12,5 TB de espaço de disco, e o sistema mal conseguia produzir 3 teraflops/s. Portanto,
-no verão de 2002, o Sandia escolheu a Cray Research, uma fabricante de supercomputadores há muito tempo no
-mercado, para construir um substituto para o ASCI Red.
+O Sandia está nesse ramo há muito tempo e produziu muitos supercomputadores de tecnologia de ponta ao longo dos anos. Durante décadas, deu preferência a supercomputadores vetoriais, mas, com o tempo, a tecnologia e a economia tornaram os MPPs mais econômicos em termos de custo. Em 2002, o MPP existente na época, denominado ASCI Red, estava ficando um pouco enferrujado. Embora tivesse 9.460 nós, coletivamente eles tinham meros 1,2 TB de RAM e 12,5 TB de espaço de disco, e o sistema mal conseguia produzir 3 teraflops/s. Portanto, no verão de 2002, o Sandia escolheu a Cray Research, uma fabricante de supercomputadores há muito tempo no mercado, para construir um substituto para o ASCI Red.
 
-O substituto foi entregue em agosto de 2004, um ciclo de projeto e execução excepcionalmente curto para
-uma máquina de tão grande porte. A razão de o computador conseguir ser projetado e entregue com tamanha
-rapidez é que o Red Storm usa quase que só peças de prateleira, exceto para um dos chips especialmente monta-
-dos, usado para roteamento. Em 2006, o sistema foi atualizado com novos processadores; detalhamos aqui essa
-versão do Red Storm.
+O substituto foi entregue em agosto de 2004, um ciclo de projeto e execução excepcionalmente curto para uma máquina de tão grande porte. A razão de o computador conseguir ser projetado e entregue com tamanha rapidez é que o Red Storm usa quase que só peças de prateleira, exceto para um dos chips especialmente monta-
+dos, usado para roteamento. Em 2006, o sistema foi atualizado com novos processadores; detalhamos aqui essa versão do Red Storm.
 
-A CPU escolhida para o Red Storm foi a AMD Opteron dual-core a 2,4 GHz. A Opteron tem diversas carac-
-terísticas fundamentais que influenciaram a escolha. A primeira é que ela tem três modos operacionais. No modo
-herdado, ela executa programas binários padrão Pentium sem modificação. No modo de compatibilidade, o sis-
-tema operacional executa em modo 64 bits e pode endereçar 264 bytes de memória, mas programas de aplicação
-executam em modo 32 bits. Por fim, em modo 64 bits, a máquina inteira é de 64 bits e todos os programas podem
-endereçar todo o espaço de endereço de 64 bits. Em modo 64 bits, é possível misturar e combinar software: pro-
-gramas de 32 bits e programas de 64 bits podem executar ao mesmo tempo, o que permite um fácil caminho de
-atualização.
+A CPU escolhida para o Red Storm foi a AMD Opteron dual-core a 2,4 GHz. A Opteron tem diversas características fundamentais que influenciaram a escolha. A primeira é que ela tem três modos operacionais. No modo herdado, ela executa programas binários padrão Pentium sem modificação. No modo de compatibilidade, o sistema operacional executa em modo 64 bits e pode endereçar 264 bytes de memória, mas programas de aplicação executam em modo 32 bits. Por fim, em modo 64 bits, a máquina inteira é de 64 bits e todos os programas podem endereçar todo o espaço de endereço de 64 bits. Em modo 64 bits, é possível misturar e combinar software: programas de 32 bits e programas de 64 bits podem executar ao mesmo tempo, o que permite um fácil caminho de atualização.
 
-A segunda característica fundamental que a Opteron tem é sua atenção ao problema da largura de banda
-da memória. Nos últimos anos, as CPUs estão ficando cada vez mais rápidas e a memória não consegue acom-
-panhá-las, o que resulta em grande penalidade quando há uma ausência da cache de nível 2. A AMD integrou o
-controlador de memória na Opteron, de modo que ela pode executar à velocidade do clock do processador em
-vez de à velocidade do barramento de memória, o que melhora o desempenho da memória. O controlador pode
-manusear oito DIMMS de 4 GB cada, para um total máximo de memória de 32 GB por Opteron. No sistema Red
-Storm, cada Opteron tem apenas 2–4 GB. Contudo, à medida que a memória fica mais barata, não há dúvida de
-que mais será adicionada no futuro. Utilizando Opterons dual-core, o sistema foi capaz de duplicar a potência
-bruta de computação.
+A segunda característica fundamental que a Opteron tem é sua atenção ao problema da largura de banda da memória. Nos últimos anos, as CPUs estão ficando cada vez mais rápidas e a memória não consegue acompanhá-las, o que resulta em grande penalidade quando há uma ausência da cache de nível 2. A AMD integrou o
+controlador de memória na Opteron, de modo que ela pode executar à velocidade do clock do processador em vez de à velocidade do barramento de memória, o que melhora o desempenho da memória. O controlador pode manusear oito DIMMS de 4 GB cada, para um total máximo de memória de 32 GB por Opteron. No sistema Red
+Storm, cada Opteron tem apenas 2–4 GB. Contudo, à medida que a memória fica mais barata, não há dúvida de que mais será adicionada no futuro. Utilizando Opterons dual-core, o sistema foi capaz de duplicar a potência bruta de computação.
 
-Cada Opteron tem seu próprio processador de rede dedicado, denominado Seastar, fabricado pela IBM.
-O Seastar é um componente crítico, uma vez que quase todo o tráfego entre os processadores passa pela rede
-Seastar. Sem a interconexão de alta velocidade oferecida por esses chips fabricados especialmente, o sistema
+Cada Opteron tem seu próprio processador de rede dedicado, denominado Seastar, fabricado pela IBM. O Seastar é um componente crítico, uma vez que quase todo o tráfego entre os processadores passa pela rede Seastar. Sem a interconexão de alta velocidade oferecida por esses chips fabricados especialmente, o sistema
 logo ficaria atolado em dados.
 
-Embora as Opterons estejam disponíveis no comércio como mercadoria de prateleira, o empacotamento do
-Red Storm é fabricado por encomenda. Cada placa Red Storm contém quatro Opterons, 4 GB de RAM, quatro
-Seastars, um processador RAS (Reliability, Availability, and Service – confiabilidade, disponibilidade e serviço) e
+Embora as Opterons estejam disponíveis no comércio como mercadoria de prateleira, o empacotamento do Red Storm é fabricado por encomenda. Cada placa Red Storm contém quatro Opterons, 4 GB de RAM, quatro Seastars, um processador RAS (Reliability, Availability, and Service – confiabilidade, disponibilidade e serviço) e
 um chip Ethernet de 100 Mbps, como ilustra a Figura 8.40.
 
 **•  Figura 8.40 - Pacote de componentes do Red Storm.**
@@ -2464,34 +2323,15 @@ O Red Storm organiza seus processadores em conjuntos de placas que são inserida
 
  - Gerenciamento: A placa inclui um módulo RAS (Reliability, Availability, and Serviceability) e interface Ethernet de 100 Mbps para monitoramento e controle do sistema.
 
-Um conjunto de oito placas é conectado a um painel traseiro e inserido em uma porta-cartões. Cada gabinete
-contém três porta-cartões para um total de 96 Opterons, mais as fontes de energia e ventiladores necessários. O
-sistema completo consiste em 108 gabinetes para nós de cálculo, o que dá um total de 10.368 Opterons (20.736
-processadores) com 10 TB de SDRAM. Cada CPU só tem acesso à sua própria SDRAM. Não há nenhuma memória
-compartilhada. A capacidade teórica de computação do sistema é de 41 teraflops/s.
+Um conjunto de oito placas é conectado a um painel traseiro e inserido em uma porta-cartões. Cada gabinete contém três porta-cartões para um total de 96 Opterons, mais as fontes de energia e ventiladores necessários. O sistema completo consiste em 108 gabinetes para nós de cálculo, o que dá um total de 10.368 Opterons (20.736 processadores) com 10 TB de SDRAM. Cada CPU só tem acesso à sua própria SDRAM. Não há nenhuma memória compartilhada. A capacidade teórica de computação do sistema é de 41 teraflops/s.
 
-A interconexão entre as CPUs Opteron é feita pelos roteadores Seastar, um roteador por CPU Opteron. Elas são
-conectadas em um toro 3D de tamanho 27 × 16 × 24 com um Seastar em cada ponto da malha. Cada Seastar tem
-sete enlaces bidirecionais de 24 Gbps nas direções norte, leste, sul, oeste, para baixo, para cima e para a Opteron. O
-tempo de trânsito entre pontos adjacentes da malha é de 2 microssegundos, e pelo conjunto inteiro de nós é de ape-
-nas 5 microssegundos. Uma segunda rede que usa uma Ethernet de 100 Mbps é usada para serviço e manutenção.
+A interconexão entre as CPUs Opteron é feita pelos roteadores Seastar, um roteador por CPU Opteron. Elas são conectadas em um toro 3D de tamanho 27 × 16 × 24 com um Seastar em cada ponto da malha. Cada Seastar tem sete enlaces bidirecionais de 24 Gbps nas direções norte, leste, sul, oeste, para baixo, para cima e para a Opteron. O tempo de trânsito entre pontos adjacentes da malha é de 2 microssegundos, e pelo conjunto inteiro de nós é de apenas 5 microssegundos. Uma segunda rede que usa uma Ethernet de 100 Mbps é usada para serviço e manutenção.
 
-Além dos 108 gabinetes de cálculo, o sistema também contém 16 gabinetes para processadores de E/S
-e de serviço. Cada um desses gabinetes contém 32 Opterons. Essas 512 CPUs são divididas: 256 para E/S e
-256 para serviço. O resto do espaço é para discos, que são organizados como RAID 3 e RAID 5, cada um com
-um drive de paridade e um sobressalente de entrada automática. O espaço total de disco é 240 TB. A largura
-de banda sustentada em disco é 50 GB/s.
+Além dos 108 gabinetes de cálculo, o sistema também contém 16 gabinetes para processadores de E/S e de serviço. Cada um desses gabinetes contém 32 Opterons. Essas 512 CPUs são divididas: 256 para E/S e 256 para serviço. O resto do espaço é para discos, que são organizados como RAID 3 e RAID 5, cada um com um drive de paridade e um sobressalente de entrada automática. O espaço total de disco é 240 TB. A largura de banda sustentada em disco é 50 GB/s.
 
-O sistema é repartido em seções confidencial e não confidencial, com switches entre as partes, de modo que
-podem ser acopladas ou desacopladas mecanicamente. Um total de 2.688 CPUs de cálculo está sempre na seção con-
-fidencial e outras 2.688 sempre na seção não confidencial. As restantes 4.992 CPUs de cálculo podem ser comutadas
-para qualquer seção, como demonstra a Figura 8.41. Cada uma das 2.688 Opterons confidenciais tem 4 GB de RAM;
-todas as outras têm 2 GB cada. O trabalho aparentemente confidencial utiliza mais memória. Os processadores de
-E/S e de serviço são subdivididos entre as duas partes.
+O sistema é repartido em seções confidencial e não confidencial, com switches entre as partes, de modo que podem ser acopladas ou desacopladas mecanicamente. Um total de 2.688 CPUs de cálculo está sempre na seção confidencial e outras 2.688 sempre na seção não confidencial. As restantes 4.992 CPUs de cálculo podem ser comutadas para qualquer seção, como demonstra a Figura 8.41. Cada uma das 2.688 Opterons confidenciais tem 4 GB de RAM; todas as outras têm 2 GB cada. O trabalho aparentemente confidencial utiliza mais memória. Os processadores de E/S e de serviço são subdivididos entre as duas partes.
 
-O conjunto inteiro está abrigado em um novo edifício de 2.000 m2 especialmente construído. O edifício
-e o local foram projetados de modo que o sistema possa ser ampliado para até 30 mil Opterons no futuro, se
-for necessário. Os nós de cálculo consomem 1,6 megawatt de energia; os discos consomem mais um megawatt.
+O conjunto inteiro está abrigado em um novo edifício de 2.000 m2 especialmente construído. O edifício e o local foram projetados de modo que o sistema possa ser ampliado para até 30 mil Opterons no futuro, se for necessário. Os nós de cálculo consomem 1,6 megawatt de energia; os discos consomem mais um megawatt.
 Somando os ventiladores e os aparelhos de ar condicionado, o pacote todo usa 3,5 MW.
 
 **• Figura 8.41 - Sistema Red Storm visto de cima.**
@@ -2523,40 +2363,22 @@ O sistema é dividido em grandes blocos de gabinetes interconectados, totalizand
 
  - Escala Total: Somando os blocos, o sistema opera com mais de 10.000 processadores AMD Opteron, todos interconectados pela malha de alta performance que vimos anteriormente.
 
-O hardware e o software do computador custaram 90 milhões de dólares. O edifício e o sistema de refrigera-
-ção custaram mais 9 milhões, portanto, o custo total ficou um pouco abaixo de 100 milhões de dólares, embora
-uma parte dessa quantia seja custo de engenharia não recorrente. Se você quiser encomendar um clone exato,
-60 milhões de dólares seria um bom número para pensar. A Cray pretende vender versões menores do sistema a
-outros governos e a clientes comerciais sob o nome X3T.
+O hardware e o software do computador custaram 90 milhões de dólares. O edifício e o sistema de refrigeração custaram mais 9 milhões, portanto, o custo total ficou um pouco abaixo de 100 milhões de dólares, embora uma parte dessa quantia seja custo de engenharia não recorrente. Se você quiser encomendar um clone exato, 60 milhões de dólares seria um bom número para pensar. A Cray pretende vender versões menores do sistema a outros governos e a clientes comerciais sob o nome X3T.
 
-Os nós de cálculo executam um núcleo leve denominado catamount. Os nós de E/S e serviço executam o
-Linux normal com uma pequena adição para suportar MPI (discutida mais adiante neste capítulo). Os nós RAS
-executam um Linux simplificado. Há muito software ASCI Red disponível para usar no Red Storm, incluindo
+Os nós de cálculo executam um núcleo leve denominado catamount. Os nós de E/S e serviço executam o Linux normal com uma pequena adição para suportar MPI (discutida mais adiante neste capítulo). Os nós RAS executam um Linux simplificado. Há muito software ASCI Red disponível para usar no Red Storm, incluindo
 alocadores de CPU, escalonadores, bibliotecas MPI, bibliotecas matemáticas, bem como programas de aplicação.
 
-Com um sistema tão grande, conseguir alta confiabilidade é essencial. Cada placa tem um processador RAS
-para fazer manutenção do sistema e também há facilidades especiais de hardware. A meta é um MTBF (Mean
-Time Between Failures – tempo médio entre falhas) de 50 horas. O ASCI Red tinha MTBF para o hardware de
-900 horas, mas era atormentado por uma queda de sistema operacional a cada 40 horas. Embora o novo hardware
-seja muito mais confiável do que o antigo, o ponto fraco continua sendo o software.
-Se quiser mais informações sobre o Red Storm, consulte Brightwell et al., 2005, 2010.
+Com um sistema tão grande, conseguir alta confiabilidade é essencial. Cada placa tem um processador RAS para fazer manutenção do sistema e também há facilidades especiais de hardware. A meta é um MTBF (Mean Time Between Failures – tempo médio entre falhas) de 50 horas. O ASCI Red tinha MTBF para o hardware de
+900 horas, mas era atormentado por uma queda de sistema operacional a cada 40 horas. Embora o novo hardware seja muito mais confiável do que o antigo, o ponto fraco continua sendo o software. Se quiser mais informações sobre o Red Storm, consulte Brightwell et al., 2005, 2010.
 
 **• Uma comparação entre BlueGene/P e Red Storm**
-Red Storm e BlueGene/P são comparáveis sob certos aspectos, porém diferentes sob outros, portanto, é
-interessante colocar alguns desses parâmetros fundamentais lado a lado, como apresentado na Figura 8.42.
+Red Storm e BlueGene/P são comparáveis sob certos aspectos, porém diferentes sob outros, portanto, é interessante colocar alguns desses parâmetros fundamentais lado a lado, como apresentado na Figura 8.42.
 
-As duas máquinas foram construídas na mesma época, portanto, suas diferenças não se devem à tecnolo-
-gia, mas às diferentes visões dos projetistas e, até certo ponto, às diferenças entre os fabricantes, IBM e Cray.
-O BlueGene/P foi projetado desde o início como uma máquina comercial, que a IBM espera vender em grandes
-quantidades às empresas de biotecnologia, farmacêuticas e outras. O Red Storm foi construído sob contrato espe-
-cial com o Sandia, embora a Cray também planeje construir uma versão menor para venda.
+As duas máquinas foram construídas na mesma época, portanto, suas diferenças não se devem à tecnologia, mas às diferentes visões dos projetistas e, até certo ponto, às diferenças entre os fabricantes, IBM e Cray. O BlueGene/P foi projetado desde o início como uma máquina comercial, que a IBM espera vender em grandes
+quantidades às empresas de biotecnologia, farmacêuticas e outras. O Red Storm foi construído sob contrato especial com o Sandia, embora a Cray também planeje construir uma versão menor para venda.
 
-A visão da IBM é clara: combinar núcleos existentes para construir um chip especial que possa ser produ-
-zido em massa a baixo custo, executar a baixa velocidade e ser interligado em números muito grandes usando
-uma rede de comunicação de velocidade modesta. A visão do Sandia é igualmente clara, mas diferente: usar uma
-poderosa CPU de 64 bits de prateleira, projetar um chip de roteador muito rápido e acrescentar uma grande
-quantidade de memória para produzir um nó mais poderoso do que o BlueGene/P, de modo que uma quantidade
-menor deles será necessária e a comunicação entre eles será mais rápida.
+A visão da IBM é clara: combinar núcleos existentes para construir um chip especial que possa ser produzido em massa a baixo custo, executar a baixa velocidade e ser interligado em números muito grandes usando uma rede de comunicação de velocidade modesta. A visão do Sandia é igualmente clara, mas diferente: usar uma
+poderosa CPU de 64 bits de prateleira, projetar um chip de roteador muito rápido e acrescentar uma grande quantidade de memória para produzir um nó mais poderoso do que o BlueGene/P, de modo que uma quantidade menor deles será necessária e a comunicação entre eles será mais rápida.
 
 **• Figura 8.42 - Comparação entre BlueGene/P e Red Storm.**
 Este comparativo destaca as diferenças fundamentais de arquitetura: enquanto o BlueGene/P foca em densidade extrema de núcleos simples, o Red Storm utiliza processadores mais potentes em menor quantidade.
@@ -2592,88 +2414,39 @@ Este comparativo destaca as diferenças fundamentais de arquitetura: enquanto o 
 
  - Flexibilidade: O Red Storm permite ser particionado, o que explica a divisão física que vimos na planta do sistema entre áreas confidenciais e não-confidenciais.
 
-As consequências dessas decisões se refletiram no empacotamento. Como a IBM construiu um chip espe-
-cial combinando processador e roteador, conseguiu uma densidade de empacotamento mais alta: 4.096 CPUs/
-gabinete. Como o Sandia preferiu um chip de CPU de prateleira, sem modificação, e 2–4 GB de RAM por nó, ele
-só conseguiu colocar 192 processadores de cálculo em um gabinete. O resultado é que o Red Storm ocupa mais
-espaço e consome mais energia do que o BlueGene/P.
+As consequências dessas decisões se refletiram no empacotamento. Como a IBM construiu um chip especial combinando processador e roteador, conseguiu uma densidade de empacotamento mais alta: 4.096 CPUs/ gabinete. Como o Sandia preferiu um chip de CPU de prateleira, sem modificação, e 2–4 GB de RAM por nó, ele
+só conseguiu colocar 192 processadores de cálculo em um gabinete. O resultado é que o Red Storm ocupa mais espaço e consome mais energia do que o BlueGene/P.
 
-No mundo exótico da computação de laboratório de âmbito nacional, o importante é o desempenho. Nesse
-aspecto, o BlueGene/P ganha, 1.000 TF/s contra 124 TF/s, mas o Red Storm foi projetado para ser expansível;
-portanto, acrescentando mais Opterons ao problema, o Sandia provavelmente conseguiria elevar seu desempenho
-de forma significativa. A IBM poderia responder aumentando um pouco o clock (850 MHz não significa forçar
-muito a tecnologia existente). Em suma, os supercomputadores MPP ainda não chegaram nem perto de quaisquer
-limites da física e continuarão crescendo por muitos anos.
+No mundo exótico da computação de laboratório de âmbito nacional, o importante é o desempenho. Nesse aspecto, o BlueGene/P ganha, 1.000 TF/s contra 124 TF/s, mas o Red Storm foi projetado para ser expansível; portanto, acrescentando mais Opterons ao problema, o Sandia provavelmente conseguiria elevar seu desempenho
+de forma significativa. A IBM poderia responder aumentando um pouco o clock (850 MHz não significa forçar muito a tecnologia existente). Em suma, os supercomputadores MPP ainda não chegaram nem perto de quaisquer limites da física e continuarão crescendo por muitos anos.
 
 ## 8.4.3 Computação de cluster
-O outro estilo de multicomputador é o computador de cluster (Anderson et al., 1995; Martin et al., 1997).
-Em geral, consiste em centenas de milhares de PCs ou estações de trabalho conectadas por uma placa de rede dis-
-ponível no mercado. A diferença entre um MPP e um cluster é análoga à diferença entre um mainframe e um PC.
-Ambos têm uma CPU, ambos têm RAM, ambos têm discos, ambos têm um sistema operacional e assim por diante.
+O outro estilo de multicomputador é o computador de cluster (Anderson et al., 1995; Martin et al., 1997). Em geral, consiste em centenas de milhares de PCs ou estações de trabalho conectadas por uma placa de rede disponível no mercado. A diferença entre um MPP e um cluster é análoga à diferença entre um mainframe e um PC. Ambos têm uma CPU, ambos têm RAM, ambos têm discos, ambos têm um sistema operacional e assim por diante.
 
-Porém, os do mainframe são mais rápidos (exceto talvez o sistema operacional). No entanto, em termos qualita-
-tivos, eles são considerados diferentes e são usados e gerenciados de modo diferente. Essa mesma diferença vale
-para MPPs em comparação com clusters.
+Porém, os do mainframe são mais rápidos (exceto talvez o sistema operacional). No entanto, em termos qualitativos, eles são considerados diferentes e são usados e gerenciados de modo diferente. Essa mesma diferença vale para MPPs em comparação com clusters.
 
-Historicamente, o elemento fundamental que tornava os MPPs especiais era sua interconexão de alta veloci-
-dade, mas o recente lançamento de interconexões de alta velocidade comerciais, de prateleira, começou a fechar
-essa lacuna. Levando tudo em conta, é provável que os clusters empurrem os MPPs para nichos cada vez meno-
-res, exatamente como os PCs transformaram os mainframes em especialidades esotéricas. O principal nicho para
-MPPs são supercomputadores de alto preço, para os quais o desempenho de pico é tudo o que interessa e, se você
-precisar perguntar o preço, é porque não pode bancar um deles.
+Historicamente, o elemento fundamental que tornava os MPPs especiais era sua interconexão de alta velocidade, mas o recente lançamento de interconexões de alta velocidade comerciais, de prateleira, começou a fechar essa lacuna. Levando tudo em conta, é provável que os clusters empurrem os MPPs para nichos cada vez meno-
+res, exatamente como os PCs transformaram os mainframes em especialidades esotéricas. O principal nicho para MPPs são supercomputadores de alto preço, para os quais o desempenho de pico é tudo o que interessa e, se você precisar perguntar o preço, é porque não pode bancar um deles.
 
-Embora existam muitos tipos de clusters, há duas espécies que dominam: o centralizado e o descentralizado.
-O centralizado é um cluster de estações de trabalho ou PCs montado em uma grande estante em uma única sala.
-Às vezes, eles são empacotados de um modo bem mais compacto do que o usual para reduzir o tamanho físico
-e o comprimento dos cabos. Em geral, as máquinas são homogêneas e não têm periféricos, a não ser cartões de
-rede e, possivelmente, discos. Gordon Bell, o projetista do PDP-11 e do VAX, denominou essas máquinas estações
-de trabalho sem cabeça (porque não têm donos). Ficamos tentados a denominá-las COWs (vacas) sem cabeça,
-mas ficamos com medo que esse termo ferisse a suscetibilidade de muitas vacas sagradas, portanto, desistimos.
+Embora existam muitos tipos de clusters, há duas espécies que dominam: o centralizado e o descentralizado. O centralizado é um cluster de estações de trabalho ou PCs montado em uma grande estante em uma única sala. Às vezes, eles são empacotados de um modo bem mais compacto do que o usual para reduzir o tamanho físico
+e o comprimento dos cabos. Em geral, as máquinas são homogêneas e não têm periféricos, a não ser cartões de rede e, possivelmente, discos. Gordon Bell, o projetista do PDP-11 e do VAX, denominou essas máquinas estações de trabalho sem cabeça (porque não têm donos). Ficamos tentados a denominá-las COWs (vacas) sem cabeça, mas ficamos com medo que esse termo ferisse a suscetibilidade de muitas vacas sagradas, portanto, desistimos.
 
-Clusters descentralizados consistem em estações de trabalho ou PCs espalhados por um prédio ou campus.
-Grande parte deles fica ociosa por muitas horas no dia, em especial à noite. Costumam ser conectados por uma
-LAN. Em geral, são heterogêneos e têm um conjunto completo de periféricos, embora ter um cluster com 1.024
-mouses na verdade não é muito melhor do que ter um cluster sem mouse algum. O mais importante é que muitos
-deles têm proprietários que têm um apego emocional às suas máquinas e tendem a olhar com desconfiança algum
-astrônomo que queira simular o big bang nelas. Usar estações de trabalho ociosas para formar um cluster sempre
-significa dispor de algum meio de migrar tarefas para fora das máquinas quando seus donos as reivindicarem. A
-migração é possível, mas aumenta a complexidade do software.
+Clusters descentralizados consistem em estações de trabalho ou PCs espalhados por um prédio ou campus. Grande parte deles fica ociosa por muitas horas no dia, em especial à noite. Costumam ser conectados por uma LAN. Em geral, são heterogêneos e têm um conjunto completo de periféricos, embora ter um cluster com 1.024
+mouses na verdade não é muito melhor do que ter um cluster sem mouse algum. O mais importante é que muitos deles têm proprietários que têm um apego emocional às suas máquinas e tendem a olhar com desconfiança algum astrônomo que queira simular o big bang nelas. Usar estações de trabalho ociosas para formar um cluster sempre significa dispor de algum meio de migrar tarefas para fora das máquinas quando seus donos as reivindicarem. A migração é possível, mas aumenta a complexidade do software.
 
-De modo geral, os clusters são conjuntos pequenos, na faixa de uma dúzia a talvez 500 PCs. Contudo, tam-
-bém é possível construir clusters muito grandes com PCs de prateleira. O Google fez isso de modo interessante,
-que veremos agora.
+De modo geral, os clusters são conjuntos pequenos, na faixa de uma dúzia a talvez 500 PCs. Contudo, também é possível construir clusters muito grandes com PCs de prateleira. O Google fez isso de modo interessante, que veremos agora.
 
 **• Google**
-Google é um sistema de busca popular para achar informações na Internet. Embora sua popularidade venha,
-em parte, de sua interface simples e tempo de resposta rápido, seu projeto não é nada simples. Do ponto de vista
-do Google, o problema é que ele tem de achar, indexar e armazenar toda a World Wide Web (estimada em 40
-bilhões de páginas), ser capaz de pesquisar a coisa toda em menos de 0,5 segundo e manipular milhares de con-
-sultas/segundo que vêm do mundo inteiro, 24 horas por dia. Ademais, ele não pode parar nunca, nem mesmo em
-face de terremotos, queda de energia elétrica, queda de redes de telecomunicações, falhas de hardware e bugs de
-software. E, é claro, tem de fazer tudo isso do modo mais barato possível. Montar um clone do Google definiti-
-vamente não é um exercício para o leitor.
+Google é um sistema de busca popular para achar informações na Internet. Embora sua popularidade venha, em parte, de sua interface simples e tempo de resposta rápido, seu projeto não é nada simples. Do ponto de vista do Google, o problema é que ele tem de achar, indexar e armazenar toda a World Wide Web (estimada em 40
+bilhões de páginas), ser capaz de pesquisar a coisa toda em menos de 0,5 segundo e manipular milhares de consultas/segundo que vêm do mundo inteiro, 24 horas por dia. Ademais, ele não pode parar nunca, nem mesmo em face de terremotos, queda de energia elétrica, queda de redes de telecomunicações, falhas de hardware e bugs de software. E, é claro, tem de fazer tudo isso do modo mais barato possível. Montar um clone do Google definitivamente não é um exercício para o leitor.
 
-Como o Google consegue? Para começar, ele opera várias centrais de dados no mundo inteiro. Além de essa
-técnica proporcionar backups no caso de alguma delas ser engolida por um terremoto, quando o <www.google.
-com> é consultado, o endereço IP do remetente é inspecionado e é fornecido o endereço da central de dados mais
+Como o Google consegue? Para começar, ele opera várias centrais de dados no mundo inteiro. Além de essa técnica proporcionar backups no caso de alguma delas ser engolida por um terremoto, quando o <www.google.com> é consultado, o endereço IP do remetente é inspecionado e é fornecido o endereço da central de dados mais
 próxima. E é para lá que o browser envia a consulta.
 
-Cada central de dados tem, no mínimo, uma conexão de fibra ótica OC-48 (2,488 Gbps) com a Internet,
-pela qual recebe consultas e envia respostas, bem como uma conexão de backup OC-12 (622 Mbps) com outro
-provedor de telecomunicações diferente, caso o primário falhe. Há fontes de energia ininterruptas e geradores
-de emergência a diesel em todas as centrais de dados para manter o espetáculo em cena durante quedas de
-energia. Por conseguinte, quando acontece um grande desastre natural, o desempenho sofrerá, mas o Google
-continuará funcionando.
+Cada central de dados tem, no mínimo, uma conexão de fibra ótica OC-48 (2,488 Gbps) com a Internet, pela qual recebe consultas e envia respostas, bem como uma conexão de backup OC-12 (622 Mbps) com outro provedor de telecomunicações diferente, caso o primário falhe. Há fontes de energia ininterruptas e geradores
+de emergência a diesel em todas as centrais de dados para manter o espetáculo em cena durante quedas de energia. Por conseguinte, quando acontece um grande desastre natural, o desempenho sofrerá, mas o Google continuará funcionando.
 
-Para entender melhor por que o Google escolheu essa arquitetura, é bom descrever de modo resumido como
-uma consulta é processada assim que chega à sua central de dados designada. Após chegar à central de dados
-(etapa 1 na Figura 8.43), o balanceador de carga roteia a consulta para um dos muitos manipuladores de consultas
-(2) e para o revisor ortográfico (3) e um servidor de anúncios publicitários (4) em paralelo. Então, as palavras
-procuradas são pesquisadas nos servidores de índice (5) em paralelo. Esses servidores contêm uma entrada para
-cada palavra na Web. Cada entrada relaciona todos os documentos (páginas Web, arquivos PDF, apresentações
-PowerPoint etc.) que contêm a palavra, organizados por relevância da página. A relevância da página é determi-
-nada por uma fórmula complicada (e secreta), mas o número de referências para uma página e suas respectivas
-relevâncias desempenha um papel importante.
+Para entender melhor por que o Google escolheu essa arquitetura, é bom descrever de modo resumido como uma consulta é processada assim que chega à sua central de dados designada. Após chegar à central de dados (etapa 1 na Figura 8.43), o balanceador de carga roteia a consulta para um dos muitos manipuladores de consultas (2) e para o revisor ortográfico (3) e um servidor de anúncios publicitários (4) em paralelo. Então, as palavras procuradas são pesquisadas nos servidores de índice (5) em paralelo. Esses servidores contêm uma entrada para cada palavra na Web. Cada entrada relaciona todos os documentos (páginas Web, arquivos PDF, apresentações PowerPoint etc.) que contêm a palavra, organizados por relevância da página. A relevância da página é determinada por uma fórmula complicada (e secreta), mas o número de referências para uma página e suas respectivas relevâncias desempenha um papel importante.
 
 **• Figura 8.43 - Processamento de uma consulta no Google.**
 Este diagrama é o exemplo perfeito de como um multicomputador massivo (como os que vimos nas Figuras 8.36 e 8.41) organiza o fluxo de dados para responder em milissegundos.
@@ -2713,77 +2486,29 @@ O processo é uma coreografia entre balanceadores de carga, servidores de consul
 
  5. Assembleia: O manipulador reúne todos os resultados, ordena-os e envia a resposta final ao usuário (etapa 11).
 
-ara obter maior desempenho, o índice é subdividido em partes denominadas fragmentos que podem ser
-pesquisadas em paralelo. Ao menos em termos conceituais, o fragmento 1 contém todas as palavras no índice,
-cada uma delas acompanhada pelos IDs dos n documentos de importância mais alta que contêm aquela palavra. O
-fragmento 2 contém todas as palavras e os IDs dos n documentos de importância mais alta seguintes e assim por
-diante. À medida que a Web cresce, cada um desses fragmentos pode ser subdividido mais tarde, com as primei-
-ras k palavras em um conjunto de fragmentos, as próximas k palavras em um segundo conjunto de fragmentos e
-assim por diante, de modo a conseguir cada vez mais paralelismo na busca.
+ara obter maior desempenho, o índice é subdividido em partes denominadas fragmentos que podem ser pesquisadas em paralelo. Ao menos em termos conceituais, o fragmento 1 contém todas as palavras no índice, cada uma delas acompanhada pelos IDs dos n documentos de importância mais alta que contêm aquela palavra. O
+fragmento 2 contém todas as palavras e os IDs dos n documentos de importância mais alta seguintes e assim por diante. À medida que a Web cresce, cada um desses fragmentos pode ser subdividido mais tarde, com as primeiras k palavras em um conjunto de fragmentos, as próximas k palavras em um segundo conjunto de fragmentos e assim por diante, de modo a conseguir cada vez mais paralelismo na busca.
 
-Os servidores de índice retornam um conjunto de identificadores de documentos (6), que então são combina-
-dos de acordo com as propriedades booleanas da consulta. Por exemplo, se a pesquisa for para +digital +capivara
-+dança, então só os identificadores de documentos que aparecem em todos os três conjuntos são usados para a
-próxima etapa. Nessa etapa (7), os próprios documentos são referenciados para extrair seus títulos, URL e pedaços
-de texto que cercam os termos de pesquisa. Os servidores de documentos contêm muitas cópias de toda a Web em
-cada central de dados, que hoje são centenas de terabytes. Os documentos também são divididos em fragmentos
-para melhorar a pesquisa paralela. Embora o processamento de consultas não exija a leitura da Web inteira (ou até
-mesmo a leitura das dezenas de terabytes nos servidores de índice), ter de processar 100 MB por pesquisa é normal.
+Os servidores de índice retornam um conjunto de identificadores de documentos (6), que então são combinados de acordo com as propriedades booleanas da consulta. Por exemplo, se a pesquisa for para +digital +capivara +dança, então só os identificadores de documentos que aparecem em todos os três conjuntos são usados para a próxima etapa. Nessa etapa (7), os próprios documentos são referenciados para extrair seus títulos, URL e pedaços de texto que cercam os termos de pesquisa. Os servidores de documentos contêm muitas cópias de toda a Web em cada central de dados, que hoje são centenas de terabytes. Os documentos também são divididos em fragmentos para melhorar a pesquisa paralela. Embora o processamento de consultas não exija a leitura da Web inteira (ou até mesmo a leitura das dezenas de terabytes nos servidores de índice), ter de processar 100 MB por pesquisa é normal.
 
-Quando os resultados são devolvidos ao manipulador de consultas (8), as páginas encontradas são reunidas
-e classificadas por importância. Se forem detectados potenciais erros de ortografia (9), eles são anunciados, e
-anúncios publicitários relevantes (10) são adicionados. Apresentar propaganda de anunciantes interessados em
-comprar termos de consulta específicos (por exemplo, “hotel” ou “filmadora”) é o modo como o Google ganha
-seu dinheiro. Por fim, os resultados são formatados em HTML (HyperText Markup Language – linguagem de
-marcação de hipertexto) e enviados ao usuário como uma página Web.
+Quando os resultados são devolvidos ao manipulador de consultas (8), as páginas encontradas são reunidas e classificadas por importância. Se forem detectados potenciais erros de ortografia (9), eles são anunciados, e anúncios publicitários relevantes (10) são adicionados. Apresentar propaganda de anunciantes interessados em comprar termos de consulta específicos (por exemplo, “hotel” ou “filmadora”) é o modo como o Google ganha seu dinheiro. Por fim, os resultados são formatados em HTML (HyperText Markup Language – linguagem de marcação de hipertexto) e enviados ao usuário como uma página Web.
 
-Munidos dessas informações básicas, agora podemos examinar a arquitetura do Google. A maioria das
-empresas, quando confrontadas com um imenso banco de dados, taxa de transmissão maciça e a necessidade de
-alta confiabilidade, compraria o equipamento maior, mais rápido e mais confiável existente no mercado. O Google
-fez exatamente o oposto. Comprou PCs baratos, de desempenho modesto. Muitos deles. E, com eles, montou o
-maior cluster de prateleira do mundo. O princípio diretor dessa decisão foi simples: otimizar preço/desempenho.
+Munidos dessas informações básicas, agora podemos examinar a arquitetura do Google. A maioria das empresas, quando confrontadas com um imenso banco de dados, taxa de transmissão maciça e a necessidade de alta confiabilidade, compraria o equipamento maior, mais rápido e mais confiável existente no mercado. O Google
+fez exatamente o oposto. Comprou PCs baratos, de desempenho modesto. Muitos deles. E, com eles, montou o maior cluster de prateleira do mundo. O princípio diretor dessa decisão foi simples: otimizar preço/desempenho.
 
-A lógica que fundamentou essa decisão está na economia: PCs normais são muito baratos. Servidores de alta
-tecnologia não são, e grandes multiprocessadores, menos ainda. Assim, conquanto um servidor de alta tecnologia
-pudesse ter duas ou três vezes o desempenho de um PC desktop comum, normalmente seu preço seria 5 a 10
-vezes mais alto, o que não é eficiente em termos de custo.
+A lógica que fundamentou essa decisão está na economia: PCs normais são muito baratos. Servidores de alta tecnologia não são, e grandes multiprocessadores, menos ainda. Assim, conquanto um servidor de alta tecnologia pudesse ter duas ou três vezes o desempenho de um PC desktop comum, normalmente seu preço seria 5 a 10 vezes mais alto, o que não é eficiente em termos de custo.
 
-Claro que PCs baratos falham mais do que servidores de topo de linha, mas os últimos também falham,
-portanto, o software do Google tinha de ser projetado para funcionar com hardware que falhava, não importando
-qual equipamento estivesse usando. Uma vez escrito o software tolerante a falhas, na verdade não importava que a
-taxa de falha fosse 0,5% por ano ou 2% por ano, elas teriam de ser tratadas. A experiência do Google diz que cerca
-de 2% dos PCs falham a cada ano. Mais da metade das falhas se deve a discos defeituosos, seguidos por fontes de
-energia e chips de RAM. Uma vez construídas, as CPUs nunca falham. Na verdade, a maior fonte de quedas não
-é o hardware; é o software. A primeira reação a uma queda é apenas reinicializar, o que muitas vezes resolve o
-problema (o equivalente eletrônico de um médico dizer: “Tome duas aspirinas e vá para a cama”).
+Claro que PCs baratos falham mais do que servidores de topo de linha, mas os últimos também falham, portanto, o software do Google tinha de ser projetado para funcionar com hardware que falhava, não importando qual equipamento estivesse usando. Uma vez escrito o software tolerante a falhas, na verdade não importava que a taxa de falha fosse 0,5% por ano ou 2% por ano, elas teriam de ser tratadas. A experiência do Google diz que cerca de 2% dos PCs falham a cada ano. Mais da metade das falhas se deve a discos defeituosos, seguidos por fontes de energia e chips de RAM. Uma vez construídas, as CPUs nunca falham. Na verdade, a maior fonte de quedas não é o hardware; é o software. A primeira reação a uma queda é apenas reinicializar, o que muitas vezes resolve o problema (o equivalente eletrônico de um médico dizer: “Tome duas aspirinas e vá para a cama”).
 
-Um típico PC moderno do Google consiste em um processador Intel de 2 GHz, 4 GB de RAM e um disco de
-cerca de 2 TB, o tipo de máquina que uma avó compraria para verificar seu e-mail de vez em quando. O único
-item especializado é um chip Ethernet. Não exatamente um chip de última geração, mas um muito barato. Os PCs
-são acondicionados em caixas de 1 unidade de altura (cerca de 5 cm de espessura) e empilhados em grupos de
-40 em estantes de 50 centímetros, uma pilha na frente e uma atrás, para um total de 80 PCs por estante. Os PCs
-que estão em uma estante são conectados por Ethernet comutada e o switch está dentro da estante. As estantes em
-uma central de dados também são conectadas por Ethernet comutada, com dois switches redundantes por central
-de dados usados para sobreviver a falhas de switches .
+Um típico PC moderno do Google consiste em um processador Intel de 2 GHz, 4 GB de RAM e um disco de cerca de 2 TB, o tipo de máquina que uma avó compraria para verificar seu e-mail de vez em quando. O único item especializado é um chip Ethernet. Não exatamente um chip de última geração, mas um muito barato. Os PCs
+são acondicionados em caixas de 1 unidade de altura (cerca de 5 cm de espessura) e empilhados em grupos de 40 em estantes de 50 centímetros, uma pilha na frente e uma atrás, para um total de 80 PCs por estante. Os PCs que estão em uma estante são conectados por Ethernet comutada e o switch está dentro da estante. As estantes em uma central de dados também são conectadas por Ethernet comutada, com dois switches redundantes por central de dados usados para sobreviver a falhas de switches .
 
-O layout de uma típica central de dados Google é ilustrado na Figura 8.44. A fibra OC-48 de alta largura de
-banda de entrada é roteada para cada um de dois switches Ethernet de 128 portas. De modo semelhante, a fibra
-OC-12 de backup também é roteada para cada um dos dois switches. As fibras de entrada usam cartões especiais
-de entrada e não ocupam qualquer uma das 128 portas Ethernet.
+O layout de uma típica central de dados Google é ilustrado na Figura 8.44. A fibra OC-48 de alta largura de banda de entrada é roteada para cada um de dois switches Ethernet de 128 portas. De modo semelhante, a fibra OC-12 de backup também é roteada para cada um dos dois switches. As fibras de entrada usam cartões especiais de entrada e não ocupam qualquer uma das 128 portas Ethernet.
 
-Quatro enlaces Ethernet saem de cada estante: dois para o switch da esquerda e dois para o da direita. Nessa
-configuração, o sistema pode sobreviver à falha de qualquer dos dois switches. Uma vez que cada estante tem
-quatro conexões com o switch (dois dos 40 PCs da frente e dois dos 40 PCs de trás), é preciso quatro falhas de
-enlace ou duas falhas de enlace e uma de switch para tirar uma estante de linha. Com um par de switches de 128
-portas e quatro enlaces de cada estante, até 64 estantes podem ser suportadas. Com 80 PCs por estante, uma cen-
-tral de dados pode ter até 5.120 PCs. Mas, é claro, as estantes não têm de conter exatamente 80 PCs e os switches
-podem ser maiores ou menores do que 128 portas; esses dados são apenas valores típicos de um cluster Google.
+Quatro enlaces Ethernet saem de cada estante: dois para o switch da esquerda e dois para o da direita. Nessa configuração, o sistema pode sobreviver à falha de qualquer dos dois switches. Uma vez que cada estante tem quatro conexões com o switch (dois dos 40 PCs da frente e dois dos 40 PCs de trás), é preciso quatro falhas de enlace ou duas falhas de enlace e uma de switch para tirar uma estante de linha. Com um par de switches de 128 portas e quatro enlaces de cada estante, até 64 estantes podem ser suportadas. Com 80 PCs por estante, uma central de dados pode ter até 5.120 PCs. Mas, é claro, as estantes não têm de conter exatamente 80 PCs e os switches podem ser maiores ou menores do que 128 portas; esses dados são apenas valores típicos de um cluster Google.
 
-A densidade de energia também é uma questão fundamental. Um PC típico utiliza 120 watts, ou cerca de
-10 kW por estante. Uma estante precisa de cerca de 3 m2 para que o pessoal de manutenção possa instalar e remo-
-ver PCs e para que o condicionamento de ar funcione. Esses parâmetros dão uma densidade de energia de mais
-de 3.000 watts/m2. A maioria das centrais de dados é projetada para 600–1.200 watts/m2, portanto, são necessárias
-medidas especiais para refrigerar as estantes.
+A densidade de energia também é uma questão fundamental. Um PC típico utiliza 120 watts, ou cerca de 10 kW por estante. Uma estante precisa de cerca de 3 m2 para que o pessoal de manutenção possa instalar e remover PCs e para que o condicionamento de ar funcione. Esses parâmetros dão uma densidade de energia de mais
+de 3.000 watts/m2. A maioria das centrais de dados é projetada para 600–1.200 watts/m2, portanto, são necessárias medidas especiais para refrigerar as estantes.
 
 **• Figura 8.44 - Cluster Google típico.**
 A Figura 8.44 detalha a organização física de um Cluster típico do Google, mostrando como milhares de computadores comuns são transformados em uma superestrutura através de redes de alta velocidade.
@@ -2819,93 +2544,52 @@ O cluster utiliza redundância em múltiplos níveis, com switches de alta densi
 O Google aprendeu três coisas sobre implementar servidores Web maciçamente paralelos, que é bom repetir:
 
     1. Componentes falham, portanto, planeje a falha.
+    
     2. Duplique tudo para manter a vazão e a disponibilidade.
 
     3. Otimize preço/desempenho.
 
-O primeiro item diz que você precisa ter software tolerante a falhas. Mesmo com o melhor dos equipamentos,
-se você tiver um número maciço de componentes, algum falhará e o software tem de ser capaz de tratar o erro. Quer
-você tenha uma falha por semana ou duas, com sistemas desse tamanho o software tem de ser capaz de tratá-las.
+O primeiro item diz que você precisa ter software tolerante a falhas. Mesmo com o melhor dos equipamentos, se você tiver um número maciço de componentes, algum falhará e o software tem de ser capaz de tratar o erro. Quer você tenha uma falha por semana ou duas, com sistemas desse tamanho o software tem de ser capaz de tratá-las.
 
-O segundo item indica que ambos, hardware e software, têm de ter alto grau de redundância. Além de melho-
-rar as propriedades de tolerância a falhas, isso também melhora a vazão. No caso do Google, os PCs, discos, cabos e
-switches são todos replicados muitas vezes. Além do mais, o índice e os documentos são subdivididos em fragmen-
-tos e estes são muito replicados em cada central de dados, e as próprias centrais de dados também são replicadas.
+O segundo item indica que ambos, hardware e software, têm de ter alto grau de redundância. Além de melhorar as propriedades de tolerância a falhas, isso também melhora a vazão. No caso do Google, os PCs, discos, cabos e switches são todos replicados muitas vezes. Além do mais, o índice e os documentos são subdivididos em fragmentos e estes são muito replicados em cada central de dados, e as próprias centrais de dados também são replicadas.
 
-O terceiro item é uma consequência dos dois primeiros. Se o sistema foi projetado corretamente para lidar
-com falhas, comprar componentes caros como RAIDs com discos SCSI é um erro. Até eles falharão, mas gastar dez
-vezes mais para reduzir a taxa de falhas à metade é uma má ideia. Melhor comprar dez vezes mais em hardware e
-tratar as falhas quando elas ocorrerem. No mínimo, ter mais hardware resultará em melhor desempenho quando
-tudo estiver funcionando.
+O terceiro item é uma consequência dos dois primeiros. Se o sistema foi projetado corretamente para lidar com falhas, comprar componentes caros como RAIDs com discos SCSI é um erro. Até eles falharão, mas gastar dez vezes mais para reduzir a taxa de falhas à metade é uma má ideia. Melhor comprar dez vezes mais em hardware e tratar as falhas quando elas ocorrerem. No mínimo, ter mais hardware resultará em melhor desempenho quando tudo estiver funcionando.
 
 Se quiser mais informações sobre o Google, veja Barroso et al., 2003; e Ghemawat et al., 2003.
 
 ## 8.4.4Software de comunicação para multicomputadores
-Programar um multicomputador requer software especial, quase sempre bibliotecas, para manipular a comu-
-nicação e a sincronização entre processos. Nesta seção, vamos falar um pouco sobre esse software. Na maioria
-das vezes, os mesmos pacotes de software executam em MPPs e clusters, portanto, é fácil portar aplicações entre
-plataformas.
+Programar um multicomputador requer software especial, quase sempre bibliotecas, para manipular a comunicação e a sincronização entre processos. Nesta seção, vamos falar um pouco sobre esse software. Na maioria das vezes, os mesmos pacotes de software executam em MPPs e clusters, portanto, é fácil portar aplicações entre plataformas.
 
-Sistemas de troca de mensagens têm dois ou mais processos que executam independentemente um do outro.
-Por exemplo, um processo pode produzir alguns dados e um, ou outros mais, podem consumi-los. Não há qual-
-quer garantia de que, quando o remetente tiver mais dados, os receptores estarão prontos para ele, pois cada um
+Sistemas de troca de mensagens têm dois ou mais processos que executam independentemente um do outro. Por exemplo, um processo pode produzir alguns dados e um, ou outros mais, podem consumi-los. Não há qualquer garantia de que, quando o remetente tiver mais dados, os receptores estarão prontos para ele, pois cada um
 executa seu próprio programa.
 
-A maioria dos sistemas de troca de mensagens fornece duas primitivas (em geral, chamadas de biblioteca),
-send e receive, mas diversos tipos de semânticas são possíveis. As três variantes principais são:
+A maioria dos sistemas de troca de mensagens fornece duas primitivas (em geral, chamadas de biblioteca), send e receive, mas diversos tipos de semânticas são possíveis. As três variantes principais são:
 
     1. Troca síncrona de mensagens.
     2. Troca de mensagens por buffers.
     3. Troca de mensagens sem bloqueio.
 
-Na troca síncrona de mensagens, se o remetente executa um send e o receptor ainda não executou um
-receive, o remetente é bloqueado (suspenso) até que o receptor execute um receive, quando então a mensagem é
-copiada. Quando o remetente obtiver de novo o controle após a chamada, ele sabe que a mensagem foi enviada
-e corretamente recebida. Esse método é o que tem a semântica mais simples e não requer operação alguma de
-buffer. Porém, uma séria desvantagem é que o remetente permanece bloqueado até que o receptor tenha adquirido
-a mensagem e reconhecido seu recebimento.
+Na troca síncrona de mensagens, se o remetente executa um send e o receptor ainda não executou um receive, o remetente é bloqueado (suspenso) até que o receptor execute um receive, quando então a mensagem é copiada. Quando o remetente obtiver de novo o controle após a chamada, ele sabe que a mensagem foi enviada
+e corretamente recebida. Esse método é o que tem a semântica mais simples e não requer operação alguma de buffer. Porém, uma séria desvantagem é que o remetente permanece bloqueado até que o receptor tenha adquirido a mensagem e reconhecido seu recebimento.
 
-Na troca de mensagens com buffer, quando uma mensagem é enviada antes de o receptor estar pronto, ela
-é colocada em algum buffer, por exemplo, em uma caixa de correio, até que o receptor a retire dali. Assim, nesse
-tipo de troca, um remetente pode continuar após um send, ainda que o receptor esteja ocupado com alguma outra
-coisa. Visto que a mensagem já foi enviada, o remetente está livre para reutilizar de imediato o buffer de mensagens.
-Esse esquema reduz o tempo que o remetente tem de esperar. Basicamente, tão logo ele tenha enviado a mensagem,
-poderá continuar. Todavia, agora, o remetente não tem nenhuma garantia de que a mensagem foi corretamente rece-
-bida. Ainda que a comunicação seja confiável, o receptor pode ter sofrido uma avaria antes de receber a mensagem.
+Na troca de mensagens com buffer, quando uma mensagem é enviada antes de o receptor estar pronto, ela é colocada em algum buffer, por exemplo, em uma caixa de correio, até que o receptor a retire dali. Assim, nesse tipo de troca, um remetente pode continuar após um send, ainda que o receptor esteja ocupado com alguma outra coisa. Visto que a mensagem já foi enviada, o remetente está livre para reutilizar de imediato o buffer de mensagens. Esse esquema reduz o tempo que o remetente tem de esperar. Basicamente, tão logo ele tenha enviado a mensagem, poderá continuar. Todavia, agora, o remetente não tem nenhuma garantia de que a mensagem foi corretamente recebida. Ainda que a comunicação seja confiável, o receptor pode ter sofrido uma avaria antes de receber a mensagem.
 
-Na troca de mensagens sem bloqueio, o remetente tem permissão para continuar imediatamente após fazer
-a chamada. A biblioteca apenas diz ao sistema operacional para fazer a chamada mais tarde, quando tiver tempo.
-Por conseguinte, o remetente mal fica bloqueado. A desvantagem desse método é que, quando o remetente conti-
-nua após a send, talvez não possa reutilizar o buffer de mensagens porque a mensagem pode não ter sido enviada
-ainda. Ele precisa descobrir, de alguma forma, quando pode utilizar novamente o buffer. Uma ideia é fazer com
-que o remetente pergunte ao sistema. Outra é obter uma interrupção quando o buffer estiver disponível. Nenhuma
-delas simplifica o software.
+Na troca de mensagens sem bloqueio, o remetente tem permissão para continuar imediatamente após fazer a chamada. A biblioteca apenas diz ao sistema operacional para fazer a chamada mais tarde, quando tiver tempo. Por conseguinte, o remetente mal fica bloqueado. A desvantagem desse método é que, quando o remetente conti-
+nua após a send, talvez não possa reutilizar o buffer de mensagens porque a mensagem pode não ter sido enviada ainda. Ele precisa descobrir, de alguma forma, quando pode utilizar novamente o buffer. Uma ideia é fazer com que o remetente pergunte ao sistema. Outra é obter uma interrupção quando o buffer estiver disponível. Nenhuma delas simplifica o software.
 
-Logo adiante, vamos discutir brevemente um sistema popular de troca de mensagens disponível em muitos
-multicomputadores: a MPI.
+Logo adiante, vamos discutir brevemente um sistema popular de troca de mensagens disponível em muitos multicomputadores: a MPI.
 
 **•  MPI – Interface de troca de mensagens**
-Durante muitos anos, o pacote de comunicação mais popular para multicomputadores foi a PVM (Parallel
-Virtual Machine – máquina virtual paralela) (Geist et al., 1994; e Sunderram, 1990). Contudo, nos últimos anos ele
-vem sendo substituído em grande parte pela MPI (Message-Passing Interface – interface de troca de mensagens). A
+Durante muitos anos, o pacote de comunicação mais popular para multicomputadores foi a PVM (Parallel Virtual Machine – máquina virtual paralela) (Geist et al., 1994; e Sunderram, 1990). Contudo, nos últimos anos ele vem sendo substituído em grande parte pela MPI (Message-Passing Interface – interface de troca de mensagens). A
 
-MPI é muito mais rica e mais complexa do que a PVM, tem muito mais chamadas de biblioteca, muito mais opções
-e muito mais parâmetros por chamada. A versão original da MPI, agora denominada MPI-1, foi ampliada pela MPI-2
-em 1997. Mais adiante, daremos uma introdução muito sucinta à MPI-1 (que contém todos os aspectos básicos) e em seguida comentaremos um pouco o que foi adicionado na MPI-2. Se o leitor quiser mais informações sobre MPI,
-pode consultar Gropp et al., 1994; e Snir et al., 1996.
+MPI é muito mais rica e mais complexa do que a PVM, tem muito mais chamadas de biblioteca, muito mais opções e muito mais parâmetros por chamada. A versão original da MPI, agora denominada MPI-1, foi ampliada pela MPI-2 em 1997. Mais adiante, daremos uma introdução muito sucinta à MPI-1 (que contém todos os aspectos básicos) e em seguida comentaremos um pouco o que foi adicionado na MPI-2. Se o leitor quiser mais informações sobre MPI, pode consultar Gropp et al., 1994; e Snir et al., 1996.
 
-A MPI-1 não lida com criação nem gerenciamento de processo, como a PVM. Cabe ao usuário criar proces-
-sos usando chamadas locais de sistema. Uma vez criados, os processos são organizados em grupos estáticos de
-processos, que não são alterados. É com esses grupos que a MPI trabalha.
+A MPI-1 não lida com criação nem gerenciamento de processo, como a PVM. Cabe ao usuário criar processos usando chamadas locais de sistema. Uma vez criados, os processos são organizados em grupos estáticos de processos, que não são alterados. É com esses grupos que a MPI trabalha.
 
-A MPI é baseada em quatro conceitos principais: comunicadores, tipos de dados de mensagens, operações de
-comunicação e topologias virtuais. Um comunicador é um grupo de processos mais um contexto. Um contexto é
-um rótulo que identifica algo, como uma fase de execução. Quando mensagens são enviadas e recebidas, o con-
+A MPI é baseada em quatro conceitos principais: comunicadores, tipos de dados de mensagens, operações de comunicação e topologias virtuais. Um comunicador é um grupo de processos mais um contexto. Um contexto é um rótulo que identifica algo, como uma fase de execução. Quando mensagens são enviadas e recebidas, o con-
 texto pode ser usado para impedir que mensagens não relacionadas interfiram umas com as outras.
 
-Mensagens têm tipos e muitos tipos de dados são suportados, entre eles caracteres, números inteiros lon-
-gos, normais e curtos, números de ponto flutuante de precisão simples e de precisão dupla, e assim por diante.
-Também é possível construir outros tipos derivados desses.
+Mensagens têm tipos e muitos tipos de dados são suportados, entre eles caracteres, números inteiros longos, normais e curtos, números de ponto flutuante de precisão simples e de precisão dupla, e assim por diante. Também é possível construir outros tipos derivados desses.
 
 A MPI suporta um extenso conjunto de operações de comunicação. A mais básica é usada para enviar mensagens, como a seguir:
 
@@ -2924,26 +2608,13 @@ A MPI suporta comunicação coletiva, incluindo broadcast, espalha/reúne, permu
 
 Um conceito básico em MPI é a topologia virtual, na qual os processos podem ser organizados em topologia de árvore, anel, grade, toro ou outra, pelo usuário e por aplicação. Essa organização proporciona um meio de nomear caminhos de comunicação e facilita a comunicação.
 
-A MPI-2 adiciona processos dinâmicos, acesso à memória remota, comunicação coletiva sem bloqueio,
-suporte para E/S escalável, processamento em tempo real e muitas outras novas características que fogem do esco-
-po deste livro. Durante anos, foi travada uma batalha na comunidade científica entre os defensores da MPI e da
-PVM. O lado da PVM afirmava que a PVM era mais fácil de aprender e mais simples de usar. O lado da MPI dizia
-que a MPI faz mais e também destacava que ela é um padrão formal, apoiada por um comitê de padronização e um
-documento oficial de definição. O lado da PVM concordou, mas declarou que a falta de uma burocracia completa
-de padronização não é necessariamente uma desvantagem. Depois de muita discussão, parece que a MPI venceu.
+A MPI-2 adiciona processos dinâmicos, acesso à memória remota, comunicação coletiva sem bloqueio, suporte para E/S escalável, processamento em tempo real e muitas outras novas características que fogem do escopo deste livro. Durante anos, foi travada uma batalha na comunidade científica entre os defensores da MPI e da PVM. O lado da PVM afirmava que a PVM era mais fácil de aprender e mais simples de usar. O lado da MPI dizia que a MPI faz mais e também destacava que ela é um padrão formal, apoiada por um comitê de padronização e um documento oficial de definição. O lado da PVM concordou, mas declarou que a falta de uma burocracia completa de padronização não é necessariamente uma desvantagem. Depois de muita discussão, parece que a MPI venceu.
 
 ## 8.4.5 Escalonamento
-Programadores de MPI podem criar jobs com facilidade requisitando várias CPUs e executando durante
-períodos substanciais de tempo. Quando várias requisições independentes estão disponíveis vindas de diferentes usuários, cada uma necessitando de um número diferente de CPUs por períodos de tempo diferentes, o cluster
+Programadores de MPI podem criar jobs com facilidade requisitando várias CPUs e executando durante períodos substanciais de tempo. Quando várias requisições independentes estão disponíveis vindas de diferentes usuários, cada uma necessitando de um número diferente de CPUs por períodos de tempo diferentes, o cluster
 precisa de um escalonador para determinar qual job é executado e quando.
 
-No modelo mais simples, o escalonador de jobs requer que cada um especifique quantas CPUs necessita.
-Então, os jobs são executados em estrita ordem FIFO, como mostra a Figura 8.45(a). Nesse modelo, após um job
-ser iniciado, verifica-se se há número suficiente de CPUs disponíveis para iniciar o próximo job que está na fila
-de entrada. Se houver, este é iniciado e assim por diante. Caso contrário, o sistema espera até que mais CPUs
-fiquem disponíveis. A propósito, embora tenhamos sugerido que esse cluster tem oito CPUs, ele poderia perfei-
-tamente ter 128 CPUs que são alocadas em unidades de 16 (o que resulta em oito grupos de CPUs) ou alguma
-outra combinação.
+No modelo mais simples, o escalonador de jobs requer que cada um especifique quantas CPUs necessita. Então, os jobs são executados em estrita ordem FIFO, como mostra a Figura 8.45(a). Nesse modelo, após um job ser iniciado, verifica-se se há número suficiente de CPUs disponíveis para iniciar o próximo job que está na fila de entrada. Se houver, este é iniciado e assim por diante. Caso contrário, o sistema espera até que mais CPUs fiquem disponíveis. A propósito, embora tenhamos sugerido que esse cluster tem oito CPUs, ele poderia perfeitamente ter 128 CPUs que são alocadas em unidades de 16 (o que resulta em oito grupos de CPUs) ou alguma outra combinação.
 
 **• Figura 8.45 - Escalonamento de um cluster. (a) FIFO. (b) Sem bloqueio de cabeça de fila. (c) Lajotas. As áreas sombreadas indicam CPUs ociosas.**
 O diagrama mostra como diferentes algoritmos gerenciam o tempo e o uso de CPUs em um grupo de processadores, onde as áreas vazias (sombreadas no original) representam ociosidade.
@@ -2970,41 +2641,22 @@ O diagrama mostra como diferentes algoritmos gerenciam o tempo e o uso de CPUs e
 
  - Lajotas / Escalonamento de Grupo (c): Tenta organizar as tarefas como blocos encaixados (lajotas) para maximizar a densidade de uso das CPUs em cada intervalo de tempo, minimizando fragmentação e espera.
 
-Um algoritmo de escalonamento melhor evita bloqueio de cabeça de fila saltando jobs que não cabem e
-escolhendo o primeiro que couber. Sempre que um job termina, uma fila de jobs remanescentes é verificada em
-ordem FIFO. Esse algoritmo resulta na Figura 8.45(b).
+Um algoritmo de escalonamento melhor evita bloqueio de cabeça de fila saltando jobs que não cabem e escolhendo o primeiro que couber. Sempre que um job termina, uma fila de jobs remanescentes é verificada em rdem FIFO. Esse algoritmo resulta na Figura 8.45(b).
 
-Um algoritmo de escalonamento ainda mais sofisticado requer que cada job apresentado especifique seu for-
-mato, isto é, quantas CPUs ele quer durante quantos minutos. Com essa informação, o escalonador de jobs pode
-tentar montar um esquema em lajotas com o tempo da CPU. Esse esquema é especialmente eficaz quando os jobs
-são apresentados durante o dia para execução à noite, de modo que o escalonador tem todas as informações sobre
-os jobs com antecedência e pode executá-los na melhor ordem, como ilustrado na Figura 8.45(c).
+Um algoritmo de escalonamento ainda mais sofisticado requer que cada job apresentado especifique seu formato, isto é, quantas CPUs ele quer durante quantos minutos. Com essa informação, o escalonador de jobs pode tentar montar um esquema em lajotas com o tempo da CPU. Esse esquema é especialmente eficaz quando os jobs são apresentados durante o dia para execução à noite, de modo que o escalonador tem todas as informações sobre os jobs com antecedência e pode executá-los na melhor ordem, como ilustrado na Figura 8.45(c).
+
 ## 8.4.6 Memória compartilhada no nível de aplicação
-Algo que deve ficar claro por nossos exemplos é que os multicomputadores podem ser ampliados para tama-
-nhos maiores do que os multiprocessadores. Essa realidade levou ao desenvolvimento de sistemas de troca de
-mensagens como a MPI. Muitos programadores não apreciam esse modelo e gostariam de ter a ilusão de memória
-compartilhada, ainda que ela não estivesse realmente ali. Atingir esse objetivo seria o melhor de ambos os mun-
-dos: hardware grande e barato (pelo menos, por nó), além de facilidade de programação. Esse é Santo Graal da
-computação paralela.
+Algo que deve ficar claro por nossos exemplos é que os multicomputadores podem ser ampliados para tamanhos maiores do que os multiprocessadores. Essa realidade levou ao desenvolvimento de sistemas de troca de mensagens como a MPI. Muitos programadores não apreciam esse modelo e gostariam de ter a ilusão de memória
+compartilhada, ainda que ela não estivesse realmente ali. Atingir esse objetivo seria o melhor de ambos os mundos: hardware grande e barato (pelo menos, por nó), além de facilidade de programação. Esse é Santo Graal da computação paralela.
 
-Muitos pesquisadores concluíram que, embora a capacidade de ampliação da memória compartilhada no
-nível da arquitetura não seja boa, pode haver outros modos de alcançar o mesmo objetivo. Pela Figura 8.21, vemos que há outros níveis nos quais uma memória compartilhada pode ser introduzida. Nas seções seguintes,
-examinaremos alguns modos pelos quais a memória compartilhada pode ser introduzida em um multicomputa-
-dor no modelo de programação, sem estar presente no nível do hardware.
+Muitos pesquisadores concluíram que, embora a capacidade de ampliação da memória compartilhada no nível da arquitetura não seja boa, pode haver outros modos de alcançar o mesmo objetivo. Pela Figura 8.21, vemos que há outros níveis nos quais uma memória compartilhada pode ser introduzida. Nas seções seguintes,
+examinaremos alguns modos pelos quais a memória compartilhada pode ser introduzida em um multicomputador no modelo de programação, sem estar presente no nível do hardware.
 
 **• Memória compartilhada distribuída**
-Uma classe de sistema de memória compartilhada no nível de aplicação é o sistema baseado em páginas.
-É conhecido pelo nome DSM (Distributed Shared Memory – memória compartilhada distribuída). A ideia é
-simples: um conjunto de CPUs em um multicomputador compartilha um espaço de endereço virtual paginado.
-Na versão mais simples, cada página é mantida na RAM de exatamente uma CPU. Na Figura 8.46(a), vemos um
-espaço de endereço virtual compartilhado que consiste em 16 páginas, distribuídas por quatro CPUs.
+Uma classe de sistema de memória compartilhada no nível de aplicação é o sistema baseado em páginas. É conhecido pelo nome DSM (Distributed Shared Memory – memória compartilhada distribuída). A ideia é simples: um conjunto de CPUs em um multicomputador compartilha um espaço de endereço virtual paginado. Na versão mais simples, cada página é mantida na RAM de exatamente uma CPU. Na Figura 8.46(a), vemos um espaço de endereço virtual compartilhado que consiste em 16 páginas, distribuídas por quatro CPUs.
 
-Quando uma CPU referencia uma página em sua própria RAM local, a escrita ou leitura apenas ocorre, sem
-mais demora. Contudo, quando referencia uma página em uma memória remota, obtém uma falta de página.
-Só que, em vez de a página faltante ser trazida do disco, o sistema de execução ou o sistema operacional envia
-uma mensagem ao nó que contém a página ordenando que ele a desmapeie e a envie. Após a página chegar, ela
-é mapeada e a instrução que falta é reiniciada, exatamente como uma falta de página normal. Na Figura 8.46(b),
-vemos a situação após a CPU 0 ter sofrido uma falta na página 10: ela é movida da CPU 1 para a CPU 0.
+Quando uma CPU referencia uma página em sua própria RAM local, a escrita ou leitura apenas ocorre, sem mais demora. Contudo, quando referencia uma página em uma memória remota, obtém uma falta de página. Só que, em vez de a página faltante ser trazida do disco, o sistema de execução ou o sistema operacional envia
+uma mensagem ao nó que contém a página ordenando que ele a desmapeie e a envie. Após a página chegar, ela é mapeada e a instrução que falta é reiniciada, exatamente como uma falta de página normal. Na Figura 8.46(b), vemos a situação após a CPU 0 ter sofrido uma falta na página 10: ela é movida da CPU 1 para a CPU 0.
 
 **• Figura 8.46 - Espaço de endereço virtual que consiste em 16 páginas distribuídas por quatro nós de um multicomputador. (a) Situação inicial. (b) Após a CPU 0 referenciar a página 10. (c) Após a CPU 1 referenciar a página 10, neste caso considerando que ela é uma página somente de leitura.**
 A imagem demonstra como 16 páginas de memória virtual são distribuídas entre quatro nós independentes, cada um com sua própria CPU e memória física.
@@ -3035,61 +2687,30 @@ A imagem demonstra como 16 páginas de memória virtual são distribuídas entre
 
  - (c) Replicação para Leitura: Se a página for configurada como somente leitura, o sistema pode simplesmente replicá-la. Assim, tanto a CPU 0 quanto a CPU 1 podem manter cópias locais da página 10 simultaneamente, reduzindo o tráfego na rede.
 
-Essa ideia básica foi executada pela primeira vez no IVY (Li e Hudak, 1989). Ela proporciona uma memória
-totalmente compartilhada e sequencialmente consistente em um multicomputador. Contudo, há muitas otimi-
-zações possíveis para melhorar o desempenho. A primeira, presente no IVY, é permitir que as páginas marcadas
-como somente de leitura estejam presentes em vários nós ao mesmo tempo. Assim, quando ocorre uma falta de
-página, uma cópia dela é enviada para a máquina onde ocorreu a falta, mas a original fica onde está, já que não há
-nenhum perigo de conflitos. A situação de duas CPUs que compartilham uma página somente de leitura (página
-10) é ilustrada na Figura 8.46(c).
+Essa ideia básica foi executada pela primeira vez no IVY (Li e Hudak, 1989). Ela proporciona uma memória totalmente compartilhada e sequencialmente consistente em um multicomputador. Contudo, há muitas otimizações possíveis para melhorar o desempenho. A primeira, presente no IVY, é permitir que as páginas marcadas
+como somente de leitura estejam presentes em vários nós ao mesmo tempo. Assim, quando ocorre uma falta de página, uma cópia dela é enviada para a máquina onde ocorreu a falta, mas a original fica onde está, já que não há nenhum perigo de conflitos. A situação de duas CPUs que compartilham uma página somente de leitura (página 10) é ilustrada na Figura 8.46(c).
 
-Mesmo com essa otimização, o desempenho muitas vezes é inaceitável, em especial quando um processo
-está escrevendo ativamente algumas palavras no topo de alguma página e outro processo em uma CPU diferente está
-escrevendo ativamente algumas palavras no final da página. Visto que só existe uma cópia da página, ela ficará
+Mesmo com essa otimização, o desempenho muitas vezes é inaceitável, em especial quando um processo está escrevendo ativamente algumas palavras no topo de alguma página e outro processo em uma CPU diferente está escrevendo ativamente algumas palavras no final da página. Visto que só existe uma cópia da página, ela ficará
 em constante ir e vir, uma situação conhecida como falso compartilhamento.
 
-O problema do falso compartilhamento pode ser tratado de várias maneiras. No sistema Treadmarks, por
-exemplo, a memória sequencialmente consistente é abandonada em favor da consistência de liberação (Amza,
-1996). Páginas que podem ser escritas conseguem estar presentes em múltiplos nós ao mesmo tempo, mas, antes
-de fazer uma escrita, um processo deve primeiro realizar uma operação acquire para sinalizar sua intenção. Nesse
-ponto, todas as cópias, exceto a mais recente, são invalidadas. Nenhuma outra cópia pode ser feita até que seja
-executada a release correspondente, quando então a página pode ser compartilhada novamente.
+O problema do falso compartilhamento pode ser tratado de várias maneiras. No sistema Treadmarks, por exemplo, a memória sequencialmente consistente é abandonada em favor da consistência de liberação (Amza, 1996). Páginas que podem ser escritas conseguem estar presentes em múltiplos nós ao mesmo tempo, mas, antes
+de fazer uma escrita, um processo deve primeiro realizar uma operação acquire para sinalizar sua intenção. Nesse ponto, todas as cópias, exceto a mais recente, são invalidadas. Nenhuma outra cópia pode ser feita até que seja executada a release correspondente, quando então a página pode ser compartilhada novamente.
 
-Uma segunda otimização feita em Treadmarks é mapear inicialmente cada página que pode ser escrita, em
-modo somente de leitura. Quando a página é escrita pela primeira vez, ocorre uma falha de proteção e o sistema
-faz uma cópia da página, denominada gêmea. Então, a página original é mapeada como de leitura-escrita e as
-escritas subsequentes podem prosseguir a toda velocidade. Quando ocorrer uma falta de página remota mais
-tarde, e a página tiver de ser despachada para onde ocorreu a falta, é realizada uma comparação palavra por
-palavra entre a página corrente e a gêmea. Somente as palavras que foram alteradas são enviadas, o que reduz
-o tamanho das mensagens.
+Uma segunda otimização feita em Treadmarks é mapear inicialmente cada página que pode ser escrita, em modo somente de leitura. Quando a página é escrita pela primeira vez, ocorre uma falha de proteção e o sistema faz uma cópia da página, denominada gêmea. Então, a página original é mapeada como de leitura-escrita e as
+escritas subsequentes podem prosseguir a toda velocidade. Quando ocorrer uma falta de página remota mais tarde, e a página tiver de ser despachada para onde ocorreu a falta, é realizada uma comparação palavra por palavra entre a página corrente e a gêmea. Somente as palavras que foram alteradas são enviadas, o que reduz o tamanho das mensagens.
 
-Quando ocorre uma falta de página, a página que está faltando tem de ser localizada. Há várias soluções pos-
-síveis, incluindo as usadas em máquinas NUMA e COMA, tais como diretórios (residentes). Na verdade, muitas
-das soluções usadas em DSM também são aplicáveis a NUMA e COMA porque, na realidade, DSM é apenas uma
+Quando ocorre uma falta de página, a página que está faltando tem de ser localizada. Há várias soluções possíveis, incluindo as usadas em máquinas NUMA e COMA, tais como diretórios (residentes). Na verdade, muitas das soluções usadas em DSM também são aplicáveis a NUMA e COMA porque, na realidade, DSM é apenas uma
 execução em software de NUMA ou COMA na qual cada página é tratada como uma linha de cache.
 
-DSM é uma área de pesquisa muito promissora. Entre os sistemas interessantes citamos CASHMERE
-(Kontothanassis et al., 1997; e Stets et al., 1997), CRL (Johnson et al., 1995), Shasta (Scales et al., 1996) e
-Treadmarks (Amza, 1996; e Lu et al., 1997).
+DSM é uma área de pesquisa muito promissora. Entre os sistemas interessantes citamos CASHMERE (Kontothanassis et al., 1997; e Stets et al., 1997), CRL (Johnson et al., 1995), Shasta (Scales et al., 1996) e Treadmarks (Amza, 1996; e Lu et al., 1997).
 
 **• Linda**
-Sistemas DSM baseados em páginas como o IVY e o Treadmarks usam o hardware MMU para causar
-exceções de acesso às páginas faltantes. Embora calcular e enviar diferenças em vez da página inteira ajude,
-permanece o fato de que páginas não são uma unidade natural para compartilhamento, portanto, foram
-tentadas outras técnicas.
+Sistemas DSM baseados em páginas como o IVY e o Treadmarks usam o hardware MMU para causar exceções de acesso às páginas faltantes. Embora calcular e enviar diferenças em vez da página inteira ajude, permanece o fato de que páginas não são uma unidade natural para compartilhamento, portanto, foram tentadas outras técnicas.
 
-Uma delas é Linda, que fornece processos em várias máquinas com uma memória compartilhada distribuída
-com alto grau de estruturação (Carriero e Gelernter, 1989). Essa memória é acessada por meio de um pequeno
-conjunto de operações primitivas que podem ser adicionadas a linguagens existentes, como C e FORTRAN, para
+Uma delas é Linda, que fornece processos em várias máquinas com uma memória compartilhada distribuída com alto grau de estruturação (Carriero e Gelernter, 1989). Essa memória é acessada por meio de um pequeno conjunto de operações primitivas que podem ser adicionadas a linguagens existentes, como C e FORTRAN, para
 formar linguagens paralelas, nesse caso, C-Linda e FORTRAN-Linda.
 
-O conceito unificador fundamental de Linda é o de um espaço de tuplas abstrato, que é global para o sistema
-inteiro e acessível a todos os seus processos. O espaço de tuplas é como uma memória global compartilhada, só
-que com certa estrutura embutida. O espaço de tuplas contém certa quantidade de tuplas, cada uma delas con-
-sistindo em um ou mais campos. Para C-Linda, os tipos de campos incluem inteiros, inteiros longos e números
-de ponto flutuante, bem como tipos compostos como vetores (incluindo cadeias) e estruturas (mas não outras
-tuplas). A Figura 8.47 mostra três exemplos de tuplas.
-
+O conceito unificador fundamental de Linda é o de um espaço de tuplas abstrato, que é global para o sistema inteiro e acessível a todos os seus processos. O espaço de tuplas é como uma memória global compartilhada, só que com certa estrutura embutida. O espaço de tuplas contém certa quantidade de tuplas, cada uma delas consistindo em um ou mais campos. Para C-Linda, os tipos de campos incluem inteiros, inteiros longos e números de ponto flutuante, bem como tipos compostos como vetores (incluindo cadeias) e estruturas (mas não outras tuplas). A Figura 8.47 mostra três exemplos de tuplas.
 
 **• Figura 8.47 - Três tuplas Linda.**
 
@@ -3103,7 +2724,7 @@ São quatro as operações efetuadas em tuplas. A primeira, out, coloca uma tupl
 
 coloca a tupla (“abc”, 2, 5) no espaço de tuplas. Os campos de out normalmente são constantes, variáveis ou expressões, como em
 
-out(“matrix–1”, i, j, 3.14);
+    out(“matrix–1”, i, j, 3.14);
 
 que produz uma tupla com quatro campos, o segundo e terceiro dos quais são determinados pelos valores correntes das variáveis i e j.
 
@@ -3145,16 +2766,9 @@ A primitiva in busca uma tupla que coincida com o padrão fornecido (chamado de 
 
  - Bloqueio: Se nenhuma tupla coincidente for encontrada, o processo que executou o in fica bloqueado até que algum outro processo execute um out com uma tupla compatível.
 
-Essa operação “pesquisa” o espaço de tuplas em busca de uma composta por uma cadeia “abc”, pelo inteiro 2,
-e por um terceiro campo que contém qualquer inteiro (considerando que i é um inteiro). Se encontrada, ela é
-retirada do espaço de tuplas e o valor do terceiro campo é atribuído à variável i. A combinação e a remoção são
-atômicas, portanto, se dois processos executarem a mesma operação in simultaneamente, só um deles será bem-
--sucedido, a menos que duas ou mais tuplas compatíveis estejam presentes. O espaço de tuplas pode até conter
-múltiplas cópias da mesma tupla.
+Essa operação “pesquisa” o espaço de tuplas em busca de uma composta por uma cadeia “abc”, pelo inteiro 2, e por um terceiro campo que contém qualquer inteiro (considerando que i é um inteiro). Se encontrada, ela é retirada do espaço de tuplas e o valor do terceiro campo é atribuído à variável i. A combinação e a remoção são atômicas, portanto, se dois processos executarem a mesma operação in simultaneamente, só um deles será bem sucedido, a menos que duas ou mais tuplas compatíveis estejam presentes. O espaço de tuplas pode até conter múltiplas cópias da mesma tupla.
 
-O algoritmo de combinação usado por in é direto. Os campos da primitiva in, denominados gabarito, são
-comparados, conceitualmente, com os campos correspondentes de toda tupla que estiver no espaço de tuplas.
-Ocorre uma combinação se todas as três condições a seguir forem cumpridas:
+O algoritmo de combinação usado por in é direto. Os campos da primitiva in, denominados gabarito, são comparados, conceitualmente, com os campos correspondentes de toda tupla que estiver no espaço de tuplas. Ocorre uma combinação se todas as três condições a seguir forem cumpridas:
 
     1. O gabarito e a tupla têm o mesmo número de campos.
 
@@ -3162,84 +2776,46 @@ Ocorre uma combinação se todas as três condições a seguir forem cumpridas:
 
     3. Cada constante ou variável no gabarito é compatível com seu campo de tupla.
 
-Parâmetros formais, indicados por um ponto de interrogação seguido por um nome ou tipo de variável, não
-participam da combinação (exceto para verificação do tipo), embora os que contêm um nome de variável sejam
-atribuídos após uma combinação bem-sucedida.
+Parâmetros formais, indicados por um ponto de interrogação seguido por um nome ou tipo de variável, não participam da combinação (exceto para verificação do tipo), embora os que contêm um nome de variável sejam atribuídos após uma combinação bem-sucedida.
 
-Se nenhuma tupla compatível estiver presente, o processo de chamada é suspenso até que outro processo
-insira a tupla necessária, quando então o processo chamador é automaticamente revivido e recebe a nova tupla. O
-fato de os processos bloquearem e desbloquearem automaticamente significa que, se um processo estiver prestes
-a produzir uma tupla e outro estiver prestes a recebê-la, não importa qual deles vai ocorrer primeiro.
+Se nenhuma tupla compatível estiver presente, o processo de chamada é suspenso até que outro processo insira a tupla necessária, quando então o processo chamador é automaticamente revivido e recebe a nova tupla. O fato de os processos bloquearem e desbloquearem automaticamente significa que, se um processo estiver prestes a produzir uma tupla e outro estiver prestes a recebê-la, não importa qual deles vai ocorrer primeiro.
 
-Além de out e in, Linda também tem uma primitiva read, que é igual a in, exceto que não retira a tupla do
-espaço de tuplas. Também há uma primitiva eval, que faz com que seus parâmetros sejam avaliados em paralelo
-e a tupla resultante seja depositada no espaço de tuplas. Esse mecanismo pode ser usado para efetuar um cálculo
-arbitrário. É assim que processos paralelos são criados em Linda.
+Além de out e in, Linda também tem uma primitiva read, que é igual a in, exceto que não retira a tupla do espaço de tuplas. Também há uma primitiva eval, que faz com que seus parâmetros sejam avaliados em paralelo e a tupla resultante seja depositada no espaço de tuplas. Esse mecanismo pode ser usado para efetuar um cálculo arbitrário. É assim que processos paralelos são criados em Linda.
 
-Um paradigma de programação comum em Linda é o modelo operário replicado. Esse modelo é baseado na
-ideia da sacola de tarefas cheia de jobs por fazer. O processo principal inicia out executando um laço que contém 
+Um paradigma de programação comum em Linda é o modelo operário replicado. Esse modelo é baseado na ideia da sacola de tarefas cheia de jobs por fazer. O processo principal inicia out executando um laço que contém 
 
     out(“task-bag”, job);
 
-no qual uma descrição de job diferente é produzida para o espaço de tuplas a cada iteração. Cada operário começa
-obtendo uma tupla de descrição de job usando
+no qual uma descrição de job diferente é produzida para o espaço de tuplas a cada iteração. Cada operário começa obtendo uma tupla de descrição de job usando
 
     in(“task-bag”, ?job);
 
-que ele então executa. Quando termina, pega outra. Além disso, novos trabalhos podem ser colocados na sacola
-de tarefas durante a execução. Desse modo simples, o trabalho é dividido dinamicamente entre os operários, e
-cada operário é mantido ocupado o tempo todo, e tudo com relativamente pouca sobrecarga.
+que ele então executa. Quando termina, pega outra. Além disso, novos trabalhos podem ser colocados na sacola de tarefas durante a execução. Desse modo simples, o trabalho é dividido dinamicamente entre os operários, e cada operário é mantido ocupado o tempo todo, e tudo com relativamente pouca sobrecarga.
 
-Existem várias implementações de Linda em sistemas multicomputadores. Em todas elas, uma questão fun-
-damental é como distribuir as tuplas entre as máquinas e como localizá-las quando necessário. Entre as várias
-possibilidades estão broadcasting e diretórios. A replicação também é uma questão importante. Esses pontos são
-discutidos em Bjornson, 1993.
+Existem várias implementações de Linda em sistemas multicomputadores. Em todas elas, uma questão fundamental é como distribuir as tuplas entre as máquinas e como localizá-las quando necessário. Entre as várias possibilidades estão broadcasting e diretórios. A replicação também é uma questão importante. Esses pontos são discutidos em Bjornson, 1993.
 
 **• Orca**
-Uma abordagem um pouco diferente para a memória compartilhada no nível de aplicação em um multi-
-computador é usar objetos como unidade de compartilhamento, em vez de apenas tuplas. Objetos consistem em
-estado interno (oculto) mais métodos para operar naquele estado. Por não permitir que o programador acesse
-o estado diretamente, são abertas muitas possibilidades para permitir o compartilhamento por máquinas que não
-têm memória física compartilhada.
-
-O sistema baseado em objetos que dá a ilusão de memória compartilhada em sistemas multicomputadores é
-denominado Orca (Bal, 1991; Bal et al., 1992; e Bal e Tanenbaum, 1988). Orca é uma linguagem de programação
-tradicional (baseada em Modula 2), à qual foram adicionadas duas novas características: objetos e a capacidade
-de criar novos processos. Um objeto Orca é um tipo de dados abstrato, semelhante a um objeto em Java ou um
-pacote em Ada. Ele encapsula estruturas de dados internas e métodos escritos pelo usuário, denominados opera-
-ções. Objetos são passivos, isto é, não contêm threads para os quais podem ser enviadas mensagens. Em vez disso,
+Uma abordagem um pouco diferente para a memória compartilhada no nível de aplicação em um multicomputador é usar objetos como unidade de compartilhamento, em vez de apenas tuplas. Objetos consistem em estado interno (oculto) mais métodos para operar naquele estado. Por não permitir que o programador acesse o estado diretamente, são abertas muitas possibilidades para permitir o compartilhamento por máquinas que não têm memória física compartilhada. O sistema baseado em objetos que dá a ilusão de memória compartilhada em sistemas multicomputadores é denominado Orca (Bal, 1991; Bal et al., 1992; e Bal e Tanenbaum, 1988). Orca é uma linguagem de programação tradicional (baseada em Modula 2), à qual foram adicionadas duas novas características: objetos e a capacidade de criar novos processos. Um objeto Orca é um tipo de dados abstrato, semelhante a um objeto em Java ou um pacote em Ada. Ele encapsula estruturas de dados internas e métodos escritos pelo usuário, denominados operações. Objetos são passivos, isto é, não contêm threads para os quais podem ser enviadas mensagens. Em vez disso,
 processos acessam os dados internos de um objeto invocando seus métodos.
 
-Cada método Orca consiste em uma lista de pares (guarda, bloco de declarações). Uma guarda é uma
-expressão booleana que não contém nenhum efeito colateral, ou a guarda vazia, que é o mesmo que o valor true.
-Quando uma operação é invocada, todas as suas guardas são avaliadas em uma ordem não especificada. Se todas
-elas forem false, o processo invocador é atrasado até que uma se torne true. Quando é encontrada uma guarda que
-é avaliada como true, o bloco de declarações que vem depois dela é executado. A Figura 8.48 retrata um objeto
-stack com duas operações, push e pop.
+Cada método Orca consiste em uma lista de pares (guarda, bloco de declarações). Uma guarda é uma expressão booleana que não contém nenhum efeito colateral, ou a guarda vazia, que é o mesmo que o valor true. Quando uma operação é invocada, todas as suas guardas são avaliadas em uma ordem não especificada. Se todas
+elas forem false, o processo invocador é atrasado até que uma se torne true. Quando é encontrada uma guarda que é avaliada como true, o bloco de declarações que vem depois dela é executado. A Figura 8.48 retrata um objeto stack com duas operações, push e pop.
 
 Uma vez definida stack, podem-se declarar variáveis desse tipo, como em
 
     s, t: stack;
 
-que cria dois objetos stack e inicializa a variável top em cada um deles como 0. A variável inteira k pode ser pas-
-sada para a pilha s pela declaração
+que cria dois objetos stack e inicializa a variável top em cada um deles como 0. A variável inteira k pode ser passada para a pilha s pela declaração
 
     s$push(k);
 
-e assim por diante. A operação pop tem uma guarda, portanto, uma tentativa de retirar uma variável de uma pilha
-vazia suspenderá o processo chamador até que outro processo tenha passado alguma coisa para a pilha.
+e assim por diante. A operação pop tem uma guarda, portanto, uma tentativa de retirar uma variável de uma pilha vazia suspenderá o processo chamador até que outro processo tenha passado alguma coisa para a pilha.
 
-Orca tem uma declaração fork para criar um novo processo em um processador especificado pelo usuário. O
-novo processo executa o procedimento nomeado na declaração fork. Parâmetros, incluindo objetos, podem ser
-passados ao novo processo, e é assim que objetos ficam distribuídos entre as máquinas. Por exemplo, a declaração
+Orca tem uma declaração fork para criar um novo processo em um processador especificado pelo usuário. O novo processo executa o procedimento nomeado na declaração fork. Parâmetros, incluindo objetos, podem ser passados ao novo processo, e é assim que objetos ficam distribuídos entre as máquinas. Por exemplo, a declaração
 
     **for i in 1 .. n do fork foobar(s) on i; od;**
 
-gera um novo processo em cada uma das máquinas, de 1 a n, executando o programa foobar em cada uma delas.
-À medida que esses n novos processos (e o pai) executam em paralelo, todos eles podem passar itens para a
-pilha compartilhada e retirá-los da pilha como se todos eles estivessem executando em um multiprocessador de
-memória compartilhada. Sustentar a ilusão de memória compartilhada onde ela realmente não existe é tarefa do
-sistema de run-time.
+gera um novo processo em cada uma das máquinas, de 1 a n, executando o programa foobar em cada uma delas. À medida que esses n novos processos (e o pai) executam em paralelo, todos eles podem passar itens para a pilha compartilhada e retirá-los da pilha como se todos eles estivessem executando em um multiprocessador de memória compartilhada. Sustentar a ilusão de memória compartilhada onde ela realmente não existe é tarefa do sistema de run-time.
 
 Object implementation stack;
 
@@ -3270,105 +2846,40 @@ begin
   top := 0;  # Inicialização
 end;
 
-Operações sobre objetos compartilhados são atômicas e sequencialmente consistentes. O sistema garante
-que, se vários processos efetuarem operações no mesmo objeto compartilhado quase de modo simultâneo, o sis-
-tema escolhe alguma ordem e todos os processos veem a mesma ordem de eventos.
+Operações sobre objetos compartilhados são atômicas e sequencialmente consistentes. O sistema garante que, se vários processos efetuarem operações no mesmo objeto compartilhado quase de modo simultâneo, o sistema escolhe alguma ordem e todos os processos veem a mesma ordem de eventos.
 
-Orca integra dados compartilhados e sincronização de um modo que não está presente em sistemas DSM
-baseados em paginação. Dois tipos de sincronização são necessários em programas paralelos. O primeiro tipo é
-sincronização por exclusão mútua, para evitar que dois processos executem a mesma região crítica ao mesmo
-tempo. Para todos os efeitos, cada operação sobre um objeto compartilhado em Orca é como uma região crítica,
-porque o sistema garante que o resultado final é o mesmo que seria se todas as regiões críticas fossem executa-
-das uma por vez (isto é, sequencialmente). Nesse aspecto, um objeto Orca é como uma forma distribuída de um
-monitor (Hoare, 1975).
+Orca integra dados compartilhados e sincronização de um modo que não está presente em sistemas DSM baseados em paginação. Dois tipos de sincronização são necessários em programas paralelos. O primeiro tipo é sincronização por exclusão mútua, para evitar que dois processos executem a mesma região crítica ao mesmo
+tempo. Para todos os efeitos, cada operação sobre um objeto compartilhado em Orca é como uma região crítica, porque o sistema garante que o resultado final é o mesmo que seria se todas as regiões críticas fossem executadas uma por vez (isto é, sequencialmente). Nesse aspecto, um objeto Orca é como uma forma distribuída de um monitor (Hoare, 1975).
 
-O outro tipo é a sincronização de condição, na qual um processo bloqueia esperando por alguma condição
-válida. Em Orca, a sincronização de condição é feita com guardas. No exemplo da Figura 8.48, um processo que
-tente retirar um item de uma pilha vazia será suspenso até que a pilha não esteja mais vazia. Afinal, você não pode
-retirar uma palavra de uma pilha vazia.
+O outro tipo é a sincronização de condição, na qual um processo bloqueia esperando por alguma condição válida. Em Orca, a sincronização de condição é feita com guardas. No exemplo da Figura 8.48, um processo que tente retirar um item de uma pilha vazia será suspenso até que a pilha não esteja mais vazia. Afinal, você não pode retirar uma palavra de uma pilha vazia.
 
-O sistema de run-time de Orca trata da replicação de objeto, migração, consistência e invocação de operação.
-Cada objeto pode estar em um de dois estados: cópia única ou replicado. Um objeto em estado de cópia única exis-
-te somente em uma máquina, portanto, todas as requisições para ele são enviadas para essa máquina. Um objeto
-replicado está presente em todas as máquinas que contêm um processo que o está usando, o que facilita as opera-
-ções de leitura (já que elas podem ser feitas localmente) à custa de encarecer as atualizações. Quando é executada
-uma operação que modifica um objeto replicado, em primeiro lugar ela deve obter um número de sequência dado por um processo centralizado que os emite. Então, é enviada uma mensagem a cada máquina que tem uma cópia do
-objeto, dizendo a ela que execute a operação. Uma vez que todas essas atualizações portam números de sequência,
-todas as máquinas executam as operações na mesma ordem, o que garante consistência sequencial.
+O sistema de run-time de Orca trata da replicação de objeto, migração, consistência e invocação de operação. Cada objeto pode estar em um de dois estados: cópia única ou replicado. Um objeto em estado de cópia única existe somente em uma máquina, portanto, todas as requisições para ele são enviadas para essa máquina. Um objeto replicado está presente em todas as máquinas que contêm um processo que o está usando, o que facilita as operações de leitura (já que elas podem ser feitas localmente) à custa de encarecer as atualizações. Quando é executada uma operação que modifica um objeto replicado, em primeiro lugar ela deve obter um número de sequência dado por um processo centralizado que os emite. Então, é enviada uma mensagem a cada máquina que tem uma cópia do objeto, dizendo a ela que execute a operação. Uma vez que todas essas atualizações portam números de sequência, todas as máquinas executam as operações na mesma ordem, o que garante consistência sequencial.
 
 ## 8.4.7 Desempenho
-O ponto principal da construção de um computador paralelo é fazer com que ele execute mais rápido do que
-uma máquina com um único processador. Se ele não cumprir esse simples objetivo, não vale a pena tê-lo. Além disso,
-ele deve cumprir o objetivo de uma maneira eficiente em relação ao custo. Uma máquina que é duas vezes mais rápida
-do que um uniprocessador a 50 vezes o custo muito provavelmente não será um sucesso de vendas. Nesta seção,
-examinaremos algumas das questões de desempenho associadas a arquiteturas de computadores paralelos.
+O ponto principal da construção de um computador paralelo é fazer com que ele execute mais rápido do que uma máquina com um único processador. Se ele não cumprir esse simples objetivo, não vale a pena tê-lo. Além disso, ele deve cumprir o objetivo de uma maneira eficiente em relação ao custo. Uma máquina que é duas vezes mais rápida do que um uniprocessador a 50 vezes o custo muito provavelmente não será um sucesso de vendas. Nesta seção, examinaremos algumas das questões de desempenho associadas a arquiteturas de computadores paralelos.
 
 **• Métrica de hardware**
-Do ponto de vista do hardware, a métrica do desempenho que interessa são as velocidades de CPU e E/S
-e o desempenho da rede de interconexão. As velocidades de CPU e E/S são as mesmas de um uniprocessador,
-portanto, os parâmetros fundamentais de interesse em um sistema paralelo são os associados com dois itens fun-
+Do ponto de vista do hardware, a métrica do desempenho que interessa são as velocidades de CPU e E/S e o desempenho da rede de interconexão. As velocidades de CPU e E/S são as mesmas de um uniprocessador, portanto, os parâmetros fundamentais de interesse em um sistema paralelo são os associados com dois itens fun-
 damentais: latência e largura de banda, que agora examinaremos um por vez.
 
-A latência de ida e volta é o tempo que leva para a CPU enviar um pacote e obter uma resposta. Se o pacote
-for enviado a uma memória, então a latência mede o tempo que leva para ler ou escrever uma palavra ou bloco
-de palavras. Se ele for enviado a outra CPU, a latência mede o tempo de comunicação entre processadores para
-pacotes daquele tamanho. Em geral, a latência que interessa é a de pacotes mínimos, muitas vezes uma única
-palavra ou uma pequena linha de cache.
+A latência de ida e volta é o tempo que leva para a CPU enviar um pacote e obter uma resposta. Se o pacote for enviado a uma memória, então a latência mede o tempo que leva para ler ou escrever uma palavra ou bloco de palavras. Se ele for enviado a outra CPU, a latência mede o tempo de comunicação entre processadores para pacotes daquele tamanho. Em geral, a latência que interessa é a de pacotes mínimos, muitas vezes uma única palavra ou uma pequena linha de cache.
 
-A latência é composta de vários fatores e é diferente para interconexões de comutação de circuitos, armaze-
-namento e repasse (store-and-forward), atalho virtual e wormhole roteada. No caso da comutação de circuitos, a
-latência é a soma do tempo de estabelecimento com o tempo de transmissão. Para estabelecer um circuito é pre-
-ciso enviar um pacote de sondagem para reservar recursos e então devolver um relatório. Tão logo isso aconteça,
-o pacote de dados tem de ser montado. Quando o pacote estiver pronto, os bits podem fluir a toda velocidade,
-portanto, se o tempo total de montagem for Ts, o tamanho do pacote é p bits, e a largura de banda b bits/s, a latên-
-cia de uma via é Ts + p/b. Se o circuito for full duplex, não há tempo de estabelecimento para a resposta, portanto,
-a latência mínima para enviar um pacote de p bits e obter uma resposta de p bits é Ts + 2p/b s.
+A latência é composta de vários fatores e é diferente para interconexões de comutação de circuitos, armazenamento e repasse (store-and-forward), atalho virtual e wormhole roteada. No caso da comutação de circuitos, a latência é a soma do tempo de estabelecimento com o tempo de transmissão. Para estabelecer um circuito é preciso enviar um pacote de sondagem para reservar recursos e então devolver um relatório. Tão logo isso aconteça, o pacote de dados tem de ser montado. Quando o pacote estiver pronto, os bits podem fluir a toda velocidade, portanto, se o tempo total de montagem for Ts, o tamanho do pacote é p bits, e a largura de banda b bits/s, a latência de uma via é Ts + p/b. Se o circuito for full duplex, não há tempo de estabelecimento para a resposta, portanto, a latência mínima para enviar um pacote de p bits e obter uma resposta de p bits é Ts + 2p/b s.
 
-Na comutação de pacotes não é necessário enviar antes um pacote de sondagem ao destino, mas ainda há
-algum tempo interno de estabelecimento para montar o pacote, Ta. Nesse caso, o tempo de transmissão de uma
-via é Ta + p/b, mas isso é apenas o tempo de levar o pacote até o primeiro switch. Há um atraso finito dentro do
-switch, por exemplo, Td, e então o processo é repetido no switch seguinte e assim por diante. O atraso Td é com-
-posto do tempo de processamento mais o atraso de fila à espera da liberação de uma porta de saída. Se houver n
-switches, então a latência total de uma via é dada pela fórmula Ta + n(p/b + Td) + p/b, cujo termo final se deve à
-cópia do último switch até o destino.
+Na comutação de pacotes não é necessário enviar antes um pacote de sondagem ao destino, mas ainda há algum tempo interno de estabelecimento para montar o pacote, Ta. Nesse caso, o tempo de transmissão de uma via é Ta + p/b, mas isso é apenas o tempo de levar o pacote até o primeiro switch. Há um atraso finito dentro do switch, por exemplo, Td, e então o processo é repetido no switch seguinte e assim por diante. O atraso Td é composto do tempo de processamento mais o atraso de fila à espera da liberação de uma porta de saída. Se houver n switches, então a latência total de uma via é dada pela fórmula Ta + n(p/b + Td) + p/b, cujo termo final se deve à cópia do último switch até o destino.
 
-No melhor caso, as latências de uma via para atalho virtual e roteamento wormhole estão próximas a Ta + p/b
-porque não há nenhum pacote de sondagem para estabelecer um circuito e nenhum atraso de armazenamento e
-repasse. Basicamente, é o tempo inicial de estabelecimento para montar o pacote, mais o tempo para empurrar
-os bits porta afora. Em todos os casos, é preciso adicionar o atraso de propagação, mas ele costuma ser pequeno.
+No melhor caso, as latências de uma via para atalho virtual e roteamento wormhole estão próximas a Ta + p/b porque não há nenhum pacote de sondagem para estabelecer um circuito e nenhum atraso de armazenamento e repasse. Basicamente, é o tempo inicial de estabelecimento para montar o pacote, mais o tempo para empurrar os bits porta afora. Em todos os casos, é preciso adicionar o atraso de propagação, mas ele costuma ser pequeno.
 
-A outra métrica de hardware é a largura de banda. Muitos programas paralelos, em especial em ciências
-naturais, movimentam grande quantidade de dados de um lado para outro, portanto, o número de bytes/s que o
-sistema pode mover é crítico para o desempenho. Há várias métricas para largura de banda. Já vimos uma delas –
-largura de banda de bisseção. Outra é a largura de banda agregada, que é calculada pela simples adição das capa-
-cidades de todos os enlaces. Esse número dá o número máximo de bits que podem estar em trânsito ao mesmo
-tempo. Ainda outra métrica importante é a largura de banda média na saída da CPU. Se cada CPU for capaz de produzir 1 MB/s, de pouco adianta a interconexão ter uma largura de bisseção de 100 GB/s. A comunicação será
-limitada pela quantidade de dados que cada CPU pode produzir.
+A outra métrica de hardware é a largura de banda. Muitos programas paralelos, em especial em ciências naturais, movimentam grande quantidade de dados de um lado para outro, portanto, o número de bytes/s que o sistema pode mover é crítico para o desempenho. Há várias métricas para largura de banda. Já vimos uma delas –
+largura de banda de bisseção. Outra é a largura de banda agregada, que é calculada pela simples adição das capacidades de todos os enlaces. Esse número dá o número máximo de bits que podem estar em trânsito ao mesmo tempo. Ainda outra métrica importante é a largura de banda média na saída da CPU. Se cada CPU for capaz de produzir 1 MB/s, de pouco adianta a interconexão ter uma largura de bisseção de 100 GB/s. A comunicação será limitada pela quantidade de dados que cada CPU pode produzir.
 
-Na prática, conseguir qualquer coisa que ao menos chegue perto da largura de banda teórica é muito difícil.
-Muitas fontes de sobrecarga contribuem para reduzir a capacidade. Por exemplo, há sempre alguma sobrecarga
-por pacote associada a cada pacote: montar o pacote, construir seu cabeçalho e mandá-lo embora. O envio de
-1.024 pacotes de 4 bytes nunca alcançará a mesma largura de banda que o envio de um único pacote de 4.096
-bytes. Infelizmente, para conseguir baixas latências é melhor usar pacotes menores, visto que os grandes blo-
-queiam as linhas e switches por muito tempo. Assim, há um conflito inerente entre conseguir baixas latências
-médias e alta utilização de largura de banda. Para algumas aplicações, uma delas é mais importante que a outra, e
-para outras aplicações pode ser o contrário. Entretanto, vale a pena observar que você sempre pode comprar mais
-largura de banda (instalando mais fios ou fios mais largos), mas não pode obter latências mais baixas. Por isso, em
-geral, é melhor errar para o lado das menores latências possíveis e se preocupar com largura de banda mais tarde.
+Na prática, conseguir qualquer coisa que ao menos chegue perto da largura de banda teórica é muito difícil. Muitas fontes de sobrecarga contribuem para reduzir a capacidade. Por exemplo, há sempre alguma sobrecarga por pacote associada a cada pacote: montar o pacote, construir seu cabeçalho e mandá-lo embora. O envio de
+1.024 pacotes de 4 bytes nunca alcançará a mesma largura de banda que o envio de um único pacote de 4.096 bytes. Infelizmente, para conseguir baixas latências é melhor usar pacotes menores, visto que os grandes bloqueiam as linhas e switches por muito tempo. Assim, há um conflito inerente entre conseguir baixas latências
+médias e alta utilização de largura de banda. Para algumas aplicações, uma delas é mais importante que a outra, e para outras aplicações pode ser o contrário. Entretanto, vale a pena observar que você sempre pode comprar mais largura de banda (instalando mais fios ou fios mais largos), mas não pode obter latências mais baixas. Por isso, em geral, é melhor errar para o lado das menores latências possíveis e se preocupar com largura de banda mais tarde.
 
 **• Métrica de software**
-A métrica de hardware, como a latência e a largura de banda, observa o que o hardware é capaz de fazer. Contudo,
-os usuários têm uma perspectiva diferente. Eles querem saber o ganho de rapidez na execução de seus programas em
-um computador paralelo em vez de em um uniprocessador. Para eles, a métrica fundamental é mais velocidade: quan-
-to mais depressa um programa executa em um sistema de n processadores em comparação com um sistema com um
-só processador. Em geral, os resultados são mostrados em grafos como os da Figura 8.49. Nesse caso, vemos vários
-programas paralelos diferentes que executam em um multicomputador que consiste em 64 CPUs Pentium Pro. Cada
-curva mostra o ganho de velocidade de um programa com k CPUs como uma função de k. O ganho de velocidade
-perfeito é indicado pela linha pontilhada na qual usar k CPUs faz o programa funcionar k vezes mais rápido, para
-qualquer k. Poucos programas conseguem o ganho perfeito de velocidade, mas alguns chegam perto. O problema dos
-N corpos consegue um ótimo paralelismo; o awari (um jogo de tabuleiro africano) se sai razoavelmente bem, mas
-inverter certa matriz de linha do horizonte não chega a mais do que cinco vezes a velocidade original, não importando
-quantas CPUs estejam disponíveis. Os programas e resultados são discutidos em Bal et al., 1998.
+A métrica de hardware, como a latência e a largura de banda, observa o que o hardware é capaz de fazer. Contudo, os usuários têm uma perspectiva diferente. Eles querem saber o ganho de rapidez na execução de seus programas em um computador paralelo em vez de em um uniprocessador. Para eles, a métrica fundamental é mais velocidade: quanto mais depressa um programa executa em um sistema de n processadores em comparação com um sistema com um só processador. Em geral, os resultados são mostrados em grafos como os da Figura 8.49. Nesse caso, vemos vários programas paralelos diferentes que executam em um multicomputador que consiste em 64 CPUs Pentium Pro. Cada curva mostra o ganho de velocidade de um programa com k CPUs como uma função de k. O ganho de velocidade perfeito é indicado pela linha pontilhada na qual usar k CPUs faz o programa funcionar k vezes mais rápido, para qualquer k. Poucos programas conseguem o ganho perfeito de velocidade, mas alguns chegam perto. O problema dos N corpos consegue um ótimo paralelismo; o awari (um jogo de tabuleiro africano) se sai razoavelmente bem, mas
+inverter certa matriz de linha do horizonte não chega a mais do que cinco vezes a velocidade original, não importando quantas CPUs estejam disponíveis. Os programas e resultados são discutidos em Bal et al., 1998.
 
 **• Figura 8.49   Programas reais alcançam menos do que o aumento perfeito de velocidade indicado pela linha pontilhada.**
 
@@ -3401,14 +2912,7 @@ Ao implementar essas lógicas no seu eBook, é vital mostrar que a escalabilidad
 
  - Inversão de Matriz: Mostra um ganho muito baixo que estagna rapidamente. Isso ocorre porque a sobrecarga de comunicação entre os nós (como as trocas de mensagens e sincronização de memória que vimos na Figura 8.46) acaba superando o ganho de processamento.
 
-Parte da razão por que o ganho de velocidade perfeito é quase impossível de alcançar é que quase todos os
-programas têm algum componente sequencial, que costuma ser a fase de incialização, a leitura de dados ou a coleta
-de resultados. Nesse caso, não adianta ter muitas CPUs. Suponha que um programa execute por T segundos em um
-uniprocessador, sendo que uma fração f de seu tempo é código sequencial e uma fração (1 – f) tem potencial para
-paralelismo, como mostra a Figura 8.50(a). Se esse último código puder executar em n CPUs sem nenhuma sobre-
-carga, seu tempo de execução pode ser reduzido de (1 – f)T para (1 – f)T/n na melhor das hipóteses, como mostra a
-Figura 8.50(b). Isso dá um tempo de execução total para as partes sequencial e paralela de fT + (1 – f)T/n. O aumento
-de velocidade é apenas o tempo de execução do programa original, T, dividido pelo novo tempo de execução:
+Parte da razão por que o ganho de velocidade perfeito é quase impossível de alcançar é que quase todos os programas têm algum componente sequencial, que costuma ser a fase de incialização, a leitura de dados ou a coleta de resultados. Nesse caso, não adianta ter muitas CPUs. Suponha que um programa execute por T segundos em um uniprocessador, sendo que uma fração f de seu tempo é código sequencial e uma fração (1 – f) tem potencial para paralelismo, como mostra a Figura 8.50(a). Se esse último código puder executar em n CPUs sem nenhuma sobre- carga, seu tempo de execução pode ser reduzido de (1 – f)T para (1 – f)T/n na melhor das hipóteses, como mostra a Figura 8.50(b). Isso dá um tempo de execução total para as partes sequencial e paralela de fT + (1 – f)T/n. O aumento de velocidade é apenas o tempo de execução do programa original, T, dividido pelo novo tempo de execução:
 
     Aumento de velocidade =     n 
                             1+ (n - 1) f
@@ -3442,33 +2946,18 @@ O diagrama demonstra que o ganho de desempenho de um programa é limitado pela s
 
  - O "Gargalo": Note que, mesmo que você tenha infinitas CPUs (n --> infinito), o tempo total de execução nunca será menor que fT. Se 10% do seu programa for sequencial, você nunca conseguirá um aumento de velocidade superior a 10 vezes, não importa o hardware.
  
- Para f = 0, podemos obter aumento de velocidade linear, mas, para f > 0, o aumento de velocidade perfeito
-não é possível por causa do componente sequencial. Esse resultado é conhecido como lei de Amdahl.
+ Para f = 0, podemos obter aumento de velocidade linear, mas, para f > 0, o aumento de velocidade perfeito não é possível por causa do componente sequencial. Esse resultado é conhecido como lei de Amdahl.
 
-A lei de Amdahl não é a única razão por que o aumento perfeito de velocidade é quase impossível de conse-
-guir. Latências de comunicação não zero, larguras de banda de comunicação finitas e ineficiências de algoritmos
-também podem desempenhar um papel. Além disso, mesmo que houvesse mil CPUs disponíveis, nem todos os
-programas podem ser escritos para fazer uso de tantas CPUs e a sobrecarga para inicializar todas pode ser signi-
-ficativa. Ademais, muitas vezes o algoritmo mais conhecido não é bom para ser usado em uma máquina paralela,
-portanto, é preciso usar um algoritmo abaixo do ideal no caso paralelo. Dito isso, há muitas aplicações para as
-quais seria muito desejável que o programa executasse com velocidade n vezes maior, ainda que para isso pre-
-cisasse de 2n CPUs. Afinal, CPUs não são tão caras, e muitas empresas vivem com consideravelmente menos do
-que 100% de eficiência em outras partes de seus negócios.
+A lei de Amdahl não é a única razão por que o aumento perfeito de velocidade é quase impossível de conseguir. Latências de comunicação não zero, larguras de banda de comunicação finitas e ineficiências de algoritmos também podem desempenhar um papel. Além disso, mesmo que houvesse mil CPUs disponíveis, nem todos os
+programas podem ser escritos para fazer uso de tantas CPUs e a sobrecarga para inicializar todas pode ser significativa. Ademais, muitas vezes o algoritmo mais conhecido não é bom para ser usado em uma máquina paralela, portanto, é preciso usar um algoritmo abaixo do ideal no caso paralelo. Dito isso, há muitas aplicações para as quais seria muito desejável que o programa executasse com velocidade n vezes maior, ainda que para isso precisasse de 2n CPUs. Afinal, CPUs não são tão caras, e muitas empresas vivem com consideravelmente menos do que 100% de eficiência em outras partes de seus negócios.
 
 **• Obtenção de alto desempenho**
-O modo mais direto de melhorar o desempenho é adicionar CPUs ao sistema. Contudo, essa adição deve ser
-feita de um modo tal que evite a criação de gargalos. Um sistema no qual se pode adicionar CPUs e obter mais
-capacidade de computação correspondente é denominado escalável.
+O modo mais direto de melhorar o desempenho é adicionar CPUs ao sistema. Contudo, essa adição deve ser feita de um modo tal que evite a criação de gargalos. Um sistema no qual se pode adicionar CPUs e obter mais capacidade de computação correspondente é denominado escalável.
 
-Para ver algumas implicações da escalabilidade, considere quatro CPUs conectadas por um barramento,
-como ilustrado na Figura 8.51(a). Agora, imagine ampliar esse sistema para 16 CPUs adicionando 12, conforme
-mostra a Figura 8.51(b). Se a largura de banda do barramento for b MB/s, então, com a quadruplicação do número
-de CPUs, também reduzimos a disponibilidade de largura de banda por CPU de b/4 MB/s para b/16 MB/s. Esse é
-um sistema não escalável.
+Para ver algumas implicações da escalabilidade, considere quatro CPUs conectadas por um barramento, como ilustrado na Figura 8.51(a). Agora, imagine ampliar esse sistema para 16 CPUs adicionando 12, conforme mostra a Figura 8.51(b). Se a largura de banda do barramento for b MB/s, então, com a quadruplicação do número
+de CPUs, também reduzimos a disponibilidade de largura de banda por CPU de b/4 MB/s para b/16 MB/s. Esse é um sistema não escalável.
 
-**• Figura 8.51 - (a) Sistema de 4 CPUs com um barramento. (b) Sistema de 16 CPUs com um barramento. (c) Sistema de 4 CPUs em
-grade. (d) Sistema de 16 CPUs em grade.
-As arquiteturas de computadores paralelos evoluíram para lidar com as limitações físicas de processamento único, permitindo que múltiplos nós trabalhem em conjunto para resolver problemas complexos. No entanto, a eficiência desses sistemas depende diretamente da forma como os componentes são interconectados e como o trabalho é distribuído entre eles.
+**• Figura 8.51 - (a) Sistema de 4 CPUs com um barramento. (b) Sistema de 16 CPUs com um barramento. (c) Sistema de 4 CPUs em grade. (d) Sistema de 16 CPUs em grade. As arquiteturas de computadores paralelos evoluíram para lidar com as limitações físicas de processamento único, permitindo que múltiplos nós trabalhem em conjunto para resolver problemas complexos. No entanto, a eficiência desses sistemas depende diretamente da forma como os componentes são interconectados e como o trabalho é distribuído entre eles.
 
 O diagrama ilustra a diferença fundamental entre conectar CPUs a um meio de comunicação compartilhado e organizá-las em uma topologia de malha.
 
@@ -3501,70 +2990,31 @@ O diagrama ilustra a diferença fundamental entre conectar CPUs a um meio de com
 
     - Caminhos Múltiplos: Se uma CPU precisa se comunicar com outra, existem vários caminhos possíveis através da grade, o que reduz a contenção e permite que o sistema escale muito melhor para um grande número de processadores.
 
-Agora, vamos fazer a mesma coisa com um sistema em grade, conforme mostra a Figura 8.51(c) e a Figura
-8.51(d). Com essa topologia, adicionar novas CPUs também adiciona novos enlaces, portanto, ampliar o sistema
-não provoca a queda da largura de banda agregada por CPU, como acontece com um barramento. Na verdade, a
-razão entre enlaces e CPUs aumenta de 1,0 com 4 CPUs (4 CPUs, 4 enlaces) para 1,5 com 16 CPUs (16 CPUs,
-24 enlaces), portanto, agregar CPUs melhora a largura de banda agregada por CPU.
+Agora, vamos fazer a mesma coisa com um sistema em grade, conforme mostra a Figura 8.51(c) e a Figura 8.51(d). Com essa topologia, adicionar novas CPUs também adiciona novos enlaces, portanto, ampliar o sistema não provoca a queda da largura de banda agregada por CPU, como acontece com um barramento. Na verdade, a
+razão entre enlaces e CPUs aumenta de 1,0 com 4 CPUs (4 CPUs, 4 enlaces) para 1,5 com 16 CPUs (16 CPUs, 24 enlaces), portanto, agregar CPUs melhora a largura de banda agregada por CPU.
 
-Claro que a largura de banda não é a única questão. Adicionar CPUs ao barramento não aumenta o diâme-
-tro da rede de interconexão nem a latência na ausência de tráfego, ao passo que adicioná-las à grade, sim. Para
-uma grade n × n, o diâmetro é 2(n – 1), portanto, na pior das hipóteses (e na média), a latência aumenta mais ou
-menos pela raiz quadrada do número de CPUs. Para 400 CPUs, o diâmetro é 38, ao passo que para 1.600 CPUs
-é 78, portanto, quadruplicar o número de CPUs aproximadamente dobra o diâmetro e, assim, a latência média.
+Claro que a largura de banda não é a única questão. Adicionar CPUs ao barramento não aumenta o diâmetro da rede de interconexão nem a latência na ausência de tráfego, ao passo que adicioná-las à grade, sim. Para uma grade n × n, o diâmetro é 2(n – 1), portanto, na pior das hipóteses (e na média), a latência aumenta mais ou menos pela raiz quadrada do número de CPUs. Para 400 CPUs, o diâmetro é 38, ao passo que para 1.600 CPUs é 78, portanto, quadruplicar o número de CPUs aproximadamente dobra o diâmetro e, assim, a latência média.
 
-O ideal seria que um sistema escalável mantivesse a mesma largura de banda média por CPU e uma latência
-média constante à medida que fossem adicionadas CPUs. Contudo, na prática, é viável manter suficiente largura
-de banda por CPU, mas, em todos os projetos práticos, a latência aumenta com o tamanho. Conseguir que ela
+O ideal seria que um sistema escalável mantivesse a mesma largura de banda média por CPU e uma latência média constante à medida que fossem adicionadas CPUs. Contudo, na prática, é viável manter suficiente largura de banda por CPU, mas, em todos os projetos práticos, a latência aumenta com o tamanho. Conseguir que ela
 aumente por logaritmo, como em um hipercubo, é quase o melhor que se pode fazer.
 
-O problema do aumento da latência à medida que o sistema é ampliado é que a latência costuma ser fatal
-para o desempenho em aplicações de granulações fina e média. Se um programa precisar de dados que não estão
-em sua memória local, muitas vezes há uma demora substancial para ir buscá-los e, quanto maior o sistema, mais
-longo é o atraso, como acabamos de ver. Esse problema é válido para multiprocessadores, bem como para multi-
-computadores, já que, em ambos os casos, a memória física é invariavelmente subdividida em módulos dispersos.
+O problema do aumento da latência à medida que o sistema é ampliado é que a latência costuma ser fatal para o desempenho em aplicações de granulações fina e média. Se um programa precisar de dados que não estão em sua memória local, muitas vezes há uma demora substancial para ir buscá-los e, quanto maior o sistema, mais longo é o atraso, como acabamos de ver. Esse problema é válido para multiprocessadores, bem como para multicomputadores, já que, em ambos os casos, a memória física é invariavelmente subdividida em módulos dispersos.
 
-Como consequência dessa observação, projetistas de sistemas muitas vezes fazem grandes esforços para redu-
-zir, ou ao menos ocultar, a latência, usando diversas técnicas que mencionaremos agora. A primeira é a replicação
-de dados. Se for possível manter cópias de um bloco de dados em vários locais, a velocidade dos acessos a partir
-desses locais pode ser aumentada. Uma dessas técnicas de replicação é fazer cache, na qual uma ou mais cópias de
-blocos de dados são mantidas próximas de onde estão sendo usadas, bem como no lugar a que elas “pertencem”.
-Contudo, outra estratégia é manter várias cópias pares – cópias que têm o mesmo status – em comparação com o
-relacionamento assimétrico primária/secundária usado em cache. Quando são mantidas várias cópias, não impor-
-tando de que forma, as questões fundamentais são: onde são colocados os blocos de dados, quando e por quem.
-As respostas vão de posicionamento dinâmico por demanda pelo hardware a posicionamento intencional na hora
-do carregamento seguindo diretivas do compilador. Em todos os casos, gerenciar a consistência é uma questão.
+Como consequência dessa observação, projetistas de sistemas muitas vezes fazem grandes esforços para reduzir, ou ao menos ocultar, a latência, usando diversas técnicas que mencionaremos agora. A primeira é a replicação de dados. Se for possível manter cópias de um bloco de dados em vários locais, a velocidade dos acessos a partir desses locais pode ser aumentada. Uma dessas técnicas de replicação é fazer cache, na qual uma ou mais cópias de blocos de dados são mantidas próximas de onde estão sendo usadas, bem como no lugar a que elas “pertencem”. Contudo, outra estratégia é manter várias cópias pares – cópias que têm o mesmo status – em comparação com o relacionamento assimétrico primária/secundária usado em cache. Quando são mantidas várias cópias, não importando de que forma, as questões fundamentais são: onde são colocados os blocos de dados, quando e por quem. As respostas vão de posicionamento dinâmico por demanda pelo hardware a posicionamento intencional na hora do carregamento seguindo diretivas do compilador. Em todos os casos, gerenciar a consistência é uma questão.
 
-Uma segunda técnica para ocultar latências é a busca antecipada. Se um item de dado puder ser buscado
-antes de ser necessário, o processo de busca pode ser sobreposto à execução normal, de modo que, quando o item
-for necessário, ele já estará lá. A busca antecipada pode ser automática ou por controle de programa. Quando
-uma cache carrega não apenas a palavra que está sendo referenciada, mas uma linha de cache inteira que contém
-a palavra, pode-se apostar que as palavras sucessivas também logo serão necessárias.
+Uma segunda técnica para ocultar latências é a busca antecipada. Se um item de dado puder ser buscado antes de ser necessário, o processo de busca pode ser sobreposto à execução normal, de modo que, quando o item for necessário, ele já estará lá. A busca antecipada pode ser automática ou por controle de programa. Quando uma cache carrega não apenas a palavra que está sendo referenciada, mas uma linha de cache inteira que contém a palavra, pode-se apostar que as palavras sucessivas também logo serão necessárias.
 
-A busca antecipada pode ser controlada explicitamente. Quando o compilador percebe que precisará
-de alguns dados, pode inserir uma instrução explícita para buscá-los e colocar aquela instrução com ante-
-cedência suficiente para que os dados estejam lá em tempo. Essa estratégia requer que o compilador tenha
-conhecimento completo da máquina subjacente e de sua temporização, bem como controle sobre o local
-onde todos os dados são colocados. E as instruções LOAD especulativas funcionam melhor quando se tem
-certeza de que os dados serão necessários. Obter uma falta de página com uma LOAD para um caminho que,
+A busca antecipada pode ser controlada explicitamente. Quando o compilador percebe que precisará de alguns dados, pode inserir uma instrução explícita para buscá-los e colocar aquela instrução com antecedência suficiente para que os dados estejam lá em tempo. Essa estratégia requer que o compilador tenha
+conhecimento completo da máquina subjacente e de sua temporização, bem como controle sobre o local onde todos os dados são colocados. E as instruções LOAD especulativas funcionam melhor quando se tem certeza de que os dados serão necessários. Obter uma falta de página com uma LOAD para um caminho que,
 afinal, não é tomado, é muito custoso.
 
-Uma terceira técnica é o multithreading, como já vimos. Se a mudança entre processos puder ser feita com
-suficiente rapidez, por exemplo, dando a cada um seu próprio mapa de memória e seus próprios registradores de
-hardware, então, quando um thread bloqueia por estar esperando a chegada de dados remotos, o hardware pode
-rapidamente mudar para algum outro que pode continuar. No caso-limite, a CPU executa a primeira instrução do
-thread um, a segunda instrução do thread dois e assim por diante. Desse modo, pode-se manter a CPU ocupada,
-mesmo em face de longas latências de memória para os threads individuais.
+Uma terceira técnica é o multithreading, como já vimos. Se a mudança entre processos puder ser feita com suficiente rapidez, por exemplo, dando a cada um seu próprio mapa de memória e seus próprios registradores de hardware, então, quando um thread bloqueia por estar esperando a chegada de dados remotos, o hardware pode rapidamente mudar para algum outro que pode continuar. No caso-limite, a CPU executa a primeira instrução do thread um, a segunda instrução do thread dois e assim por diante. Desse modo, pode-se manter a CPU ocupada, mesmo em face de longas latências de memória para os threads individuais.
 
-Uma quarta técnica para ocultar latência é usar escritas sem bloqueio. Em geral, quando é executada uma
-instrução STORE, a CPU espera até que a STORE tenha concluído antes de continuar. Com escritas sem blo-
-queio, a operação de memória é iniciada, mas o programa continua assim mesmo. É mais difícil continuar após
+Uma quarta técnica para ocultar latência é usar escritas sem bloqueio. Em geral, quando é executada uma instrução STORE, a CPU espera até que a STORE tenha concluído antes de continuar. Com escritas sem bloqueio, a operação de memória é iniciada, mas o programa continua assim mesmo. É mais difícil continuar após
 uma instrução LOAD, mas com a execução fora de ordem até isso é possível.
 
 ## 8.5 Computação em grade 
-Muitos dos desafios atuais na ciência, engenharia, indústria, meio ambiente e outras áreas são de grande
-escala e interdisciplinares. Resolvê-los requer a experiência, as habilidades, conhecimentos, instalações, softwares
-e dados de múltiplas organizações e, muitas vezes, em países diferentes. Alguns exemplos são os seguintes:
+Muitos dos desafios atuais na ciência, engenharia, indústria, meio ambiente e outras áreas são de grande escala e interdisciplinares. Resolvê-los requer a experiência, as habilidades, conhecimentos, instalações, softwares e dados de múltiplas organizações e, muitas vezes, em países diferentes. Alguns exemplos são os seguintes:
 
     1. Cientistas que estão desenvolvendo uma missão para Marte.
 
@@ -3572,38 +3022,18 @@ e dados de múltiplas organizações e, muitas vezes, em países diferentes. Alg
 
     3. Uma equipe de socorro internacional para coordenar o auxílio prestado após um desastre natural.
 
-Algumas dessas cooperações são de longo prazo, outras de prazos mais curtos, mas todas compartilham a
-linha comum que é conseguir que organizações individuais, com seus próprios recursos e procedimentos, traba-
-lhem juntas para atingir uma meta comum.
+Algumas dessas cooperações são de longo prazo, outras de prazos mais curtos, mas todas compartilham a linha comum que é conseguir que organizações individuais, com seus próprios recursos e procedimentos, trabalhem juntas para atingir uma meta comum.
 
-Até há pouco tempo, conseguir que organizações diferentes, com sistemas operacionais de computador, ban-
-cos de dados e protocolos diferentes, trabalhassem juntas era muito difícil. Contudo, a crescente necessidade de
-cooperação interorganizacional em larga escala levou ao desenvolvimento de sistemas e tecnologia para conectar
-computadores muito distantes uns dos outros no que é denominado grade. Em certo sentido, a grade é a etapa
-seguinte ao longo do eixo da Figura 8.1. Ela pode ser considerada um cluster muito grande, internacional, fraca-
-mente acoplado e heterogêneo.
+Até há pouco tempo, conseguir que organizações diferentes, com sistemas operacionais de computador, bancos de dados e protocolos diferentes, trabalhassem juntas era muito difícil. Contudo, a crescente necessidade de cooperação interorganizacional em larga escala levou ao desenvolvimento de sistemas e tecnologia para conectar computadores muito distantes uns dos outros no que é denominado grade. Em certo sentido, a grade é a etapa seguinte ao longo do eixo da Figura 8.1. Ela pode ser considerada um cluster muito grande, internacional, fracamente acoplado e heterogêneo.
 
-O objetivo da grade é proporcionar infraestrutura técnica para permitir que um grupo de organizações que
-compartilham uma mesma meta forme uma organização virtual. Essa organização virtual tem de ser flexível,
-com um quadro de associados grande e mutável, permitindo que seus membros trabalhem juntos em áreas que
-consideram apropriadas e, ao mesmo tempo, permitindo que eles mantenham controle sobre seus próprios recur-
-sos em qualquer grau que desejarem. Com essa finalidade, pesquisadores de grade estão desenvolvendo serviços,
-ferramentas e protocolos para habilitar o funcionamento dessas organizações virtuais.
+O objetivo da grade é proporcionar infraestrutura técnica para permitir que um grupo de organizações que compartilham uma mesma meta forme uma organização virtual. Essa organização virtual tem de ser flexível, com um quadro de associados grande e mutável, permitindo que seus membros trabalhem juntos em áreas que
+consideram apropriadas e, ao mesmo tempo, permitindo que eles mantenham controle sobre seus próprios recursos em qualquer grau que desejarem. Com essa finalidade, pesquisadores de grade estão desenvolvendo serviços, ferramentas e protocolos para habilitar o funcionamento dessas organizações virtuais.
 
-A grade é inerentemente multilateral, com muitos participantes de mesmo status. Ela pode ser contras-
-tada com estruturas de computação existentes. No modelo cliente-servidor, uma transação envolve duas
-partes: o servidor, que oferece algum serviço, e o cliente, que quer usar o serviço. Um exemplo típico é a
-Web, na qual usuários se dirigem a servidores Web para achar informações. A grade também é diferente de aplicações peer-to-peer, nas quais pares de indivíduos trocam arquivos. O e-mail é um exemplo comum
-dessa aplicação. Por ser diferente desses modelos, a grade requer novos protocolos e tecnologia.
+A grade é inerentemente multilateral, com muitos participantes de mesmo status. Ela pode ser contrastada com estruturas de computação existentes. No modelo cliente-servidor, uma transação envolve duas partes: o servidor, que oferece algum serviço, e o cliente, que quer usar o serviço. Um exemplo típico é a Web, na qual usuários se dirigem a servidores Web para achar informações. A grade também é diferente de aplicações peer-to-peer, nas quais pares de indivíduos trocam arquivos. O e-mail é um exemplo comum dessa aplicação. Por ser diferente desses modelos, a grade requer novos protocolos e tecnologia.
 
-A grade precisa ter acesso a uma ampla variedade de recursos. Cada recurso tem um sistema e organização
-específicos aos quais pertence e que decidem quanto desse recurso disponibilizará para a grade, em que horários
-e para quem. Em um sentido abstrato, a grade trata de acesso e gerenciamento de recursos.
+A grade precisa ter acesso a uma ampla variedade de recursos. Cada recurso tem um sistema e organização específicos aos quais pertence e que decidem quanto desse recurso disponibilizará para a grade, em que horários e para quem. Em um sentido abstrato, a grade trata de acesso e gerenciamento de recursos.
 
-Um modo de modelar a grade é a hierarquia em camadas da Figura 8.52. A camada-base na parte mais baixa
-é o conjunto de componentes com o qual a grade é construída. Inclui CPUs, discos, redes e sensores do lado do
-hardware, e programas e dados do lado do software. Esses são os recursos que a grade disponibiliza de um modo
-controlado.
+Um modo de modelar a grade é a hierarquia em camadas da Figura 8.52. A camada-base na parte mais baixa é o conjunto de componentes com o qual a grade é construída. Inclui CPUs, discos, redes e sensores do lado do hardware, e programas e dados do lado do software. Esses são os recursos que a grade disponibiliza de um modo controlado.
 
 **• Figura 8.52 - Camadas da grade.**
 Esta tabela é o componente final para consolidar a hierarquia de software em sistemas de computação em grade (grid computing) no seu eBook. Enquanto as figuras anteriores focaram no hardware e na topologia física, a Figura 8.52 organiza como o software gerencia essa infraestrutura complexa em camadas lógicas.
@@ -3641,50 +3071,21 @@ Esta tabela é o componente final para consolidar a hierarquia de software em si
 
  - Camada de Aplicação: É onde residem os programas do usuário, como o seu IDS Sentinel ou uma consulta de busca do Google, utilizando toda a estrutura subjacente de forma transparente.
 
-Em um nível acima está a camada de recursos, que se preocupa com o gerenciamento de recursos individuais.
-Em muitos casos, um recurso que participa de uma grade tem um processo local que gerencia esse recurso e permite
-acesso controlado a ele por usuários remotos. Essa camada proporciona uma interface uniforme para que camadas
-mais altas possam inquirir as características e status de recursos individuais, monitorando esses recursos e os utili-
-zando de modo seguro.
+Em um nível acima está a camada de recursos, que se preocupa com o gerenciamento de recursos individuais. Em muitos casos, um recurso que participa de uma grade tem um processo local que gerencia esse recurso e permite acesso controlado a ele por usuários remotos. Essa camada proporciona uma interface uniforme para que camadas mais altas possam inquirir as características e status de recursos individuais, monitorando esses recursos e os utilizando de modo seguro.
 
-Em seguida, vem a camada coletiva, que manuseia grupos de recursos. Uma de suas funções é a descoberta
-de recursos, pela qual um usuário pode localizar ciclos de CPU disponíveis, espaço em disco ou dados específicos.
-A camada coletiva pode manter diretórios ou outros bancos de dados para fornecer essas informações. Também
-pode oferecer um serviço de corretagem, pelo qual os provedores e usuários de serviços são compatibilizados,
-possivelmente proporcionando alocação de recursos escassos entre usuários concorrentes. A camada coletiva
-também é responsável por replicar dados, gerenciar admissão de novos membros e recursos, pela contabilidade e
-pela manutenção das políticas de bancos de dados sobre quem pode usar o quê.
+Em seguida, vem a camada coletiva, que manuseia grupos de recursos. Uma de suas funções é a descoberta de recursos, pela qual um usuário pode localizar ciclos de CPU disponíveis, espaço em disco ou dados específicos. A camada coletiva pode manter diretórios ou outros bancos de dados para fornecer essas informações. Também pode oferecer um serviço de corretagem, pelo qual os provedores e usuários de serviços são compatibilizados, possivelmente proporcionando alocação de recursos escassos entre usuários concorrentes. A camada coletiva também é responsável por replicar dados, gerenciar admissão de novos membros e recursos, pela contabilidade e pela manutenção das políticas de bancos de dados sobre quem pode usar o quê.
 
-Ainda mais acima está a camada de aplicação, onde residem as aplicações do usuário. Ela usa as camadas
-mais baixas para adquirir credenciais que provam seu direito de usar certos recursos, apresentar requisições de
-utilização, monitorar o andamento dessas requisições, lidar com falhas e notificar o usuário dos resultados.
+Ainda mais acima está a camada de aplicação, onde residem as aplicações do usuário. Ela usa as camadas mais baixas para adquirir credenciais que provam seu direito de usar certos recursos, apresentar requisições de utilização, monitorar o andamento dessas requisições, lidar com falhas e notificar o usuário dos resultados.
 
-Segurança é fundamental para uma grade bem-sucedida. Os proprietários dos recursos quase sempre insis-
-tem em manter rígido controle e querem determinar quem vai usá-los, por quanto tempo, e o quanto. Sem boa
-segurança, nenhuma organização disponibilizaria seus recursos à grade. Por outro lado, se um usuário fosse
-obrigado a ter uma conta de login e uma senha para todo computador que quisesse usar, a utilização da grade
-seria insuportavelmente trabalhosa. Por conseguinte, a grade teve de desenvolver um modelo de segurança para
-tratar dessas preocupações.
+Segurança é fundamental para uma grade bem-sucedida. Os proprietários dos recursos quase sempre insistem em manter rígido controle e querem determinar quem vai usá-los, por quanto tempo, e o quanto. Sem boa segurança, nenhuma organização disponibilizaria seus recursos à grade. Por outro lado, se um usuário fosse
+obrigado a ter uma conta de login e uma senha para todo computador que quisesse usar, a utilização da grade seria insuportavelmente trabalhosa. Por conseguinte, a grade teve de desenvolver um modelo de segurança para tratar dessas preocupações.
 
 
-Uma das principais características do modelo de segurança é a assinatura única. A primeira etapa para um usuá-
-rio utilizar a grade é ser autenticado e adquirir uma credencial, um documento assinado digitalmente que especifica
-em nome de quem o trabalho deve ser realizado. Credenciais podem ser delegadas, de modo que, quando uma
-computação precisa criar subcomputações, os processos-filhos também podem ser identificados. Quando uma
-credencial é apresentada a uma máquina remota, ela tem de ser mapeada para o mecanismo local de segurança.
+Uma das principais características do modelo de segurança é a assinatura única. A primeira etapa para um usuário utilizar a grade é ser autenticado e adquirir uma credencial, um documento assinado digitalmente que especifica em nome de quem o trabalho deve ser realizado. Credenciais podem ser delegadas, de modo que, quando uma computação precisa criar subcomputações, os processos-filhos também podem ser identificados. Quando uma credencial é apresentada a uma máquina remota, ela tem de ser mapeada para o mecanismo local de segurança.
 
-Em sistemas UNIX, por exemplo, usuários são identificados por IDs de usuários de 16 bits, mas outros sistemas
-têm outros esquemas. Por fim, a grade precisa de mecanismos para permitir que políticas de acesso sejam decla-
-radas, mantidas e atualizadas.
+Em sistemas UNIX, por exemplo, usuários são identificados por IDs de usuários de 16 bits, mas outros sistemas têm outros esquemas. Por fim, a grade precisa de mecanismos para permitir que políticas de acesso sejam declaradas, mantidas e atualizadas.
 
-Para proporcionar interoperabilidade entre diferentes organizações e máquinas são necessários padrões,
-tanto em termos dos serviços oferecidos, quanto dos protocolos usados para acessá-los. A comunidade das grades
-criou uma organização, a Global Grid Forum, para gerenciar o processo de padronização. Ela criou uma estrutura
-denominada OGSA (Open Grid Services Architecture – arquitetura de serviços de grade aberta) para posicio-
-nar os vários padrões e seu desenvolvimento. Sempre que possível, os padrões utilizam padrões já existentes,
-por exemplo, o WSDL (Web Services Definition Language – linguagem para definição de serviços Web), para
-descrever serviços OGSA. Os serviços que estão atualmente em fase de padronização pertencem a oito categorias
-gerais, como descrevemos a seguir, mas novas categorias serão criadas mais tarde.
+Para proporcionar interoperabilidade entre diferentes organizações e máquinas são necessários padrões, tanto em termos dos serviços oferecidos, quanto dos protocolos usados para acessá-los. A comunidade das grades criou uma organização, a Global Grid Forum, para gerenciar o processo de padronização. Ela criou uma estrutura denominada OGSA (Open Grid Services Architecture – arquitetura de serviços de grade aberta) para posicionar os vários padrões e seu desenvolvimento. Sempre que possível, os padrões utilizam padrões já existentes, por exemplo, o WSDL (Web Services Definition Language – linguagem para definição de serviços Web), para descrever serviços OGSA. Os serviços que estão atualmente em fase de padronização pertencem a oito categorias gerais, como descrevemos a seguir, mas novas categorias serão criadas mais tarde.
 
     1. Serviços de infraestrutura (habilitar comunicação entre recursos).
 
@@ -3702,49 +3103,24 @@ gerais, como descrevemos a seguir, mas novas categorias serão criadas mais tard
 
     8. Serviços de gerenciamento de execução (gerenciar fluxo de trabalho).
 
-Há muito mais que poderia ser dito sobre a grade, mas limitações de espaço nos impedem de estender mais
-esse tópico. Se o leitor quiser mais informações sobre a grade, pode consultar Abramson, 2011; Balasangameshwara
-e Raju, 2012; Celaya e Arronategui, 2011; Foster e Kesselman, 2003; e Lee et al., 2011.
+Há muito mais que poderia ser dito sobre a grade, mas limitações de espaço nos impedem de estender mais esse tópico. Se o leitor quiser mais informações sobre a grade, pode consultar Abramson, 2011; Balasangameshwara e Raju, 2012; Celaya e Arronategui, 2011; Foster e Kesselman, 2003; e Lee et al., 2011.
 
 ## 8.6 Resumo
-Está ficando cada vez mais difícil conseguir que os computadores funcionem com mais rapidez apenas
-aumentando a velocidade de clock por causa de problemas como maior dissipação de calor e outros fatores. Em
-vez disso, os projetistas estão buscando o paralelismo para conseguir ganhos de velocidade. O paralelismo pode
-ser introduzido em muitos níveis diferentes, desde o muito baixo, onde os elementos de processamento são muito
-fortemente acoplados, até o muito alto, onde eles são muito fracamente acoplados.
+Está ficando cada vez mais difícil conseguir que os computadores funcionem com mais rapidez apenas aumentando a velocidade de clock por causa de problemas como maior dissipação de calor e outros fatores. Em vez disso, os projetistas estão buscando o paralelismo para conseguir ganhos de velocidade. O paralelismo pode
+ser introduzido em muitos níveis diferentes, desde o muito baixo, onde os elementos de processamento são muito fortemente acoplados, até o muito alto, onde eles são muito fracamente acoplados.
 
-No nível baixo está o paralelismo no chip, no qual atividades paralelas ocorrem em um único chip. Uma
-forma é o paralelismo no nível da instrução, no qual uma instrução, ou uma sequência delas, emite diversas ope-
-rações que podem ser executadas em paralelo por diferentes unidades funcionais. Uma segunda forma de parale-
-lismo no chip é multithreading, no qual a CPU pode comutar como quiser entre múltiplos threads, instrução por
-instrução, criando um multiprocessador virtual. Uma terceira forma é o multiprocessador de chip único no qual
-dois ou mais núcleos são colocados no mesmo chip para permitir que executem ao mesmo tempo.
+No nível baixo está o paralelismo no chip, no qual atividades paralelas ocorrem em um único chip. Uma forma é o paralelismo no nível da instrução, no qual uma instrução, ou uma sequência delas, emite diversas operações que podem ser executadas em paralelo por diferentes unidades funcionais. Uma segunda forma de parale-
+lismo no chip é multithreading, no qual a CPU pode comutar como quiser entre múltiplos threads, instrução por instrução, criando um multiprocessador virtual. Uma terceira forma é o multiprocessador de chip único no qual dois ou mais núcleos são colocados no mesmo chip para permitir que executem ao mesmo tempo.
 
-Em um nível acima encontramos os coprocessadores, em geral placas de expansão que agregam capacidade
-de processamento extra em alguma área especializada, como processamento de protocolos de rede ou multimídia.
-Esses processadores extras aliviam o trabalho da CPU principal, permitindo que ela faça outras coisas enquanto
+Em um nível acima encontramos os coprocessadores, em geral placas de expansão que agregam capacidade de processamento extra em alguma área especializada, como processamento de protocolos de rede ou multimídia. Esses processadores extras aliviam o trabalho da CPU principal, permitindo que ela faça outras coisas enquanto
 eles estão realizando suas tarefas especializadas.
 
-No próximo nível encontramos os multiprocessadores de memória compartilhada. Os sistemas contêm duas
-ou mais CPUs totalmente desenvolvidas, que compartilham uma memória em comum. Multiprocessadores UMA
-se comunicam por meio de um barramento compartilhado (de escuta), um switch crossbar ou uma rede de comu-
-tação multiestágios. Eles são caracterizados por terem um tempo de acesso uniforme a todos os locais de memória.
+No próximo nível encontramos os multiprocessadores de memória compartilhada. Os sistemas contêm duas ou mais CPUs totalmente desenvolvidas, que compartilham uma memória em comum. Multiprocessadores UMA se comunicam por meio de um barramento compartilhado (de escuta), um switch crossbar ou uma rede de comutação multiestágios. Eles são caracterizados por terem um tempo de acesso uniforme a todos os locais de memória.
 
-Por comparação, multiprocessadores NUMA também apresentam todos os processos com o mesmo espaço de
-endereço compartilhado, mas, nesse caso, os acessos remotos levam um tempo bem mais longo do que os locais.
-Por fim, multiprocessadores COMA são mais uma variação na qual linhas de cache são movidas sob demanda um
-lado para outro da máquina, mas não têm uma residência real como em outros projetos.
+Por comparação, multiprocessadores NUMA também apresentam todos os processos com o mesmo espaço de endereço compartilhado, mas, nesse caso, os acessos remotos levam um tempo bem mais longo do que os locais. Por fim, multiprocessadores COMA são mais uma variação na qual linhas de cache são movidas sob demanda um lado para outro da máquina, mas não têm uma residência real como em outros projetos.
 
-Multicomputadores são sistemas com muitas CPUs que não compartilham uma memória em comum. Cada
-uma tem sua própria memória privada, com comunicação por troca de mensagens. MPPs são multicomputadores
-grandes com redes de comunicação especializadas como o BlueGene/P da IBM. Clusters são sistemas mais simples,
-que usam componentes de prateleira, como o sistema que sustenta o Google.
+Multicomputadores são sistemas com muitas CPUs que não compartilham uma memória em comum. Cada uma tem sua própria memória privada, com comunicação por troca de mensagens. MPPs são multicomputadores grandes com redes de comunicação especializadas como o BlueGene/P da IBM. Clusters são sistemas mais simples, que usam componentes de prateleira, como o sistema que sustenta o Google.
 
-Multicomputadores costumam ser programados usando um pacote de troca de mensagens como MPI. Uma
-abordagem alternativa é usar memória compartilhada no nível da aplicação, como um sistema DSM baseado em
-páginas, o espaço de tuplas Linda, ou objetos Orca ou Globe. DSM simula memória compartilhada no nível de
-página, o que o torna semelhante a uma máquina NUMA, exceto pela penalidade maior para referências remotas.
+Multicomputadores costumam ser programados usando um pacote de troca de mensagens como MPI. Uma abordagem alternativa é usar memória compartilhada no nível da aplicação, como um sistema DSM baseado em páginas, o espaço de tuplas Linda, ou objetos Orca ou Globe. DSM simula memória compartilhada no nível de página, o que o torna semelhante a uma máquina NUMA, exceto pela penalidade maior para referências remotas.
 
-Por fim, no nível mais alto e mais fracamente acoplado, estão as grades. São sistemas nos quais organizações
-inteiras são reunidas e interligadas pela Internet para compartilhar capacidade de processamento, dados e outros
-recursos.
+Por fim, no nível mais alto e mais fracamente acoplado, estão as grades. São sistemas nos quais organizações inteiras são reunidas e interligadas pela Internet para compartilhar capacidade de processamento, dados e outros recursos.
