@@ -3035,4 +3035,716 @@ A imagem demonstra como 16 páginas de memória virtual são distribuídas entre
 
  - (c) Replicação para Leitura: Se a página for configurada como somente leitura, o sistema pode simplesmente replicá-la. Assim, tanto a CPU 0 quanto a CPU 1 podem manter cópias locais da página 10 simultaneamente, reduzindo o tráfego na rede.
 
+Essa ideia básica foi executada pela primeira vez no IVY (Li e Hudak, 1989). Ela proporciona uma memória
+totalmente compartilhada e sequencialmente consistente em um multicomputador. Contudo, há muitas otimi-
+zações possíveis para melhorar o desempenho. A primeira, presente no IVY, é permitir que as páginas marcadas
+como somente de leitura estejam presentes em vários nós ao mesmo tempo. Assim, quando ocorre uma falta de
+página, uma cópia dela é enviada para a máquina onde ocorreu a falta, mas a original fica onde está, já que não há
+nenhum perigo de conflitos. A situação de duas CPUs que compartilham uma página somente de leitura (página
+10) é ilustrada na Figura 8.46(c).
 
+Mesmo com essa otimização, o desempenho muitas vezes é inaceitável, em especial quando um processo
+está escrevendo ativamente algumas palavras no topo de alguma página e outro processo em uma CPU diferente está
+escrevendo ativamente algumas palavras no final da página. Visto que só existe uma cópia da página, ela ficará
+em constante ir e vir, uma situação conhecida como falso compartilhamento.
+
+O problema do falso compartilhamento pode ser tratado de várias maneiras. No sistema Treadmarks, por
+exemplo, a memória sequencialmente consistente é abandonada em favor da consistência de liberação (Amza,
+1996). Páginas que podem ser escritas conseguem estar presentes em múltiplos nós ao mesmo tempo, mas, antes
+de fazer uma escrita, um processo deve primeiro realizar uma operação acquire para sinalizar sua intenção. Nesse
+ponto, todas as cópias, exceto a mais recente, são invalidadas. Nenhuma outra cópia pode ser feita até que seja
+executada a release correspondente, quando então a página pode ser compartilhada novamente.
+
+Uma segunda otimização feita em Treadmarks é mapear inicialmente cada página que pode ser escrita, em
+modo somente de leitura. Quando a página é escrita pela primeira vez, ocorre uma falha de proteção e o sistema
+faz uma cópia da página, denominada gêmea. Então, a página original é mapeada como de leitura-escrita e as
+escritas subsequentes podem prosseguir a toda velocidade. Quando ocorrer uma falta de página remota mais
+tarde, e a página tiver de ser despachada para onde ocorreu a falta, é realizada uma comparação palavra por
+palavra entre a página corrente e a gêmea. Somente as palavras que foram alteradas são enviadas, o que reduz
+o tamanho das mensagens.
+
+Quando ocorre uma falta de página, a página que está faltando tem de ser localizada. Há várias soluções pos-
+síveis, incluindo as usadas em máquinas NUMA e COMA, tais como diretórios (residentes). Na verdade, muitas
+das soluções usadas em DSM também são aplicáveis a NUMA e COMA porque, na realidade, DSM é apenas uma
+execução em software de NUMA ou COMA na qual cada página é tratada como uma linha de cache.
+
+DSM é uma área de pesquisa muito promissora. Entre os sistemas interessantes citamos CASHMERE
+(Kontothanassis et al., 1997; e Stets et al., 1997), CRL (Johnson et al., 1995), Shasta (Scales et al., 1996) e
+Treadmarks (Amza, 1996; e Lu et al., 1997).
+
+**• Linda**
+Sistemas DSM baseados em páginas como o IVY e o Treadmarks usam o hardware MMU para causar
+exceções de acesso às páginas faltantes. Embora calcular e enviar diferenças em vez da página inteira ajude,
+permanece o fato de que páginas não são uma unidade natural para compartilhamento, portanto, foram
+tentadas outras técnicas.
+
+Uma delas é Linda, que fornece processos em várias máquinas com uma memória compartilhada distribuída
+com alto grau de estruturação (Carriero e Gelernter, 1989). Essa memória é acessada por meio de um pequeno
+conjunto de operações primitivas que podem ser adicionadas a linguagens existentes, como C e FORTRAN, para
+formar linguagens paralelas, nesse caso, C-Linda e FORTRAN-Linda.
+
+O conceito unificador fundamental de Linda é o de um espaço de tuplas abstrato, que é global para o sistema
+inteiro e acessível a todos os seus processos. O espaço de tuplas é como uma memória global compartilhada, só
+que com certa estrutura embutida. O espaço de tuplas contém certa quantidade de tuplas, cada uma delas con-
+sistindo em um ou mais campos. Para C-Linda, os tipos de campos incluem inteiros, inteiros longos e números
+de ponto flutuante, bem como tipos compostos como vetores (incluindo cadeias) e estruturas (mas não outras
+tuplas). A Figura 8.47 mostra três exemplos de tuplas.
+
+
+**• Figura 8.47 - Três tuplas Linda.**
+
+("abc", 2, 5)
+("matrix-1", 1, 6, 3.14)
+("family", "is sister", Carolyn, Elinor)
+
+São quatro as operações efetuadas em tuplas. A primeira, out, coloca uma tupla no espaço de tuplas. Por exemplo,
+
+    out(“abc”, 2, 5);
+
+coloca a tupla (“abc”, 2, 5) no espaço de tuplas. Os campos de out normalmente são constantes, variáveis ou expressões, como em
+
+out(“matrix–1”, i, j, 3.14);
+
+que produz uma tupla com quatro campos, o segundo e terceiro dos quais são determinados pelos valores correntes das variáveis i e j.
+
+Tuplas são recuperadas do espaço de tuplas pela primitiva in. Elas são endereçadas pelo conteúdo em vez de pelo nome ou endereço. Os campos de in podem ser expressões ou parâmetros formais. Considere, por exemplo,
+
+    in(“abc”, 2, ? i);
+
+    ESPAÇO DE TUPLAS (SHARED POOL)
+    +------------------------------------------+
+    |  ("abc", 2, 5)        ("sensor", 1, 25.4)|
+    |                                          |
+    |  ("matrix-1", 10, 20, 3.14)              |
+    +------------------------------------------+
+        ^                      |
+        | out("abc", 2, 5)     | in("abc", 2, ? i)
+        |                      v
+    +-----------+          +-----------+
+    | PROCESSO A|          | PROCESSO B|
+    +-----------+          +-----------+
+                        (i recebe 5)
+
+**• Operações em Espaço de Tuplas**
+
+O conceito central é que, em vez de enviar uma mensagem diretamente para um destino, o processo "solta" a informação em um espaço compartilhado global.
+
+1. A Operação out (Inserção)
+A primitiva out é responsável por gerar e colocar uma nova tupla no espaço de dados.
+
+ - Comportamento: Os valores são avaliados no momento da chamada e a tupla resultante é armazenada no espaço comum.
+
+ - Exemplo: out("matrix-1", i, j, 3.14); cria uma entrada contendo a string, os valores atuais de i e j, e a constante real.
+
+2. A Operação in (Recuperação e Remoção)
+A primitiva in busca uma tupla que coincida com o padrão fornecido (chamado de template ou gabarito).
+
+ - Endereçamento por Conteúdo: Diferente de uma variável comum, você não busca pelo nome "X", mas por uma tupla que tenha, por exemplo, "abc" na primeira posição e 2 na segunda.
+
+ - Parâmetros Formais: O uso do símbolo ? (como em ? i) indica que aquela posição é um "espaço em branco" que deve ser preenchido com o valor encontrado na tupla recuperada.
+
+ - Bloqueio: Se nenhuma tupla coincidente for encontrada, o processo que executou o in fica bloqueado até que algum outro processo execute um out com uma tupla compatível.
+
+Essa operação “pesquisa” o espaço de tuplas em busca de uma composta por uma cadeia “abc”, pelo inteiro 2,
+e por um terceiro campo que contém qualquer inteiro (considerando que i é um inteiro). Se encontrada, ela é
+retirada do espaço de tuplas e o valor do terceiro campo é atribuído à variável i. A combinação e a remoção são
+atômicas, portanto, se dois processos executarem a mesma operação in simultaneamente, só um deles será bem-
+-sucedido, a menos que duas ou mais tuplas compatíveis estejam presentes. O espaço de tuplas pode até conter
+múltiplas cópias da mesma tupla.
+
+O algoritmo de combinação usado por in é direto. Os campos da primitiva in, denominados gabarito, são
+comparados, conceitualmente, com os campos correspondentes de toda tupla que estiver no espaço de tuplas.
+Ocorre uma combinação se todas as três condições a seguir forem cumpridas:
+
+    1. O gabarito e a tupla têm o mesmo número de campos.
+
+    2. Os tipos dos campos correspondentes são iguais.
+
+    3. Cada constante ou variável no gabarito é compatível com seu campo de tupla.
+
+Parâmetros formais, indicados por um ponto de interrogação seguido por um nome ou tipo de variável, não
+participam da combinação (exceto para verificação do tipo), embora os que contêm um nome de variável sejam
+atribuídos após uma combinação bem-sucedida.
+
+Se nenhuma tupla compatível estiver presente, o processo de chamada é suspenso até que outro processo
+insira a tupla necessária, quando então o processo chamador é automaticamente revivido e recebe a nova tupla. O
+fato de os processos bloquearem e desbloquearem automaticamente significa que, se um processo estiver prestes
+a produzir uma tupla e outro estiver prestes a recebê-la, não importa qual deles vai ocorrer primeiro.
+
+Além de out e in, Linda também tem uma primitiva read, que é igual a in, exceto que não retira a tupla do
+espaço de tuplas. Também há uma primitiva eval, que faz com que seus parâmetros sejam avaliados em paralelo
+e a tupla resultante seja depositada no espaço de tuplas. Esse mecanismo pode ser usado para efetuar um cálculo
+arbitrário. É assim que processos paralelos são criados em Linda.
+
+Um paradigma de programação comum em Linda é o modelo operário replicado. Esse modelo é baseado na
+ideia da sacola de tarefas cheia de jobs por fazer. O processo principal inicia out executando um laço que contém 
+
+    out(“task-bag”, job);
+
+no qual uma descrição de job diferente é produzida para o espaço de tuplas a cada iteração. Cada operário começa
+obtendo uma tupla de descrição de job usando
+
+    in(“task-bag”, ?job);
+
+que ele então executa. Quando termina, pega outra. Além disso, novos trabalhos podem ser colocados na sacola
+de tarefas durante a execução. Desse modo simples, o trabalho é dividido dinamicamente entre os operários, e
+cada operário é mantido ocupado o tempo todo, e tudo com relativamente pouca sobrecarga.
+
+Existem várias implementações de Linda em sistemas multicomputadores. Em todas elas, uma questão fun-
+damental é como distribuir as tuplas entre as máquinas e como localizá-las quando necessário. Entre as várias
+possibilidades estão broadcasting e diretórios. A replicação também é uma questão importante. Esses pontos são
+discutidos em Bjornson, 1993.
+
+**• Orca**
+Uma abordagem um pouco diferente para a memória compartilhada no nível de aplicação em um multi-
+computador é usar objetos como unidade de compartilhamento, em vez de apenas tuplas. Objetos consistem em
+estado interno (oculto) mais métodos para operar naquele estado. Por não permitir que o programador acesse
+o estado diretamente, são abertas muitas possibilidades para permitir o compartilhamento por máquinas que não
+têm memória física compartilhada.
+
+O sistema baseado em objetos que dá a ilusão de memória compartilhada em sistemas multicomputadores é
+denominado Orca (Bal, 1991; Bal et al., 1992; e Bal e Tanenbaum, 1988). Orca é uma linguagem de programação
+tradicional (baseada em Modula 2), à qual foram adicionadas duas novas características: objetos e a capacidade
+de criar novos processos. Um objeto Orca é um tipo de dados abstrato, semelhante a um objeto em Java ou um
+pacote em Ada. Ele encapsula estruturas de dados internas e métodos escritos pelo usuário, denominados opera-
+ções. Objetos são passivos, isto é, não contêm threads para os quais podem ser enviadas mensagens. Em vez disso,
+processos acessam os dados internos de um objeto invocando seus métodos.
+
+Cada método Orca consiste em uma lista de pares (guarda, bloco de declarações). Uma guarda é uma
+expressão booleana que não contém nenhum efeito colateral, ou a guarda vazia, que é o mesmo que o valor true.
+Quando uma operação é invocada, todas as suas guardas são avaliadas em uma ordem não especificada. Se todas
+elas forem false, o processo invocador é atrasado até que uma se torne true. Quando é encontrada uma guarda que
+é avaliada como true, o bloco de declarações que vem depois dela é executado. A Figura 8.48 retrata um objeto
+stack com duas operações, push e pop.
+
+Uma vez definida stack, podem-se declarar variáveis desse tipo, como em
+
+    s, t: stack;
+
+que cria dois objetos stack e inicializa a variável top em cada um deles como 0. A variável inteira k pode ser pas-
+sada para a pilha s pela declaração
+
+    s$push(k);
+
+e assim por diante. A operação pop tem uma guarda, portanto, uma tentativa de retirar uma variável de uma pilha
+vazia suspenderá o processo chamador até que outro processo tenha passado alguma coisa para a pilha.
+
+Orca tem uma declaração fork para criar um novo processo em um processador especificado pelo usuário. O
+novo processo executa o procedimento nomeado na declaração fork. Parâmetros, incluindo objetos, podem ser
+passados ao novo processo, e é assim que objetos ficam distribuídos entre as máquinas. Por exemplo, a declaração
+
+    **for i in 1 .. n do fork foobar(s) on i; od;**
+
+gera um novo processo em cada uma das máquinas, de 1 a n, executando o programa foobar em cada uma delas.
+À medida que esses n novos processos (e o pai) executam em paralelo, todos eles podem passar itens para a
+pilha compartilhada e retirá-los da pilha como se todos eles estivessem executando em um multiprocessador de
+memória compartilhada. Sustentar a ilusão de memória compartilhada onde ela realmente não existe é tarefa do
+sistema de run-time.
+
+Object implementation stack;
+
+  # Dados internos
+  top: integer;                                # armazenamento para a pilha
+  stack: array [integer 0..N-1] of integer;
+
+  # Operações
+  operation push(item: integer); 
+    # Função retorna nada
+    begin
+      guard top < N - 1 do
+        stack[top] := item;  # Passe item para a pilha
+        top := top + 1;      # Incremente o ponteiro de pilha
+      od;
+    end;
+
+  operation pop( ): integer; 
+    # Função retornando um inteiro
+    begin
+      guard top > 0 do       # Suspenda se a pilha estiver vazia
+        top := top - 1;      # Decremente o ponteiro de pilha
+        return stack[top];   # Retorne o item do topo
+      od;
+    end;
+
+begin
+  top := 0;  # Inicialização
+end;
+
+Operações sobre objetos compartilhados são atômicas e sequencialmente consistentes. O sistema garante
+que, se vários processos efetuarem operações no mesmo objeto compartilhado quase de modo simultâneo, o sis-
+tema escolhe alguma ordem e todos os processos veem a mesma ordem de eventos.
+
+Orca integra dados compartilhados e sincronização de um modo que não está presente em sistemas DSM
+baseados em paginação. Dois tipos de sincronização são necessários em programas paralelos. O primeiro tipo é
+sincronização por exclusão mútua, para evitar que dois processos executem a mesma região crítica ao mesmo
+tempo. Para todos os efeitos, cada operação sobre um objeto compartilhado em Orca é como uma região crítica,
+porque o sistema garante que o resultado final é o mesmo que seria se todas as regiões críticas fossem executa-
+das uma por vez (isto é, sequencialmente). Nesse aspecto, um objeto Orca é como uma forma distribuída de um
+monitor (Hoare, 1975).
+
+O outro tipo é a sincronização de condição, na qual um processo bloqueia esperando por alguma condição
+válida. Em Orca, a sincronização de condição é feita com guardas. No exemplo da Figura 8.48, um processo que
+tente retirar um item de uma pilha vazia será suspenso até que a pilha não esteja mais vazia. Afinal, você não pode
+retirar uma palavra de uma pilha vazia.
+
+O sistema de run-time de Orca trata da replicação de objeto, migração, consistência e invocação de operação.
+Cada objeto pode estar em um de dois estados: cópia única ou replicado. Um objeto em estado de cópia única exis-
+te somente em uma máquina, portanto, todas as requisições para ele são enviadas para essa máquina. Um objeto
+replicado está presente em todas as máquinas que contêm um processo que o está usando, o que facilita as opera-
+ções de leitura (já que elas podem ser feitas localmente) à custa de encarecer as atualizações. Quando é executada
+uma operação que modifica um objeto replicado, em primeiro lugar ela deve obter um número de sequência dado por um processo centralizado que os emite. Então, é enviada uma mensagem a cada máquina que tem uma cópia do
+objeto, dizendo a ela que execute a operação. Uma vez que todas essas atualizações portam números de sequência,
+todas as máquinas executam as operações na mesma ordem, o que garante consistência sequencial.
+
+## 8.4.7 Desempenho
+O ponto principal da construção de um computador paralelo é fazer com que ele execute mais rápido do que
+uma máquina com um único processador. Se ele não cumprir esse simples objetivo, não vale a pena tê-lo. Além disso,
+ele deve cumprir o objetivo de uma maneira eficiente em relação ao custo. Uma máquina que é duas vezes mais rápida
+do que um uniprocessador a 50 vezes o custo muito provavelmente não será um sucesso de vendas. Nesta seção,
+examinaremos algumas das questões de desempenho associadas a arquiteturas de computadores paralelos.
+
+**• Métrica de hardware**
+Do ponto de vista do hardware, a métrica do desempenho que interessa são as velocidades de CPU e E/S
+e o desempenho da rede de interconexão. As velocidades de CPU e E/S são as mesmas de um uniprocessador,
+portanto, os parâmetros fundamentais de interesse em um sistema paralelo são os associados com dois itens fun-
+damentais: latência e largura de banda, que agora examinaremos um por vez.
+
+A latência de ida e volta é o tempo que leva para a CPU enviar um pacote e obter uma resposta. Se o pacote
+for enviado a uma memória, então a latência mede o tempo que leva para ler ou escrever uma palavra ou bloco
+de palavras. Se ele for enviado a outra CPU, a latência mede o tempo de comunicação entre processadores para
+pacotes daquele tamanho. Em geral, a latência que interessa é a de pacotes mínimos, muitas vezes uma única
+palavra ou uma pequena linha de cache.
+
+A latência é composta de vários fatores e é diferente para interconexões de comutação de circuitos, armaze-
+namento e repasse (store-and-forward), atalho virtual e wormhole roteada. No caso da comutação de circuitos, a
+latência é a soma do tempo de estabelecimento com o tempo de transmissão. Para estabelecer um circuito é pre-
+ciso enviar um pacote de sondagem para reservar recursos e então devolver um relatório. Tão logo isso aconteça,
+o pacote de dados tem de ser montado. Quando o pacote estiver pronto, os bits podem fluir a toda velocidade,
+portanto, se o tempo total de montagem for Ts, o tamanho do pacote é p bits, e a largura de banda b bits/s, a latên-
+cia de uma via é Ts + p/b. Se o circuito for full duplex, não há tempo de estabelecimento para a resposta, portanto,
+a latência mínima para enviar um pacote de p bits e obter uma resposta de p bits é Ts + 2p/b s.
+
+Na comutação de pacotes não é necessário enviar antes um pacote de sondagem ao destino, mas ainda há
+algum tempo interno de estabelecimento para montar o pacote, Ta. Nesse caso, o tempo de transmissão de uma
+via é Ta + p/b, mas isso é apenas o tempo de levar o pacote até o primeiro switch. Há um atraso finito dentro do
+switch, por exemplo, Td, e então o processo é repetido no switch seguinte e assim por diante. O atraso Td é com-
+posto do tempo de processamento mais o atraso de fila à espera da liberação de uma porta de saída. Se houver n
+switches, então a latência total de uma via é dada pela fórmula Ta + n(p/b + Td) + p/b, cujo termo final se deve à
+cópia do último switch até o destino.
+
+No melhor caso, as latências de uma via para atalho virtual e roteamento wormhole estão próximas a Ta + p/b
+porque não há nenhum pacote de sondagem para estabelecer um circuito e nenhum atraso de armazenamento e
+repasse. Basicamente, é o tempo inicial de estabelecimento para montar o pacote, mais o tempo para empurrar
+os bits porta afora. Em todos os casos, é preciso adicionar o atraso de propagação, mas ele costuma ser pequeno.
+
+A outra métrica de hardware é a largura de banda. Muitos programas paralelos, em especial em ciências
+naturais, movimentam grande quantidade de dados de um lado para outro, portanto, o número de bytes/s que o
+sistema pode mover é crítico para o desempenho. Há várias métricas para largura de banda. Já vimos uma delas –
+largura de banda de bisseção. Outra é a largura de banda agregada, que é calculada pela simples adição das capa-
+cidades de todos os enlaces. Esse número dá o número máximo de bits que podem estar em trânsito ao mesmo
+tempo. Ainda outra métrica importante é a largura de banda média na saída da CPU. Se cada CPU for capaz de produzir 1 MB/s, de pouco adianta a interconexão ter uma largura de bisseção de 100 GB/s. A comunicação será
+limitada pela quantidade de dados que cada CPU pode produzir.
+
+Na prática, conseguir qualquer coisa que ao menos chegue perto da largura de banda teórica é muito difícil.
+Muitas fontes de sobrecarga contribuem para reduzir a capacidade. Por exemplo, há sempre alguma sobrecarga
+por pacote associada a cada pacote: montar o pacote, construir seu cabeçalho e mandá-lo embora. O envio de
+1.024 pacotes de 4 bytes nunca alcançará a mesma largura de banda que o envio de um único pacote de 4.096
+bytes. Infelizmente, para conseguir baixas latências é melhor usar pacotes menores, visto que os grandes blo-
+queiam as linhas e switches por muito tempo. Assim, há um conflito inerente entre conseguir baixas latências
+médias e alta utilização de largura de banda. Para algumas aplicações, uma delas é mais importante que a outra, e
+para outras aplicações pode ser o contrário. Entretanto, vale a pena observar que você sempre pode comprar mais
+largura de banda (instalando mais fios ou fios mais largos), mas não pode obter latências mais baixas. Por isso, em
+geral, é melhor errar para o lado das menores latências possíveis e se preocupar com largura de banda mais tarde.
+
+**• Métrica de software**
+A métrica de hardware, como a latência e a largura de banda, observa o que o hardware é capaz de fazer. Contudo,
+os usuários têm uma perspectiva diferente. Eles querem saber o ganho de rapidez na execução de seus programas em
+um computador paralelo em vez de em um uniprocessador. Para eles, a métrica fundamental é mais velocidade: quan-
+to mais depressa um programa executa em um sistema de n processadores em comparação com um sistema com um
+só processador. Em geral, os resultados são mostrados em grafos como os da Figura 8.49. Nesse caso, vemos vários
+programas paralelos diferentes que executam em um multicomputador que consiste em 64 CPUs Pentium Pro. Cada
+curva mostra o ganho de velocidade de um programa com k CPUs como uma função de k. O ganho de velocidade
+perfeito é indicado pela linha pontilhada na qual usar k CPUs faz o programa funcionar k vezes mais rápido, para
+qualquer k. Poucos programas conseguem o ganho perfeito de velocidade, mas alguns chegam perto. O problema dos
+N corpos consegue um ótimo paralelismo; o awari (um jogo de tabuleiro africano) se sai razoavelmente bem, mas
+inverter certa matriz de linha do horizonte não chega a mais do que cinco vezes a velocidade original, não importando
+quantas CPUs estejam disponíveis. Os programas e resultados são discutidos em Bal et al., 1998.
+
+**• Figura 8.49   Programas reais alcançam menos do que o aumento perfeito de velocidade indicado pela linha pontilhada.**
+
+    Aumento de Velocidade (Speedup)
+    ^
+    60 |                                         / (Aumento de
+    |                                        /   Velocidade Linear)
+    50 |                                     [#]-- Problema dos N corpos
+    |                                    /
+    40 |                                 [#]
+    |                                /
+    30 |                             [O]---------- Awari
+    |                          /
+    20 |                 [#]--[O]
+    |              /
+    10 |        [#]-[O]
+    |  [#]-[O] [X]---[X]---[X]---[X]---[X]----- Inversão de Matriz
+    0 +------------------------------------------->
+    0        10        20        30        40        50        60
+                    Número de CPUs
+
+![alt text](image-147.png)
+
+**• Desempenho e Realidade em Multiprocessadores**
+Ao implementar essas lógicas no seu eBook, é vital mostrar que a escalabilidade não é perfeita. A Figura 8.49 ilustra como programas reais se comportam à medida que adicionamos mais CPUs:
+
+ - Aumento de Velocidade Linear: O ideal teórico onde dobrar as CPUs dobra a velocidade.
+
+ - Problema dos N corpos: Consegue manter uma eficiência alta, aproximando-se da linha ideal devido à sua natureza altamente paralelizável.
+
+ - Inversão de Matriz: Mostra um ganho muito baixo que estagna rapidamente. Isso ocorre porque a sobrecarga de comunicação entre os nós (como as trocas de mensagens e sincronização de memória que vimos na Figura 8.46) acaba superando o ganho de processamento.
+
+Parte da razão por que o ganho de velocidade perfeito é quase impossível de alcançar é que quase todos os
+programas têm algum componente sequencial, que costuma ser a fase de incialização, a leitura de dados ou a coleta
+de resultados. Nesse caso, não adianta ter muitas CPUs. Suponha que um programa execute por T segundos em um
+uniprocessador, sendo que uma fração f de seu tempo é código sequencial e uma fração (1 – f) tem potencial para
+paralelismo, como mostra a Figura 8.50(a). Se esse último código puder executar em n CPUs sem nenhuma sobre-
+carga, seu tempo de execução pode ser reduzido de (1 – f)T para (1 – f)T/n na melhor das hipóteses, como mostra a
+Figura 8.50(b). Isso dá um tempo de execução total para as partes sequencial e paralela de fT + (1 – f)T/n. O aumento
+de velocidade é apenas o tempo de execução do programa original, T, dividido pelo novo tempo de execução:
+
+    Aumento de velocidade =     n 
+                            1+ (n - 1) f
+
+**• Figura 8.50 - (a) Um programa tem uma parte sequencial e uma parte que pode utilizar paralelismo. (b) Efeito da execução de parte do programa em paralelo.**
+A Figura 8.50 é fundamental para o seu eBook pois ela ilustra visualmente a Lei de Amdahl, um conceito crucial para qualquer desenvolvedor que trabalha com sistemas distribuídos ou multithreading.
+
+O diagrama demonstra que o ganho de desempenho de um programa é limitado pela sua parte que não pode ser paralelizada (sequencial).
+
+    (a) Estrutura do Programa            (b) Execução em Paralelo (n CPUs)
+        (Tempo Total = T)                    (Tempo Reduzido)
+
+    +-----------------------+            +-------+
+    |        Parte          |            |   f   | <--- 1 CPU ativa
+    |      Sequencial (f)   |            +-------+
+    +-----------------------+            |       |
+    |                       |            | 1 - f |
+    |        Parte          |            |-------|
+    |     Paralelizável     |    ====>   | 1 - f | <--- n CPUs ativas
+    |        (1 - f)        |            |-------|
+    |                       |            | 1 - f |
+    +-----------------------+            +-------+
+
+    <---------- T ---------->            <--fT--><--- (1-f)T / n --->
+
+**• Explicação para o eBook**
+
+ - Parte Sequencial (f): Representa o código que precisa ser executado em ordem, como a inicialização de variáveis, leitura de arquivos ou sincronização de travas (locks). Não importa quantas CPUs você adicione, essa parte sempre levará o mesmo tempo (fT).
+
+ - Parte Paralelizável (1 - f): É o trecho do código que pode ser dividido entre várias CPUs. Em um cenário ideal com n CPUs, o tempo gasto nessa parte cai para (1 - f)T.
+
+ - O "Gargalo": Note que, mesmo que você tenha infinitas CPUs (n --> infinito), o tempo total de execução nunca será menor que fT. Se 10% do seu programa for sequencial, você nunca conseguirá um aumento de velocidade superior a 10 vezes, não importa o hardware.
+ 
+ Para f = 0, podemos obter aumento de velocidade linear, mas, para f > 0, o aumento de velocidade perfeito
+não é possível por causa do componente sequencial. Esse resultado é conhecido como lei de Amdahl.
+
+A lei de Amdahl não é a única razão por que o aumento perfeito de velocidade é quase impossível de conse-
+guir. Latências de comunicação não zero, larguras de banda de comunicação finitas e ineficiências de algoritmos
+também podem desempenhar um papel. Além disso, mesmo que houvesse mil CPUs disponíveis, nem todos os
+programas podem ser escritos para fazer uso de tantas CPUs e a sobrecarga para inicializar todas pode ser signi-
+ficativa. Ademais, muitas vezes o algoritmo mais conhecido não é bom para ser usado em uma máquina paralela,
+portanto, é preciso usar um algoritmo abaixo do ideal no caso paralelo. Dito isso, há muitas aplicações para as
+quais seria muito desejável que o programa executasse com velocidade n vezes maior, ainda que para isso pre-
+cisasse de 2n CPUs. Afinal, CPUs não são tão caras, e muitas empresas vivem com consideravelmente menos do
+que 100% de eficiência em outras partes de seus negócios.
+
+**• Obtenção de alto desempenho**
+O modo mais direto de melhorar o desempenho é adicionar CPUs ao sistema. Contudo, essa adição deve ser
+feita de um modo tal que evite a criação de gargalos. Um sistema no qual se pode adicionar CPUs e obter mais
+capacidade de computação correspondente é denominado escalável.
+
+Para ver algumas implicações da escalabilidade, considere quatro CPUs conectadas por um barramento,
+como ilustrado na Figura 8.51(a). Agora, imagine ampliar esse sistema para 16 CPUs adicionando 12, conforme
+mostra a Figura 8.51(b). Se a largura de banda do barramento for b MB/s, então, com a quadruplicação do número
+de CPUs, também reduzimos a disponibilidade de largura de banda por CPU de b/4 MB/s para b/16 MB/s. Esse é
+um sistema não escalável.
+
+**• Figura 8.51 - (a) Sistema de 4 CPUs com um barramento. (b) Sistema de 16 CPUs com um barramento. (c) Sistema de 4 CPUs em
+grade. (d) Sistema de 16 CPUs em grade.
+As arquiteturas de computadores paralelos evoluíram para lidar com as limitações físicas de processamento único, permitindo que múltiplos nós trabalhem em conjunto para resolver problemas complexos. No entanto, a eficiência desses sistemas depende diretamente da forma como os componentes são interconectados e como o trabalho é distribuído entre eles.
+
+O diagrama ilustra a diferença fundamental entre conectar CPUs a um meio de comunicação compartilhado e organizá-las em uma topologia de malha.
+
+    (a) 4 CPUs (Barramento)          (b) 16 CPUs (Barramento)
+        +---+ +---+ +---+ +---+          +---+ +---+ ... +---+
+        |CPU| |CPU| |CPU| |CPU|          |CPU| |CPU|     |CPU|
+        +-+-+ +-+-+ +-+-+ +-+-+          +-+-+ +-+-+     +-+-+
+        |     |     |     |              |     |         |
+    ----*-----*-----*-----*----      ----*-----*---------*----
+            BARRAMENTO                       BARRAMENTO (Gargalo!)
+
+    (c) 4 CPUs (Grade)               (d) 16 CPUs (Grade)
+        +---+---[S]---+---+              +---+---[S]---+---+---[S]---+
+        |CPU|         |CPU|              |CPU|         |CPU|         |
+        +---+---[S]---+---+              +---+---[S]---+---+---[S]---+
+        |      |      |                  |      |      |      |      |
+        [S]----[S]----[S]                [S]----[S]----[S]----[S]----[S]
+
+**• Análise de Escalabilidade:**
+
+ - Sistemas com Barramento (a e b):
+
+    - Limitação: Todas as CPUs compartilham o mesmo caminho de comunicação.
+
+    - O Gargalo: À medida que passamos de 4 para 16 CPUs, a disputa pelo barramento aumenta drasticamente. Isso causa latência, pois apenas uma CPU (ou um pequeno grupo, dependendo do protocolo) pode transmitir dados por vez.
+
+ - Sistemas em Grade (c e d):
+
+    - Vantagem: Utilizam múltiplos switches (S) para interconectar os nós.
+
+    - Caminhos Múltiplos: Se uma CPU precisa se comunicar com outra, existem vários caminhos possíveis através da grade, o que reduz a contenção e permite que o sistema escale muito melhor para um grande número de processadores.
+
+Agora, vamos fazer a mesma coisa com um sistema em grade, conforme mostra a Figura 8.51(c) e a Figura
+8.51(d). Com essa topologia, adicionar novas CPUs também adiciona novos enlaces, portanto, ampliar o sistema
+não provoca a queda da largura de banda agregada por CPU, como acontece com um barramento. Na verdade, a
+razão entre enlaces e CPUs aumenta de 1,0 com 4 CPUs (4 CPUs, 4 enlaces) para 1,5 com 16 CPUs (16 CPUs,
+24 enlaces), portanto, agregar CPUs melhora a largura de banda agregada por CPU.
+
+Claro que a largura de banda não é a única questão. Adicionar CPUs ao barramento não aumenta o diâme-
+tro da rede de interconexão nem a latência na ausência de tráfego, ao passo que adicioná-las à grade, sim. Para
+uma grade n × n, o diâmetro é 2(n – 1), portanto, na pior das hipóteses (e na média), a latência aumenta mais ou
+menos pela raiz quadrada do número de CPUs. Para 400 CPUs, o diâmetro é 38, ao passo que para 1.600 CPUs
+é 78, portanto, quadruplicar o número de CPUs aproximadamente dobra o diâmetro e, assim, a latência média.
+
+O ideal seria que um sistema escalável mantivesse a mesma largura de banda média por CPU e uma latência
+média constante à medida que fossem adicionadas CPUs. Contudo, na prática, é viável manter suficiente largura
+de banda por CPU, mas, em todos os projetos práticos, a latência aumenta com o tamanho. Conseguir que ela
+aumente por logaritmo, como em um hipercubo, é quase o melhor que se pode fazer.
+
+O problema do aumento da latência à medida que o sistema é ampliado é que a latência costuma ser fatal
+para o desempenho em aplicações de granulações fina e média. Se um programa precisar de dados que não estão
+em sua memória local, muitas vezes há uma demora substancial para ir buscá-los e, quanto maior o sistema, mais
+longo é o atraso, como acabamos de ver. Esse problema é válido para multiprocessadores, bem como para multi-
+computadores, já que, em ambos os casos, a memória física é invariavelmente subdividida em módulos dispersos.
+
+Como consequência dessa observação, projetistas de sistemas muitas vezes fazem grandes esforços para redu-
+zir, ou ao menos ocultar, a latência, usando diversas técnicas que mencionaremos agora. A primeira é a replicação
+de dados. Se for possível manter cópias de um bloco de dados em vários locais, a velocidade dos acessos a partir
+desses locais pode ser aumentada. Uma dessas técnicas de replicação é fazer cache, na qual uma ou mais cópias de
+blocos de dados são mantidas próximas de onde estão sendo usadas, bem como no lugar a que elas “pertencem”.
+Contudo, outra estratégia é manter várias cópias pares – cópias que têm o mesmo status – em comparação com o
+relacionamento assimétrico primária/secundária usado em cache. Quando são mantidas várias cópias, não impor-
+tando de que forma, as questões fundamentais são: onde são colocados os blocos de dados, quando e por quem.
+As respostas vão de posicionamento dinâmico por demanda pelo hardware a posicionamento intencional na hora
+do carregamento seguindo diretivas do compilador. Em todos os casos, gerenciar a consistência é uma questão.
+
+Uma segunda técnica para ocultar latências é a busca antecipada. Se um item de dado puder ser buscado
+antes de ser necessário, o processo de busca pode ser sobreposto à execução normal, de modo que, quando o item
+for necessário, ele já estará lá. A busca antecipada pode ser automática ou por controle de programa. Quando
+uma cache carrega não apenas a palavra que está sendo referenciada, mas uma linha de cache inteira que contém
+a palavra, pode-se apostar que as palavras sucessivas também logo serão necessárias.
+
+A busca antecipada pode ser controlada explicitamente. Quando o compilador percebe que precisará
+de alguns dados, pode inserir uma instrução explícita para buscá-los e colocar aquela instrução com ante-
+cedência suficiente para que os dados estejam lá em tempo. Essa estratégia requer que o compilador tenha
+conhecimento completo da máquina subjacente e de sua temporização, bem como controle sobre o local
+onde todos os dados são colocados. E as instruções LOAD especulativas funcionam melhor quando se tem
+certeza de que os dados serão necessários. Obter uma falta de página com uma LOAD para um caminho que,
+afinal, não é tomado, é muito custoso.
+
+Uma terceira técnica é o multithreading, como já vimos. Se a mudança entre processos puder ser feita com
+suficiente rapidez, por exemplo, dando a cada um seu próprio mapa de memória e seus próprios registradores de
+hardware, então, quando um thread bloqueia por estar esperando a chegada de dados remotos, o hardware pode
+rapidamente mudar para algum outro que pode continuar. No caso-limite, a CPU executa a primeira instrução do
+thread um, a segunda instrução do thread dois e assim por diante. Desse modo, pode-se manter a CPU ocupada,
+mesmo em face de longas latências de memória para os threads individuais.
+
+Uma quarta técnica para ocultar latência é usar escritas sem bloqueio. Em geral, quando é executada uma
+instrução STORE, a CPU espera até que a STORE tenha concluído antes de continuar. Com escritas sem blo-
+queio, a operação de memória é iniciada, mas o programa continua assim mesmo. É mais difícil continuar após
+uma instrução LOAD, mas com a execução fora de ordem até isso é possível.
+
+## 8.5 Computação em grade 
+Muitos dos desafios atuais na ciência, engenharia, indústria, meio ambiente e outras áreas são de grande
+escala e interdisciplinares. Resolvê-los requer a experiência, as habilidades, conhecimentos, instalações, softwares
+e dados de múltiplas organizações e, muitas vezes, em países diferentes. Alguns exemplos são os seguintes:
+
+    1. Cientistas que estão desenvolvendo uma missão para Marte.
+
+    2. Um consórcio para construir um produto complexo (por exemplo, uma represa ou uma aeronave).
+
+    3. Uma equipe de socorro internacional para coordenar o auxílio prestado após um desastre natural.
+
+Algumas dessas cooperações são de longo prazo, outras de prazos mais curtos, mas todas compartilham a
+linha comum que é conseguir que organizações individuais, com seus próprios recursos e procedimentos, traba-
+lhem juntas para atingir uma meta comum.
+
+Até há pouco tempo, conseguir que organizações diferentes, com sistemas operacionais de computador, ban-
+cos de dados e protocolos diferentes, trabalhassem juntas era muito difícil. Contudo, a crescente necessidade de
+cooperação interorganizacional em larga escala levou ao desenvolvimento de sistemas e tecnologia para conectar
+computadores muito distantes uns dos outros no que é denominado grade. Em certo sentido, a grade é a etapa
+seguinte ao longo do eixo da Figura 8.1. Ela pode ser considerada um cluster muito grande, internacional, fraca-
+mente acoplado e heterogêneo.
+
+O objetivo da grade é proporcionar infraestrutura técnica para permitir que um grupo de organizações que
+compartilham uma mesma meta forme uma organização virtual. Essa organização virtual tem de ser flexível,
+com um quadro de associados grande e mutável, permitindo que seus membros trabalhem juntos em áreas que
+consideram apropriadas e, ao mesmo tempo, permitindo que eles mantenham controle sobre seus próprios recur-
+sos em qualquer grau que desejarem. Com essa finalidade, pesquisadores de grade estão desenvolvendo serviços,
+ferramentas e protocolos para habilitar o funcionamento dessas organizações virtuais.
+
+A grade é inerentemente multilateral, com muitos participantes de mesmo status. Ela pode ser contras-
+tada com estruturas de computação existentes. No modelo cliente-servidor, uma transação envolve duas
+partes: o servidor, que oferece algum serviço, e o cliente, que quer usar o serviço. Um exemplo típico é a
+Web, na qual usuários se dirigem a servidores Web para achar informações. A grade também é diferente de aplicações peer-to-peer, nas quais pares de indivíduos trocam arquivos. O e-mail é um exemplo comum
+dessa aplicação. Por ser diferente desses modelos, a grade requer novos protocolos e tecnologia.
+
+A grade precisa ter acesso a uma ampla variedade de recursos. Cada recurso tem um sistema e organização
+específicos aos quais pertence e que decidem quanto desse recurso disponibilizará para a grade, em que horários
+e para quem. Em um sentido abstrato, a grade trata de acesso e gerenciamento de recursos.
+
+Um modo de modelar a grade é a hierarquia em camadas da Figura 8.52. A camada-base na parte mais baixa
+é o conjunto de componentes com o qual a grade é construída. Inclui CPUs, discos, redes e sensores do lado do
+hardware, e programas e dados do lado do software. Esses são os recursos que a grade disponibiliza de um modo
+controlado.
+
+**• Figura 8.52 - Camadas da grade.**
+Esta tabela é o componente final para consolidar a hierarquia de software em sistemas de computação em grade (grid computing) no seu eBook. Enquanto as figuras anteriores focaram no hardware e na topologia física, a Figura 8.52 organiza como o software gerencia essa infraestrutura complexa em camadas lógicas.
+
+    +---------------------+------------------------+---------------------+
+    | Camada              | Função                 | Exemplos            |
+    +---------------------+------------------------+---------------------+
+    | Aplicação           | Aplicaçōes que         |                     |
+    |                     | compartilham recursos  |                     |
+    |                     | gerenciados de modos   |                     |
+    |                     | controlados            |                     |
+    +---------------------+------------------------+---------------------+
+    | Coletiva            | Descoberta, corretagem,| BARRAMENTO          |
+    |                     | monitoração e controle | INTERNO             |
+    |                     | de grupos de recursos  |                     |
+    +---------------------+------------------------+---------------------+
+    | De recursos         | Acesso seguro e        | [B. Endereços]      |
+    |                     | gerenciado a recursos  |                     |
+    |                     | individuais            |                     |
+    +---------------------+------------------------+---------------------+
+    | Base                | Recursos físicos:      | CLOCK (Sincronismo),|
+    |                     | computadores,          | MEMÓRIA PRINCIPAL   |
+    |                     | armazenamento, redes,  | (RAM)               |
+    |                     | sensores, programas    |                     |
+    |                     | e dados                |                     |
+    +---------------------+------------------------+---------------------+
+
+**• Análise das Camadas para o seu eBook:**
+
+ - Camada de Base: É o alicerce físico, englobando desde o seu IdeaPad até os supercomputadores como o BlueGene/P e as redes de fibra óptica que os conectam.
+
+ - Camada de Recursos: Define os protocolos de comunicação e segurança. É aqui que o sistema decide quem pode acessar uma CPU específica ou um banco de dados na OCI.
+
+ - Camada Coletiva: Funciona como o "maestro" do sistema, lidando com o escalonamento que vimos na Figura 8.45 (como o backfilling) para evitar que os recursos fiquem ociosos.
+
+ - Camada de Aplicação: É onde residem os programas do usuário, como o seu IDS Sentinel ou uma consulta de busca do Google, utilizando toda a estrutura subjacente de forma transparente.
+
+Em um nível acima está a camada de recursos, que se preocupa com o gerenciamento de recursos individuais.
+Em muitos casos, um recurso que participa de uma grade tem um processo local que gerencia esse recurso e permite
+acesso controlado a ele por usuários remotos. Essa camada proporciona uma interface uniforme para que camadas
+mais altas possam inquirir as características e status de recursos individuais, monitorando esses recursos e os utili-
+zando de modo seguro.
+
+Em seguida, vem a camada coletiva, que manuseia grupos de recursos. Uma de suas funções é a descoberta
+de recursos, pela qual um usuário pode localizar ciclos de CPU disponíveis, espaço em disco ou dados específicos.
+A camada coletiva pode manter diretórios ou outros bancos de dados para fornecer essas informações. Também
+pode oferecer um serviço de corretagem, pelo qual os provedores e usuários de serviços são compatibilizados,
+possivelmente proporcionando alocação de recursos escassos entre usuários concorrentes. A camada coletiva
+também é responsável por replicar dados, gerenciar admissão de novos membros e recursos, pela contabilidade e
+pela manutenção das políticas de bancos de dados sobre quem pode usar o quê.
+
+Ainda mais acima está a camada de aplicação, onde residem as aplicações do usuário. Ela usa as camadas
+mais baixas para adquirir credenciais que provam seu direito de usar certos recursos, apresentar requisições de
+utilização, monitorar o andamento dessas requisições, lidar com falhas e notificar o usuário dos resultados.
+
+Segurança é fundamental para uma grade bem-sucedida. Os proprietários dos recursos quase sempre insis-
+tem em manter rígido controle e querem determinar quem vai usá-los, por quanto tempo, e o quanto. Sem boa
+segurança, nenhuma organização disponibilizaria seus recursos à grade. Por outro lado, se um usuário fosse
+obrigado a ter uma conta de login e uma senha para todo computador que quisesse usar, a utilização da grade
+seria insuportavelmente trabalhosa. Por conseguinte, a grade teve de desenvolver um modelo de segurança para
+tratar dessas preocupações.
+
+
+Uma das principais características do modelo de segurança é a assinatura única. A primeira etapa para um usuá-
+rio utilizar a grade é ser autenticado e adquirir uma credencial, um documento assinado digitalmente que especifica
+em nome de quem o trabalho deve ser realizado. Credenciais podem ser delegadas, de modo que, quando uma
+computação precisa criar subcomputações, os processos-filhos também podem ser identificados. Quando uma
+credencial é apresentada a uma máquina remota, ela tem de ser mapeada para o mecanismo local de segurança.
+
+Em sistemas UNIX, por exemplo, usuários são identificados por IDs de usuários de 16 bits, mas outros sistemas
+têm outros esquemas. Por fim, a grade precisa de mecanismos para permitir que políticas de acesso sejam decla-
+radas, mantidas e atualizadas.
+
+Para proporcionar interoperabilidade entre diferentes organizações e máquinas são necessários padrões,
+tanto em termos dos serviços oferecidos, quanto dos protocolos usados para acessá-los. A comunidade das grades
+criou uma organização, a Global Grid Forum, para gerenciar o processo de padronização. Ela criou uma estrutura
+denominada OGSA (Open Grid Services Architecture – arquitetura de serviços de grade aberta) para posicio-
+nar os vários padrões e seu desenvolvimento. Sempre que possível, os padrões utilizam padrões já existentes,
+por exemplo, o WSDL (Web Services Definition Language – linguagem para definição de serviços Web), para
+descrever serviços OGSA. Os serviços que estão atualmente em fase de padronização pertencem a oito categorias
+gerais, como descrevemos a seguir, mas novas categorias serão criadas mais tarde.
+
+    1. Serviços de infraestrutura (habilitar comunicação entre recursos).
+
+    2. Serviços de gerenciamento de recursos (reserva e distribuição de recursos).
+
+    3. Serviços de dados (mover e replicar dados para onde forem necessários).
+
+    4. Serviços de contexto (descrever recursos necessários e políticas de utilização).
+
+    5. Serviços de informação (obter informações sobre disponibilidade de recursos).
+
+    6. Serviços de autogerenciamento (suportar uma qualidade de serviço declarada).
+
+    7. Serviços de segurança (impor políticas de segurança).
+
+    8. Serviços de gerenciamento de execução (gerenciar fluxo de trabalho).
+
+Há muito mais que poderia ser dito sobre a grade, mas limitações de espaço nos impedem de estender mais
+esse tópico. Se o leitor quiser mais informações sobre a grade, pode consultar Abramson, 2011; Balasangameshwara
+e Raju, 2012; Celaya e Arronategui, 2011; Foster e Kesselman, 2003; e Lee et al., 2011.
+
+## 8.6 Resumo
+Está ficando cada vez mais difícil conseguir que os computadores funcionem com mais rapidez apenas
+aumentando a velocidade de clock por causa de problemas como maior dissipação de calor e outros fatores. Em
+vez disso, os projetistas estão buscando o paralelismo para conseguir ganhos de velocidade. O paralelismo pode
+ser introduzido em muitos níveis diferentes, desde o muito baixo, onde os elementos de processamento são muito
+fortemente acoplados, até o muito alto, onde eles são muito fracamente acoplados.
+
+No nível baixo está o paralelismo no chip, no qual atividades paralelas ocorrem em um único chip. Uma
+forma é o paralelismo no nível da instrução, no qual uma instrução, ou uma sequência delas, emite diversas ope-
+rações que podem ser executadas em paralelo por diferentes unidades funcionais. Uma segunda forma de parale-
+lismo no chip é multithreading, no qual a CPU pode comutar como quiser entre múltiplos threads, instrução por
+instrução, criando um multiprocessador virtual. Uma terceira forma é o multiprocessador de chip único no qual
+dois ou mais núcleos são colocados no mesmo chip para permitir que executem ao mesmo tempo.
+
+Em um nível acima encontramos os coprocessadores, em geral placas de expansão que agregam capacidade
+de processamento extra em alguma área especializada, como processamento de protocolos de rede ou multimídia.
+Esses processadores extras aliviam o trabalho da CPU principal, permitindo que ela faça outras coisas enquanto
+eles estão realizando suas tarefas especializadas.
+
+No próximo nível encontramos os multiprocessadores de memória compartilhada. Os sistemas contêm duas
+ou mais CPUs totalmente desenvolvidas, que compartilham uma memória em comum. Multiprocessadores UMA
+se comunicam por meio de um barramento compartilhado (de escuta), um switch crossbar ou uma rede de comu-
+tação multiestágios. Eles são caracterizados por terem um tempo de acesso uniforme a todos os locais de memória.
+
+Por comparação, multiprocessadores NUMA também apresentam todos os processos com o mesmo espaço de
+endereço compartilhado, mas, nesse caso, os acessos remotos levam um tempo bem mais longo do que os locais.
+Por fim, multiprocessadores COMA são mais uma variação na qual linhas de cache são movidas sob demanda um
+lado para outro da máquina, mas não têm uma residência real como em outros projetos.
+
+Multicomputadores são sistemas com muitas CPUs que não compartilham uma memória em comum. Cada
+uma tem sua própria memória privada, com comunicação por troca de mensagens. MPPs são multicomputadores
+grandes com redes de comunicação especializadas como o BlueGene/P da IBM. Clusters são sistemas mais simples,
+que usam componentes de prateleira, como o sistema que sustenta o Google.
+
+Multicomputadores costumam ser programados usando um pacote de troca de mensagens como MPI. Uma
+abordagem alternativa é usar memória compartilhada no nível da aplicação, como um sistema DSM baseado em
+páginas, o espaço de tuplas Linda, ou objetos Orca ou Globe. DSM simula memória compartilhada no nível de
+página, o que o torna semelhante a uma máquina NUMA, exceto pela penalidade maior para referências remotas.
+
+Por fim, no nível mais alto e mais fracamente acoplado, estão as grades. São sistemas nos quais organizações
+inteiras são reunidas e interligadas pela Internet para compartilhar capacidade de processamento, dados e outros
+recursos.
