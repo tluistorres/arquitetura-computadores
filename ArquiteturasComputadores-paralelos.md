@@ -226,17 +226,17 @@ Por fim, as últimas cinco colunas mostram quais posições de instrução podem
     |                                                                               |
     |  Unidade        | Descrição                        | Qtd | Lat |  1 2 3 4 5   |
     |-----------------|----------------------------------|-----|-----|--------------|
-    |  Constante      | Operações imediatas              |  5  |  1  |  x x x x x   |
+    |  Constante      | Operações imediatas              |  5  |  1  |  x x x x x   | Latência - indica quantos ciclos de clock leva p/ concluir
     |  ULA de inteiros| Operações aritmét., bool, 32 bit |  5  |  1  |  x x x x x   |
     |  Deslocador     | Deslocamentos multibits          |  2  |  1  |  x x x x x   |
-    |  Load/Store     | Operações de memória             |  2  |  3  |        x x   |
+    |  Load/Store     | Operações de memória             |  2  |  3  |        x x   | Load/Store (carregamento/armazenamento)
     |  Int/FP MUL     | Multiplic. int e PF 32 bits      |  2  |  3  |    x x       |
     |  ULA de PF      | Aritmética de PF                 |  2  |  3  |  x     x     |
     |  Comparação PF  | Compara Ponto Flutuante          |  1  |  1  |      x       |
     |  Raiz/div de PF | Divisão e raiz quadrada PF       |  1  | 17  |    x         |
     |  Desvio         | Controle de fluxo (Jumps)        |  3  |  3  |    x x x     |
     |  ULA DSP        | Aritmét. multimídia (8/16 bits)  |  2  |  3  |  x   x   x   |
-    |  MUL DSP        | Multiplic. multimídia (8/16 bits)|  2  |  3  |    x x       |
+    |  MUL DSP        | Multiplic. multimídia (8/16 bits)|  2  |  3  |    x x       | DSP - Digital Signal Processor (processador de sinal digital)
     |                                                                               |
     |  (Legenda: x = Unidade disponível nesta posição | Espaço vazio = Indisponível)|
     +-------------------------------------------------------------------------------+
@@ -283,41 +283,43 @@ considera dois registradores como quatro pares de bytes e compara cada par.
 
 **• Figura 8.5   Principais grupos de operações que vêm com o TriMedia.**
 
-    +---------------------------------------------------------------------------------------------------------+
-    |                  Grupos de Operações TriMedia                                                           |
-    +---------------------------------------------------------------------------------------------------------+
-    | Grupo                      | Descrição                                                                  |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Clip                       | Corta 4 bytes ou 2 meias-palavras                                          |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Valor absoluto             | Valor cortado, com sinal, absoluto DSP                                     |                                                     
-    +----------------------------+----------------------------------------------------------------------------+
-    | Adição DSP                 | Adição cortada, com sinal                                                  |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Subtração DSP              | Subtração cortada, com sinal                                               |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Multiplicação              | Multiplicação cortada, com sinal DSP                                       |                             
-    +----------------------------+----------------------------------------------------------------------------+
-    | Mínimo, máximo             | Obtém mínimo ou máximo de pares de quatro bytes                            |               
-    +----------------------------+----------------------------------------------------------------------------+
-    | Comparação                 | Compara dois registradores byte por byte                                   |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Deslocamento               | Desloca um par de operandos de 16 bits                                     |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Soma de produtos           | Soma, com sinal, produtos de 8 ou 16 bits                                  |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Merge, pack, swap          | Manipulação de bytes e meias-palavras                                      |      
-    +----------------------------+----------------------------------------------------------------------------+
-    | Médias quadráticas de byte | Média quádrupla, sem sinal, byte por byte                                  |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Médias de byte             | Média de quatro elementos, sem sinal, byte por byte                        |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Multiplicações de byte     | Multiplicação, sem sinal, de 8 bits                                        |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Estimativa de movimento    | Soma, sem sinal, de valores absolutos de diferenças de 8 bits com sinal    |
-    +----------------------------+----------------------------------------------------------------------------+
-    | Diversos                   | Outras operações aritméticas                                               |
-    +----------------------------+----------------------------------------------------------------------------+
+    +-----------------------------------------------------------------------------+
+    |                  Grupos de Operações TriMedia                               |
+    +----------------------------+------------------------------------------------+
+    | Processamento              | Armazenamento (Descrição Técnica)              |
+    +----------------------------+------------------------------------------------+
+    | Clip                       | Corta 4 bytes ou 2 meias-palavras (Saturação)  |
+    +----------------------------+------------------------------------------------+
+    | Valor absoluto             | Valor cortado, com sinal, absoluto (DSP)       |
+    +----------------------------+------------------------------------------------+
+    | Adição DSP                 | Adição cortada, com sinal (Saturação)          |
+    +----------------------------+------------------------------------------------+
+    | Subtração DSP              | Subtração cortada, com sinal                   |
+    +----------------------------+------------------------------------------------+
+    | Multiplicação  DSP         | Multiplicação cortada, com sinal               |
+    +----------------------------+------------------------------------------------+
+    | Mínimo, máximo             | Obtém mínimo ou máximo de pares de 4 bytes     |
+    +----------------------------+------------------------------------------------+
+    | Comparação                 | Compara dois registradores byte por byte       |
+    +----------------------------+------------------------------------------------+
+    | Deslocamento               | Desloca um par de operandos de 16 bits         |
+    +----------------------------+------------------------------------------------+
+    | Soma de produtos           | Soma, com sinal, produtos de 8 ou 16 bits      |
+    +----------------------------+------------------------------------------------+
+    | Merge, pack, swap          | Manipulação de bytes e meias-palavras          |
+    +----------------------------+------------------------------------------------+
+    | Médias quadráticas         | Média quádrupla, sem sinal, byte por byte      |
+    +----------------------------+------------------------------------------------+
+    | Médias de byte             | Média de quatro elementos, sem sinal           |
+    +----------------------------+------------------------------------------------+
+    | Multiplicações de byte     | Multiplicação, sem sinal, de 8 bits            |
+    +----------------------------+------------------------------------------------+
+    | Estimativa de movimento    | Soma de diferenças absolutas (SAD)             |
+    +----------------------------+------------------------------------------------+
+    | Diversos                   | Outras operações aritméticas                   |
+    +----------------------------+------------------------------------------------+
+    | CLOCK (Sincronismo)        | MEMÓRIA PRINCIPAL (RAM)                        |
+    +----------------------------+------------------------------------------------+
 
 O TriMedia tem um grande número de operações projetadas especificamente para o processamento eficiente de matrizes de inteiros de 8 bits sem sinal. Como um exemplo simples, considere o canto superior esquerdo de uma matriz de valores de 8 bits armazenados em memória (big-endian), como ilustra a Figura 8.6(a). O bloco 4 × 4 mostrado nesse canto contém 16 valores de 8 bits rotulados de A até P. Suponha, por exemplo, que a imagem precisa ser transposta, para produzir a Figura 8.6(b). Como essa tarefa deve ser realizada?
 
@@ -467,7 +469,7 @@ nulação grossa. (c) Multithreading simultâneo.**
     | A2 |    | C2 | C4 | A4 |    |    | C6 | A7 |    | B4 | B6 |
     +-----------------------------------------------------------+
 
-    c) Multithreading Simultâneo (SMT) Instruções de threads diferentes podem ocupar o mesmo ciclo simultaneamente.
+    (c) Multithreading Simultâneo (SMT) Instruções de threads diferentes podem ocupar o mesmo ciclo simultaneamente.
 
     +-----------------------------------------------------------+
     | A1 | B1 | C2 | C4 | A4 | B2 | C6 | A7 | B3 | B5 | B7 | C7 |
@@ -485,10 +487,9 @@ nulação grossa. (c) Multithreading simultâneo.**
 Na Figura 8.8(b), vemos como funciona o multithreading de granulação grossa com uma CPU de emissão dual, mas agora com um escalonador estático que não introduz um ciclo morto após uma instrução que protela. Em essência, os threads são executados um por vez, sendo que a CPU emite duas instruções por thread até atingir um
 que protela, ponto em que troca para o próximo thread no início do ciclo seguinte.
 
-Com CPUs superescalares há um terceiro modo, denominado multithreading simultâneo, ilustrado na Figura 8.8(c). Essa técnica pode ser considerada um refinamento do multithreading de granulação grossa, na qual um único thread tem permissão de emitir duas instruções por ciclo pelo tempo que puder, mas, quando protelar, as instruções são tomadas imediatamente do próximo thread na sequência, para manter a CPU ocupada por completo. O multithreading simultâneo também pode ajudar a manter ocupadas todas as unidades funcionais. Quando uma instrução não puder ser iniciada porque uma unidade funcional de que ela necessita está ocupada,
-pode-se escolher uma instrução de um thread diferente no lugar daquela. Nessa figura, estamos considerando que B8 protela no ciclo 11, portanto, C7 é iniciada no ciclo 12.
+Com CPUs superescalares há um terceiro modo, denominado multithreading simultâneo, ilustrado na Figura 8.8(c). Essa técnica pode ser considerada um refinamento do multithreading de granulação grossa, na qual um único thread tem permissão de emitir duas instruções por ciclo pelo tempo que puder, mas, quando protelar, as instruções são tomadas imediatamente do próximo thread na sequência, para manter a CPU ocupada por completo. O multithreading simultâneo também pode ajudar a manter ocupadas todas as unidades funcionais. Quando uma instrução não puder ser iniciada porque uma unidade funcional de que ela necessita está ocupada, pode-se escolher uma instrução de um thread diferente no lugar daquela. Nessa figura, estamos considerando que B8 protela no ciclo 11, portanto, C7 é iniciada no ciclo 12.
 
-    Se quiser mais informações sobre multithreading, consulte Gebhart et al., 2011; e Wing-kei et al., 2011.
+    **Se quiser mais informações sobre multithreading, consulte Gebhart et al., 2011; e Wing-kei et al., 2011.**
 
 **• Hyperthreading no Core i7**
 Agora que já vimos o multithreading no campo abstrato, vamos considerar um exemplo prático: o Core i7. No início da década de 2000, processadores como Pentium 4 não ofereciam os aumentos de desempenho de que a Intel precisava para manter suas vendas. Depois que o Pentium 4 já estava em produção, os arquitetos da Intel
@@ -514,9 +515,7 @@ Adicionar unidades funcionais também é razoavelmente fácil, mas é importante
 Um pipeline mais longo, com mais estágios, cada um realizando uma porção menor do trabalho em um período de tempo mais curto eleva o desempenho, mas também aumenta os efeitos negativos das previsões erradas de desvios, ausências da cache, interrupções e outros fatores que obstruem o fluxo normal no pipeline. Além
 do mais, para o total aproveitamento de um pipeline mais longo, a velocidade de clock tem de ser aumentada, o que significa que mais energia é consumida e mais calor é produzido.
 
-Por fim, pode-se adicionar multithreading. Seu valor está em fazer um segundo thread utilizar hardware que, não fosse por isso, ficaria abandonado. Após algumas experimentações, ficou claro que um aumento de 5% na área do chip para suporte de multithreading resultaria em ganho de 25% em desempenho para muitas aplicações,
-o que significava uma boa escolha. A primeira CPU com multithreading da Intel foi a Xeon em 2002, porém, mais tarde ele foi adicionado ao Pentium 4, a partir da versão de 3,06 GHz e continuando com versões mais rápidas do processador Pentium, incluindo o Core i7. A Intel deu o nome de hyperthreading à implementação
-de multithreading usada nos seus processadores.
+Por fim, pode-se adicionar multithreading. Seu valor está em fazer um segundo thread utilizar hardware que, não fosse por isso, ficaria abandonado. Após algumas experimentações, ficou claro que um **aumento de 5% na área do chip para suporte de multithreading resultaria em ganho de 25% em desempenho para muitas aplicações**, o que significava uma boa escolha. A primeira CPU com multithreading da Intel foi a Xeon em 2002, porém, mais tarde ele foi adicionado ao Pentium 4, a partir da versão de 3,06 GHz e continuando com versões mais rápidas do processador Pentium, incluindo o Core i7. A Intel deu o nome de hyperthreading à implementação de multithreading usada nos seus processadores.
 
 A ideia básica é permitir que dois threads (ou talvez processos, já que a CPU não pode distinguir entre thread e processo) executem ao mesmo tempo. Para o sistema operacional, o chip Core i7 com hyperthreading parece um processador dual em que ambas as CPUs compartilham em comum uma cache e a memória principal.
 O sistema operacional escalona os threads de modo independente. Se duas aplicações estiverem executando ao mesmo tempo, o sistema operacional pode executar ambos ao mesmo tempo. Por exemplo, se um daemon de correio estiver enviando ou recebendo e-mail em segundo plano enquanto um usuário está interagindo com algum
@@ -571,6 +570,23 @@ Figura 8.9, que detalha a microarquitetura do processador Core i7 (como o do seu
     |  +--------------+           +--------------+                          |
     |                                                                       |
     +-----------------------------------------------------------------------+
+
+    +-----------------------------------------------------------------------+
+    |          ESTRUTURAS DA MICROARQUITETURA CORE i7                       |
+    +=======================================================================+
+    | COMPONENTE                  | TIPO DE COMPARTILHAMENTO                |
+    +-----------------------------+-----------------------------------------+
+    | PC (Contador de Programa)   | [Duplicado]                             |
+    | Cache I (Instruções)        | [Compartilhado]                         |
+    | Fila de Busca               | [Particionado]                          |
+    | Alocação / Renomeação       | [Particionado]                          |
+    | Buffer de Reordenação (ROB) | [Particionado]                          |
+    | Escalonador                 | [Compartilhado]                         |
+    | Registradores               | [Duplicado (Logicamente)]               |
+    | Unidades de Execução        | [Compartilhado]                         |
+    | Cache D (Dados)             | [Compartilhado]                         |
+    | Fila de Retirada (Retire)   | [Particionado]                          |
+    +-----------------------------+-----------------------------------------+
 
 ![alt text](image-119.png)
 
