@@ -1,8 +1,7 @@
 ![alt text](image-114.png)
 
 # Arquiteturas de computadores paralelos
-Embora os computadores continuem a ficar cada vez mais rápidos, as demandas impostas a eles estão crescendo no mínimo com a mesma rapidez. Astrônomos querem simular toda a história do universo, desde o big bang até o final do espetáculo. Cientistas farmacêuticos adorariam projetar em seus computadores medicamentos por encomenda para doenças específicas, em vez de ter de sacrificar legiões de ratos. Projetistas de aeronaves poderiam inventar produtos mais eficientes no consumo de combustível se os computadores pudessem fazer todo o trabalho sem a necessidade de construir protótipos físicos para testar em túneis aerodinâmicos. Em
-suma, seja qual for a capacidade de computação disponível, para muitos usuários, em especial nas áreas da ciência, engenharia e industrial, ela nunca será suficiente.
+Embora os computadores continuem a ficar cada vez mais rápidos, as demandas impostas a eles estão crescendo no mínimo com a mesma rapidez. Astrônomos querem simular toda a história do universo, desde o big bang até o final do espetáculo. Cientistas farmacêuticos adorariam projetar em seus computadores medicamentos por encomenda para doenças específicas, em vez de ter de sacrificar legiões de ratos. Projetistas de aeronaves poderiam inventar produtos mais eficientes no consumo de combustível se os computadores pudessem fazer todo o trabalho sem a necessidade de construir protótipos físicos para testar em túneis aerodinâmicos. Em suma, seja qual for a capacidade de computação disponível, para muitos usuários, em especial nas áreas da ciência, engenharia e industrial, ela nunca será suficiente.
 
 Embora as velocidades de clock continuem subindo, velocidades de circuitos não podem aumentar indefinidamente. A velocidade da luz já é um grande problema para projetistas de computadores de alta tecnologia, e as perspectivas de conseguir que elétrons e fótons se movam com maior rapidez são desanimadoras. Questões de
 dissipação de calor estão transformando supercomputadores em condicionadores de ar de última geração. Por fim, como o tamanho dos transistores continua a diminuir, chegará um ponto em que cada transistor terá um número tão pequeno de átomos dentro dele que os efeitos da mecânica quântica (por exemplo, o princípio da incerteza de Heisenberg) podem se tornar um grande problema.
@@ -12,9 +11,9 @@ de ciclo de 1 ns cada. Embora esse último projeto use CPUs mais lentas do que o
 
 O paralelismo pode ser introduzido em vários níveis. No nível mais baixo, ele pode ser adicionado ao chip da CPU, por pipeline e projetos superescalares com várias unidades funcionais. Também pode ser adicionado por meio de palavras de instrução muito longas com paralelismo implícito. Características especiais podem ser adicionadas à CPU para permitir que ela manipule múltiplos threads de controle ao mesmo tempo. Por fim, várias CPUs podem ser reunidas no mesmo chip. Juntas, essas características podem equivaler, talvez, a um fator de 10 vezes em desempenho em relação a projetos puramente sequenciais.
 
-No nível seguinte, placas extras de CPU com capacidade de processamento adicional podem ser acrescentadas a um sistema. Em geral, essas CPUs de encaixe têm funções especializadas, tais como processamento de pacotes de rede, processamento de multimídia ou criptografia. No caso de funções especializadas, o fator de ganho também pode ser de, talvez, 5 a 10.
+No nível seguinte, placas extras de CPU com capacidade de processamento adicional podem ser acrescentadas a um sistema. Em geral, essas CPUs de encaixe têm funções especializadas, tais como **processamento de pacotes de rede, processamento de multimídia ou criptografia**. No caso de funções especializadas, o fator de ganho também pode ser de, talvez, 5 a 10.
 
-Contudo, para conseguir um fator de cem, de mil, ou de milhão, é necessário replicar CPUs inteiras e fazer que todas elas funcionem juntas com eficiência. Essa ideia leva a grandes multiprocessadores e multicomputa- dores (computadores em cluster). Nem é preciso dizer que interligar milhares de processadores em um grande sistema gera seus próprios problemas, que precisam ser resolvidos.
+Contudo, para conseguir um fator de cem, de mil, ou de milhão, é necessário replicar CPUs inteiras e fazer que todas elas funcionem juntas com eficiência. Essa ideia leva a grandes multiprocessadores e multicomputadores (computadores em cluster). Nem é preciso dizer que interligar milhares de processadores em um grande sistema gera seus próprios problemas, que precisam ser resolvidos.
 
 Por fim, agora é possível envolver organizações inteiras pela Internet e formar grades de computação fracamente acopladas. Esses sistemas estão apenas começando a surgir, mas têm um potencial interessante para o futuro.
 
@@ -117,7 +116,7 @@ A Figura 8.2 é fundamental para o seu eBook, pois ela descreve como os processa
 ![alt text](image-117.png)
 
     +-------------------------------------------------+
-    |                  Conceitos de Processamento     |
+    |           Conceitos de Processamento            |
     +-------------------------------------------------+
     |  Conceito  | Descrição Técnica                  |
     +------------+------------------------------------+
@@ -1661,15 +1660,15 @@ Esse “algo bem diferente” pode ser baseado no modesto switch 2 × 2 mostrado
 
 
 **• Resumo Comparativo**
-+---------------------+---------------------+----------------------+--------------------------+
-| Arquitetura         | Escalabilidade      | Custo (Switches)     | Conflitos                |
-+---------------------+---------------------+----------------------+--------------------------+
-| Barramento Único    | Baixa               | Muito Baixo          | Alto (um por vez)        |
-+---------------------+---------------------+----------------------+--------------------------+
-| Crossbar (Grade)    | Média               | Muito Alto (n^2)     | Baixo (paralelismo total)|
-+---------------------+---------------------+----------------------+--------------------------+
-| Rede Ômega          | Alta                | Moderado (n/2 log2 n)| Médio (bloqueante)       |
-+---------------------+---------------------+----------------------+--------------------------+
+    +---------------------+---------------------+----------------------+--------------------------+
+    | Arquitetura         | Escalabilidade      | Custo (Switches)     | Conflitos                |
+    +---------------------+---------------------+----------------------+--------------------------+
+    | Barramento Único    | Baixa               | Muito Baixo          | Alto (um por vez)        |
+    +---------------------+---------------------+----------------------+--------------------------+
+    | Crossbar (Grade)    | Média               | Muito Alto (n^2)     | Baixo (paralelismo total)|
+    +---------------------+---------------------+----------------------+--------------------------+
+    | Rede Ômega          | Alta                | Moderado (n/2 log2 n)| Médio (bloqueante)       |
+    +---------------------+---------------------+----------------------+--------------------------+
 
 Nossos switches 2 × 2 podem ser organizados de muitos modos para construir redes de comutação multiestágios maiores. Uma possibilidade é a rede ômega, classe econômica, sem supérfluos, ilustrada na Figura 8.31. Nesse caso, conectamos oito CPUs a oito memórias usando 12 switches. De modo mais geral, para n CPUs e n
 memórias precisaríamos de log2 n estágios, com n/2 switches cada, para um total de (n/2)log2 n switches, o que é muito melhor do que n2 pontos de cruzamento, em especial para valores grandes de n.
@@ -1729,11 +1728,11 @@ CPUs, porém, diferentemente das máquinas UMA, o acesso a módulos de memória 
 Todas as máquinas NUMA têm três características fundamentais que, juntas, as distinguem de outros mul-
 tiprocessadores:
 
-1. Há um único espaço de endereço visível a todas as CPUs.
+    1. Há um único espaço de endereço visível a todas as CPUs.
 
-2. O acesso à memória remota é feito usando instruções LOAD e STORE.
+    2. O acesso à memória remota é feito usando instruções LOAD e STORE.
 
-3. O acesso à memória remota é mais lento do que o acesso à memória local.
+    3. O acesso à memória remota é mais lento do que o acesso à memória local.
 
 Quando o tempo de acesso à memória remota não é oculto (porque não há cache), o sistema é denominado NC-NUMA. Quando estão presentes caches coerentes, ele é denominado CC-NUMA (ao menos pelo pessoal do hardware). O pessoal do software costuma denominá-lo DSM de hardware, porque ele é em essência o mesmo que memória compartilhada distribuída por software, mas implementada pelo hardware usando uma página de tamanho pequeno.
 
