@@ -617,16 +617,18 @@ uma fração do custo total do sistema).
 Há dois projetos predominantes para multiprocessadores de pequena escala em um único chip. No primeiro, mostrado na Figura 8.10(a), na realidade há só um chip, mas ele tem um segundo pipeline, o que pode dobrar a taxa de execução de instruções. No segundo, mostrado na Figura 8.10(b), há núcleos separados no chip e cada
 um contém uma CPU completa. Um núcleo é um grande circuito, tal como uma CPU, controlador de E/S ou cache, que pode ser colocado em um chip de forma modular, normalmente ao lado de outros núcleos.
 
-**• Figura 8.10   Multiprocessadores com um único chip. (a) Chip com pipeline dual. (b) Chip com dois núcleos.**
+**• Figura 8.10 - Multiprocessadores com um único chip. (a) Chip com pipeline dual. (b) Chip com dois núcleos.**
 
     (a) Chip com Pipeline Dual          (b) Chip com Dois Núcleos
     +--------------------------+        +--------------------------+
-    |  CPU                     |        |  CPU 1       CPU 2       |
+    |  CPU                     |        |    CPU 1       CPU 2     |
     |  [ooooooo] (Pipeline 1)  |        |  [ooooooo]   [ooooooo]   |
-    |  [ooooooo] (Pipeline 2)  |        |                          |
+    |  [ooooooo] (Pipeline 2)  |        |      \ Pipelines /       |
     +--------------------------+        +--------------------------+
     |      Memória Cache       |        |      Memória Cache       |
     +--------------------------+        +--------------------------+
+
+![alt text](image-120.png)
 
 **• Conclusão para o eBook:**
 
@@ -634,7 +636,43 @@ um contém uma CPU completa. Um núcleo é um grande circuito, tal como uma CPU,
 
  - Dois Núcleos (b): Cada núcleo é independente, o que é o padrão atual do seu Lenovo IdeaPad, permitindo que tarefas pesadas como o seu IDS Sentinel rodem em um núcleo enquanto o sistema operacional gerencia o restante no outro.
 
-![alt text](image-120.png)
+1. NIDS - Network IDSMonitora o tráfego da rede inteira. Geralmente fica num ponto de espelhamento.
+
+    [ Internet ]
+        |
+        v
+    +----------+      +----------------+
+    | Firewall |----->| Switch Core    |
+    +----------+      +-------+--------+
+                              |
+            +-----------------+-----------------+
+            |                 |                 |
+            v                 v                 v
+       +---------+      +---------+      +---------+
+       | Servidor|      | Servidor|      |   PCs   |
+       +---------+      +---------+      +---------+
+            |
+            | Porta SPAN/TAP
+            v
+      +-----------+
+      |   NIDS    |  <- Só escuta o tráfego, não bloqueia
+      |  (Snort)  |     Gera alertas pro admin
+      +-----------+
+            |
+            v
+    [ SIEM / Logs ]
+
+Posição: Instalado direto no host. Se detectar /etc/passwd alterado, dispara alerta.
+
+NIDS vs IPS no fluxo:
+
+[ Internet ] -> [ Firewall ] -> [ IPS ] -> [ Switch ] -> [ Servidores ]
+                                  |             |
+                               Bloqueia      [ NIDS ] -> Só Alerta
+
+Resumo rápido:
+NIDS = câmera de segurança da rede, só filma.
+IPS = segurança na porta, barra o invasor.
 
 O primeiro projeto permite que recursos, como unidades funcionais, sejam compartilhados entre os processadores, o que permite que uma CPU use recursos que a outra não necessita. Por outro lado, essa técnica requer um novo projeto para o chip e não funciona muito bem para mais de duas CPUs. Por comparação, colocar dois ou mais núcleos de CPU no mesmo chip é algo relativamente fácil de fazer.
 
@@ -711,8 +749,8 @@ Discos de CD, DVD e Blu-ray contêm uma longa espiral na qual estão as informa�
     |          CHIP MULTIPROCESSADOR HETEROGÊNEO (6 NÚCLEOS)        |
     |===============================================================|
     |  [ Proc. ] [ Decod. ] [ Decod. ] [ Codif. ] [ Contr. ] [ C  ] |
-    |  [ Contr.] [ Video  ] [ Áudio  ] [ Video  ] [ Disco  ] [ a  ] |
-    |  [       ] [ MPEG   ] [        ] [ Comp.  ] [        ] [ che] |
+    |  [ Contr.] [ Video  ] [ Áudio  ] [ Video  ] [ Disco  ] [ a  ] | Chip multiprocessador heterogênio com seis núcleos
+    |  [       ] [ MPEG   ] [        ] [ Comp.  ] [        ] [ che] | 
     +---------------------------------------------------------------+
           |            |            |            |            |
      [======================== BARRAMENTO =========================]
@@ -785,7 +823,7 @@ Ao fornecer barramento no chip, interface e estrutura padronizados, a IBM espera
 as placas propriamente ditas que os montadores e usuários finais de PC compram. No mundo do CoreConnect, terceiros projetam núcleos, mas não os fabricam. Em vez disso, eles os licenciam como propriedade intelectual para empresas de eletrônicos de consumo e outras, que então projetam chips multiprocessadores heterogêneos
 por encomenda, baseados em seus próprios núcleos e em núcleos licenciados por terceiros. Visto que fabricar esses chips tão grandes e complexos requer maciço investimento em unidades industriais, na maioria dos casos as empresas de eletrônicos de consumo apenas fazem o projeto e subcontratam a fabricação do chip com um fabricante de semicondutores. Existem núcleos para várias CPUs (ARM, MIPS, PowerPC etc.), bem como para decodificadores MPEG, processadores de sinais digitais e todos os controladores de E/S padronizados.
 
-O CoreConnect da IBM não é o único barramento no chip popular no mercado. O AMBA (Advanced Microcontroller Bus Architecture – arquitetura de barramento avançado de microcontrolador), também é muito usado para conectar CPUs ARM a outras CPUs e dispositivos de E/S (Flynn, 1997). Outros barramentos no chip um pouco menos populares são o VCI (Virtual Component Interconnect – interconexão de componentes virtuais) e o OCP-IP (Open Core Protocol-International Partnership – Aliança Internacional de Protocolo de Núcleo Aberto), que também estão competindo por uma fatia do mercado (Bhakthavatchalu et al., 2010). Barramentos no chip são
+O CoreConnect da IBM não é o único barramento no chip popular no mercado. O AMBA (Advanced Microcontroller Bus Architecture – arquitetura de barramento avançado de microcontrolador), também é muito usado para conectar CPUs ARM a outras CPUs e dispositivos de E/S (Flynn, 1997). Outros barramentos no chip um pouco menos populares são o **VCI (Virtual Component Interconnect – interconexão de componentes virtuais)** e o **OCP-IP (Open Core Protocol-International Partnership – Aliança Internacional de Protocolo de Núcleo Aberto)**, que também estão competindo por uma fatia do mercado (Bhakthavatchalu et al., 2010). Barramentos no chip são
 apenas o começo; há quem já esteja pensando em redes inteiras em um chip (Ahmadinia e Shahrabi, 2011). Como os fabricantes de chips encontram uma dificuldade cada vez maior para elevar frequências de clock por causa de problemas de dissipação de calor, multiprocessadores em um único chip são um tópico que desperta muito interesse. Mais informações podem ser encontradas em Gupta et al., 2010; Herrero et al., 2010; e Mishra et al., 2011.
 
 ## 8.2 Coprocessadores
@@ -799,14 +837,12 @@ Grande parte dos computadores de hoje estão conectados a uma rede ou à Interne
 especiais de rede para lidar com o tráfego e muitos computadores de alta tecnologia agora têm um desses processadores. Nesta seção, antes de tudo, vamos dar uma breve introdução a redes e em seguida discutiremos como funcionam os processadores de rede.
 
 **• Introdução a redes**
-Redes de computadores podem ser de dois tipos gerais: redes locais, ou LANs (Local-Area Networks), que conectam vários computadores dentro de um edifício, campus, escritório ou residência, e redes de longa distância ou WANs (Wide-Area Networks), que conectam computadores espalhados por uma grande área geográfica.
-A LAN mais popular é denominada Ethernet. A Ethernet original consistia em um cabo grosso no qual eram forçosamente inseridos os fios que vinham de cada computador, usando uma derivação conhecida pelo eufemismo conector vampiro. Ethernets modernas ligam os computadores a um switch central, como ilustrado no lado
-direito da Figura 8.14. A Ethernet original se arrastava a 3 Mbps, mas a primeira versão comercial foi de 10 Mbps. Ela não demorou muito a ser substituída pela Fast Ethernet a 100 Mbps e, em seguida, pela Gigabit Ethernet a 1 Gbps. Já existe no mercado uma Ethernet de 10 gigabits e uma de 40 gigabits já está pronta para ser lançada.
+Redes de computadores podem ser de dois tipos gerais: **redes locais**, ou **LANs (Local-Área Networks)**, que conectam vários computadores dentro de um edifício, campus, escritório ou residência, e redes de longa distância ou WANs (Wide-Área Networks), que conectam computadores espalhados por uma grande área geográfica. A LAN mais popular é denominada Ethernet. A Ethernet original consistia em um cabo grosso no qual eram forçosamente inseridos os fios que vinham de cada computador, usando uma derivação conhecida pelo eufemismo conector vampiro. Ethernets modernas ligam os computadores a um switch central, como ilustrado no lado direito da Figura 8.14. A Ethernet original se arrastava a 3 Mbps, mas a primeira versão comercial foi de 10 Mbps. Ela não demorou muito a ser substituída pela Fast Ethernet a 100 Mbps e, em seguida, pela Gigabit Ethernet a 1 Gbps. Já existe no mercado uma Ethernet de 10 gigabits e uma de 40 gigabits já está pronta para ser lançada.
 
 A organização das WANs é diferente. Elas consistem em computadores especializados denominados roteadores conectados por fios ou fibras óticas, como mostra a parte do meio da Figura 8.14. Blocos de dados denominados pacotes, normalmente de 64 a cerca de 1.500 bytes, são movidos da máquina de origem e passam por um
-ou mais roteadores até alcançarem seu destino. Em cada salto, um pacote é armazenado na memória do roteador e então repassado ao próximo roteador ao longo do caminho, tão logo a linha de transmissão necessária esteja disponível. Essa técnica é denominada comutação de pacotes armazena-e-encaminha.
+ou mais roteadores até alcançarem seu destino. Em cada salto, um pacote é armazenado na memória do roteador e então repassado ao próximo roteador ao longo do caminho, tão logo a linha de transmissão necessária esteja disponível. Essa técnica é denominada **comutação de pacotes armazena-e-encaminha**.
 
-**• Figura 8.14   Como os usuários são conectados a servidores na Internet.**
+**• Figura 8.14 - Como os usuários são conectados a servidores na Internet.**
 Este diagrama ilustra o caminho físico de um pacote de dados desde o seu computador até o servidor de destino.
 
     +-----------+
@@ -834,7 +870,7 @@ A maioria das empresas que oferece serviços de Web tem um computador especializ
 Ethernet, que roteia pacotes até o servidor desejado. É claro que a realidade é muito mais complicada do que mostramos, mas a ideia básica da Figura 8.14 continua válida.
 
 O software de rede consiste em múltiplos protocolos, e cada um deles é um conjunto de formatos, sequências de troca e regras sobre o significado dos pacotes. Por exemplo, quando um usuário quer buscar uma página Web em um servidor, seu browser envia ao servidor um pacote que contém uma requisição GET PAGE usando
-o protocolo HTTP (HyperText Transfer Protocol – protocolo de transferência de hipertexto). O servidor sabe como processar essas requisições. Há muitos protocolos em uso e, com frequência, eles são combinados. Na maioria das situações, os protocolos são estruturados como uma série de camadas, sendo que as mais altas passam pacotes para as mais baixas para processamento e a camada mais baixa efetua a transmissão propriamente dita. No lado receptor, os pacotes percorrem seu caminho pelas camadas na ordem inversa.
+o protocolo **HTTP (HyperText Transfer Protocol – protocolo de transferência de hipertexto)**. O servidor sabe como processar essas requisições. Há muitos protocolos em uso e, com frequência, eles são combinados. Na maioria das situações, os protocolos são estruturados como uma série de camadas, sendo que as mais altas passam pacotes para as mais baixas para processamento e a camada mais baixa efetua a transmissão propriamente dita. No lado receptor, os pacotes percorrem seu caminho pelas camadas na ordem inversa.
 
 Uma vez que processamento de protocolos é o que os processadores de rede fazem para ganhar a vida, é necessário explicar um pouco sobre protocolos antes de estudar os processadores de rede em si. Por enquanto, vamos voltar à requisição GET PAGE. Como ela é enviada ao servidor Web? O que acontece é que, em pri-
 meiro lugar, o browser estabelece uma conexão com o servidor Web usando um protocolo denominado TCP (Transmission Control Protocol – protocolo de controle de transmissão). O software que executa esse protocolo verifica se todos os pacotes foram recebidos corretamente e na ordem certa. Se um pacote se perder, o software TCP garante que ele seja retransmitido tantas vezes quantas forem necessárias até ser recebido.
@@ -843,7 +879,7 @@ Na prática, o que acontece é que o browser Web formata a requisição GET PAGE
 
 Isso feito, o software TCP pega o cabeçalho TCP e a carga útil (ou payload, que contém a requisição GET PAGE) e os passa a outro software que executa o Protocolo IP (Internet Protocol). Esse software anexa à frente do pacote um cabeçalho IP que contém o endereço da origem (a máquina da qual o pacote está partindo), o endereço de destino (a máquina para a qual o pacote deve ir), por quantos saltos mais o pacote pode viver (para evitar que pacotes perdidos fiquem vagando eternamente pela rede), uma soma de verificação (para detectar erros de transmissão e de memória) e outros campos.
 
-Em seguida, o pacote resultante (que agora é composto do cabeçalho IP, cabeçalho TCP e requisição GET PAGE) é passado para baixo, para a camada de enlace de dados, e é acrescentado um cabeçalho de enlace de dados à frente do pacote para a transmissão. A camada de enlace de dados também acrescenta uma soma de verificação ao final do pacote, denominada CRC (Cyclic Redundancy Code – código de redundância cíclica) para detectar erros de transmissão. A presença de somas de verificação na camada de enlace de dados e na de IP poderia parecer redundante, mas ela melhora a confiabilidade. A cada salto, o CRC é verificado e o cabeçalho e o CRC são removidos e recriados em um formato apropriado para o enlace de saída. A Figura 8.15 mostra o aspecto do pacote quando está na Ethernet. Em uma linha telefônica (para ADSL) ele é semelhante, exceto pelo “cabeçalho de linha telefônica” em vez de um cabeçalho Ethernet. O gerenciamento de cabeçalhos é importante e é uma das coisas que os processadores de rede podem fazer. Não é preciso dizer que apenas arranhamos a superfície da questão de redes de computadores. Se o leitor quiser um tratamento mais abrangente, consulte Tanenbaum e Wetherall, 2011.
+Em seguida, o pacote resultante (que agora é composto do cabeçalho IP, cabeçalho TCP e requisição GET PAGE) é passado para baixo, para a camada de enlace de dados, e é acrescentado um cabeçalho de enlace de dados à frente do pacote para a transmissão. A camada de enlace de dados também acrescenta uma soma de verificação ao final do pacote, denominada **CRC (Cyclic Redundancy Code – código de redundância cíclica)** para detectar erros de transmissão. A presença de somas de verificação na camada de enlace de dados e na de IP poderia parecer redundante, mas ela melhora a confiabilidade. A cada salto, o CRC é verificado e o cabeçalho e o CRC são removidos e recriados em um formato apropriado para o enlace de saída. A Figura 8.15 mostra o aspecto do pacote quando está na Ethernet. Em uma linha telefônica (para ADSL) ele é semelhante, exceto pelo “cabeçalho de linha telefônica” em vez de um cabeçalho Ethernet. O gerenciamento de cabeçalhos é importante e é uma das coisas que os processadores de rede podem fazer. Não é preciso dizer que apenas arranhamos a superfície da questão de redes de computadores. Se o leitor quiser um tratamento mais abrangente, consulte Tanenbaum e Wetherall, 2011.
 
 **• Figura 8.15 - Pacote tal como aparece na Ethernet.**
 Este diagrama é fundamental para o seu projeto de IDS Sentinel, pois mostra exatamente como os cabeçalhos são empilhados (encapsulamento) para que você possa realizar a análise de protocolos como IP e TCP.
@@ -971,11 +1007,10 @@ Uma segunda área na qual coprocessadores são usados é o tratamento de process
 maioria dos PCs futuros serão equipados com GPUs (Graphics Processing Units – unidades de processamento gráfico) para os quais passarão grandes porções do processamento geral.
 
 **• A GPU Fermi NVIDIA**
-Estudaremos essa área cada vez mais importante por meio de um exemplo: a GPU Fermi NVIDIA, uma arquitetura usada em uma família de chips de processamento gráfico que estão disponíveis em diversas velocidades e tamanhos. A arquitetura da GPU Fermi aparece na Figura 8.17. Ela é organizada em 16 SMs (Streaming
-Multiprocessors – multiprocessadores streaming), tendo sua própria cache nível 1 privada com alta largura de banda. Cada multiprocessador streaming contém 32 núcleos CUDA, para um total de 512 núcleos CUDA por GPU Fermi. Um núcleo CUDA (Compute Unified Device Architecture – arquitetura de elemento unificado de computação) é um processador simples que dá suporte a cálculos com inteiros e ponto flutuante com precisão simples. Um único SM com 32 núcleos CUDA é ilustrado na Figura 2.7. Os 16 SMs compartilham acesso a uma única cache nível 2 unificada de 768 KB, que está conectada a uma interface DRAM de múltiplas portas. A inter-
-face do processador hospedeiro oferece um caminho de comunicação entre o sistema hospedeiro e a GPU por meio de uma interface de barramento DRAM compartilhada, em geral por meio de uma interface PCI-Express.
+Estudaremos essa área cada vez mais importante por meio de um exemplo: a GPU Fermi NVIDIA, uma arquitetura usada em uma família de chips de processamento gráfico que estão disponíveis em diversas velocidades e tamanhos. A arquitetura da GPU Fermi aparece na Figura 8.17. Ela é organizada em 16 **SMs (Streaming
+Multiprocessors – multiprocessadores streaming)** , tendo sua própria cache nível 1 privada com alta largura de banda. Cada multiprocessador streaming contém 32 núcleos CUDA, para um total de 512 núcleos CUDA por GPU Fermi. Um núcleo **CUDA (Compute Unified Device Architecture – arquitetura de elemento unificado de computação)** é um processador simples que dá suporte a cálculos com inteiros e ponto flutuante com precisão simples. Um único SM com 32 núcleos CUDA é ilustrado na Figura 2.7. Os 16 SMs compartilham acesso a uma única cache nível 2 unificada de 768 KB, que está conectada a uma interface DRAM de múltiplas portas. A interface do processador hospedeiro oferece um caminho de comunicação entre o sistema hospedeiro e a GPU por meio de uma interface de barramento DRAM compartilhada, em geral por meio de uma interface PCI-Express.
 
-A arquitetura Fermi é projetada para executar, com eficiência, códigos de processamento de gráficos, vídeo e imagens, que costumam ter muitos cálculos redundantes espalhados por muitos pixels. Por causa dessa redundância, os multiprocessadores streaming, embora capazes de executar 16 operações por vez, exigem que todas as operações executadas em um único ciclo sejam idênticas. Esse estilo de processamento é denominado computação SIMD (Single-Instruction Multiple Data – instrução única, múltiplos dados), e tem a importante vantagem de que cada SM busca e decodifica apenas uma única instrução a cada ciclo. Somente compartilhando o processamento de instruções por todos os núcleos em um SM é que a NVIDIA consegue colocar 512 núcleos em uma única pastilha de silício. Se os programadores puderem aproveitar todos os recursos de computação (sempre um “se” muito grande e incerto), então o sistema oferece vantagens computacionais significativas sobre arquiteturas escalares tradicionais, como o Core i7 ou o OMAP4430.
+A arquitetura Fermi é projetada para executar, com eficiência, códigos de processamento de gráficos, vídeo e imagens, que costumam ter muitos cálculos redundantes espalhados por muitos pixels. Por causa dessa redundância, os multiprocessadores streaming, embora capazes de executar 16 operações por vez, exigem que todas as operações executadas em um único ciclo sejam idênticas. Esse estilo de processamento é denominado computação **SIMD (Single-Instruction Multiple Data – instrução única, múltiplos dados)**, e tem a importante vantagem de que cada SM busca e decodifica apenas uma única instrução a cada ciclo. Somente compartilhando o processamento de instruções por todos os núcleos em um SM é que a NVIDIA consegue colocar 512 núcleos em uma única pastilha de silício. Se os programadores puderem aproveitar todos os recursos de computação (sempre um “se” muito grande e incerto), então o sistema oferece vantagens computacionais significativas sobre arquiteturas escalares tradicionais, como o Core i7 ou o OMAP4430.
 
 **• Figura 8.17 - A arquitetura da GPU Fermi.**
 Este diagrama é excelente para contrastar com o Core i7 (Figura 8.11), mostrando como uma GPU prioriza milhares de pequenos núcleos para processamento massivo em paralelo.
@@ -988,7 +1023,7 @@ Este diagrama é excelente para contrastar com o Core i7 (Figura 8.11), mostrand
     |  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+        |
     |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||        |
     |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   ||||| (NÚCLEOS|
-    |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||  CUDA) |
+    |  |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||  CUDA) | --> Arquitetura de elemento unificado de computação
     |  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+        |
     |    ^       ^       ^       ^       ^       ^       ^       ^          |
     |    |       |       |       |       |       |       |       |          |
@@ -1012,8 +1047,7 @@ Este diagrama é excelente para contrastar com o Core i7 (Figura 8.11), mostrand
 
  - Cache L2 Unificado: Serve como o ponto central de comunicação entre todos os SMs, a memória de vídeo (DRAM) e o processador principal do seu computador (Interface do Hospedeiro).
 
-Os requisitos de processamento SIMD dentro dos SMs impõem restrições sobre o tipo de código que os programadores podem executar sobre essas unidades. De fato, cada núcleo CUDA precisa estar rodando o mesmo código em sincronismo para alcançar 16 operações ao mesmo tempo. Para aliviar esse peso ao programador, a
-NVIDIA desenvolveu a linguagem de programação CUDA, a qual especifica o paralelismo do programa usando threads. Threads são então agrupados em blocos, designados a processadores streaming. Desde que cada thread em um bloco execute exatamente a mesma sequência de código (ou seja, todos os desvios tomem a mesma decisão), até 16 operações serão executadas em simultâneo (supondo que haja 16 threads prontos para executar). Quando os threads em um SM tomarem decisões de desvio diferentes, haverá um efeito de diminuição de desempenho, denominado divergência de desvio, forçando os threads com caminhos de código diferentes a serem executados de modo serial no SM. A divergência de desvio reduz o paralelismo e atrasa o processamento da GPU. Felizmente, há uma grande faixa de atividades no processamento gráfico e de imagens, que poderá evitar a divergência de desvio e alcançar bons ganhos de velocidade. Também muitos outros códigos se beneficiaram da arquitetura no estilo SIMD sobre processadores gráficos, como imagens médicas, resolução de prova, previsão financeira e análise de gráficos. Essa ampliação das aplicações em potencial para GPUs lhes deu o novo apelido de GPGPUs (General-Purpose Graphics Processing Units – unidades de processamento gráfico de uso geral).
+Os requisitos de processamento SIMD (instrução única, múltiplos dados) dentro dos SMs impõem restrições sobre o tipo de código que os programadores podem executar sobre essas unidades. De fato, cada núcleo CUDA precisa estar rodando o mesmo código em sincronismo para alcançar 16 operações ao mesmo tempo. Para aliviar esse peso ao programador, a NVIDIA desenvolveu a linguagem de programação CUDA, a qual especifica o paralelismo do programa usando threads. Threads são então agrupados em blocos, designados a processadores streaming. Desde que cada thread em um bloco execute exatamente a mesma sequência de código (ou seja, todos os desvios tomem a mesma decisão), até 16 operações serão executadas em simultâneo (supondo que haja 16 threads prontos para executar). Quando os threads em um SM tomarem decisões de desvio diferentes, haverá um efeito de diminuição de desempenho, denominado divergência de desvio, forçando os threads com caminhos de código diferentes a serem executados de modo serial no SM. A divergência de desvio reduz o paralelismo e atrasa o processamento da GPU. Felizmente, há uma grande faixa de atividades no processamento gráfico e de imagens, que poderá evitar a divergência de desvio e alcançar bons ganhos de velocidade. Também muitos outros códigos se beneficiaram da arquitetura no estilo SIMD sobre processadores gráficos, como imagens médicas, resolução de prova, previsão financeira e análise de gráficos. Essa ampliação das aplicações em potencial para GPUs lhes deu o novo apelido de **GPGPUs (General-Purpose Graphics Processing Units – unidades de processamento gráfico de uso geral)**.
 
 Com 512 núcleos CUDA, a GPU Fermi pararia sem uma largura de banda de memória significativa. Para fornecer essa largura de banda, a GPU Fermi implementa uma hierarquia de memória moderna, conforme ilustrado na Figura 8.18. Todos os SMs têm uma memória compartilhada dedicada e uma cache de dados nível 1 privada. A memória compartilhada dedicada é endereçada diretamente pelos núcleos CUDA, e oferece compartilhamento rápido de dados entre threads dentro de um único SM. A cache de nível 1 agiliza os acessos aos dados da DRAM. Para acomodar a grande variedade de uso dos dados do programa, os SMs podem ser configurados com memória compartilhada de 16 KB e cache nível 1 de 48 KB ou memória compartilhada de 48 KB e cache nível 1 de 16 KB. Todos os SMs compartilham uma única cache nível 2 de 768 KB. A cache nível 2 oferece acesso mais rápido aos dados da DRAM que não couberem nas de nível 1. A cache nível 2 também oferece compartilhamento entre SMs, embora esse modo seja muito mais lento do que o que ocorre dentro da memória compartilhada de um SM. Além da cache nível 2 está a DRAM, que mantém os dados restantes, imagens e texturas, usados por programas rodando na GPU Fermi. Programas eficientes tentarão evitar o acesso à DRAM a todo custo, pois um único acesso pode levar centenas de ciclos para concluir.
 
@@ -1056,7 +1090,7 @@ Para um programador esperto, a GPU Fermi representa, em termos de computação, 
 Uma terceira área na qual os coprocessadores são populares é segurança, em especial segurança em redes. Quando uma conexão é estabelecida entre um cliente e um servidor, em muitos casos eles devem primeiro se autenticar mutuamente. Então, é preciso estabelecer uma conexão segura e criptografada entre eles, para que os
 dados sejam transferidos com segurança, frustrando quaisquer bisbilhoteiros que poderiam estar invadindo a linha.
 
-O problema da segurança é que, para consegui-la, é preciso usar criptografia, a qual faz uso muito intensivo de computação. Há dois tipos gerais de criptografia, denominados criptografia de chave simétrica e criptografia de chave pública. A primeira é baseada na mistura completa de bits, algo equivalente a jogar uma mensagem dentro de um liquidificador. A última é baseada em multiplicação e exponenciação de grandes números (por exemplo, 1.024 bits) e consome enormes quantidades de tempo.
+O problema da segurança é que, para consegui-la, é preciso usar criptografia, a qual faz uso muito intensivo de computação. Há dois tipos gerais de criptografia, denominados **criptografia de chave simétrica e criptografia de chave pública**. A primeira é baseada na mistura completa de bits, algo equivalente a jogar uma mensagem dentro de um liquidificador. A última é baseada em multiplicação e exponenciação de grandes números (por exemplo, 1.024 bits) e consome enormes quantidades de tempo.
 
 Para tratar da computação necessária para criptografar os dados com segurança para transmissão ou armazenamento, várias empresas produziram coprocessadores criptográficos, às vezes na forma de placas de expansão para barramento PCI. Esses coprocessadores têm um hardware especial que os habilita a executar a criptografia necessária muito mais rápido do que poderia uma CPU comum. Infelizmente, uma discussão detalhada do modo de funcionamento dos criptoprocessadores exigiria, primeiro, explicar muita coisa sobre a criptografia em si, o que está fora do escopo deste livro. Se o leitor desejar mais informações sobre coprocessadores criptográficos, pode consultar Gaspar et al., 2010; Haghighizadeh et al., 2010; e Shoufan et al., 2011.
 
@@ -1065,10 +1099,10 @@ Agora já vimos como se pode acrescentar paralelismo a chips únicos e a sistema
 putadores. Após vermos com atenção o que esses termos de fato significam, estudaremos primeiro multiprocessadores e, em seguida, multicomputadores.
 
 ## 8.3.1 Multiprocessadores versus multicomputadores
-Em qualquer sistema de computação paralelo, CPUs que trabalham em partes diferentes do mesmo serviço devem se comunicar umas com as outras para trocarinformações. O modo exato como elas devem fazer isso é assunto de muito debate na comunidade da arquitetura de computadores. Dois projetos distintos foram propostos e implementados: multiprocessadores e multicomputadores. A diferença fundamental entre os dois é a presença ou  ausência de memória compartilhada. Essa diferença interfere no modo como são projetados, construídos e programados, bem como em sua escala e preço.
+Em qualquer sistema de computação paralelo, CPUs que trabalham em partes diferentes do mesmo serviço devem se comunicar umas com as outras para trocar informações. O modo exato como elas devem fazer isso é assunto de muito debate na comunidade da arquitetura de computadores. Dois projetos distintos foram propostos e implementados: multiprocessadores e multicomputadores. A diferença fundamental entre os dois é a presença ou  ausência de memória compartilhada. Essa diferença interfere no modo como são projetados, construídos e programados, bem como em sua escala e preço.
 
 **• Multiprocessadores** 
-Um computador paralelo no qual todas as CPUs compartilham uma memória comum é denominado um multiprocessador, como indicado simbolicamente na Figura 8.19. Todos os processos que funcionam juntos em um multiprocessador podem compartilhar um único espaço de endereço virtual mapeado para a memória comum. Qualquer processo pode ler ou escrever uma palavra de memória apenas executando uma instrução LOAD ou STORE. Nada mais é preciso. O hardware faz o resto. Dois processos podem se comunicar pelo simples ato de um deles escrever dados para a memória e o outro os ler de volta.
+Um computador paralelo no qual todas as CPUs compartilham uma memória comum é denominado um multiprocessador, como indicado simbolicamente na Figura 8.19. Todos os processos que funcionam juntos em um multiprocessador podem compartilhar um único espaço de endereço virtual mapeado para a memória comum. Qualquer processo pode ler ou escrever uma palavra de memória apenas executando uma instrução **LOAD ou STORE**. Nada mais é preciso. O hardware faz o resto. Dois processos podem se comunicar pelo simples ato de um deles escrever dados para a memória e o outro os ler de volta.
 
 A capacidade de dois (ou mais) processos se comunicarem apenas lendo e escrevendo na memória é a razão por que os multiprocessadores são populares. É um modelo fácil de entender pelos programadores e é aplicável a uma ampla faixa de problemas. Considere, por exemplo, um programa que inspeciona uma imagem de mapa de bits
 e relaciona todos os objetos ali encontrados. Uma cópia da imagem é mantida na memória, como mostra a Figura 8.19(b). Cada uma das 16 CPUs executa um único processo, ao qual foi designada uma das 16 seções a analisar. Não obstante, cada processo tem acesso à imagem inteira, que é essencial, visto que alguns objetos podem ocupar várias seções. Se um processo descobrir que um de seus objetos se estende para além da fronteira de uma seção, ele apenas segue o objeto na próxima seção lendo as palavras dessa seção. Nesse exemplo, alguns objetos serão descobertos por vários processos, portanto, é preciso certa coordenação no final para determinar quantas casas, árvores e aviões há.
@@ -1082,7 +1116,7 @@ A Figura 8.19, que ilustra o conceito de multiprocessadores com memória compart
     (a) Multiprocessador com 16 CPUs          (b) Decomposição de Imagem 
             em Memória Compartilhada                  (Processamento Paralelo)
 
-                [P] [P] [P] [P]                           [P] [P] [P] [P]
+               [P] [P] [P] [P] <-- CPUs                  [P] [P] [P] [P]
                 |   |   |   |                             |   |   |   |
         [P]--+-----------------+--[P]             [P]--+-------------+--[P]
              |                 |                       |  ✈ |   | ☼  |
@@ -1092,7 +1126,7 @@ A Figura 8.19, que ilustra o conceito de multiprocessadores com memória compart
              |                 |                       | 🚶 | 🌳| 🏠 |
         [P]--+-----------------+--[P]             [P]--+-------------+--[P]
                 |   |   |   |                             |   |   |   |
-                [P] [P] [P] [P]                           [P] [P] [P] [P]
+               [P] [P] [P] [P]                           [P] [P] [P] [P]
 
         (P = Unidade de Processamento / CPU)
 
@@ -1110,18 +1144,18 @@ Um multiprocessador, como todos os computadores, deve ter dispositivos de E/S, c
 todo dispositivo de E/S. Quando cada CPU tem igual acesso a todos os módulos de memória e a todos os dispositivos de E/S e é tratada pelo sistema operacional como intercambiável com as outras, o sistema é denominado SMP (Symmetric MultiProcessor – multiprocessador simétrico).
 
 **• Multicomputadores**
-O segundo projeto possível para uma arquitetura paralela é um projeto no qual toda CPU tem sua própria memória privada, acessível somente a ela mesma e a nenhuma outra. Esse projeto é denominado multicomputador ou, às vezes, sistema de memória distribuída, e é ilustrado na Figura 8.20(a). O aspecto fundamental de um multicomputador que o distingue de um multiprocessador é que a CPU em um multicomputador tem sua própria memória local privada, a qual pode acessar apenas executando instruções LOAD e STORE, mas que nenhuma outra CPU pode acessar usando instruções LOAD e STORE. Assim, multiprocessadores têm um único espaço de endereço físico com- partilhado por todas as CPUs, ao passo que multicomputadores têm um espaço de endereço físico para cada CPU.
+O segundo projeto possível para uma arquitetura paralela é um projeto no qual toda CPU tem sua própria memória privada, acessível somente a ela mesma e a nenhuma outra. Esse projeto é denominado multicomputador ou, às vezes, sistema de memória distribuída, e é ilustrado na Figura 8.20(a). O aspecto fundamental de um multicomputador que o distingue de um multiprocessador é que a CPU em um multicomputador tem sua própria memória local privada, a qual pode acessar apenas executando instruções **LOAD e STORE**, mas que nenhuma outra CPU pode acessar usando instruções **LOAD e STORE**. Assim, multiprocessadores têm um único espaço de endereço físico compartilhado por todas as CPUs, ao passo que multicomputadores têm um espaço de endereço físico para cada CPU.
 
-**• Figura 8.20 - (a) Multicomputador com 16 CPUs, cada uma com sua própria memória privada. (b) Imagem de mapa de bits da figura 8.19 dividida entre as 16** memórias.
+**• Figura 8.20 - (a) Multicomputador com 16 CPUs, cada uma com sua própria memória privada. (b) Imagem de mapa de bits da figura 8.19 dividida entre as 16 memórias.**
 
     (a) Multicomputador com 16 CPUs           (b) Imagem de Mapa de Bits
             e Memórias Privadas (M)                   Dividida entre as Memórias
 
-                [M] [M] [M] [M]                           [  ] [  ] [  ] [☼ ]
+               [M] [M] [M] [M]                           [  ] [  ] [  ] [☼ ]
+                |   |   |   |                             |     |   |    | 
+               [P] [P] [P] [P]                           [P] [P] [P] [P]
                 |   |   |   |                             |   |   |   | 
-                [P] [P] [P] [P]                           [P] [P] [P] [P]
-                |   |   |   |                             |   |   |   | 
-        [M]-[P]-+-----------+-[P]-[M]             [  ]-[P]-+-----------+-[P]-[  ]
+        [M]-[P]-+-----------+-[P]-[M]            [  ]-[P]-+-----------+-[P]-[  ]
                 |  REDE DE  |                             |           | 
         [M]-[P]-| INTERCON. |--[P]-[M]           [  ]-[P]-|   REDE    |--[P]-[🧱]
                 |           |                             |           | 
@@ -1129,9 +1163,9 @@ O segundo projeto possível para uma arquitetura paralela é um projeto no qual 
                 | MENSAGENS |                             |           | 
         [M]-[P]-+-----------+-[P]-[M]            [  ]-[P]-+-----------+-[P]-[🛤️]
                 |   |   |   |                             |   |   |   | 
-                [P] [P] [P] [P]                           [P] [P] [P] [P]
-                |   |   |   |                             |   |   |   | 
-                [M] [M] [M] [M]                           [🚶] [🌳] [🏠] [🏢]
+               [P] [P] [P] [P]                            [P] [P] [P] [P]
+                |   |   |   |                              |   |   |   | 
+               [M] [M] [M] [M]                           [🚶] [🌳] [🏠] [🏢]
 
         (P = CPU | M = Memória Privada)
 
@@ -1145,7 +1179,7 @@ O segundo projeto possível para uma arquitetura paralela é um projeto no qual 
 
  - Escalabilidade: Este modelo é a base para grandes clusters de servidores e sistemas de computação em nuvem, pois é mais fácil adicionar novos nós (CPU + Memória) sem criar gargalos no acesso a uma memória central única.
 
-Uma vez que as CPUs em um multicomputador não podem se comunicar apenas lendo e escrevendo na memória comum, elas precisam de um mecanismo de comunicação diferente. O que elas fazem é passar mensagens uma para outra usando a rede de interconexão. Entre os exemplos de multicomputadores podemos citar o IBM BlueGene/L, o Red Storm e o cluster Google.
+Uma vez que as CPUs em um multicomputador não podem se comunicar apenas lendo e escrevendo na memória comum, elas precisam de um mecanismo de comunicação diferente. O que elas fazem é passar mensagens uma para outra usando a rede de interconexão. Entre os exemplos de multicomputadores podemos citar o **IBM BlueGene/L, o Red Storm e o cluster Google**.
 
 A ausência de memória compartilhada em hardware em um multicomputador tem importantes implicações para a estrutura do software. Ter um único espaço de endereço virtual do qual e para o qual todos os processos podem ler e escrever de e para toda a memória apenas executando instruções LOAD e STORE é impossível em um
 multicomputador. Por exemplo, se a CPU 0 (a que está no canto superior esquerdo) da Figura 8.19(b) descobrir que parte de seu objeto se estende até a seção designada à CPU 1, ainda assim ela continua a ler memória para acessar a cauda do avião. Por outro lado, se a CPU 0 da Figura 8.20(b) fizer a mesma descoberta, ela não pode simplesmente ler a memória da CPU. Em vez disso, ela precisa fazer algo bem diferente para obter os dados de que necessita.
@@ -1162,25 +1196,50 @@ Portanto, temos um dilema: multiprocessadores são difíceis de construir, mas f
 Uma técnica para a construção de sistemas híbridos é baseada no fato de que sistemas de computação modernos não são monolíticos, mas construídos como uma série de camadas – o tema deste livro. Essa percepção abre a possibilidade de implementar memória compartilhada em qualquer uma das várias camadas, como ilustra a Figura 8.21. Na Figura 8.21(a), vemos a memória compartilhada executada pelo hardware como um verdadeiro multiprocessador. Nesse projeto, há uma única cópia do sistema operacional com um único conjunto de tabelas, em particular, a tabela de alocação de memória. Quando um processo precisa de mais memória, recorre ao sistema operacional, que então procura em sua tabela uma página livre e mapeia a página para o espaço de endereço do processo chamador. No que concerne ao sistema operacional, há uma única memória, e ele monitora em software qual processo possui qual página. Há muitos modos de implementar memória compartilhada em hardware, como veremos mais adiante.
 
 **• Figura 8.21 - Várias camadas onde a memória compartilhada pode ser implementada. (a) Hardware. (b) Sistema operacional. (c) Sistema de execução da linguagem.**
-    (a) Hardware             (b) Sistema Operacional   (c) Sistema de Execução
-                                                            da Linguagem
-
-     Máquina 1  Máquina 2      Máquina 1  Máquina 2      Máquina 1    Máquina 2
-    +---------++---------+    +---------++---------+    +---------+  +---------+
-    | Aplica. || Aplica. |    | Aplica. || Aplica. |    | Aplica. |  | Aplica. |
-    +---------++---------+    +---------++---------+    +---------+  +---------+
-    | Sist. de|| Sist. de|    | Sist. de|| Sist. de|    | Sist. de|  | Sist. de|
-    | Execuç. || Execuç. |    | Execuç. || Execuç. |    | Execuç. |==| Execuç. |
-    +---------++---------+    +---------++---------+    +---------+  +---------+
-    | Sistema || Sistema |    | Sistema || Sistema |    | Sistema |  | Sistema |
-    | Operac. || Operac. |    | Operac. || Operac. |    | Operac. |  | Operac. |
-    +---------++---------+    +---------++---------+    +---------+  +---------+
-    | Hardware|| Hardware|    | Hardware|| Hardware|    | Hardware|  | Hardware|
-    +----+----++----+----+    +----+----++----+----+    +---------+  +---------+
-         |          |              |          |              ^            ^
-    [ MEMÓRIA COMPART. ]      [ MEMÓRIA COMPART. ]      [ MEMÓRIA COMPARTILHADA ]
+       
+            (a) HARDWARE               (b) SISTEMA OPERACIONAL        (c) RUNTIME DA LINGUAGEM
+        _____________________           _____________________           _____________________
+        |      Máquina 1      |        |      Máquina 1      |         |      Máquina 1      |
+        | [ Aplicação       ] |        | [ Aplicação       ] |         | [ Aplicação       ] |
+        | [ Sist. Execução  ] |        | [ Sist. Execução  ] |         | [ Sist. Execução  ] |--+
+        | [ Sist. Operativo ] |        | [ Sist. Operativo ] |--+      | [ Sist. Operativo ] |  |
+        | [ Hardware        ] |--+     | [ Hardware        ] |  |      | [ Hardware        ] |  |
+        |_____________________|  |     |_____________________|  |      |_____________________|  |
+                |                |              |               |               |               |
+        ________V________        |      ________V________       |       ________V________       |
+        | MEMÓRIA         | <----+     | MEMÓRIA         | <----+      | MEMÓRIA         | <----+
+        | COMPARTILHADA   | <----+     | COMPARTILHADA   | <----+      | COMPARTILHADA   | <----+
+        |_________________|      |     |_________________|      |      |_________________|      |
+                ^                |              ^               |               ^               |
+        ________|____________    |      ________|____________   |      ________|____________    |
+        |      Máquina 2      |  |     |      Máquina 2      |  |     |      Máquina 2      |   |
+        | [ Aplicação       ] |  |     | [ Aplicação       ] |  |     | [ Aplicação       ] |   |
+        | [ Sist. Execução  ] |  |     | [ Sist. Execução  ] |  |     | [ Sist. Execução  ] |---+
+        | [ Sist. Operativo ] |  |     | [ Sist. Operativo ] |--+     | [ Sist. Operativo ] |
+        | [ Hardware        ] |--+     | [ Hardware        ] |        | [ Hardware        ] |
+        |_____________________|        |_____________________|        |_____________________|
 
 ![alt text](image-128.png)
+
+        +-------------------+-------------------+-------------------+----------------------------+
+        |     Nível         |   Velocidade      | Facilidade de     | Exemplo Real de            |
+        |                   |                   |  Programação      | Hardware                   |
+        +---------+---------+---------+---------+---------+---------+----------------------------+
+        |                   |                   |                   |                            |
+        |  Multiprocessador |    Média          |     Média         | SMP (Linux, Windows)       |
+        |  (SMP) - S.O.     |                   |                   |                            |
+        |                   |                   |                   |                            |
+        +---------+---------+---------+---------+---------+---------+----------------------------+
+        |                   |                   |                   |                            |
+        |  Clusters de      |    Baixa          |     Difícil       | Servidores em rede         |
+        |  Servidores       |                   |                   | (Hadoop, MPI)              |
+        |                   |                   |                   |                            |
+        +---------+---------+---------+---------+---------+---------+----------------------------+
+        |                   |                   |                   |                            |
+        |  Objetos          |  Altíssima        |  Muito Fácil      | Java RMI, CORBA,           |
+        |  Distribuídos     |                   |                   | Serviços Web (SOAP, REST)  |
+        |  (Java RMI, etc)  |                   |                   |                            |
+        +---------+---------+---------+---------+---------+---------+----------------------------+
 
 **• Análise Técnica para o eBook**
 
@@ -1192,25 +1251,64 @@ Uma técnica para a construção de sistemas híbridos é baseada no fato de que
 
  - Implementação no Sistema de Execução (c): Bibliotecas ou o próprio "runtime" da linguagem (como a JVM ou o runtime de C#) gerenciam a consistência dos dados. É comum em sistemas que utilizam objetos compartilhados em vez de endereços de memória brutos.
 
-Uma segunda possibilidade é usar hardware de multicomputador e fazer com que o sistema operacional simule memória compartilhada proporcionando um único espaço de endereço virtual de compartilhamento de páginas no âmbito do sistema inteiro. Nessa técnica, denominada DSM (Distributed Shared Memory – memória compartilhada distribuída) (Li e Hudak, 1989), cada página está localizada em uma das memórias da Figura 8.20(a). Cada máquina tem memória virtual e tabelas de páginas próprias. Quando uma CPU faz uma LOAD ou uma STORE em uma página que ela não tem, ocorre uma exceção para o sistema operacional. Este, então, localiza
-a página e solicita à CPU que a contém no momento que desmapeie a página e a envie pela interconexão de rede. Quando chega, a página é mapeada para dentro e a instrução que falhou é reiniciada. Na verdade, o sistema operacional está apenas atendendo faltas de páginas a partir de memórias remotas em vez de a partir de disco. Para o usuário, parece que a máquina tem memória compartilhada. Examinaremos a DSM mais adiante neste capítulo.
+Uma segunda possibilidade é usar hardware de multicomputador e fazer com que o sistema operacional simule memória compartilhada proporcionando um único espaço de endereço virtual de compartilhamento de páginas no âmbito do sistema inteiro. Nessa técnica, denominada **DSM (Distributed Shared Memory – memória compartilhada distribuída)** (Li e Hudak, 1989), cada página está localizada em uma das memórias da Figura 8.20(a). Cada máquina tem memória virtual e tabelas de páginas próprias. Quando uma CPU faz uma **LOAD ou uma STORE** em uma página que ela não tem, ocorre uma exceção para o sistema operacional. Este, então, localiza a página e solicita à CPU que a contém no momento que desmapeie a página e a envie pela interconexão de rede. Quando chega, a página é mapeada para dentro e a instrução que falhou é reiniciada. Na verdade, o sistema operacional está apenas atendendo faltas de páginas a partir de memórias remotas em vez de a partir de disco. Para o usuário, parece que a máquina tem memória compartilhada. Examinaremos a DSM mais adiante neste capítulo.
 
 Uma terceira possibilidade é fazer com que um sistema de execução em nível de usuário, possivelmente específico para uma linguagem, execute uma forma de memória compartilhada. Nessa abordagem, a linguagem de programação provê algum tipo de abstração de memória compartilhada, que então é realizada pelo compilador e
-pelo sistema de execução. Por exemplo, o modelo Linda é baseado na abstração de um espaço compartilhado de tuplas (registros de dados que contêm uma coleção de campos). Processos em qualquer máquina podem produzir entrada de uma tupla a partir do espaço compartilhado de tuplas ou produzir saída de uma tupla para o espaço compartilhado de tuplas. Como o acesso ao espaço de tuplas é todo controlado em software (pelo sistema de execução Linda), não é preciso nenhum hardware especial ou suporte de sistema operacional.
+pelo sistema de execução. Por exemplo, **o modelo Linda é baseado na abstração de um espaço compartilhado de tuplas (registros de dados que contêm uma coleção de campos)**. Processos em qualquer máquina podem produzir entrada de uma tupla a partir do espaço compartilhado de tuplas ou produzir saída de uma tupla para o espaço compartilhado de tuplas. Como o acesso ao espaço de tuplas é todo controlado em software (pelo sistema de execução Linda), não é preciso nenhum hardware especial ou suporte de sistema operacional.
 
-Outro exemplo de memória compartilhada específica de linguagem executada pelo sistema de execução é o modelo Orca de objetos de dados compartilhados. Em Orca, os processos compartilham objetos genéricos em vez de apenas tuplas e podem executar neles métodos específicos de objetos. Quando um método muda o estado interno de um objeto, cabe ao sistema de execução garantir que todas as cópias do objeto em todas as máquinas sejam atualizadas simultaneamente. Mais uma vez, como objetos são um conceito estritamente de software, a implementação pode ser feita pelo sistema de execução sem ajuda do sistema operacional ou do hardware.
+# Estruturas de Dados
+
+## 1. Tuplas (Tuples)
+* **Immutáveis** (não dá pra mudar depois de criadas)
+* Ordenadas
+* Indexadas por posição (acesso por índice)
+* Permite valores repetidos
+* Exemplo: `(1, 2, 3, 'a')`
+
+## 2. Listas (Lists)
+* **Mutáveis** (dá pra adicionar, remover, alterar)
+* Ordenadas
+* Indexadas por posição
+* Permita valores repetidos
+* Exemplo: `[1, 2, 3, 'a']`
+
+## 3. Conjuntos (Sets)
+* **Mutáveis** (dá pra adicionar, remover)
+* **Não ordenados** (sem índice)
+* **Não permite valores repetidos** (elementos únicos)
+* Exemplo: `{1, 2, 3, 'a'}`
+
+## 4. Dicionários (Dictionaries/Mapas)
+* **Mutáveis**
+* **Chave-valor** (acesso por chave, não por índice)
+* Chaves únicas, valores podem se repetir
+* Exemplo: `{'nome': 'João', 'idade': 30}`
+
+## Outras estruturas comuns
+* **Deque** (lista com operações eficientes nas pontas)
+* **Fila (Queue)** e **Pilha (Stack)**
+* **Árvores** (estruturas hierárquicas)
+* **Grafos** (relacionamentos entre nós)
+
+## Quando usar cada um?
+* **Tupla**: dados fixos que não mudam (ex: coordenadas)
+* **Lista**: dados que precisam ser alterados (ex: carrinho de compras)
+* **Conjunto**: elementos únicos, sem ordem (ex: usuários únicos)
+* **Dicionário**: quando precisa de chave-valor (ex: configurações)
+
+Outro exemplo de memória compartilhada específica de linguagem executada pelo sistema de execução é o **modelo Orca** de objetos de dados compartilhados. Em Orca, os processos compartilham objetos genéricos em vez de apenas tuplas e podem executar neles métodos específicos de objetos. Quando um método muda o estado interno de um objeto, cabe ao sistema de execução garantir que todas as cópias do objeto em todas as máquinas sejam atualizadas simultaneamente. Mais uma vez, como objetos são um conceito estritamente de software, a implementação pode ser feita pelo sistema de execução sem ajuda do sistema operacional ou do hardware.
 Examinaremos ambos, Linda e Orca, mais adiante neste capítulo.
 
-**• Taxonomia de computadores paralelos**
+* **Taxonomia de computadores paralelos**
 Agora, vamos voltar a nosso tópico principal, a arquitetura de computadores paralelos. Muitos tipos já foram propostos e construídos ao longo dos anos. Portanto, é natural perguntar se há alguma maneira de categorizá-los em uma taxonomia. Muitos pesquisadores tentaram, com resultados mistos (Flynn, 1972; e Treleaven, 1985). Infelizmente, o Carl von Linné1 da computação paralela ainda está para surgir. O esquema de Flynn, o único que é muito usado, é dado na Figura 8.22, e mesmo este é, na melhor das hipóteses, uma aproximação muito grosseira.
 
-**• Figura 8.22   Taxonomia de Flynn para computadores paralelos**
+* **Figura 8.22 - Taxonomia de Flynn para computadores paralelos**
 
     +---------------------+--------------- +-------------------------------------------+----------------------------------+
     | Fluxo de Instruções | Fluxo de Dados | Nome                                      | Exemplos                         |
     +---------------------+----------------+-------------------------------------------+----------------------------------+
     | 1                   | 1              | SISD (Single Instruction, Single Data)    | Máquina clássica de Von Neumann  | 
-    +---------------------+----------------+----------------------------------------------+-------------------------------+
+    +---------------------+----------------+-------------------------------------------+----------------------------------+
     | 1                   | Múltiplos      | SIMD (Single Instruction, Multiple Data)  | Supercomputador vetorial,        |
     |                     |                |                                           | processador de array             |
     +---------------------+----------------+-------------------------------------------+----------------------------------+
@@ -1224,15 +1322,13 @@ A classificação de Flynn é baseada em dois conceitos – fluxos de instruçõ
 Um fluxo de dados consiste em um conjunto de operandos. Por exemplo, em um sistema de previsão do tempo, cada um de um grande número de sensores poderia emitir um fluxo de temperaturas em intervalos regulares.
 
 Os fluxos de instruções e de dados são, até certo ponto, independentes, portanto, existem quatro combinações, como relacionadas na Figura 8.22. SISD é apenas o clássico computador sequencial de Von Neumann. Ele tem um fluxo de instruções, um fluxo de dados e faz uma coisa por vez. Máquinas SIMD têm uma única unidade
-de controle que emite uma instrução por vez, mas elas têm múltiplas ULAs para executá-las em vários conjuntos de dados simultaneamente. O ILLIAC IV (Figura 2.7) é o protótipo de tais máquinas. Elas estão ficando cada vez mais raras, mas computadores convencionais às vezes têm algumas instruções SIMD para processamento
-de material audiovisual. As instruções SSE do Core i7 são SIMD. Não obstante, há uma nova área na qual algumas das ideias do mundo SIMD estão desempenhando um papel: processadores de fluxo. Essas máquinas são projetadas especificamente para tratar demandas de entrega de multimídia e podem se tornar importantes no futuro (Kapasi et al., 2003).
+de controle que emite uma instrução por vez, mas elas têm múltiplas ULAs para executá-las em vários conjuntos de dados simultaneamente. O ILLIAC IV (Figura 2.7) é o protótipo de tais máquinas. Elas estão ficando **cada vez mais raras**, mas computadores convencionais às vezes têm algumas instruções SIMD para processamento de material audiovisual. **As instruções SSE do Core i7 são SIMD**. Não obstante, há uma nova área na qual algumas das ideias do mundo SIMD estão desempenhando um papel: processadores de fluxo. Essas máquinas são projetadas especificamente para tratar demandas de **entrega de multimídia e podem se tornar importantes no futuro** (Kapasi et al., 2003).
 
 As máquinas MISD são uma categoria um tanto estranha, com múltiplas instruções operando no mesmo dado. Não está claro se elas existem, embora haja quem considere MISD as máquinas com pipeline.
 
-Por fim, temos MIMD, que são apenas múltiplas CPUs independentes operando como parte de um sistema maior. A maioria dos processadores paralelos cai nessa categoria. Ambos, multiprocessadores e multicomputadores são máquinas MIMD.
+**Por fim, temos MIMD, que são apenas múltiplas CPUs independentes operando como parte de um sistema maior. A maioria dos processadores paralelos cai nessa categoria. Ambos, multiprocessadores e multicomputadores são máquinas MIMD.**
 
-1 - Carl von Linné (1707–1778) foi o biólogo sueco que inventou o sistema usado hoje para classificar todas as plantas e animais em reino, filo,
-classe, ordem, família, gênero e espécie.
+    1 - Carl von Linné (1707–1778) foi o biólogo sueco que inventou o sistema usado hoje para classificar todas as plantas e animais em reino, filo, classe, ordem, família, gênero e espécie.
 
 A taxonomia de Flynn para aqui, mas nós a ampliamos na Figura 8.23. A SIMD foi subdividida em dois sub-grupos. O primeiro é para supercomputadores numéricos e outras máquinas que operam sobre vetores, efetuando a mesma operação em cada elemento do vetor. O segundo é para máquinas do tipo paralelo como ILLIAC IV, na
 qual uma unidade mestra de controle transmite instruções para muitas ULAs independentes.
@@ -1240,14 +1336,14 @@ qual uma unidade mestra de controle transmite instruções para muitas ULAs inde
 **• Figura 8.23   Taxonomia de computadores paralelos.**
 Este mapa mental organiza como os sistemas são classificados com base no fluxo de instruções e dados, além da forma como gerenciam a memória.
 
-    [ ARQUITETURAS DE COMPUTADOR PARALELO ]
-                                        |
+                      [ ARQUITETURAS DE COMPUTADOR PARALELO ]
+                                         |
         +----------------+---------------+---------------+---------------+
         |                |               |               |               |
     [ SISD ]         [ SIMD ]        [ MISD ]        [ MIMD ]            |
     (Von Neumann)        |               ?               |               |
-                +-------+-------+               +-------+-------+        |
-                |               |               |               |        |
+                 +-------+-------+               +-------+-------+        |
+                 |               |               |               |        |
             Processador     Processador     Multiproces-    Multicompu-  |
             de vetor        de array         sadores         tadores     |
                                                 |               |        |
@@ -1279,18 +1375,18 @@ A taxonomia de Flynn e suas derivações modernas permitem classificar quase tod
 
  - NUMA (Non-Uniform Memory Access): Arquiteturas comuns em servidores de alta performance (como os da OCI) onde o tempo de acesso à memória depende da localização física do dado em relação ao processador.
 
-Em nossa taxonomia, a categoria MIMD foi subdividida em multiprocessadores (máquinas de memória compartilhada) e multicomputadores (máquinas de troca de mensagens). Existem três tipos de multiprocessadores, distinguidos pelo modo como a memória compartilhada é neles implementada. Eles são denominados UMA
-(Uniform Memory Access – acesso uniforme à memória), NUMA (NonUniform Memory Access – acesso não uniforme à memória) e COMA (Cache Only Memory Access – acesso somente à memória cache). Essas categorias existem porque, em grandes multiprocessadores, a memória costuma ser subdividida em vários módulos. A propriedade distintiva das máquinas UMA é que cada CPU tem o mesmo tempo de acesso a todos os módulos de memória. Ou seja, cada palavra de memória pode ser lida tão depressa quanto qualquer outra. Se isso for tecnicamente impossível, a velocidade das referências mais rápidas é reduzida para que se compatibilizem com as mais lentas, portanto, os programadores não veem a diferença. É isso que “uniforme” significa nesse caso. Essa uniformidade torna o desempenho previsível, um fator importante para escrever código eficiente.
+Em nossa taxonomia, a categoria MIMD foi subdividida em multiprocessadores (máquinas de memória compartilhada) e multicomputadores (máquinas de troca de mensagens). Existem três tipos de multiprocessadores, distinguidos pelo modo como a memória compartilhada é neles implementada. Eles são denominados **UMA
+(Uniform Memory Access – acesso uniforme à memória)** , **NUMA (NonUniform Memory Access – acesso não uniforme à memória)** e **COMA (Cache Only Memory Access – acesso somente à memória cache)**. Essas categorias existem porque, em grandes multiprocessadores, a memória costuma ser subdividida em vários módulos. A propriedade distintiva das máquinas UMA é que cada CPU tem o mesmo tempo de acesso a todos os módulos de memória. Ou seja, cada palavra de memória pode ser lida tão depressa quanto qualquer outra. Se isso for tecnicamente impossível, a velocidade das referências mais rápidas é reduzida para que se compatibilizem com as mais lentas, portanto, os programadores não veem a diferença. É isso que “uniforme” significa nesse caso. Essa uniformidade torna o desempenho previsível, um fator importante para escrever código eficiente.
 
-Por comparação, essa propriedade não é válida em um multiprocessador NUMA. Muitas vezes, há um módulo de memória próximo a cada CPU e acessá-lo é mais rápido do que acessar os distantes. O resultado é que, por questões de desempenho, o local onde o código e os dados são posicionados é importante. Máquinas COMA também são não uniformes, mas de um modo diferente. Estudaremos detalhadamente cada um desses tipos e suas subcategorias mais adiante.
+Por comparação, essa propriedade não é válida em um multiprocessador **NUMA**. Muitas vezes, há um módulo de memória próximo a cada CPU e acessá-lo é mais rápido do que acessar os distantes. O resultado é que, por questões de desempenho, o local onde o código e os dados são posicionados é importante. Máquinas **COMA** também são não uniformes, mas de um modo diferente. Estudaremos detalhadamente cada um desses tipos e suas subcategorias mais adiante.
 
-A outra categoria principal de máquinas MIMD consiste nos multicomputadores, que, diferente dos multiprocessadores, não têm memória primária compartilhada no nível da arquitetura. Em outras palavras, o sistema operacional em uma CPU de multicomputador não pode acessar memória ligada a uma CPU diferente apenas executando uma instrução LOAD. Ela tem de enviar uma mensagem explícita e esperar uma resposta. A capacidade­ do sistema operacional de ler uma palavra distante apenas executando uma LOAD é o que distingue multiprocessadores de multicomputadores. Como mencionamos antes, mesmo em um multicomputador, programas do
-usuário podem ter a capacidade de acessar a memória remota usando instruções LOAD e STORE, mas essa ilusão é suportada pelo sistema operacional, e não pelo hardware. Essa diferença é sutil, mas muito importante. Como multicomputadores não têm acesso direto à memória remota, às vezes eles são denominados máquinas NORMA (NO Remote Memory Access – sem acesso à memória remota).
+A outra categoria principal de máquinas **MIMD** consiste nos multicomputadores, que, diferente dos multiprocessadores, não têm memória primária compartilhada no nível da arquitetura. Em outras palavras, o sistema operacional em uma CPU de multicomputador não pode acessar memória ligada a uma CPU diferente apenas executando uma instrução LOAD. Ela tem de enviar uma mensagem explícita e esperar uma resposta. A capacidade­ do sistema operacional de ler uma palavra distante apenas executando uma LOAD é o que distingue multiprocessadores de multicomputadores. Como mencionamos antes, mesmo em um multicomputador, programas do
+usuário podem ter a capacidade de acessar a memória remota usando instruções** LOAD e STORE**, mas essa ilusão é suportada pelo sistema operacional, e não pelo hardware. Essa diferença é sutil, mas muito importante. Como multicomputadores não têm acesso direto à memória remota, às vezes eles são denominados máquinas **NORMA (NO Remote Memory Access – sem acesso à memória remota)**.
 
-Os multicomputadores podem ser divididos em duas categorias gerais. A primeira contém os MPPs (Massively Parallel Processors – processadores de paralelismo maciço), que são supercomputadores caros que consistem em muitas CPUs fortemente acopladas por uma rede de interconexão proprietária de alta velocidade.
-O IBM SP/3 é um exemplo bem conhecido no mercado.
+Os multicomputadores podem ser divididos em duas categorias gerais. A primeira contém os **MPPs (Massively Parallel Processors – processadores de paralelismo maciço)**, que são supercomputadores caros que consistem em muitas CPUs fortemente acopladas por uma rede de interconexão proprietária de alta velocidade.
+O **IBM SP/3** é um exemplo bem conhecido no mercado.
 
-A outra categoria consiste em PCs ou estações de trabalho comuns, possivelmente montados em estantes e conectados por tecnologia de interconexão comercial, de prateleira. Em termos de lógica, não há muita diferença, mas supercomputadores enormes que custam muitos milhões de dólares são usados de modo diferente das redes de PCs montadas pelos usuários por uma fração do preço de um MPP. Essas máquinas caseiras são conhecidas por vários nomes, entre eles NOW (Network of Workstations – rede de estações de trabalho), COW (Cluster of Workstations – grupo de estações de trabalho), ou, às vezes, apenas cluster (grupo).
+A outra categoria consiste em PCs ou estações de trabalho comuns, possivelmente montados em estantes e conectados por tecnologia de interconexão comercial, de prateleira. Em termos de lógica, não há muita diferença, mas supercomputadores enormes que custam muitos milhões de dólares são usados de modo diferente das redes de PCs montadas pelos usuários por uma fração do preço de um MPP. Essas máquinas caseiras são conhecidas por vários nomes, entre eles **NOW (Network of Workstations – rede de estações de trabalho)**, **COW (Cluster of Workstations – grupo de estações de trabalho)**, ou, às vezes, apenas **cluster** (grupo).
 
 ## 8.3.2 Semântica da memória
 Ainda que todos os multiprocessadores apresentem às CPUs a imagem de um único espaço de endereço compartilhado, muitas vezes estão presentes muitos módulos de memória, cada um contendo alguma porção da memória física. As CPUs e memórias muitas vezes são conectadas por uma complexa rede de interconexão, como
@@ -1303,15 +1399,15 @@ de consistência e muitos modelos diferentes já foram propostos e executados.
 Para dar uma ideia do problema, suponha que a CPU 0 escreve o valor 1 em alguma palavra de memória e, um pouco mais tarde, a CPU 1 escreve o valor 2 para a mesma palavra. Agora, a CPU 2 lê a palavra e obtém o valor 1. O proprietário do computador deve levar sua máquina para consertar? Isso depende do que a memória
 prometeu (seu contrato).
 
-**• Consistência estrita**
+* **Consistência estrita**
 O modelo mais simples é o da consistência estrita. Nele, qualquer leitura para uma localização x sempre retorna o valor da escrita mais recente para x. Programadores adoram esse modelo, mas, na verdade, ele é efetivamente impossível de implementar de qualquer outro modo que não seja ter um único módulo de memória que apenas atende a todas as requisições segundo a política primeiro a chegar, primeiro a ser atendido, sem cache nem duplicação de dados. Essa implementação transformaria a memória em um imenso gargalo e, portanto, não é uma candidata séria, infelizmente.
 
-**• Consistência sequencial**
+* **Consistência sequencial**
 O segundo melhor é um modelo denominado consistência sequencial (Lamport, 1979). Nesse caso, a ideia é que, na presença de múltiplas requisições de leitura (read) e escrita (write), o hardware escolhe (sem determinismo) alguma intercalação de todas as requisições, mas todas as CPUs veem a mesma ordem.
 
 Para entender o que isso significa, considere um exemplo. Suponha que a CPU 1 escreve o valor 100 para a palavra x, e 1 ns mais tarde a CPU 2 escreve o valor 200 para a palavra x. Agora, suponha que 1 ns após a segunda escrita ter sido emitida (mas não necessariamente ainda concluída), duas outras CPUs, 3 e 4, leem a palavra x duas vezes cada uma em rápida sucessão, conforme mostra a Figura 8.24(a). Três possíveis ordenações dos seis eventos (duas escritas e quatro leituras)são mostradas na Figura 8.24 (b)–(d), respectivamente. Na Figura 8.24(b), a CPU 3 obtém (200, 200) e a CPU 4 obtém (200, 200). Na Figura 8.24(c), elas obtêm (100, 200) e (200, 200), respectivamente. Na Figura 8.24(d), elas obtêm (100, 100) e (200, 100), respectivamente. Todas essas são válidas, bem como algumas outras possibilidades que não são mostradas. Observe que não existe um único valor “correto”.
 
-**• Figura 8.24 - (a) Duas CPUs escrevendo e duas CPUs lendo uma palavra de memória em comum. (b)–(d) Três modos possíveis de intercalar as duas escritas e as quatro leituras em relação ao tempo.**
+* **Figura 8.24 - (a) Duas CPUs escrevendo e duas CPUs lendo uma palavra de memória em comum. (b)–(d) Três modos possíveis de intercalar as duas escritas e as quatro leituras em relação ao tempo.**
 Este diagrama mostra o que acontece quando duas CPUs tentam escrever em uma mesma variável ($x$) e outras duas tentam ler esses valores simultaneamente.
 
     (a) Cenário de Acesso                  (b)-(d) Sequências Possíveis
