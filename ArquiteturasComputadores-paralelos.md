@@ -1413,9 +1413,9 @@ Este diagrama mostra o que acontece quando duas CPUs tentam escrever em uma mesm
     (a) Cenário de Acesso                  (b)-(d) Sequências Possíveis
             à Memória                                  no Tempo
             
-                [CPU 2]                          (b)          (c)          (d)
+                 [CPU 2]                          (b)          (c)          (d)
                     |                            W100         W100         W200
-            escrita 200                          W200       R3 = 100     R4 = 200
+            escrita 200                          W200         R3 = 100     R4 = 200
                     v                          R3 = 200       W200         W100
     [CPU 1] -> escrita 100 -> [ x ]            R3 = 200     R4 = 200     R3 = 100
                                 |              R4 = 200     R3 = 200     R4 = 100
@@ -1425,7 +1425,7 @@ Este diagrama mostra o que acontece quando duas CPUs tentam escrever em uma mesm
                                 &
                             [CPU 4]
 
-**• Resumo Técnico para o eBookA**
+* **Resumo Técnico para o eBookA**
 A Figura 8.24 é essencial para entender por que a ordem das operações importa em sistemas paralelos:
 
  - O Problema (a): As CPUs 1 e 2 realizam operações de escrita (valores 100 e 200), enquanto as CPUs 3 e 4 tentam ler o valor de $x$ duas vezes cada.
@@ -1447,7 +1447,7 @@ escrita de 200 pela CPU 2. Tudo bem. Mas também significaria que, de acordo com
 
 Embora a consistência sequencial não seja uma regra tão poderosa quanto a estrita, ainda é muito útil. Na verdade, ela diz que, quando múltiplos eventos acontecem concorrentemente, há alguma ordem verdadeira na qual eles ocorrem, talvez determinada pela temporização e pelo acaso, mas existe uma ordenação verdadeira e todos os processadores observam essa mesma ordem. Embora essa afirmativa talvez pareça óbvia, a seguir discutiremos modelos de consistência que nem isso garantem.
 
-**• Consistência de processador**
+* **Consistência de processador**
 Um modelo de consistência menos rigoroso, mas que é mais fácil de implementar em grandes multiprocessadores, é a consistência de processador (Goodman, 1989). Ele tem duas propriedades:
 
     1. Escritas por qualquer CPU são vistas por todas as CPUs na ordem em que foram emitidas.
@@ -1462,14 +1462,14 @@ Mesmo com essas restrições, o projetista tem muita flexibilidade. Considere o 
 
 Vale a pena notar que alguns autores definem consistência de processador de modo diferente e não requerem a segunda condição.
 
-**• Consistência fraca**
+* **Consistência fraca**
 Nosso próximo modelo, a consistência fraca, nem mesmo garante que escritas de uma única CPU sejam vistas em ordem (Dubois et al., 1986). Em uma memória fracamente consistente, uma CPU poderia ver 1A antes de 1B e outra CPU poderia ver 1A depois de 1B. Contudo, para colocar alguma ordem no caos, tais memórias
 têm variáveis de sincronização ou uma operação de sincronização. Quando uma sincronização é executada, todas as escritas pendentes são terminadas e nenhuma nova é iniciada até que todas as antigas – e a própria sincronização – estejam concluídas. Na verdade, uma sincronização “descarrega o pipeline” e leva a memória a um estado estável sem nenhuma operação pendente. Operações de sincronização são, em si, sequencialmente consistentes, isto é, quando múltiplas CPUs as emitem, alguma ordem é escolhida, mas todas as CPUs veem a mesma ordem.
 
 Em consistência fraca, o tempo é dividido em épocas bem definidas delimitadas pelas sincronizações (sequencialmente consistentes), como ilustra a Figura 8.25. Nenhuma ordem relativa é garantida para 1A e 1B e diferentes CPUs podem ver as duas escritas em ordens diferentes, isto é, uma CPU pode ver 1A e então 1B e outra
 CPU pode ver 1B e então 1A. Essa situação é permitida. Contudo, todas as CPUs veem 1B antes de 1C porque a primeira operação de sincronização força 1A, 1B e 2A a concluírem antes que 1C, 2B, 3A ou 3B tenham permissão de iniciar. Assim, realizando operações de sincronização, o software pode impor alguma ordem na sequência de eventos, embora não a custo zero, visto que descarregar o pipeline de memória toma algum tempo e, portanto, atrasa o processamento da máquina. Fazer isso com frequência pode ser um problema.
 
-**• Figura 8.25   A memória fracamente consistente usa operações de sincronização para dividir o tempo em épocas sequenciais.**
+* **Figura 8.25 - A memória fracamente consistente usa operações de sincronização para dividir o tempo em épocas sequenciais.**
 Este diagrama demonstra como o tempo é dividido em épocas sequenciais para garantir que todas as CPUs tenham uma visão coerente da memória em momentos específicos.
 
     ESCRITA
@@ -1496,16 +1496,16 @@ A consistência fraca é uma estratégia de otimização comum em sistemas de al
 
  - Exemplo de Fluxo: Na figura, as operações 1A e 1B da CPU A só precisam ser visíveis para as outras CPUs após o primeiro traço vertical (Sincronização).
 
-**• Consistência de liberação**
+* **Consistência de liberação**
 A consistência fraca tem o problema de ser bastante ineficiente porque deve encerrar todas as operações de memória pendentes e deter todas as novas até que as operações correntes tenham terminado. A consistência de liberação melhora as coisas adotando um modelo semelhante ao das seções críticas (Gharachorloo et al., 1990). A ideia que fundamenta esse modelo é que, quando um processo sai de uma região crítica não é necessário forçar todas as escritas a concluírem imediatamente. Basta assegurar que elas estejam encerradas antes que qualquer processo entre naquela região crítica outra vez.
 
-Nesse modelo, a operação de sincronização oferecida pela consistência fraca é subdividida em duas operações diferentes. Para ler ou escrever uma variável de dados compartilhada, uma CPU (isto é, seu software) deve realizar, primeiro, uma operação acquire na variável de sincronização para obter acesso exclusivo aos dados compartilhados. Então, a CPU pode usá-los como quiser, lendo e escrevendo à vontade. Ao concluir, a CPU realiza uma operação release na variável de sincronização para indicar que terminou. A release não obriga as escritas pendentes a concluir, mas ela própria não conclui até que as escritas emitidas antes estejam concluídas. Além do mais, novas operações de memória não são impedidas de iniciar imediatamente.
+Nesse modelo, a operação de sincronização oferecida pela consistência fraca é subdividida em duas operações diferentes. Para ler ou escrever uma variável de dados compartilhada, uma CPU (isto é, seu software) deve realizar, primeiro, uma operação acquire na variável de sincronização para obter acesso exclusivo aos dados compartilhados. Então, a CPU pode usá-los como quiser, lendo e escrevendo à vontade. Ao concluir, a CPU realiza uma operação **release** na variável de sincronização para indicar que terminou. A **release** não obriga as escritas pendentes a concluir, mas ela própria não conclui até que as escritas emitidas antes estejam concluídas. Além do mais, novas operações de memória não são impedidas de iniciar imediatamente.
 
-Quando a próxima operação acquire é emitida, é feita uma verificação para ver se todas as operações release anteriores foram concluídas. Se não foram, acquire é detida até que todas tenham concluído (e, portanto, que todas as escritas realizadas antes delas estejam concluídas). Desse modo, se a acquire seguinte ocorrer em um tempo longo o suficiente após a release mais recente, ela não tem de esperar antes de iniciar e pode entrar na região crítica sem demora. Se a acquire seguinte ocorrer logo após uma release, a acquire, e todas as instruções após ela, serão retardadas até todas as releases pendentes serem concluídas, garantindo assim que as variáveis na seção crítica tenham sido atualizadas. Esse esquema é um pouco mais complicado do que consistência fraca, mas tem a significativa vantagem de não atrasar instruções com tanta frequência para manter consistência.
+Quando a próxima operação acquire é emitida, é feita uma verificação para ver se todas as operações release anteriores foram concluídas. Se não foram, acquire é detida até que todas tenham concluído (e, portanto, que todas as escritas realizadas antes delas estejam concluídas). Desse modo, se a acquire seguinte ocorrer em um tempo longo o suficiente após a release mais recente, ela não tem de esperar antes de iniciar e pode entrar na região crítica sem demora. Se a acquire seguinte ocorrer logo após uma release, a acquire, e todas as instruções após ela, serão retardadas até todas as releases pendentes serem concluídas, garantindo assim que as variáveis na seção crítica tenham sido atualizadas. **Esse esquema é um pouco mais complicado do que consistência fraca, mas tem a significativa vantagem de não atrasar instruções com tanta frequência para manter consistência.**
 
 A consistência de memória não é um assunto encerrado. Os pesquisadores ainda estão propondo novos modelos (Naeem et al., 2011; Sorin et al., 2011; e Tu et al., 2010).
 
-## 8.3.3 Arquiteturas de multiprocessadores simétricos UMA
+## 8.3.3 Arquiteturas de multiprocessadores simétricos UMA(acesso uniforme à memória)
 Os multiprocessadores mais simples são baseados em um único barramento, como ilustrado na Figura 8.26(a). Duas ou mais CPUs e um ou mais módulos de memória, todos usam o mesmo barramento para comunicação. Quando uma CPU quer ler uma palavra de memória, ela primeiro verifica se o barramento está ocupado. Se estiver ocioso, a CPU coloca nele o endereço da palavra que ela quer, ativa alguns sinais de controle e espera até que a memória coloque a palavra desejada no barramento.
 
 Se o barramento estiver ocupado quando uma CPU quiser ler ou escrever na memória, a CPU apenas espera até que ele fique ocioso. E é aqui que está o problema desse projeto. Com duas ou três CPUs, a contenção pelo barramento será administrável; com 32 ou 64, será insuportável. O sistema ficará totalmente limitado pela largura de banda do barramento e a maioria das CPUs restará ociosa na maior parte do tempo.
@@ -1537,7 +1537,7 @@ Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no bar
 
 ![alt text](image-132.png)
 
-**• Notas Técnicas para o eBook:**
+* **Notas Técnicas para o eBook:**
 
  - Configuração (a) - Sem Cache: Todas as instruções e dados devem ser buscados na memória compartilhada através do barramento. Isso gera um gargalo severo, pois o barramento fica rapidamente saturado com o tráfego de múltiplas CPUs.
 
@@ -1547,70 +1547,38 @@ Este diagrama ilustra a evolução da arquitetura para reduzir o tráfego no bar
 
 A solução para esse problema é acrescentar uma cache a cada CPU, como retratado na Figura 8.26(b). A cache pode estar dentro do chip da CPU, próxima ao chip da CPU, na placa do processador ou alguma combinação de todas as três. Uma vez que agora muitas leituras podem ser satisfeitas pela cache local, haverá muito menos tráfego no barramento e o sistema pode suportar mais CPUs. Assim, nesse caso, fazer cache é um grande ganho. Porém, como veremos em breve, manter as caches consistentes entre si não é trivial.
 
-Ainda outra possibilidade é o projeto da Figura 8.26(c), no qual cada CPU tem não só uma cache, mas também uma memória local e privada que ela acessa por um barramento dedicado (privado). Para fazer a utilização ideal dessa configuração, o compilador deve colocar nas memórias privadas todo o texto de programa, todas as cadeias, constantes e outros dados somente de leitura, pilhas e variáveis locais. Então, a memória compartilhada só é usada para variáveis compartilhadas que podem ser escritas. Na maioria dos casos, esse posicionamento cui- dadoso reduzirá muito o tráfego no barramento, mas requer cooperação ativa do compilador.
+Ainda outra possibilidade é o projeto da Figura 8.26(c), no qual cada CPU tem não só uma cache, mas também uma memória local e privada que ela acessa por um barramento dedicado (privado). Para fazer a utilização ideal dessa configuração, o compilador deve colocar nas memórias privadas todo o texto de programa, todas as cadeias, constantes e outros dados somente de leitura, pilhas e variáveis locais. Então, a memória compartilhada só é usada para variáveis compartilhadas que podem ser escritas. Na maioria dos casos, esse posicionamento cuidadoso reduzirá muito o tráfego no barramento, mas requer cooperação ativa do compilador.
 
-**• Caches de escuta**
+* **Caches de escuta**
 Embora os argumentos de desempenho que acabamos de apresentar decerto sejam verdadeiros, atenuamos um problema fundamental um pouco depressa demais. Suponha que a memória seja sequencialmente consistente. O que acontece se a CPU 1 tiver uma linha em sua cache e então a CPU 2 tentar ler uma palavra na mesma linha? Na ausência de quaisquer regras especiais, também ela obteria uma cópia em sua cache. Em princípio, é aceitável fazer duas vezes a cache de uma mesma linha. Agora, suponha que a CPU 1 modifique a linha e então, imediatamente após, a CPU 2 leia sua cópia da linha a partir de sua cache. Ela obterá dados velhos, violando
 assim o contrato entre o software e a memória. O programa que está executando na CPU 2 não ficará satisfeito.
 
-Esse problema, conhecido como coerência de cache ou consistência de cache, é extremamente sério. Sem uma solução, não se pode usar a cache e os multiprocessadores baseados em barramento ficariam limitados a duas ou três CPUs. Como consequência de sua importância, muitas soluções foram propostas ao longo dos anos (por exemplo, Goodman, 1983; e Papamarcos e Patel, 1984). Embora todos esses algoritmos de cache, denominados protocolos de coerência de cache,apresentem diferenças em detalhes, todos eles impedem que versões diferentes da mesma linha de cache apareçam simultaneamente em duas ou mais caches.
+Esse problema, conhecido como **coerência de cache ou consistência de cache**, é extremamente sério. Sem uma solução, não se pode usar a cache e os multiprocessadores baseados em barramento ficariam limitados a duas ou três CPUs. Como consequência de sua importância, muitas soluções foram propostas ao longo dos anos (por exemplo, Goodman, 1983; e Papamarcos e Patel, 1984). Embora todos esses algoritmos de cache, denominados protocolos de coerência de cache,apresentem diferenças em detalhes, todos eles impedem que versões diferentes da mesma linha de cache apareçam simultaneamente em duas ou mais caches.
 
-Em todas as soluções, o controlador de cache é projetado especialmente para permitir que ele escute o barramento monitorando todas as requisições de barramento de outras CPUs e caches e execute alguma ação em certos casos. Esses dispositivos são denominados caches de escuta ou, às vezes, caches de espia, porque “espiam”
-o barramento. O conjunto de regras executado pelas caches, CPUs e memória para impedir que diferentes versões dos dados apareçam em múltiplas caches forma o protocolo de coerência de cache. A unidade de transferência e armazenamento de uma cache é denominada uma linha de cache e seu comprimento típico é 32 ou 64 bytes.
+Em todas as soluções, o controlador de cache é projetado especialmente para permitir que ele escute o barramento monitorando todas as requisições de barramento de outras CPUs e caches e execute alguma ação em certos casos. Esses dispositivos são denominados **caches de escuta** ou, às vezes, **caches de espia**, porque “espiam” o barramento. O conjunto de regras executado pelas caches, CPUs e memória para impedir que diferentes versões dos dados apareçam em múltiplas caches forma o protocolo de coerência de cache. A unidade de transferência (LOAD) e armazenamento(STORE) de uma cache é denominada uma **linha de cache** e seu comprimento típico é 32 ou 64 bytes.
 
-O protocolo de coerência de cache mais simples de todos é denominado escrita direta. Ele pode ser mais bem entendido distinguindo os quatro casos mostrados na Figura 8.27. Quando uma CPU tenta ler uma palavra que não está em sua cache (isto é, há uma ausência da cache para leitura), seu controlador de cache carrega nela a linha que contém aquela palavra. A linha é fornecida pela memória, que, nesse protocolo, está sempre atualizada. Leituras subsequentes (isto é, presenças na cache para leitura) podem ser satisfeitas pela cache.
+O protocolo de coerência de cache mais simples de todos é denominado **escrita direta**. Ele pode ser mais bem entendido distinguindo os quatro casos mostrados na Figura 8.27. Quando uma CPU tenta ler uma palavra que não está em sua cache (isto é, há uma ausência da cache para leitura), seu controlador de cache carrega nela a linha que contém aquela palavra. A linha é fornecida pela memória, que, nesse protocolo, está sempre atualizada. Leituras subsequentes (isto é, presenças na cache para leitura) podem ser satisfeitas pela cache.
 
-**•  Figura 8.27 - Protocolo de coerência de cache de escrita direta. Os retângulos vazios indicam que nenhuma ação foi realizada.**
+* **Figura 8.27 - Protocolo de coerência de cache de escrita direta. Os retângulos vazios indicam que nenhuma ação foi realizada.**
 
-                    +---------------+
-                    |  Ação         |
-                    +---------------+
-                           |
-                           |
-                           v
-           +---------------+-------------------------------+
-           |         Requisição local                      |
-           +---------------+-------------------------------+
-                           |
-                           |
-                           v
-           +---------------+----------------------------------------------------+
-           |  Ausência da cache para leitura  |  Presença na cache para leitura |
-           +---------------+-------------------------------+--------------------+
-                           |                               |
-                           |                               |
-                           v                               v
-           +---------------+                       +---------------+
-           | Busque dados  |                       | Use dados da  |
-           | da memória    |                       | cache local   |
-           +---------------+                       +---------------+
-                           |
-                           |
-                           v
-           +---------------+----------------------------------------------------+
-           |  Ausência da cache para escrita  |  Presença na cache para escrita |
-           +---------------+---------------------------------------+------------+
-                           |                                       |
-                           |                                       |
-                           v                                       v
-           +---------------+                       +---------------+
-           | Atualize dados|                       | Atualize cache|
-           | na memória    |                       | e memória     |
-           +---------------+                       +---------------+
-                           |
-                           |
-                           v
-           +---------------+
-           |  Requisição   |
-           |  remota       |
-           +---------------+
-                           |
-                           |
-                           v
-           +-----------------+
-           | Invalide entrada|
-           | de cache        |
-           +-----------------+
+        +---------------------+-----------------------+----------------------------------+
+        |        AÇÃO         |        ESTADO         |             RESPOSTA             |
+        +=====================+=======================+==================================+
+        |                     | Ausência (Miss)       | [ Busque dados da memória ]      |
+        |  REQUISIÇÃO LOCAL   | na Cache para Leitura |                                  |
+        |     (READ/WRITE)    |-----------------------+----------------------------------+
+        |                     | Presença (Hit)        | [ Use dados da cache local ]     |
+        |                     | na Cache para Leitura |                                  |
+        |                     |-----------------------+----------------------------------+
+        |                     | Ausência (Miss)       | [ Atualize dados na memória ]    |
+        |                     | na Cache para Escrita |                                  |
+        |                     |-----------------------+----------------------------------+
+        |                     | Presença (Hit)        | [ Atualize cache e memória ]     |
+        |                     | na Cache para Escrita |                                  |
+        +---------------------+-----------------------+----------------------------------+
+        |  REQUISIÇÃO REMOTA  | Presença na Cache     | [ Invalide entrada de cache ]    |
+        |    (SNOOPING)       | de outra CPU          |                                  |
+        +---------------------+-----------------------+----------------------------------+             
 
 Quando há uma ausência da cache para escrita, a palavra que foi modificada é escrita para a memória principal. A linha que contém a palavra referenciada não é carregada na cache. Quando há uma presença na cache para escrita, a cache é atualizada e, além disso, a palavra é escrita diretamente para a memória principal. A essência desse protocolo é que todas as operações de escrita resultam na escrita da palavra diretamente para a memória para mantê-la atualizada o tempo todo.
 
@@ -1792,28 +1760,43 @@ Todos os switches do segundo estágio, incluindo 2D, usam o segundo bit para rot
 
 **• Figura 8.31   Rede de comutação ômega.**
 
-    ESTÁGIO 1      ESTÁGIO 2      ESTÁGIO 3
-    CPUs     (1)            (2)            (3)         Memórias
-    000 --+        +--+        +--+        +--+        +-- 000
-          | [1A] |    | [2A] |    | [3A] |    |        |
-    001 --+        +--+        +--+        +--+        +-- 001
-                                                       |
-    010 --+        +--+        +--+        +--+        +-- 010
-          | [1B] |    | [2B] |    | [3B] |    |        |
-    011 --+        +--+        +--+        +--+        +-- 011
-                                                       |
-    100 --+        +--+        +--+        +--+        +-- 100
-          | [1C] |    | [2C] |    | [3C] |    |        |
-    101 --+        +--+        +--+        +--+        +-- 101
-                                                       |
-    110 --+        +--+        +--+        +--+        +-- 110
-          | [1D] |    | [2D] |    | [3D] |    |        |
-    111 --+        +--+        +--+        +--+        +-- 111
+        ESTÁGIO 1        ESTÁGIO 2        ESTÁGIO 3
+    CPUs    (2x2)            (2x2)            (2x2)        MEMÓRIAS
+          +-------+        +-------+        +-------+
+    000 --|       |--------|       |--------|       |-- 000
+    001 --|  1A   |---+    |  2A   |---+    |  3A   |-- 001
+          +-------+   |    +-------+   |    +-------+
+                      |                |
+    010 --|       |---+----|       |---+----|       |-- 010
+    011 --|  1B   |---|----|  2B   |---|----|  3B   |-- 011
+          +-------+   |    +-------+   |    +-------+
+                      |                |
+    100 --|       |---+----|       |---+----|       |-- 100
+    101 --|  1C   |---|----|  2C   |---|----|  3C   |-- 101
+          +-------+   |    +-------+   |    +-------+
+                      |                |
+    110 --|       |---+    |       |---+    |       |-- 110
+    111 --|  1D   |--------|  2D   |--------|  3D   |-- 111
+          +-------+        +-------+        +-------+
 
-**• Análise Técnica para o eBook**
+# Análise Técnica: Comutadores 2x2
+
+## Estrutura dos Comutadores
+Cada caixa (1A, 2B, etc.) pode conectar qualquer uma de suas 2 entradas a qualquer uma de suas 2 saídas (conhecidas como estado "direto" ou "cruzado").
+
+## Roteamento por Bits
+Para chegar à memória `011`, o sistema olha o endereço binário:
+* O primeiro bit (0) orienta a saída no Estágio 1.
+* O segundo bit (1) orienta no Estágio 2.
+* O terceiro bit (1) orienta no Estágio 3.
+
+## Bloqueio
+Uma característica da Rede Ômega é que ela é bloqueante. Se a CPU `000` estiver acessando a Memória `000`, e a CPU `001` tentar acessar a Memória `010`, pode haver um conflito no uso de um caminho interno (uma "briga" pelo fio), forçando uma das CPUs a esperar.
+
+* **Análise Técnica para o eBook**
 Diferente do Crossbar, que requer n^2 switches, a Rede Ômega é mais econômica e organizada em camadas:
 
-- Estrutura de Estágios: Para $n$ CPUs, a rede possui log_2 n estágios. No exemplo de 8 CPUs, temos 3 estágios (2^3 = 8).
+- Estrutura de Estágios: Para n CPUs, a rede possui log_2 n estágios. No exemplo de 8 CPUs, temos 3 estágios (2^3 = 8).
 
 - Conexões de Estágio: Cada estágio contém n/2 switches 2 x 2
 
@@ -1826,54 +1809,44 @@ Diferente do Crossbar, que requer n^2 switches, a Rede Ômega é mais econômica
 Ao mesmo tempo em que tudo isso está acontecendo, a CPU 001 quer escrever uma palavra para o módulo de memória 001. Nesse caso, acontece um processo análogo e a mensagem é roteada pelas saídas superior, superior e inferior, respectivamente, marcadas com a letra b. Quando chega, seu campo Módulo lê 001, que representa
 o caminho que ela tomou. Uma vez que essas duas requisições não usam nenhum dos mesmos switches, linhas ou módulos de memória, elas podem prosseguir em paralelo.
 
-Agora, considere o que aconteceria se a CPU 000 quisesse acessar simultaneamente o módulo de memória 000. Sua requisição entraria em conflito com a requisição da CPU 001 no switch 3A. Uma delas teria de esperar. Diferente do switch crossbar, a rede ômega é uma rede com bloqueio. Nem todos os conjuntos de requisições
-podem ser processados ao mesmo tempo. Podem ocorrer conflitos pela utilização de um fio ou de um switch, bem como entre requisições para a memória e respostas da memória.
+Agora, considere o que aconteceria se a CPU 000 quisesse acessar simultaneamente o módulo de memória 000. Sua requisição entraria em conflito com a requisição da CPU 001 no switch 3A. Uma delas teria de esperar. Diferente do switch crossbar, a rede ômega é uma **rede com bloqueio.** Nem todos os conjuntos de requisições podem ser processados ao mesmo tempo. Podem ocorrer conflitos pela utilização de um fio ou de um switch, bem como entre requisições para a memória e respostas da memória.
 
 É claramente desejável espalhar as referências à memória de maneira uniforme pelos módulos. Uma técnica comum é usar os bits de ordem baixa como o número de módulo. Considere, por exemplo, um espaço de endereço por bytes para um computador que acessa principalmente palavras de 32 bits. Os 2 bits de ordem baixa em
-geral serão 00, mas os 3 bits seguintes estarão uniformemente distribuídos. Usando esses 3 bits como o número de módulo, palavras endereçadas consecutivamente estarão em módulos consecutivos. Um sistema de memória no qual palavras consecutivas estão em módulos consecutivos é denominado intercalado. Memórias intercaladas maximizam o paralelismo porque grande parte das referências à memória é para endereços consecutivos. Também é possível projetar redes de comutação que não são bloqueantes e oferecem múltiplos caminhos de cada CPU a cada módulo de memória, para distribuir melhor o tráfego.
+geral serão 00, mas os 3 bits seguintes estarão uniformemente distribuídos. Usando esses 3 bits como o número de módulo, palavras endereçadas consecutivamente estarão em módulos consecutivos. Um sistema de memória no qual palavras consecutivas estão em módulos consecutivos é denominado **intercalado**. Memórias intercaladas maximizam o paralelismo porque grande parte das referências à memória é para endereços consecutivos. Também é possível projetar redes de comutação que não são bloqueantes e oferecem múltiplos caminhos de cada CPU a cada módulo de memória, para distribuir melhor o tráfego.
 
 ## 8.3.4 Multiprocessadores NUMA
 A esta altura, deve estar claro que multiprocessadores UMA de um único barramento em geral são limitados a não mais do que algumas dezenas de CPUs e que multiprocessadores crossbar ou comutados precisam de muito hardware (caro) e não são assim tão maiores. Para chegar a mais de cem CPUs, alguma coisa tem de ser
-abandonada. Em geral, o que se abandona é a ideia de que todos os módulos de memória tenham o mesmo tempo de acesso. Essa concessão leva à ideia de multiprocessadores NUMA (NonUniform Memory Access – acesso não uniforme à memória). Como seus primos UMA, eles fornecem um único espaço de endereço para todas as
-CPUs, porém, diferentemente das máquinas UMA, o acesso a módulos de memória locais é mais rápido do que o acesso a módulos remotos. Assim, todos os programas UMA executarão sem alteração em máquinas NUMA, mas o desempenho será pior do que em uma máquina UMA à mesma velocidade de clock.
+abandonada. Em geral, o que se abandona é a ideia de que todos os módulos de memória tenham o mesmo tempo de acesso. Essa concessão leva à ideia de multiprocessadores **NUMA (NonUniform Memory Access – acesso não uniforme à memória)**. Como seus primos UMA, eles fornecem um único espaço de endereço para todas as CPUs, porém, diferentemente das máquinas UMA, o acesso a módulos de memória locais é mais rápido do que o acesso a módulos remotos. Assim, todos os programas UMA executarão sem alteração em máquinas NUMA, mas o desempenho será pior do que em uma máquina UMA à mesma velocidade de clock.
 
-Todas as máquinas NUMA têm três características fundamentais que, juntas, as distinguem de outros mul-
-tiprocessadores:
+Todas as máquinas NUMA têm três características fundamentais que, juntas, as distinguem de outros multiprocessadores:
 
     1. Há um único espaço de endereço visível a todas as CPUs.
 
-    2. O acesso à memória remota é feito usando instruções LOAD e STORE.
+    2. O acesso à memória remota é feito usando instruções **LOAD e STORE**.
 
     3. O acesso à memória remota é mais lento do que o acesso à memória local.
 
-Quando o tempo de acesso à memória remota não é oculto (porque não há cache), o sistema é denominado NC-NUMA. Quando estão presentes caches coerentes, ele é denominado CC-NUMA (ao menos pelo pessoal do hardware). O pessoal do software costuma denominá-lo DSM de hardware, porque ele é em essência o mesmo que memória compartilhada distribuída por software, mas implementada pelo hardware usando uma página de tamanho pequeno.
+Quando o tempo de acesso à memória remota não é oculto (porque não há cache), o sistema é denominado **NC-NUMA**. Quando estão presentes caches coerentes, ele é denominado **CC-NUMA (ao menos pelo pessoal do hardware)**. O pessoal do software costuma denominá-lo **DSM de hardware**, porque ele é em essência o mesmo que memória compartilhada distribuída por software, mas implementada pelo hardware usando uma página de tamanho pequeno.
 
 Umas das primeiras máquinas NC-NUMA (embora o nome ainda não tivesse sido cunhado) foi a Carnegie­‑Mellon Cm*, ilustrada de forma simplificada na Figura 8.32 (Swan et al., 1977). Ela consistia em uma coleção de CPUs LSI-11, cada uma com alguma memória endereçada por meio de um barramento local. (A LSI-11 era uma
 versão de chip único do DEC PDP-11, um minicomputador popular na década de 1970.) Ademais, os sistemas LSI-11 eram conectados por um barramento de sistema. Quando uma requisição de memória entrava em uma MMU, especialmente modificada, era feita uma verificação para ver se a palavra necessária estava na memória
 local. Se estivesse, era enviada uma requisição pelo barramento local para obter a palavra. Se não, a requisição era roteada pelo barramento de sistema até o sistema que continha a palavra, que, então, respondia. É claro que a última demorava muito mais do que a primeira. Embora um programa pudesse ser executado com facilidade a partir da memória remota, isso levava dez vezes mais tempo do que se o mesmo programa fosse executado a partir da memória local.
 
 
-**• Figura 8.32   Máquina NUMA com dois níveis de barramentos. O Cm* foi o primeiro multiprocessador a usar esse projeto.**
+* **Figura 8.32   Máquina NUMA com dois níveis de barramentos. O Cm* foi o primeiro multiprocessador a usar esse projeto.**
 Diferente das arquiteturas de acesso uniforme, o modelo NUMA (Non-Uniform Memory Access) organiza o sistema em nós locais para reduzir o congestionamento do barramento principal.
 
-           [ CPU ]       [ CPU ]       [ CPU ]        [ CPU ]
-              |             |             |             |
-           +-------+     +-------+     +-------+      +-------+
-           |  MMU  |     |  MMU  |     |  MMU  |      |  MMU  |
-           +-------+     +-------+     +-------+      +-------+
-               |             |             |              |
-         ------+------ ------+------  ------+------  -----+-------
-        | Barramento|  | Barramento|  | Barramento|  | Barramento|
-        |   Local   |  |   Local   |  |   Local   |  |   Local   |
-        ------+------  ------+------  ------+------  ------+------
-              |              |              |              |
-          +-------+     +-------+       +-------+     +-------+
-          |Memória|     |Memória|       |Memória|     |Memória|
-          +-------+     +-------+       +-------+     +-------+
-              |             |               |             |
-        ------+-------------+---------------+-------------+-----
-        |                BARRAMENTO DO SISTEMA                 |
-        --------------------------------------------------------
+               MODULO 1          MODULO 2          MODULO 3          MODULO 4
+            +-----------+     +-----------+     +-----------+     +-----------+
+            | CPU | MEM |     | CPU | MEM |     | CPU | MEM |     | CPU | MEM |
+            +--+--+--+--+     +--+--+--+--+     +--+--+--+--+     +--+--+--+--+
+            |     |           |     |           |     |           |     |
+         [MMU]----+        [MMU]----+        [MMU]----+        [MMU]----+
+            |  Barramento     |  Barramento     |  Barramento     |  Barramento
+            |  Local          |  Local          |  Local          |  Local
+            |                 |                 |                 |
+            ---+-----------------+-----------------+-----------------+----------
+                            BARRAMENTO DO SISTEMA (Interconect)
 
 ![alt text](image-135.png)
 
@@ -1883,27 +1856,26 @@ Diferente das arquiteturas de acesso uniforme, o modelo NUMA (Non-Uniform Memory
 
  - Gargalo do Sistema: Quando uma CPU precisa de dados que estão na memória de outro nó, ela deve usar o Barramento do Sistema. Esse processo é mais lento e pode causar latência se muitas CPUs tentarem fazer o mesmo simultaneamente.
 
- - O papel da MMU: A Unidade de Gerenciamento de Memória (MMU) decide se a requisição pode ser resolvida localmente ou se deve ser enviada para o barramento global.
+ - MMU (Memory Management Unit): Observe que a MMU está posicionada no barramento local. Ela decide se o endereço solicitado pela CPU está na memória local (acesso imediato) ou se precisa ser buscado através do barramento do sistema (acesso remoto).
+
+ - Escalabilidade: Esse projeto permite adicionar mais CPUs de forma eficiente, mas exige que o programador (ou o sistema operacional) seja inteligente ao alocar dados próximos aos processadores que os utilizam.
 
 A coerência de memória é garantida em uma máquina NC-NUMA porque não há cache presente. Cada palavra de memória reside em exatamente um local, portanto, não há perigo de uma cópia ter dados velhos: não há cópias. Claro que agora é muito importante saber que página está em qual memória, porque a penalidade sobre
 o desempenho no caso de ela estar no lugar errado é muito grande. Por conseguinte, máquinas NC-NUMA usam software elaborado para mover páginas de um lado para outro de modo a maximizar o desempenho.
 
-Em geral, há um processo residente denominado scanner de páginas que executa com intervalo de poucos segundos. Sua tarefa é examinar a estatística de utilização e mover páginas de um lado para outro na tentativa de melhorar o desempenho. Se a página parece estar no lugar errado, o scanner a desmapeia de modo que a
-próxima referência a ela causará uma falta de página. Quando ocorre a falta, é tomada uma decisão sobre onde colocá-la, possivelmente em uma memória diferente daquela em que estava antes. Para evitar paginação excessiva (thrashing), costuma haver alguma regra afirmando que, uma vez posicionada, a página é congelada no lugar durante algum tempo ΔT. Vários algoritmos foram estudados, mas a conclusão é que nenhum funciona melhor em todas as circunstâncias (LaRowe e Ellis, 1991). O melhor desempenho depende da aplicação.
+Em geral, há um processo residente denominado **scanner de páginas** que executa com intervalo de poucos segundos. Sua tarefa é examinar a estatística de utilização e mover páginas de um lado para outro na tentativa de melhorar o desempenho. Se a página parece estar no lugar errado, o scanner a desmapeia de modo que a próxima referência a ela causará uma falta de página. Quando ocorre a falta, é tomada uma decisão sobre onde colocá-la, possivelmente em uma memória diferente daquela em que estava antes. Para evitar paginação excessiva (thrashing), costuma haver alguma regra afirmando que, uma vez posicionada, a página é congelada no lugar durante algum tempo ΔT. Vários algoritmos foram estudados, mas a conclusão é que nenhum funciona melhor em todas as circunstâncias (LaRowe e Ellis, 1991). O melhor desempenho depende da aplicação.
 
-**• Multiprocessadores NUMA com coerência de cache**
+* **Multiprocessadores NUMA com coerência de cache**
 Projetos de multiprocessadores como o da Figura 8.32 não se prestam muito bem à ampliação, porque não fazem cache. Ter de ir até a memória remota toda vez que uma palavra de memória não local for acessada é um grande empecilho ao desempenho. Contudo, se for adicionado cache, então é preciso adicionar também coerência
 de cache. Um modo de proporcionar coerência é escutar o barramento de sistema. Tecnicamente, não é difícil fazer isso, mas, se for ultrapassado certo número de CPUs, torna-se inviável. Para construir multiprocessadores grandes de fato é preciso usar uma técnica fundamentalmente diferente.
 
-Hoje, a abordagem mais popular para construir multiprocessadores CC-NUMA (Cache Coherent NUMA – NUMA com coerência de cache) de grande porte é o multiprocessador baseado em diretório. A ideia é manter um banco de dados que informa onde está cada linha de cache e em que estado ela está. Quando uma linha de
-cache é referenciada, o banco de dados é pesquisado para descobrir onde ela está e se está limpa ou suja (modificada). Como é preciso pesquisar esse banco de dados a cada instrução que referenciar a memória, ele tem de ser mantido em hardware extremamente rápido de uso especial, que pode responder em uma fração de um ciclo de barramento.
+Hoje, a abordagem mais popular para construir multiprocessadores **CC-NUMA (Cache Coherent NUMA – NUMA com coerência de cache)** de grande porte é o **multiprocessador baseado em diretório**. A ideia é manter um banco de dados que informa onde está cada linha de cache e em que estado ela está. Quando uma linha de cache é referenciada, o banco de dados é pesquisado para descobrir onde ela está e se está limpa ou suja (modificada). Como é preciso pesquisar esse banco de dados a cada instrução que referenciar a memória, ele tem de ser mantido em hardware extremamente rápido de uso especial, que pode responder em uma fração de um ciclo de barramento.
 
-Para tornar um pouco mais concreta a ideia de um multiprocessador baseado em diretório, vamos considerar o exemplo simples (hipotético) de um sistema de 256 nós, cada qual consistindo em uma CPU e 16 MB de RAM conectados à CPU por um barramento local. A memória total é 232 bytes, dividida em 226 linhas de cache de 64
-bytes cada. A memória é alocada estaticamente entre os nós, com 0–16M no nó 0, 16–32M no nó 1 e assim por diante. Os nós são conectados por uma rede de interconexão, como mostra a Figura 8.33(a). A rede de interconexão poderia ser uma grade, um hipercubo ou outra topologia. Cada nó também contém as entradas de diretório para as 218 linhas de cache de 64 bytes abrangendo sua memória de 224 bytes. Por enquanto, vamos considerar que uma linha pode ser contida, no máximo, em uma cache.
+Para tornar um pouco mais concreta a ideia de um multiprocessador baseado em diretório, vamos considerar o exemplo simples (hipotético) de um sistema de 256 nós, cada qual consistindo em uma CPU e 16 MB de RAM conectados à CPU por um barramento local. A memória total é 2^32 bytes, dividida em 2^26 linhas de cache de 64 bytes cada. A memória é alocada estaticamente entre os nós, com 0–16M no nó 0, 16–32M no nó 1 e assim por diante. Os nós são conectados por uma rede de interconexão, como mostra a Figura 8.33(a). A rede de interconexão poderia ser uma grade, um hipercubo ou outra topologia. Cada nó também contém as entradas de diretório para as 218 linhas de cache de 64 bytes abrangendo sua memória de 224 bytes. Por enquanto, vamos considerar que uma linha pode ser contida, no máximo, em uma cache.
 
 Para ver como o diretório funciona, vamos acompanhar uma instrução LOAD da CPU 20 que referencia uma linha que está em cache. Primeiro, a CPU que está emitindo a instrução a apresenta à sua MMU (unidade de gerenciamento de memória), que a traduz para um endereço físico, por exemplo, 0x24000108. A MMU subdivide esse endereço nas três partes mostradas na Figura 8.33(b). Em decimal, essas três partes são nó 36, linha 4 e deslocamento 8. A MMU vê que a palavra de memória referenciada é do nó 36, e não do nó 20, portanto, envia uma mensagem de requisição pela rede de interconexão ao nó nativo da linha, 36, perguntando se sua linha 4 está em cache e, se sim, onde está.
 
-**• Figura 8.33 - (a) Multiprocessador de 256 nós baseado em diretório. (b) Divisão de um endereço de memória de 32 bits em campos. (c) Diretório no nó 36.**
+* **Figura 8.33 - (a) Multiprocessador de 256 nós baseado em diretório. (b) Divisão de um endereço de memória de 32 bits em campos. (c) Diretório no nó 36.**
 Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutarem" o barramento (o que causaria um congestionamento imenso), cada nó gerencia quem tem acesso aos seus próprios dados através de um diretório local.
 
     (a) Arquitetura dos Nós
@@ -1932,13 +1904,13 @@ Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutare
         +----------------+--------------------------+-------------------+
         |  Nó (8 bits)   |      Bloco (18 bits)     | Deslocam. (6 bits)|
         +----------------+--------------------------+-------------------+
-        (Qual dos 256)    (Qual linha na memória)    (Byte no bloco)
+        (Qual dos 256)    (Qual linha na memória)     (Byte no bloco)
 
     (c) Exemplo de entrada no diretório do Nó 36
 
         Índice do Bloco         Bit de Presença / Nó
         +---------------+      +-----------------------+
-        |      ...      |      |          ...          |
+        |      ...      |      |          ...          |   2 ^ 18 -1
         +---------------+      +-----------------------+
         |       4       |      |  0  0  0  0  0  0  0  |
         +---------------+      +-----------------------+
@@ -1960,6 +1932,7 @@ Esta arquitetura resolve o problema de escala: em vez de todas as CPUs "escutare
 **• Notas de Estudo para o eBook:
 
  - O Diretório (a): Cada nó possui uma tabela (diretório) que sabe exatamente quais outros nós no sistema possuem uma cópia de seus blocos de memória. Se a CPU 0 quiser escrever em um dado, ela consulta seu diretório; se a CPU 255 tiver uma cópia, o diretório envia uma mensagem de invalidação apenas para ela.
+ 
  - Encaminhamento de Mensagens: A comunicação não é mais global (broadcast), mas direcionada (point-to-point), o que permite que o sistema cresça para centenas de processadores sem saturar a rede.
  
  - Mapeamento (b): Com 8 bits dedicados ao campo "Nó", o sistema consegue endereçar até 2^8 = 256 unidades independentes de processamento e memória.
@@ -1984,15 +1957,41 @@ Outra melhoria do projeto de diretório é monitorar se a linha de cache está l
 
 Claro que monitorar se cada linha de cache está limpa ou suja implica que, quando uma linha de cache é modificada, o nó nativo tem de ser informado, mesmo se existir somente uma cópia de cache. Se existirem várias cópias, modificar uma delas requer que o resto seja invalidado, portanto, é preciso algum protocolo para evitar condições de disputa. Por exemplo, para modificar uma linha de cache compartilhada, um dos portadores poderia ter de requisitar acesso exclusivo antes de modificá-la. Tal requisição faria com que todas as outras cópias fossem invalidadas antes da concessão da permissão. Outras otimizações de desempenho para máquinas CC-NUMA são discutidas em Cheng e Carter, 2008.
 
-**• O multiprocessador NUMA Sun Fire E25K**
+* **O multiprocessador NUMA Sun Fire E25K**
 Como exemplo de um multiprocessador NUMA de memória compartilhada, vamos estudar a família Sun Fire da Sun Microsystems. Embora essa família contenha vários modelos, focalizaremos o E25K, que tem 72 chips de CPU UltraSPARC IV. Uma UltraSPARC IV é, basicamente, um par de processadores UltraSPARC III que com-
 partilham uma cache e memória. O E15K é, em essência, o mesmo sistema, exceto que tem um uniprocessador em vez de chips de CPU com processadores duais. Existem membros menores também, mas, de nosso ponto de vista, o interessante é como funcionam os que têm o maior número de CPUs.
 
 O sistema E25K consiste em até 18 conjuntos de placas, cada conjunto composto por uma placa CPU-memória, uma placa de E/S com quatro conectores PCI e uma placa de expansão que acopla a placa CPU-memória à placa de E/S e une o par ao plano central, que suporta as placas e contém a lógica de comutação. Cada placa CPU-memória contém quatro chips de CPU e quatro módulos de RAM de 8 GB. Por conseguinte, cada placa CPU-memória no E25K contém oito CPUs e 32 GB de RAM (quatro CPUs e quatro 32 GB de RAM no E15K). Assim, um E25K completo contém 144 CPUs, 576 GB de RAM e 72 conectores PCI. Ele é ilustrado na Figura 8.34. O interessante é que o número 18 foi escolhido por causa de limitações de empacotamento: um sistema com 18 conjuntos de placas era o maior que podia passar inteiro por uma porta. Enquanto programadores só pensam em 0s e 1s, engenheiros têm de se preocupar com questões como se o produto consegue passar pela porta e entrar no prédio do cliente.
 
-**• Figura 8.34 - Multiprocessador E25K da Sun Microsystems.
+* **Figura 8.34 - Multiprocessador E25K da Sun Microsystems.**
+Essa imagem representa a Figura 8.34, que detalha o Multiprocessador E25K da Sun Microsystems. É um exemplo clássico de um sistema de grande porte (mainframe/supercomputador) que utiliza uma arquitetura baseada em Crossbar Switch (Plano Central) para conectar múltiplas placas de CPU, memória e E/S.
+
+Este sistema utiliza um Plano Central (Centerplane) com chaves crossbar de 18 X 18 para permitir que qualquer placa de CPU se comunique com qualquer placa de expansão ou E/S simultaneamente.
+
+        9 PLACAS CPU-MEMÓRIA                     9 PLACAS DE E/S
+        +-----------------------+    PLANO     +---------------------+
+        | [CPU][MEM] [CPU][MEM] |    CENTRAL   | [Cont. PCI] [PCI]   |
+        | [CPU][MEM] [CPU][MEM] |    (Cross)   | [Cont. PCI] [PCI]   |
+        +-----------+-----------+   +-----+    +----------+----------+
+                    |               |  C  |               |
+         [Barramento de Escuta]-----|  R  |-----[Barramento de Escuta]
+                    |               |  O  |               |
+         [Controle de Diretório]----|  S  |-----[Controle de Diretório]
+                    |               |  S  |               |
+         [ Placa de Expansão  ]-----|  B  |-----[ Placa de Expansão  ]
+                    |               |  A  |               |
+                    |               |  R  |               |
+                    +---------------+-----+---------------+
 
 ![alt text](image-137.png)
+
+* **Análise Estrutural para o eBook:**
+
+ - Plano Central (Centerplane): Funciona como o "coração" do sistema. Ele contém três tipos de chaves crossbar 18 X 18: uma para endereços, uma para respostas e uma para dados. Isso permite uma largura de banda massiva e evita gargalos comuns em barramentos únicos.
+ 
+ - Barramento de Escuta (Snooping): Mesmo em um sistema gigante como este, as placas usam barramentos de escuta locais para manter a coerência de cache entre as CPUs de uma mesma placa.
+ 
+ - Controle de Diretório: Essencial para a escalabilidade. Em vez de todas as CPUs "gritarem" no barramento o tempo todo para saber quem tem qual dado (o que saturaria o sistema), o diretório mantém um registro de onde os dados estão.
 
 O plano central é composto de um conjunto de três switches crossbar 18 × 18 para conectar os 18 conjuntos de placas. Um switch crossbar é para as linhas de endereço, um é para respostas e um é para transferência de dados. Além das 18 placas de expansão, o plano central também tem um conjunto de placas de controle de sistema ligado a ele. Esse conjunto tem uma única CPU, mas também interfaces com CD-ROM, fita, linhas seriais e outros dispositivos periféricos necessários para inicializar, manter e controlar o sistema.
 
@@ -2005,7 +2004,7 @@ funciona a 150 MHz, portanto, é possível realizar 150 milhões de escutas/segu
 
 Embora em termos lógicos a lógica de escuta seja um barramento, como retratado na Figura 8.34, em termos físicos ela é uma árvore de dispositivos, cujos comandos são repassados para cima e para baixo dela. Quando uma CPU ou uma placa PCI produzem um endereço, este vai até um repetidor de endereços por meio de uma conexão ponto a ponto, como mostra a Figura 8.35. Os dois repetidores convergem para a placa de expansão, onde os endereços são enviados de volta árvore abaixo para cada dispositivo para verificar presenças. Esse arranjo é usado para evitar ter um barramento que envolva três placas.
 
-- **Conectando 144 CPUs à Memória Distribuída**
+* **Conectando 144 CPUs à Memória Distribuída**
 
 Para conectar 144 CPUs à memória distribuída, é necessário um subsistema de memória mais complexo, pois os modos diretos (barramento compartilhado ou switch crossbar) não são viáveis.
 
@@ -2023,41 +2022,33 @@ Algumas opções incluem:
  
  - IBM pSeries: uma linha de servidores de alta escalabilidade da IBM, que usa uma arquitetura de multiprocessador com memória distribuída.
 
-**• Figura 8.35 - O Sun Fire E25K usa uma interconexão de quatro níveis. As linhas tracejadas são caminhos de endereços. As linhas cheias são caminhos de dados.**
+*  **Figura 8.35 - O Sun Fire E25K usa uma interconexão de quatro níveis. As linhas tracejadas são caminhos de endereços. As linhas cheias são caminhos de dados.**
 Este diagrama mostra o fluxo entre o Nível 0 (componentes físicos) até o Nível 3 (barramento central de alta velocidade).
 
-    ======================= NIVEL 3: PLANO CENTRAL =======================
-        [ Crossbar 18x18 ]      [ Crossbar 18x18 ]      [ Crossbar 18x18 ]
-        (Endereços - - -)        (Respostas . . .)       (Dados ________)
-    =============================== | ====================================
-                                    |
-    ======================= NIVEL 2: PLACA DE EXPANSÃO ===================
-        +------------------------------------------+    +--------------+
-        |  Gerenciamento de Diretório e Escuta     |    | Switch Dados |
-        |  (Hardware de Coerência de Cache)        |    |     3 x 3    |
-        +----------------------+-------------------+    +------+-------+
-                               |                               |
-    ======================= NIVEL 1: PLACA CPU-MEMÓRIA ===================
-            /------------------+------------------\            |
-    +------+-------+                        +------+-------+  |
-    | Rep. Endereço|                        | Rep. Endereço|  |
-    +------+-------+                        +------+-------+  |
-           |                                       |          |
-    +------+-------+                        +------+-------+  |
-    | Switch Dados |                        | Switch Dados |  |
-    |     3 x 3    |                        |     3 x 3    |--/
-    +------+-------+                        +------+-------+
-           |                                       |
-    ======================= NIVEL 0: COMPONENTES =========================
-        [C]--[ 5x5 ]--[C]                  [C]--[ 5x5 ]--[C]
-            |   |                             |   |
-            [ M ] [ M ]                       [ M ] [ M ]
-
-    LEGENDA: [C] CPU | [M] Memória | --- Linha de Dados | - - Linha de Endereço
-
+        NÍVEL 3: PLANO CENTRAL
+    +----------------------------------------------------------------+
+    | [Crossbar Endereços]   [Crossbar Respostas]   [Crossbar Dados] |
+    |         18 x 18                18 X 18               18 X 18   |
+    +----------:--------------------:--------------------|-----------+
+               :                    :                    |
+    NÍVEL 2: PLACA DE EXPANSÃO      :                    |
+    +----------:--------------------:----------+         |
+    | [Gerenciamento de Diretório e Escuta]    |    [Switch Dados 3x3]
+    +----------:-------------------------------+         |
+               :                                         |
+    NÍVEL 1: PLACA CPU-MEMÓRIA                           |
+    +----------:-----------------------------------------|--------+
+    | [Rep. de Endereços] <---- (Sinais de Controle) ----+        |
+    |    :          :                                    |        |
+    | [Switch Dados 3x3] <-------------------------------+        |
+    +----:----------:---------------------------------------------+
+        :          :
+    NÍVEL 0: COMPONENTES FÍSICOS
+    [CPU]      [MEM]
+    
 ![alt text](image-138.png)
 
-**• Notas de Arquitetura para o eBook**
+* **Notas de Arquitetura para o eBook**
 
  - Separação de Tráfego: Observe que o sistema possui barramentos distintos para endereços e dados. Isso evita que uma busca por endereço bloqueie a transferência de um grande bloco de dados que já foi localizado.
  
@@ -2065,12 +2056,23 @@ Este diagrama mostra o fluxo entre o Nível 0 (componentes físicos) até o Nív
  
  - Eficiência Local (Nível 0): O switch 5 X 5 permite que duas CPUs acessem suas memórias locais sem precisar incomodar o restante do sistema, o que é a base da eficiência NUMA.
 
+# Análise dos Níveis
+
+## Níveis de Comunicação
+* **Nível 3 (Plano Central)**: Onde residem os switches crossbar 18 X 18. É o nível global de comunicação.
+* **Nível 2 (Placa de Expansão)**: Atua como um "agregador". O gerenciamento de diretório aqui é fundamental para filtrar o tráfego de endereços, evitando que mensagens desnecessárias cheguem ao Plano Central.
+* **Nível 1 (Placa de Unidade)**: Contém switches menores (3 X 3) que gerenciam o tráfego interno da placa.
+* **Nível 0 (Componentes)**: É onde a computação acontece de fato (CPUs e Módulos de Memória).
+
+## Diferenciação de Caminhos
+* **Linhas Tracejadas (Endereços)**: Seguem uma topologia de árvore para garantir que a coerência de cache seja mantida via diretório.
+* **Linhas Cheias (Dados)**: Utilizam a malha de switches para transferência de alta velocidade, otimizando o throughput.
+
 Transferências de dados usam uma interconexão de quatro níveis como ilustrado na Figura 8.35. Esse projeto foi escolhido por causa de seu alto desempenho. No nível 0, pares de chips de CPU e memórias são conectados por um pequeno switch crossbar que também tem uma conexão com o nível 1. Os dois grupos de pares CPU-memória são conectados por um segundo switch crossbar no nível 1. Os switches crossbar são ASICs fabricados por especificação. Para todos eles, todas as entradas estão disponíveis nas linhas, bem como nas colunas, embora nem todas as combinações sejam usadas (ou nem mesmo façam sentido). Toda a lógica de comutação nas placas é construída a partir de crossbars 3 × 3.
 
 Cada conjunto de placas consiste em três placas: a CPU-memória, a placa de E/S e a de expansão, que conecta as outras duas. A interconexão de nível 2 é outro switch crossbar 3 × 3 (na placa de expansão) que une a memória propriamente dita às portas de E/S (que são de mapeamento de memória em todas as UltraSPARCs). Todas as transferências de dados de ou para o conjunto de placas, seja para memória ou para uma porta de E/S, passam pelo switch de nível 2. Por fim, dados que têm de ser transferidos de ou para uma placa remota passam por um switch crossbar 18 × 18 de dados no nível 3. Transferências de dados são feitas 32 bytes por vez, portanto, leva dois ciclos de clock para transferir 64 bytes, que é a unidade de transferência normal.
 
-Agora que já vimos como os componentes são organizados, vamos voltar nossa atenção ao modo como a memória compartilhada opera. No nível mais baixo, os 576 GB de memória são divididos em 229 blocos de 64 bytes cada. Esses blocos são as unidades atômicas do sistema de memória. Cada bloco tem uma placa nativa onde ele reside quando não está em uso em algum outro lugar. A maioria fica em sua placa nativa por grande parte do tempo. Contudo, quando uma CPU precisa de um bloco de memória, seja de sua própria placa ou de uma das 17 placas remotas, primeiro ela requisita uma cópia para sua própria cache e então acessa a cópia na cache. Embora cada chip de CPU no E25K contenha duas CPUs, elas compartilham uma única cache física e, por isso, compartilham todos os blocos nela contidos.
-Cada bloco de memória e linha de cache de cada chip de CPU pode estar em um de três estados:
+Agora que já vimos como os componentes são organizados, vamos voltar nossa atenção ao modo como a memória compartilhada opera. No nível mais baixo, os 576 GB de memória são divididos em 229 blocos de 64 bytes cada. Esses blocos são as unidades atômicas do sistema de memória. Cada bloco tem uma placa nativa onde ele reside quando não está em uso em algum outro lugar. A maioria fica em sua placa nativa por grande parte do tempo. Contudo, quando uma CPU precisa de um bloco de memória, seja de sua própria placa ou de uma das 17 placas remotas, primeiro ela requisita uma cópia para sua própria cache e então acessa a cópia na cache. Embora cada chip de CPU no E25K contenha duas CPUs, elas compartilham uma única cache física e, por isso, compartilham todos os blocos nela contidos. Cada bloco de memória e linha de cache de cada chip de CPU pode estar em um de três estados:
 
     1. Acesso exclusivo (para escrita).
 
@@ -2097,10 +2099,9 @@ Se o leitor quiser mais informações técnicas sobre o Sun Fire, veja Charleswo
 Uma desvantagem das máquinas NUMA e CC-NUMA é que referências à memória remota são muito mais lentas do que referências à memória local. Em CC-NUMA, essa diferença em desempenho está oculta, até certo ponto, pela atividade de cache. Não obstante, se a quantidade de dados remotos necessários for muito maior do
 que a capacidade da cache, ausências desta ocorrerão constantemente e o desempenho será medíocre.
 
-Assim, temos uma situação em que máquinas UMA têm excelente desempenho, mas seu tamanho é limitado e elas são muito caras. Máquinas NC-NUMA podem ser ampliadas para tamanhos um pouco maiores, mas requerem posicionamento de páginas manual ou semiautomático, muitas vezes com resultados mistos. O problema é que é difícil prever quais páginas serão necessárias em que lugares e, de qualquer modo, páginas costumam ser uma unidade muito grande para mover de um lado para outro. Máquinas CC-NUMA, como o Sun Fire E25K, podem experimentar mau desempenho se muitas CPUs precisarem de grandes quantidades de dados remotos.
-Levando tudo isso em conta, cada um desses projetos tem sérias limitações.
+Assim, temos uma situação em que máquinas UMA têm excelente desempenho, mas seu tamanho é limitado e elas são muito caras. Máquinas NC-NUMA podem ser ampliadas para tamanhos um pouco maiores, mas requerem posicionamento de páginas manual ou semiautomático, muitas vezes com resultados mistos. O problema é que é difícil prever quais páginas serão necessárias em que lugares e, de qualquer modo, páginas costumam ser uma unidade muito grande para mover de um lado para outro. Máquinas CC-NUMA, como o Sun Fire E25K, podem experimentar mau desempenho se muitas CPUs precisarem de grandes quantidades de dados remotos. Levando tudo isso em conta, cada um desses projetos tem sérias limitações.
 
-Um tipo alternativo de multiprocessador tenta contornar todos esses problemas usando a memória principal de cada CPU como uma cache. Nesse projeto, denominado COMA (Cache Only Memory Access – acesso somente à memória cache), as páginas não têm máquinas nativas fixas, como acontece em máquinas NUMA e CC-NUMA. Na verdade, as páginas não têm qualquer significado.
+Um tipo alternativo de multiprocessador tenta contornar todos esses problemas usando a memória principal de cada CPU como uma cache. Nesse projeto, denominado **COMA (Cache Only Memory Access – acesso somente à memória cache)**, as páginas não têm máquinas nativas fixas, como acontece em máquinas NUMA e CC-NUMA. Na verdade, as páginas não têm qualquer significado.
 
 Em vez disso, o espaço de endereço físico é subdividido em linhas de cache, que migram pelo sistema por demanda. Blocos não têm máquinas nativas. Como nômades em alguns países do Terceiro Mundo, seu lar é onde eles estão naquele momento. Uma memória que apenas atrai linhas conforme necessário é denominada memória
 de atração. Usar a RAM principal com uma grande cache aumenta muito a taxa de presença na cache e, por conseguinte, o desempenho. Infelizmente, como sempre, não existe almoço grátis. Sistemas COMA introduzem dois novos problemas:
@@ -2109,7 +2110,7 @@ de atração. Usar a RAM principal com uma grande cache aumenta muito a taxa de 
 
     2. Quando uma linha é expurgada da memória, o que acontece se ela for a última cópia?
 
-O primeiro problema está relacionado ao fato de que, após a MMU ter traduzido um endereço virtual para um endereço físico, se a linha não estiver na cache verdadeira de hardware, não existe uma maneira fácil de dizer se ela está na memória principal. O hardware de paginação não ajuda nada nesse caso, porque cada página é composta de muitas linhas de cache individuais que vagueiam de modo independente. Além do mais, ainda que se saiba que uma linha não está na memória principal, onde ela está então? Não podemos perguntar à máquina “lar” porque essa máquina não existe.
+O primeiro problema está relacionado ao fato de que, após a MMU (Unidade de Gerenciamento de Memória) ter traduzido um endereço virtual para um endereço físico, se a linha não estiver na cache verdadeira de hardware, não existe uma maneira fácil de dizer se ela está na memória principal. O hardware de paginação não ajuda nada nesse caso, porque cada página é composta de muitas linhas de cache individuais que vagueiam de modo independente. Além do mais, ainda que se saiba que uma linha não está na memória principal, onde ela está então? Não podemos perguntar à máquina “lar” porque essa máquina não existe.
 
 Foram propostas algumas soluções para o problema da localização. Para ver se uma linha de cache está na memória principal, poderia ser adicionado novo hardware para monitorar o rótulo de cada linha em cache. Então, a MMU poderia comparar o rótulo da linha necessária com os rótulos de todas as linhas de cache na memória em busca de uma presença na cache. Essa solução precisa de hardware adicional.
 
@@ -2123,35 +2124,35 @@ acontece se, por acaso, a linha escolhida for a última cópia? Nesse caso, ela 
 Uma solução é voltar ao diretório e verificar se há outras cópias. Se houver, a linha pode ser descartada com segurança. Caso contrário, ela tem de ser migrada para algum outro lugar. Outra solução é identificar uma cópia de cada linha de cache como a cópia mestra e nunca jogá-la fora. Essa solução evita ter de verificar o diretório. Levando tudo em conta, COMA promete melhor desempenho do que CC-NUMA, mas poucas máquinas COMA foram construídas, portanto, é preciso mais experiência. As duas primeiras máquinas COMA construídas foram a KSR-1 (Burkhardt et al.,1992) e a Data Diffusion Machine (Hagersten et al., 1992). Artigos mais recentes sobre COMA são Vu et al., 2008; e Zhang e Jesshope, 2008.
 
 ## 8.4 Multicomputadores de troca de mensagens
-Como vimos na Figura 8.23, os dois tipos de processadores paralelos MIMD são multiprocessadores e multicomputadores. Na seção anterior, estudamos os multiprocessadores. Vimos que eles aparecem para o sistema operacional como se tivessem memória compartilhada que pode ser acessada usando instruções comuns LOAD e STORE. Essa memória compartilhada pode ser executada de várias maneiras, como vimos, incluindo barramentos de escuta, crossbar de dados, redes de comutação multiestágios e vários esquemas baseados em diretório. Não obstante, programas escritos para um multiprocessador podem acessar qualquer localização na memória sem nada saber sobre a topologia interna ou o esquema de implementação. Essa ilusão é que torna os multiprocessadores tão atraentes e é a razão de os programadores gostarem desse modelo de programação.
+Como vimos na Figura 8.23, os dois tipos de processadores paralelos MIMD são multiprocessadores e multicomputadores. Na seção anterior, estudamos os multiprocessadores. Vimos que eles aparecem para o sistema operacional como se tivessem memória compartilhada que pode ser acessada usando instruções comuns **LOAD e STORE**. Essa memória compartilhada pode ser executada de várias maneiras, como vimos, incluindo barramentos de escuta, crossbar de dados, redes de comutação multiestágios e vários esquemas baseados em diretório. Não obstante, programas escritos para um multiprocessador podem acessar qualquer localização na memória sem nada saber sobre a topologia interna ou o esquema de implementação. Essa ilusão é que torna os multiprocessadores tão atraentes e é a razão de os programadores gostarem desse modelo de programação.
 
 Por outro lado, os multiprocessadores também têm suas limitações, e é por isso que os multicomputadores também são importantes. Antes de tudo, multiprocessadores não podem ser ampliados para grandes tamanhos. Vimos a enorme quantidade de hardware que a Sun teve de usar para aumentar o número de CPUs do E25K para 72. Por comparação, logo adiante estudaremos um multicomputador que tem 65.536 CPUs. Ainda faltam muitos anos para que alguém construa um multiprocessador comercial com 65.536 nós e, então, já estarão em uso multicomputadores com milhões de nós.
 
 Ademais, a contenção pela memória em um multiprocessador pode afetar seriamente o desempenho. Se cem CPUs estiverem tentando ler e escrever as mesmas variáveis constantemente, a contenção pelas várias memórias, barramentos e diretórios pode resultar em um enorme impacto no desempenho.
 
 Como consequência desses e de outros fatores, há um grande interesse em construir e usar computadores paralelos nos quais cada CPU tem sua própria memória privada, que não pode ser acessada diretamente por qualquer outra CPU. Eles são os multicomputadores. Programas em CPUs de multicomputadores interagem usando
-primitivas como send e receive para trocar mensagens explicitamente, porque uma não pode chegar até a memória da outra com instruções LOAD e STORE. Essa diferença muda completamente o modelo de programação.
+primitivas como **send e receive** para trocar mensagens explicitamente, porque uma não pode chegar até a memória da outra com instruções **LOAD e STORE.** Essa diferença muda completamente o modelo de programação.
 
 Cada nó em um multicomputador consiste em uma ou algumas CPUs, alguma RAM (decerto compartilhada só entre as CPUs que estão naquele nó), um disco e/ou outros dispositivos de E/S e um processador de comunicação. Os processadores de comunicação estão conectados por uma rede de intercomunicação de alta velocidade dos tipos que discutimos na Seção 8.3.3. São usadas muitas topologias, esquemas de comutação e algoritmos de roteamento diferentes. O que todos os multicomputadores têm em comum é que, quando um programa de aplicação executa a primitiva send, o processador de comunicação é notificado e transmite um bloco de dados de usuário à máquina de destino, possivelmente após pedir e obter permissão. Um multicomputador genérico é mostrado na Figura 8.36.
 
-**• Figura 8.36 - Multicomputador genérico.**
+* **Figura 8.36 - Multicomputador genérico.**
 Neste modelo, o segredo da escalabilidade está na independência de cada nó e na eficiência do processador de comunicação dedicado.
 
-       +----------------------------+        +----------------------------+
-       |           NÓ 1             |        |           NÓ N             |
-       |  +-----+  +-----+  +-----+ |        |  +-----+  +-----+  +-----+ |
-       |  | CPU |  | CPU |  | MEM | |  ....  |  | CPU |  | CPU |  | MEM | |
-       |  +--+--+  +--+--+  +--+--+ |        |  +--+--+  +--+--+  +--+--+ |
-       |     |        |        |    |        |     |        |        |    |
-       |  [===== INTERCONEXÃO =====]|        |  [===== INTERCONEXÃO =====]|
-       |  [        LOCAL          ] |        |  [        LOCAL          ] |
-       |  +-----------+-------------+ |      |  +-----------+-------------+ |
-       |              |             |        |              |             |
-       |        +-----+-----+  +----+--+     |        +-----+-----+  +----+--+
-       |        | PROCESSOR |  | DISCO |     |        | PROCESSOR |  | DISCO |
-       |        | DE COMUN. |  | E E/S |     |        | DE COMUN. |  | E E/S |
-       |        +-----+-----+  +-------+     |        +-----+-----+  +-------+
-       +--------------|-------------+        +--------------|-------------+
+       +----------------------------+        +-----------------------------+
+       |           NÓ 1             |        |           NÓ N              |
+       |  +-----+  +-----+  +-----+ |        |  +-----+  +-----+  +-----+  |
+       |  | CPU |  | CPU |  | MEM | |  ....  |  | CPU |  | CPU |  | MEM |  |
+       |  +--+--+  +--+--+  +--+--+ |        |  +--+--+  +--+--+  +--+--+  |
+       |     |        |        |    |        |     |        |        |     |
+       |  [===== INTERCONEXÃO =====]|        |  [===== INTERCONEXÃO =====] |
+       |  [        LOCAL          ] |        |  [        LOCAL          ]  |
+       |  +-----------+-------------+        |  +-----------+-------------+|
+       |              |             |        |              |              |
+       |        +-----+-----+  +----+--+     |        +-----+-----+   +----+--+
+       |        | PROCESSOR |  | DISCO |     |        | PROCESSOR |   | DISCO |
+       |        | DE COMUN. |  | E E/S |     |        | DE COMUN. |   | E E/S |
+       |        +-----+-----+  +-------+     |        +-----+-----+   +-------+
+       +--------------|-------------+        +--------------|-----------------+
                       |                                     |
     ==================|=====================================|==================
     ||                                                                       ||
@@ -2162,13 +2163,20 @@ Neste modelo, o segredo da escalabilidade está na independência de cada nó e 
 
 ![alt text](image-139.png)
 
-**• Destaques para o seu eBook:**
+# Análise Técnica: O Nó
 
- - Autonomia do Nó: Cada nó possui sua própria hierarquia de memória, barramento (interconexão local) e armazenamento em disco. Isso elimina a disputa por um barramento global de memória, permitindo adicionar centenas de nós ao sistema.
+## Características do Nó
+* Cada nó possui suas próprias CPUs, sua própria memória privada e, muitas vezes, seus próprios discos.
 
- - Processador de Comunicação: Atua como um "despachante". Ele empacota os dados da memória local e os envia pela rede, permitindo que as CPUs continuem processando sem esperar pela confirmação de recebimento da rede externa.
+## Processador de Comunicação
+* É o componente vital. Ele desonera a CPU principal de gerenciar os protocolos de rede, cuidando do envio e recebimento de pacotes.
+* Ele empacota os dados da memória local e os envia pela rede, permitindo que as CPUs continuem processando sem esperar pela confirmação de recebimento da rede externa.
 
- - Rede Global: Diferente do barramento do sistema em máquinas NUMA, esta rede é projetada exclusivamente para o tráfego de mensagens entre processos distantes.
+## Escalabilidade
+* Multicomputadores são muito mais fáceis de expandir do que multiprocessadores, pois você pode simplesmente adicionar mais nós à rede sem sobrecarregar um barramento central.
+
+## Programação
+* Exige o uso de bibliotecas como MPI (Message Passing Interface), já que um processo no Nó A não pode ler diretamente uma variável na memória do Nó B.
 
 ## 8.4.1 Redes de interconexão
 Na Figura 8.36, vemos que multicomputadores são mantidos juntos por redes de interconexão. Agora, chegou a hora de examiná-las mais de perto. O interessante é que multiprocessadores e multicomputadores são surpreendentemente similares nesse aspecto, porque os primeiros muitas vezes têm vários módulos de memória
