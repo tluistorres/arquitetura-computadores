@@ -2992,7 +2992,83 @@ que ele então executa. Quando termina, pega outra. Além disso, novos trabalhos
 
 Existem várias implementações de Linda em sistemas multicomputadores. Em todas elas, uma questão fundamental é como distribuir as tuplas entre as máquinas e como localizá-las quando necessário. Entre as várias possibilidades estão broadcasting e diretórios. A replicação também é uma questão importante. Esses pontos são discutidos em Bjornson, 1993.
 
-* **Orca**
+# Resumo - Sistema Linda
+O sistema Linda é fascinante porque ele introduz o conceito de **Espaço de Tuplas (Tuple Space)**, que funciona como uma memória compartilhada "nuvem" onde os processos não precisam saber o endereço um do outro, apenas o conteúdo que buscam.
+
+* **Figura 8.47: Exemplos de Tuplas e o Espaço de Tuplas**
+O sistema Linda utiliza tuplas (coleções de dados) que flutuam em um espaço comum. Pense nisso como uma "sacola" onde processos jogam dados e outros "pescam" esses dados usando gabaritos.
+
+    ESPAÇO DE TUPLAS (TUPLE SPACE)
+        +----------------------------------------+
+        |  ("abc", 2, 5)                         |
+        |                                        |
+        |  ("matrix-1", 1, 6, 3.14)              |
+        |                                        |
+        |  ("family", "is sister", Carolyn, ...) |
+        +----------------------------------------+
+            ^               |               |
+          [out]            [in]           [read]
+            |               |               |
+        Processo A      Processo B      Processo C
+        (Produtor)      (Consumidor)    (Observador)
+
+# Primitivas de Espaço de Tuplas
+
+| Primitiva | Função | Analogia |
+| --- | --- | --- |
+| `out` | Coloca uma tupla no espaço. | Colocar um anúncio no mural. |
+| `in` | Busca e remove uma tupla compatível. | Retirar o anúncio do mural. |
+| `read` | Busca, mas não remove a tupla. | Ler o anúncio sem retirá-lo. |
+| `eval` | Cria processos em paralelo para gerar a tupla. | Contratar alguém para fazer o anúncio. |
+
+# Paradigma: Modelo Operário Replicado (Sacola de Tarefas)
+
+## Funcionamento
+* O mestre joga as tarefas na "sacola" (ou fila de tarefas).
+* Os operários (workers) pegam as tarefas disponíveis na sacola.
+
+## Vantagem
+* **Balanceamento de Carga Dinâmico**: Se um operário for mais rápido, ele pega mais tarefas. Se um for lento, ele não trava o sistema.
+* Isso permite uma distribuição eficiente das tarefas entre os operários, maximizando a utilização dos recursos.
+
+// Código exemplo para o eBook
+// O mestre coloca tarefas
+for (i=0; i<N; i++) out("task-bag", job[i]);
+
+// O operário consome tarefas
+while(1) {
+    in("task-bag", ? job); // "Pescando" uma tarefa qualquer
+    executar(job);
+}
+
+# Conexão com Desenvolvimento e OCI
+
+## Sistemas Distribuídos
+* O Linda é o tataravô de tecnologias modernas como:
+ * Redis
+ * Filas de mensagens (RabbitMQ/Kafka)
+* Você pode usar essas tecnologias na Oracle Cloud para conectar microserviços.
+
+## Exemplo: IDS Sentinel
+* Imagine que seu analisador de pacotes joga alertas em um "Espaço de Tuplas".
+* Um módulo de resposta "pesca" esses alertas para bloquear IPs.
+* Isso desacopla a detecção da resposta, permitindo uma arquitetura mais flexível e escalável.
+
+# Glossário de Conceitos
+
+## Termos
+* **Processamento Atômico**: Operação que ocorre por inteiro ou não ocorre (sem interrupção).
+* **Gabarito**: Padrão usado pela primitiva `in` para encontrar uma tupla.
+* **Bloqueante**: O processo para e espera até que a tupla apareça.
+* **Desacoplamento**: Processos não precisam conhecer a identidade um do outro.
+
+## Diagrama
+* REM (Endereços) ---> [B. Endereços]
+* Decodificador
+* CLOCK (Sincronismo)
+* MEMÓRIA PRINCIPAL (RAM)
+
+* # **Orca**
 Uma abordagem um pouco diferente para a memória compartilhada no nível de aplicação em um multicomputador é usar objetos como unidade de compartilhamento, em vez de apenas tuplas. Objetos consistem em estado interno (oculto) mais métodos para operar naquele estado. Por não permitir que o programador acesse o estado diretamente, são abertas muitas possibilidades para permitir o compartilhamento por máquinas que não têm memória física compartilhada. O sistema baseado em objetos que dá a ilusão de memória compartilhada em sistemas multicomputadores é denominado Orca (Bal, 1991; Bal et al., 1992; e Bal e Tanenbaum, 1988). Orca é uma linguagem de programação tradicional (baseada em Modula 2), à qual foram adicionadas duas novas características: objetos e a capacidade de criar novos processos. Um objeto Orca é um tipo de dados abstrato, semelhante a um objeto em Java ou um pacote em Ada. Ele encapsula estruturas de dados internas e métodos escritos pelo usuário, denominados operações. Objetos são passivos, isto é, não contêm threads para os quais podem ser enviadas mensagens. Em vez disso,
 processos acessam os dados internos de um objeto invocando seus métodos.
 
@@ -3052,6 +3128,58 @@ tempo. Para todos os efeitos, cada operação sobre um objeto compartilhado em O
 O outro tipo é a sincronização de condição, na qual um processo bloqueia esperando por alguma condição válida. Em Orca, a sincronização de condição é feita com guardas. No exemplo da Figura 8.48, um processo que tente retirar um item de uma pilha vazia será suspenso até que a pilha não esteja mais vazia. Afinal, você não pode retirar uma palavra de uma pilha vazia.
 
 O sistema de run-time de Orca trata da replicação de objeto, migração, consistência e invocação de operação. Cada objeto pode estar em um de dois estados: cópia única ou replicado. Um objeto em estado de cópia única existe somente em uma máquina, portanto, todas as requisições para ele são enviadas para essa máquina. Um objeto replicado está presente em todas as máquinas que contêm um processo que o está usando, o que facilita as operações de leitura (já que elas podem ser feitas localmente) à custa de encarecer as atualizações. Quando é executada uma operação que modifica um objeto replicado, em primeiro lugar ela deve obter um número de sequência dado por um processo centralizado que os emite. Então, é enviada uma mensagem a cada máquina que tem uma cópia do objeto, dizendo a ela que execute a operação. Uma vez que todas essas atualizações portam números de sequência, todas as máquinas executam as operações na mesma ordem, o que garante consistência sequencial.
+
+## Resumo - Orca
+Enquanto o Linda foca em dados soltos (tuplas), o Orca foca em Objetos Compartilhados. Para o seu eBook, o conceito-chave aqui é o Encapsulamento aplicado a sistemas distribuídos.
+
+* **Figura 8.48: Objeto Pilha (Stack) em Orca**
+O diferencial do Orca é que você não acessa os dados diretamente. Você invoca operações (métodos) e o sistema de run-time garante que tudo ocorra de forma segura entre as máquinas.
+
+       OBJETO COMPARTILHADO (ORCA)
+        +-----------------------------------+
+        |           Pilha (Stack)           |
+        |  [ Dados Internos: top, array ]   | <--- Ocultos (Encapsulados)
+        +-----------------------------------+
+        |  Op. PUSH  | (Guarda: top < N)    | <--- Só executa se houver espaço
+        +------------+----------------------+
+        |  Op. POP   | (Guarda: top > 0)    | <--- Só executa se NÃO estiver vazia
+        +-----------------------------------+
+                ^               |
+        [ Invocação ]    [ Suspensão ]
+                |               |
+            Processo 1      Processo 2
+        (Emite Push)     (Espera Pop)
+
+# Pilares do Sistema Orca
+
+## Conceitos Chave
+* **Sincronização por Guardas**: O Orca resolve o problema de pilhas vazias ou cheias nativamente.
+ + Se você der um `pop()` em uma pilha vazia, o processo não dá erro; ele fica "dormindo" (suspenso) até que alguém dê um `push()`.
+* **Atomicidade**: Cada operação é tratada como uma "região crítica".
+ + O sistema garante que duas máquinas não alterem o topo da pilha ao mesmo tempo. É como um monitor distribuído.
+* **Replicação Inteligente**:
+ + *Cópia Única*: O objeto fica em uma máquina só (bom para muitas escritas).
+ + *Replicado*: Todas as máquinas têm uma cópia (excelente para leituras rápidas, mas caro para atualizar).
+
+# Comando `fork` no Orca
+
+## Funcionalidade
+* O `fork` do Orca permite especificar em qual processador o novo processo vai rodar.
+* Exemplo de código:
+
+   orc
+for i in 1 .. n do
+  fork foobar(s) on i; // Cria o processo 'foobar' na máquina 'i' passando o objeto 's'
+od;
+
+# Tabela de Comparação: Linda vs. Orca
+
+| Característica | Sistema LINDA | Sistema ORCA |
+| --- | --- | --- |
+| Unidade | Tuplas (Dados brutos) | Objetos (Dados + Métodos) |
+| Acesso | Por conteúdo (Gabarito) | Por invocação de método |
+| Sincronização | Bloqueio no `in` | Guardas booleanas |
+| Consistência | Atômica por tupla | Sequencial por objeto |
 
 ## 8.4.7 Desempenho
 O ponto principal da construção de um computador paralelo é fazer com que ele execute mais rápido do que uma máquina com um único processador. Se ele não cumprir esse simples objetivo, não vale a pena tê-lo. Além disso, ele deve cumprir o objetivo de uma maneira eficiente em relação ao custo. Uma máquina que é duas vezes mais rápida do que um uniprocessador a 50 vezes o custo muito provavelmente não será um sucesso de vendas. Nesta seção, examinaremos algumas das questões de desempenho associadas a arquiteturas de computadores paralelos.
@@ -3355,3 +3483,204 @@ Multicomputadores são sistemas com muitas CPUs que não compartilham uma memór
 Multicomputadores costumam ser programados usando um pacote de troca de mensagens como **MPI(Message-Passing Interface – interface de troca de mensagem)**. Uma abordagem alternativa é usar memória compartilhada no nível da aplicação, como um sistema DSM(Memória Compartilhada Distribuída) baseado em páginas, o espaço de tuplas Linda, ou objetos Orca ou Globe. DSM simula memória compartilhada no nível de página, o que o torna semelhante a uma máquina NUMA, exceto pela penalidade maior para referências remotas.
 
 Por fim, no nível mais alto e mais fracamente acoplado, estão as grades. São sistemas nos quais organizações inteiras são reunidas e interligadas pela Internet para compartilhar capacidade de processamento, dados e outros recursos.
+
+Problemas
+
+# Arquitetura e Sistemas Paralelos
+
+## Questões e Respostas
+**1. Instruções da arquitetura Intel x86 podem ter comprimentos de até 17 bytes. O x86 é uma CPU VLIW?**
+
+Não. O x86 é uma arquitetura CISC. CPUs VLIW utilizam pacotes de instruções de tamanho fixo agendados pelo compilador.
+
+**2. Como a tecnologia de projeto de processos permite que os engenheiros coloquem cada vez mais transistores em um chip, Intel e AMD escolheram aumentar o número de núcleos em cada chip. Existem outras opções viáveis que eles poderiam ter usado em vez disso?**
+
+Sim, aumentar memórias cache, implementar unidades de execução mais largas, adicionar coprocessadores especializados.
+
+**3. Quais são os valores grampeados de 96, –9, 300 e 256 quando a faixa de grampeamento é 0–255?**
+
+    * 96 → 96
+    * –9 → 0
+    * 300 → 255
+    * 256 → 255
+
+**4. As seguintes instruções TriMedia são permitidas? Se não forem, qual a razão?**
+
+ a. Adição de inteiros, subtração de inteiros, carga, adição de ponto flutuante, carga imediata.
+ * Não permitido: muitas operações de memória (2 cargas).
+
+ b. Subtração de inteiros, multiplicação de inteiros, carga imediata, deslocamento, deslocamento.
+ * Permitido.
+
+ c. Carga imediata, adição de ponto flutuante, multiplicação de ponto flutuante, desvio, carga imediata.
+ * Não permitido: desvio + múltiplas cargas/oper. pesadas.
+
+**5. A Figura 8.7(d) e (e) mostra 12 ciclos de instruções. Para cada um, diga o que acontece nos três ciclos seguintes.**
+
+Progressão no pipeline: Fetch → Decode → Execute → Write-back.
+
+**6. Em uma determinada CPU, uma instrução que encontra uma ausência da cache de nível 1, mas uma presença na cache de nível 2, leva k ciclos no total. Se for usado multithreading para mascarar ausências da cache de nível 1, quantos threads precisam ser executados ao mesmo tempo usando multithreading de granulação fina para evitar ciclos ociosos?**
+
+k threads.
+
+**7. A GPU Fermi NVIDIA é semelhante em espírito a uma das arquiteturas que estudamos no Capítulo 2. Qual?**
+
+À arquitetura de processadores vetoriais (SIMD).
+
+**8. Uma bela manhã, a abelha-rainha de certa colmeia convoca todas as suas abelhas operárias e lhes comunica que a tarefa daquele dia é colher néctar de rosas. Então, as operárias saem voando em busca de rosas. Esse é um sistema SIMD ou um sistema MIMD?**
+
+SIMD.
+
+**9. Durante nossa discussão sobre modelos de consistência de memória, dissemos que um modelo de consistência é um tipo de contrato entre o software e a memória. Por que tal contrato é necessário?**
+
+Garantir previsibilidade.
+
+**10. Suponha que, por razões técnicas, uma cache de escuta só pode escutar linhas de endereço, e não linhas de dados. Essa alteração afetaria o protocolo de escrita direta?**
+
+Sim, afetaria o protocolo de escrita direta.
+
+**11. Considere um multiprocessador que usa um barramento compartilhado. O que acontece se dois processadores tentarem acessar a memória global exatamente no mesmo instante?**
+
+Colisão; um processador é escolhido.
+
+**12. Considere um multiprocessador que usa um barramento compartilhado. O que acontece se três processadores tentarem acessar a memória global exatamente no mesmo instante?**
+
+Mesma coisa, um é escolhido.
+
+**13. Como um modelo simples de um sistema multiprocessador com barramento, sem cache, suponha que uma instrução em cada quatro referencia a memória, e que uma referência à memória ocupa o barramento durante um tempo de instrução inteiro. Se o barramento estiver ocupado, a CPU requisitante é colocada em uma fila FIFO. Qual será a diferença entre a velocidade de execução de um sistema com 64 CPUs e um sistema com uma CPU?**
+
+Barramento satura com 4 CPUs.
+
+**14. O protocolo de coerência de cache MESI tem quatro estados. Outros protocolos de coerência de cache de escrita retroativa têm somente três. Qual dos quatro estados MESI poderia ser sacrificado e quais seriam as consequências de cada escolha? Se você tivesse de optar por apenas três estados, quais escolheria?**
+
+Estado E (Exclusive); protocolo MSI.
+
+**15. Usando protocolo de coerência de cache MESI, há alguma situação na qual uma linha de cache está presente na cache local, mas para a qual ainda assim é necessária uma transação de barramento? Caso a resposta seja positiva, explique.**
+
+Sim, estado S (Shared).
+
+**16. Suponha que haja n CPUs em um barramento comum. A probabilidade de qualquer uma das CPUs tentar usar o barramento em um dado ciclo é p. Qual é a chance de:**
+
+a. O barramento estar ocioso (0 requisições)? (1-p)^n
+b. Ser feita exatamente uma requisição? n.p.(1-p)^n-1
+c. Ser feita mais de uma requisição? 1 - [(1-p)^n + n.p(1-p)^n-1]
+
+**17. Cite a principal vantagem e a principal desvantagem de um switch crossbar.**
+
+Vantagem: alta largura de banda. Desvantagem: custo n^2.
+
+**18. Quantos switches crossbar têm um Sun Fire E25K completo?**
+
+18 switches.
+
+**19. Suponha que o fio entre o switch 2A e o switch 3B na rede ômega da Figura 8.31 se rompa. Quem é desconectado de quem?**
+
+CPUs desconectadas de módulos de memória específicos.
+
+**20. Hot spots (locais de memória que recebem grandes quantidades de referências) são claramente um grande problema em redes de comutação multiestágio. Também são um problema em sistemas baseados em barramento?**
+
+Sim, saturação do barramento.
+
+**21. Uma rede de comutação ômega conecta 4.096 CPUs RISC, cada qual com um tempo de ciclo de 60 ns, a 4.096 módulos de memória infinitamente rápidos. Cada um dos elementos de comutação tem um atraso de 5 ns. Quantas posições de atraso são necessárias para uma instrução LOAD?**
+
+2 ciclos.
+
+**22. Considere uma máquina que usa uma rede de comutação ômega, como a mostrada na Figura 8.31. Suponha que o programa e a pilha para o processador i sejam mantidos no módulo de memória i. Proponha uma ligeira alteração na topologia que faça uma grande diferença no desempenho (o IBM RP3 e o BBN Butterfly usam essa topologia modificada). Qual é a desvantagem dessa sua nova topologia em comparação com a original?**
+
+# Proposta de Alteração
+
+## Descrição
+Criar atalho direto entre Processador $i$ e Módulo de Memória $i$
+* Acesso local (pilha, programa) é feito de forma imediata
+* Requisições não passam pelos switches da rede Ômega
+
+## Benefícios
+* **Redução de Latência**: acesso sem esperar pelos switches
+* **Descongestionamento**: libera switches para outras comunicações
+* Arquitetura: modelo NUMA (Acesso Não Uniforme à Memória)
+
+## Desvantagens
+* **Custo e Complexidade**: hardware adicional (fiação, portas de memória)
+* **Assimetria**: desempenho depende da localização dos dados
+
+**23. Em um multiprocessador NUMA, referências à memória local levam 20 ns e referências remotas levam 120 ns. Certo programa faz um total de N referências à memória durante sua execução, das quais 1% é para uma página P. No início, essa página é remota, e copiá-la localmente leva C ns. Em quais condições a página deveria ser copiada localmente na ausência de utilização significativa por outros processadores?**
+
+Resposta: A cópia vale a pena se o custo de copiar (C) for menor que a economia gerada. Cada acesso local economiza 100ns (120 - 20). Logo: C < (N x 0,01) x 100ns$.
+
+**24. Considere um multiprocessador CC-NUMA como o da Figura 8.33, porém com 512 nós de 8 MB cada. Se as linhas de cache têm 64 bytes, qual é a porcentagem de sobrecarga para os diretórios? Aumentar o número de nós aumenta a sobrecarga, reduz a sobrecarga ou não provoca nenhuma alteração?**
+
+# Cálculo da Sobrecarga do Diretório
+
+## Dados
+* Memória por nó: 8 MB = 8 x 1024 x 1024 = 8.388.608$ bytes
+* Tamanho da linha de cache: 64 bytes
+* Número de nós: 512
+
+## Cálculo
+1. **Número de linhas de cache por nó**
+ 8.388.608 / 64 = 131.072 linhas de cache por nó
+
+2. **Tamanho da entrada do diretório**
+ * 1 bit por nó: 512 bits
+ * Em bytes: 512 / 8 = 64 bytes por entrada
+
+3. **Sobrecarga**
+ * Para cada linha de cache de 64 bytes, diretório de 64 bytes
+ * Sobrecarga: 64 / 64 = 1 = 100%
+
+## Impacto do Aumento de Nós
+* Aumentar nós aumenta a sobrecarga
+* Entrada do diretório ∝ número de nós
+* Exemplo: 1024 nós → entrada de 128 bytes → sobrecarga de 200%
+
+**25. Qual é a diferença entre NC-NUMA e CC-NUMA?**
+
+CC-NUMA mantém coerência de cache; NC-NUMA não.
+
+**26. Calcule o diâmetro da rede para cada topologia mostrada na Figura 8.37.**
+
+* Estrela: 2
+* Anel: n/2
+* Grade: 2(k-1)
+* Hipercubo: n
+
+**27. Para cada topologia mostrada na Figura 8.37, determine o grau de tolerância à falha, definida como o número máximo de enlaces que podem ser perdidos sem repartir a rede em duas.**
+
+O grau de tolerância à falha é o número de caminhos redundantes. Para "partir" a rede, precisamos remover todos os enlaces que conectam um nó ou um grupo de nós ao restante.
+
+* (a) Estrela: 0. Se o enlace central falhar, o nó da ponta fica isolado.
+* (b) Anel: 1. Se um enlace falhar, os dados ainda podem circular pelo outro lado do anel.
+* (c) Grade (Mesh): 1. Nos cantos da grade, um nó tem apenas 2 enlaces. Se perder um, ainda está conectado; se perder 2, fica isolado.
+* (d) Árvore: 0. A falha de qualquer enlace (exceto os das folhas) divide a rede em duas subárvores.
+* (e) Hipercubo: n-1 (onde n é a dimensão). Em um hipercubo de 3 dimensões, cada nó tem 3 conexões; são necessários 3 cortes para isolá-lo.
+* (f) Toro Duplo: 3. Como cada nó possui 4 conexões (2 em cada anel), você pode perder até 3 enlaces sem isolar um nó completamente.
+
+**28. Considere a topologia de toro duplo da Figura 8.37(f), mas expandida para um tamanho k × k. Qual é o diâmetro da rede? (Dica: considere k ímpar e k par separadamente.)**
+
+No toro, as bordas são conectadas, o que reduz a distância máxima pela metade em comparação com uma grade simples.
+* Se k for par: O diâmetro é k. (Você anda no máximo k/2 na horizontal e k/2 na vertical).
+* Se k for ímpar: O diâmetro é k - 1. (Pois a distância máxima do centro até a borda "mais distante" é (k-1)/2 em cada direção).
+
+**29. Uma rede de interconexão tem a forma de um cubo 8 × 8 × 8. Cada enlace tem uma largura de banda full duplex de 1 GB/s. Qual é a largura de banda de bisseção da rede?**
+
+A largura de banda de bisseção é a largura de banda do corte que divide a rede em duas metades iguais com o menor número de fios.
+  * Para um cubo 8 x 8 x 8, o corte mais eficiente atravessa uma das faces.
+  * O número de enlaces cortados será uma área de 8 x 8 = 64 enlaces.
+  * Como cada enlace é full duplex de 1 GB/s, ele trafega 1 GB/s em cada direção simultaneamente.
+  * Cálculo: 64 enlaces x GB/s = 64GB/s (em cada direção).
+
+**30. A lei de Amdahl limita o aumento potencial de velocidade que se pode conseguir em um computador paralelo. Calcule, como uma função de f, o aumento máximo de velocidade possível quando o número de CPUs se aproximar de infinito. Quais são as implicações desse limite para f = 0,1?**
+
+Ganho máximo é 1/f. Para f = 0,1, ganho máximo é 10x.
+
+**31. A Figura 8.51 mostra como a ampliação falha com um barramento, mas é bem-sucedida com uma grade. Considerando que cada barramento ou enlace tem uma largura de banda b, calcule a largura de banda média por CPU para cada um dos quatro casos. Então, amplie cada sistema para 64 CPUs e repita os cálculos. Qual é o limite à medida que o número de CPUs tende ao infinito?**
+
+Barramento: $b/n$. Grade: largura constante.
+
+**32. No texto, foram discutidas três variações de send: síncrona, com bloqueio e sem bloqueio. Cite um quarto método que seja semelhante à send com bloqueio, mas tenha propriedades ligeiramente diferentes. Cite uma vantagem e uma desvantagem de seu método em comparação com a send com bloqueio.**
+
+Send com Buffer. Vantagem: paralelismo. Desvantagem: consumo de memória.
+
+**33. Considere um multicomputador que está executando em uma rede com hardware de broadcasting, como a Ethernet. Por que é importante a razão entre operações de leitura (as que não atualizam variáveis de estado interno) e operações de escrita (as que atualizam variáveis de estado interno)?**
+
+Importante para evitar saturação da rede com escritas.
